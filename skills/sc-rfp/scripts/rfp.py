@@ -13,6 +13,12 @@
   python rfp.py check    --register register.json --verdicts verdicts.json --out consistency.md [--xlsx consistency.xlsx]
       Compares the customer-facing answers already in the register (the bid team's) with our verdicts. Lists every
       line where their answer claims more than we found.
+
+  python rfp.py poc      --register register.json --verdicts verdicts.json --out 05-poc-brief.md [--deal "<Customer>"]
+      POC brief for sc-demo-plan proof mode (+ 05-poc-brief.json with the Build, Show and gap refs).
+
+  python rfp.py coverage --brief 05-poc-brief.json <demo-plan.md> [<clickpath/cards.json> ...]
+      Every Build ref and must-have gap must appear in each file. Exit 1 if any is missing.
 """
 import argparse
 import collections
@@ -361,6 +367,83 @@ def check(a):
     print(len(rows), "of", total, "->", a.out)
 
 
+def short(t, n=150):
+    t = " ".join(str(t or "").split())
+    return t if len(t) <= n else t[:n - 1] + "…"
+
+
+def poc(a):
+    """POC brief for sc-demo-plan (proof mode): Build lines to configure, gaps to handle, Show evidence, questions."""
+    reg, ver = load(a)
+    ours = [q for q in reg["requirements"] if q["scope"] == "ours" and q["rid"] in ver]
+    tier = lambda t: [q for q in ours if ver[q["rid"]].get("tier") == t]
+    build, show, tell = tier("Build"), tier("Show"), tier("Tell")
+    mt = metrics(reg["requirements"], ver)
+    eng = lambda q: ver[q["rid"]].get("english") or q["text"]
+    L = ["# POC brief: %s" % (a.deal or reg.get("customer") or reg["source"]), "",
+         "> From the fit-gap (`sc-rfp`), %s. Input for `sc-demo-plan` in **proof mode**: it maps every Build line to a "
+         "scene and a test. Internal." % datetime.date.today().isoformat(), "",
+         "| | |", "|---|---|",
+         "| Build (live in the POC) | %d lines, about %s h |" % (len(build), sum(float(ver[q["rid"]].get("hours") or 0) for q in build)),
+         "| Show (screenshot or clip) | %d |" % len(show), "| Tell (written answer; the bid team) | %d |" % len(tell),
+         "| Must-have fit | %s%% (%s) |" % (mt["must_fit_pct"], mt["recommendation"]), "",
+         "## 1. Build: every line needs a scene and a test", "",
+         "Group these into 3–5 scenes around their journeys (and their named use cases, if the RFP has them). The plan's "
+         "coverage table must list every ref below; `rfp.py coverage` checks it.", ""]
+    by = collections.OrderedDict()
+    for q in build:
+        by.setdefault(q["section"] or "Other", []).append(q)
+    for sec, qs in by.items():
+        L += ["### %s" % sec, "", "| Ref | Requirement | How (fit) | Test (draft: the plan sharpens it) | Hours |", "|---|---|---|---|---|"]
+        for q in qs:
+            v = ver[q["rid"]]
+            L.append("| %s | %s | %s (%s) | %s | %s |" % (q["rid"], short(eng(q)).replace("|", "/"), short(v.get("how"), 120).replace("|", "/"),
+                                                     v.get("fit"), "they see it work live on their example data: " + short(v.get("how"), 80).replace("|", "/"),
+                                                     v.get("hours") or ""))
+        L.append("")
+    L += ["## 2. Gaps to handle in the POC story", "",
+          "Don't hide them: show the workaround or say how it's handled. These are the evaluator's likely questions.", "",
+          "| Ref | Requirement | Fit | Workaround |", "|---|---|---|---|"]
+    for q in mt["must_gaps"]:
+        v = ver[q["rid"]]
+        L.append("| %s | %s | %s | %s |" % (q["rid"], short(eng(q)).replace("|", "/"), FITS[v["fit"]]["label"], short(v.get("workaround"), 160).replace("|", "/")))
+    if not mt["must_gaps"]:
+        L.append("| | None | | |")
+    L += ["", "## 3. Show: evidence to collect (library screenshots, clips, standard screens)", "",
+          "| Ref | Requirement | Evidence |", "|---|---|---|"]
+    for q in show:
+        L.append("| %s | %s | %s |" % (q["rid"], short(eng(q), 110).replace("|", "/"), short(ver[q["rid"]].get("evidence"), 110).replace("|", "/")))
+    qs = [q for q in ours if ver[q["rid"]].get("question")]
+    L += ["", "## 4. Questions to settle before building", ""] + \
+         ["- **%s**: %s" % (q["rid"], short(ver[q["rid"]]["question"], 220)) for q in qs] + \
+         ["", "## 5. Low-confidence lines to confirm (product or SC)", ""] + \
+         ["- **%s** (%s): %s" % (q["rid"], ver[q["rid"]]["fit"], short(eng(q), 140)) for q in mt["low_conf"]] + \
+         ["", "SC check required before this is used with the customer or the bid team."]
+    open(a.out, "w", encoding="utf-8").write("\n".join(L) + "\n")
+    json.dump({"deal": a.deal or reg.get("customer"), "build": [q["rid"] for q in build], "show": [q["rid"] for q in show],
+               "gaps": [q["rid"] for q in mt["must_gaps"]]}, open(os.path.splitext(a.out)[0] + ".json", "w", encoding="utf-8"), indent=1)
+    print("Build %d · Show %d · Tell %d · gaps %d -> %s" % (len(build), len(show), len(tell), len(mt["must_gaps"]), a.out))
+
+
+def coverage(a):
+    """Every Build ref must appear in the demo plan (and, once built, in the click path cards)."""
+    brief = json.load(open(a.brief, encoding="utf-8"))
+    texts = {}
+    for f in a.files:
+        texts[f] = open(f, encoding="utf-8", errors="replace").read()
+    rows, missing = [], 0
+    for rid in brief["build"] + brief["gaps"]:
+        found = {os.path.basename(f): bool(re.search(r"(?<![\w-])%s(?![\w.])" % re.escape(rid), t)) for f, t in texts.items()}
+        if not all(found.values()):
+            missing += 1
+        rows.append((rid, "gap" if rid in brief["gaps"] and rid not in brief["build"] else "build", found))
+    print("%d of %d Build/gap refs missing from at least one file" % (missing, len(rows)))
+    for rid, kind, found in rows:
+        if not all(found.values()):
+            print("  %-8s %-5s missing in: %s" % (rid, kind, ", ".join(k for k, v in found.items() if not v)))
+    sys.exit(1 if missing else 0)
+
+
 def main():
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -370,8 +453,11 @@ def main():
     p.add_argument("--out", required=True); p.add_argument("--summary"); p.add_argument("--codes"); p.add_argument("--deal")
     p = sp.add_parser("check"); p.add_argument("--register", required=True); p.add_argument("--verdicts", required=True)
     p.add_argument("--out", required=True); p.add_argument("--xlsx")
+    p = sp.add_parser("poc"); p.add_argument("--register", required=True); p.add_argument("--verdicts", required=True)
+    p.add_argument("--out", required=True); p.add_argument("--deal")
+    p = sp.add_parser("coverage"); p.add_argument("--brief", required=True); p.add_argument("files", nargs="+")
     a = ap.parse_args()
-    {"scan": scan, "register": register, "fitgap": fitgap, "check": check}[a.cmd](a)
+    {"scan": scan, "register": register, "fitgap": fitgap, "check": check, "poc": poc, "coverage": coverage}[a.cmd](a)
 
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 |---|---|---|
 | What we know about the customer | Deal folder: `01-fm-prep.md`, `NN-meeting-review-*.md`, transcripts, `deck.json`. Older deals: W1 pack, W2 brief, discovery card, hypothesis files: read whatever is there | Ask the SC for the latest transcript or notes; don't plan from the BDR call alone for a full demo |
 | Level | Light (first meeting, ≤ half a day), Full (value demo) or Proof (days or weeks, ending in a readout) | Ask |
+| RFP POC brief (Proof after an RFP or TOR) | `rfp/05-poc-brief.md` + `.json` from `sc-rfp` | Run `sc-rfp` first if there's an RFP and no fit-gap |
 | Time available to build, demo length, stand to use | The SC | Ask; default Full = 2–3 days, 45–60 min demo. **Full and Proof: a clean stand of its own or the library master stand**, never one holding another customer's demo (demo bar item 7) |
 | Presenting device, network and login | The SC | Ask: laptop, phone or tablet app, VPN, SSO. Rehearse on exactly that |
 | Demo bar | `../../standards/DEMO-BAR-v0.2.md` | — |
@@ -72,6 +73,12 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     test set with the right answers (synthetic unless they approve real data); how each result is scored; a scoreboard
     the customer can see (pattern P16); what is built before the proof and what during it; the readout agenda and who
     must attend (include whoever can veto).
+    **POC after an RFP:** start from `rfp/05-poc-brief.md`. Every **Build** ref gets a scene and a sharpened test (their
+    data, what they click, what they must see) in a **Requirement coverage** table (`Ref · Scene · Test · Status`);
+    every must-have **gap** gets a line in the story (the workaround shown or said). Put the refs in the demo script and
+    the click path card notes too, so they show up at readout. Check with
+    `python ../sc-rfp/scripts/rfp.py coverage --brief rfp/05-poc-brief.json <plan.md> [clickpath/cards.json]`
+    before the build starts and again before the readout; a missing ref is a gap to fix or to explain to the SC.
 11. **Harvest is part of the plan:** the L1 harvest (`sc-harvest`) is the last line of the build order, due within 2
     working days of the demo.
 12. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.0 (12 Nov 2026): RFP → POC hand-off
+- `rfp.py poc`: POC brief from the fit-gap (Build lines grouped with draft tests, must-have gaps to handle in the story,
+  Show evidence, questions, low-confidence lines) + a JSON of the refs.
+- `rfp.py coverage`: checks every Build ref and must-have gap appears in the demo plan and the click path cards.
+- `sc-demo-plan` proof mode: starts from the POC brief; a Requirement coverage table (ref, scene, test, status); refs
+  carried into the demo script and click path notes. `sc-rfp` step 8 produces the brief.
+
 ## 0.9.1 (12 Nov 2026)
 - `sc-rfp`: `ours_ids` in the map for sheets that mix our scope and the bid team's (Pegadaian); summaries and the
   consistency check show the English translation for non-English RFPs. Tested on Pegadaian (Bahasa, 49 of 112 lines ours).

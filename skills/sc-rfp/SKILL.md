@@ -54,8 +54,11 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
    - `02-bid-no-bid.md`: the recommendation, the numbers, the big gaps. Rule: **Bid** = must-have fit ≥ 90% and no
      must-have we can't do · **Bid with conditions** = 75–90%, or a must-have needing custom or partner work ·
      **No-bid** = under 75%, or a must-have we can't do with no workaround. The SC and AE decide; we recommend.
-8. **Win themes and POC:** propose 3 win themes (their pains + where the named competitors are weak + our
-   differentiators) and hand the `Build` tier to `sc-demo-plan` (proof mode) with the register.
+8. **Win themes and POC brief:** propose 3 win themes (their pains + where the named competitors are weak + our
+   differentiators). Then `python scripts/rfp.py poc --register rfp/register.json --verdicts rfp/verdicts.json --out rfp/05-poc-brief.md --deal "<Customer>"`
+   (Build lines grouped with draft tests, must-have gaps to handle, Show evidence, questions, low-confidence lines) and
+   hand it to `sc-demo-plan` in proof mode. `rfp.py coverage` later checks every Build ref made it into the plan and
+   the click path.
 9. **Consistency check** (when the bid team shares their filled sheet): copy it in as `rfp/03-bid-team-answers-<date>.xlsx`,
    map its answer columns into a register, then
    `python scripts/rfp.py check --register <that register> --verdicts rfp/verdicts.json --out rfp/04-consistency-<date>.md --xlsx rfp/04-consistency-<date>.xlsx`.
