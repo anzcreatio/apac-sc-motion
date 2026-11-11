@@ -94,6 +94,15 @@ def scan(a):
     print(js[:20000])
 
 
+def scope_of(sm, rid):
+    """Sheet scope, unless the map lists row IDs: "ours_ids" (everything else is bid) or "bid_ids"."""
+    if "ours_ids" in sm:
+        return "ours" if rid in {str(x) for x in sm["ours_ids"]} else "bid"
+    if "bid_ids" in sm:
+        return "bid" if rid in {str(x) for x in sm["bid_ids"]} else sm.get("scope", "ours")
+    return sm.get("scope", "ours")
+
+
 def register(a):
     m = json.load(open(a.map, encoding="utf-8"))
     wb = openpyxl.load_workbook(a.file, read_only=True, data_only=True)
@@ -136,7 +145,7 @@ def register(a):
             if seen[key] > 1:
                 key = "%s#%d" % (key, seen[key])
             reqs.append({"rid": key, "sheet": sm["sheet"], "src_id": rid, "section": section or sm.get("default_section"),
-                         "text": text, "mandatory": mand, "weight": extra.get("weight"), "scope": sm.get("scope", "ours"),
+                         "text": text, "mandatory": mand, "weight": extra.get("weight"), "scope": scope_of(sm, rid),
                          "answer": {k: v for k, v in answer.items() if v is not None}, "extra": extra})
     out = {"source": os.path.basename(a.file), "customer": m.get("customer"), "language": m.get("language"),
            "codes": m.get("codes"), "built": datetime.date.today().isoformat(), "requirements": reqs}
@@ -281,7 +290,7 @@ def summary_md(reg, ver, mt, deal, xlsx="fit-gap.xlsx"):
          "## Big gaps (must-haves)", "", "| Ref | Requirement | Fit | Workaround |", "|---|---|---|---|"]
     for q in mt["must_gaps"]:
         v = ver[q["rid"]]
-        L.append("| %s | %s | %s | %s |" % (q["rid"], q["text"].replace("|", "/").replace("\n", " ")[:160],
+        L.append("| %s | %s | %s | %s |" % (q["rid"], (v.get("english") or q["text"]).replace("|", "/").replace("\n", " ")[:160],
                                              FITS[v["fit"]]["label"], (v.get("workaround") or "").replace("|", "/")))
     if not mt["must_gaps"]:
         L.append("| | None | | |")
@@ -335,7 +344,7 @@ def check(a):
           sum(1 for r in rows if r[3].startswith("Says comply; it depends")), sum(1 for r in rows if "explanation" in r[3])), "",
          "| Ref | Requirement | Their answer | Our fit | Issue | Their explanation (start) |", "|---|---|---|---|---|---|"]
     for q, v, t, issue, expl in rows:
-        L.append("| %s | %s | %s | %s | %s | %s |" % (q["rid"], q["text"].replace("|", "/").replace("\n", " ")[:120], t,
+        L.append("| %s | %s | %s | %s | %s | %s |" % (q["rid"], (v.get("english") or q["text"]).replace("|", "/").replace("\n", " ")[:120], t,
                                                      FITS[v["fit"]]["label"], issue, (expl or "").replace("|", "/").replace("\n", " ")[:160]))
     L += ["", "SC check required before this is used with the customer or the bid team."]
     open(a.out, "w", encoding="utf-8").write("\n".join(L) + "\n")

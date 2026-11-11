@@ -37,7 +37,8 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
     "sheets": [{"sheet": "5.1 …", "prefix": "F-", "header_row": 2, "id_col": "A", "text_col": "B", "mo_col": "C",
                 "section": {"mode": "prefix_colon | row | col", "col": "…", "id_col": "B", "text_col": "C"},
                 "answer_cols": {"compliance": "G", "explanation": "H", "code": "D"}, "extra_cols": {"weight": "…"},
-                "scope": "ours | bid", "default_section": "…"}]}
+                "scope": "ours | bid", "ours_ids": ["optional: row IDs that are ours when one sheet mixes both"],
+                "default_section": "…"}]}
    ```
 4. **Register:** `python scripts/rfp.py register rfp/00-<file>.xlsx --map rfp/map.json --out rfp/register.json`.
    Check the counts against the sheet (spot-check the first and last requirement of each sheet).

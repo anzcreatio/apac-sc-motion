@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.1 (12 Nov 2026)
+- `sc-rfp`: `ours_ids` in the map for sheets that mix our scope and the bid team's (Pegadaian); summaries and the
+  consistency check show the English translation for non-English RFPs. Tested on Pegadaian (Bahasa, 49 of 112 lines ours).
+
 ## 0.9.0 (11 Nov 2026): RFP fit-gap
 - New skill `sc-rfp` (+ `scripts/rfp.py`, `FIT-RUBRIC.md`): scan any RFP/TOR layout, map columns (SC confirms), build a
   register (ours vs bid team), rate every requirement in parallel batches, fit-gap workbook, bid / no-bid page, and a
