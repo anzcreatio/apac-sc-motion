@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 (11 Nov 2026)
+- Before any build, `sc-demo-plan` (step 0) and `sc-first-meeting` (step 5b) ask the three pre-build questions:
+  competition, anything else the customer gave us (RFP, email, documents), anything else to know. Answers recorded.
+- Every skill: questions for the SC go at the top of the message.
+
 ## 0.4.0 (11 Nov 2026): Phase 1, demo configuration
 - `standards/DEMO-BAR-v0.1.md`: the minimum for every demo (8 items; Light, Full and Proof levels), element labels
   (Pain, Asked, Asked (must), Differentiator, SC idea), nothing banned, time and buffer, custom components, outside

@@ -24,6 +24,17 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 
 ## Steps
 
+0. **Before we build: ask these three questions, every time** (Renzo, 11 Nov 2026). Ask them at the top of your
+   message, in these words, before any configuration starts, even if you think you know the answers:
+   
+   > 1. Who is our competition? If we know, which vendors or partners?
+   > 2. Has the customer given us anything else, such as an RFP, requirements, an email with details, or documents?
+   > 3. Is there anything else we should know before we start configuring?
+   
+   Record the answers in the plan under **Before we build** (date, who answered). If the SC says "nothing more", record
+   that too. Then: a named competitor → check the differentiator catalogue for what we beat them on and the pattern book
+   for their UX patterns; an RFP or document → read it fully and add its requirements to the pains and asks (tag C,
+   source = the document), marking hard requirements **Asked (must)**; anything else → fold it into the plan.
 1. **Pains and asks.** List every pain with its evidence tag: **C** the customer said it · **P** a partner said it ·
    **I** we inferred it (call context or research, with source and date) · **A** we assumed it. Plus everything they
    **asked** to see, and any **must** (a stated requirement or constraint). Scenes follow demo bar item 3: C builds;
@@ -64,6 +75,8 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 
 ## Output: `NN-demo-plan.md` in the deal folder (NN = the next free number)
 
+**Before we build:** the three questions and their answers (date, who answered).
+
 **Summary (≤ 10 lines):** level, hero journey in one sentence, scene count by label, total hours, bar gaps, decisions
 the SC must make.
 
@@ -92,3 +105,7 @@ the SC must make.
 - Plain words, their vocabulary, per `../../standards/WRITING-STYLE-v0.1.md`.
 - Don't touch a Creatio stand from this skill. Building is the toolkit's job, after the SC approves the plan.
 - End with "SC check required before this is used with the customer." when anything in it will be shown.
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).

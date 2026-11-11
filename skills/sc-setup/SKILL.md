@@ -43,3 +43,7 @@ Suggest (don't force) right-click `Deals` → **Always keep on this device**, so
 - Never register clio environments, type passwords, create accounts or open `CREDENTIALS.md` files.
 - Never put `node_modules`, build caches or videos in a deal folder: it syncs to every SC. Build workspaces live in
   `C:\Projects\builds\<account>\`.
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).

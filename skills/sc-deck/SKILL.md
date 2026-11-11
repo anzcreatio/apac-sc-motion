@@ -51,3 +51,7 @@ long titles, semicolons, em dashes): fix them in `deck.json`, don't ignore them.
    inches, colours, font, cover colour.
 3. Build `../../tests/deck/sample-fictional/deck.json` with `"template": "<name>"`, render, check every slide.
 4. Bump the deck standard's version and changelog if the default template changes.
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).

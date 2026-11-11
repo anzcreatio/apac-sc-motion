@@ -62,3 +62,7 @@ change to a skill, standard, pack or template. Don't change the motion here: the
 change needs 2+ deals or 2+ SCs (or one serious failure).
 
 End customer-facing drafts with "SC check required before this is used with the customer."
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).

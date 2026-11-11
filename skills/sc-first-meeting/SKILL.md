@@ -72,6 +72,9 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    the slide's notes). Talk track in each slide's `notes`.
 5. **Build and check the deck:** run the `sc-deck` skill (`python ../sc-deck/scripts/build_deck.py <deal>/deck.json
    --render`). Read every warning, open every PNG, fix and rebuild until clean.
+5b. **Before the light configuration is built,** ask the SC the three pre-build questions in
+   `../sc-demo-plan/SKILL.md` step 0 (competition, anything else the customer gave us, anything else we should know),
+   at the top of your message, and record the answers in `01-fm-prep.md`.
 6. **Write `01-fm-prep.md`** in the deal folder with the outputs below.
 7. **After the light config is built** (same skill, second pass, when the SC says the demo is ready): take the
    screenshots from the click path (`creatio-demo-clickpass` shots in the deal folder), add a `build` slide ("What
@@ -131,3 +134,7 @@ any is missing, say so and let the SC decide.
 - [ ] No claim outside the catalogue; no AI/data line outside "can say"
 - [ ] Deck rendered, every slide looked at, no builder warnings left unexplained
 - [ ] The deck's last notes and `01-fm-prep.md` end with "SC check required before this is used with the customer."
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).

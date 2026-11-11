@@ -48,3 +48,7 @@ screens, branding or wording. Approved entries go in; the original moves to `Pat
   to quote it. Numbers keep their exact unit and source.
 - Keep Creatio's sensitivity labels. Never remove or change a label to make a file easier to process.
 - Big files (video) stay in SharePoint; don't copy them into the repo.
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
