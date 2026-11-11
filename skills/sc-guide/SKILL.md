@@ -58,6 +58,7 @@ message. If they want to skip a step, let them and note it.
 | BDR/AE books the meeting | (the AE's BDR card and handoff) | `00-handoff-form.md`, the call transcript |
 | Before the first meeting | `sc-first-meeting` | Prep, the standard deck (`deck.json` → `.pptx`), light config brief, meeting plan |
 | Any deck change | `sc-deck` | Rebuilt deck from `deck.json` |
+| An RFP, TOR or requirements list arrives | `sc-rfp` | Requirements register, fit-gap, bid / no-bid recommendation; later a check of the bid team's answers |
 | Before building a demo | `sc-demo-plan` | The three pre-build questions, the demo plan, the script for the toolkit |
 | Building | `creatio-demo-toolkit` (`creatio-demo-build`) | The configured demo, click path cards |
 | After the build | `sc-clickpath` | SC practice page + customer recap (DRAFT until the SC approves) |

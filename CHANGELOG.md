@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0 (11 Nov 2026): RFP fit-gap
+- New skill `sc-rfp` (+ `scripts/rfp.py`, `FIT-RUBRIC.md`): scan any RFP/TOR layout, map columns (SC confirms), build a
+  register (ours vs bid team), rate every requirement in parallel batches, fit-gap workbook, bid / no-bid page, and a
+  consistency check of the bid team's answers. Tested on Mandiri Sekuritas (blank, 190 lines) and Adira (87 FR lines,
+  blind, checked against the submitted answers).
+- `sc-guide`: `sc-rfp` added to the motion map.
+
 ## 0.8.0 (11 Nov 2026): onboarding
 - New skill `sc-guide`: onboards a new SC one step at a time (8 steps, progress saved in SharePoint
   `Lessons/onboarding/<sc>.json`), tells any SC the next step on a deal, logs feedback to `Lessons/feedback/`.
