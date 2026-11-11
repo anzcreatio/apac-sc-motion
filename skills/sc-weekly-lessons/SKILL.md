@@ -1,6 +1,6 @@
 ---
 name: sc-weekly-lessons
-description: Run the APAC SC team's weekly lessons digest - gather the week's evidence (presented-deck comparisons, meeting reviews, first-meeting coverage scores, demo plans, lessons files, inbox and pattern intake, library harvests, customer recaps waiting) and propose at most three changes to the motion (skills, standards, packs, templates, library), each backed by two or more deals or SCs, for Renzo to approve; then apply only what he approves and publish. Use on Fridays, when Renzo asks for the weekly digest or lessons, asks what should change in the motion, or asks how the team is tracking.
+description: Run the APAC SC team's weekly lessons digest - gather the week's evidence (presented-deck comparisons, meeting reviews, first-meeting coverage scores, demo plans, lessons files, inbox and pattern intake, library harvests, customer recaps waiting, SC feedback and onboarding progress) and propose at most three changes to the motion (skills, standards, packs, templates, library), each backed by two or more deals or SCs, for Renzo to approve; then apply only what he approves and publish. Use on Fridays, when Renzo asks for the weekly digest or lessons, asks what should change in the motion, or asks how the team is tracking.
 ---
 
 # sc-weekly-lessons

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 (11 Nov 2026): onboarding
+- New skill `sc-guide`: onboards a new SC one step at a time (8 steps, progress saved in SharePoint
+  `Lessons/onboarding/<sc>.json`), tells any SC the next step on a deal, logs feedback to `Lessons/feedback/`.
+  Blind-tested: practice runs go to `Deals/_practice/`, older deal folders matched loosely, asks whether the meeting happened.
+- SharePoint `Plugin/START-HERE.md`: the paste-in prompt that installs the plugin and starts the guide.
+- `sc-weekly-lessons`: the digest now reads SC feedback and onboarding progress.
+- `sc-first-meeting`: uses the folder the caller names (practice), never the real deal.
+
 ## 0.7.3 (11 Nov 2026)
 - Library: `field-sales-visit` AI complete; the Suntory briefing agent's instructions were read from AI Studio (read-only).
 

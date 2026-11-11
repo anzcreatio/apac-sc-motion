@@ -16,7 +16,7 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 | Input | Required? | If missing |
 |---|---|---|
 | Transcript (BDR/AE call using the six questions, or a partner call) | **Yes** | Stop and ask for it |
-| Deal folder: `<team root>/Deals/<kebab-case-account>/` (team root from `~/.apac-sc-motion.json`, set by `sc-setup`) | Yes | Create it; save the transcript as `00-<source>-transcript-<yyyy-mm-dd>.md` |
+| Deal folder: `<team root>/Deals/<kebab-case-account>/` (team root from `~/.apac-sc-motion.json`, set by `sc-setup`). If the caller names another folder (for example a practice folder from `sc-guide`), use that one and never write to the real deal | Yes | Create it; save the transcript as `00-<source>-transcript-<yyyy-mm-dd>.md` |
 | Opportunity type: AI CRM / AI Studio / Custom apps (no-code) / combination | Preferred | Infer from the answers and say so |
 | Meeting date, attendees, length, language | Preferred | From the transcript; list what's missing |
 | Knowledge: `../../knowledge/` (packs, `DIFFERENTIATOR-CATALOGUE`, `AI-GOVERNANCE-PACK-LITE`, `M6-LIVE-CHANGE-KIT`, call sheet) | **Yes** | — |

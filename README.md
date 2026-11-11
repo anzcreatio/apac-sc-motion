@@ -3,10 +3,11 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.7.0)
+## What's in it (v0.8.0)
 
 | Skill | Use it for |
 |---|---|
+| `sc-guide` | **Start here.** Onboards a new SC step by step, tells any SC what's next on a deal, logs feedback for the Friday digest |
 | `sc-setup` | First run on a machine: finds the synced SharePoint folder, checks Python, PowerPoint, toolkit |
 | `sc-first-meeting` | Discovery/BDR transcript → standard deck + light-config brief (Business Studio, then AI) + meeting plan |
 | `sc-deck` | Build, rebuild, render or restyle a deck from a deal's `deck.json`; slide library; new templates |
@@ -27,7 +28,7 @@ library for every SC, updated in one place.
 | `lessons/` | What we learned from the field and what changed because of it |
 | `tests/deck/` | Fictional sample deck that exercises every slide type |
 
-Coming next: onboarding the other SCs.
+New SCs: open SharePoint `Plugin/START-HERE.md` and paste its prompt into Claude.
 
 ## Where things live
 

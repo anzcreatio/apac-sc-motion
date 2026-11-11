@@ -11,6 +11,8 @@ Gathers, for files changed in the window:
   - inbox               _inbox files waiting, latest scan; Patterns/_inbox items waiting
   - library             deals with a demo build but no library module (harvest overdue)
   - click paths         customer recaps still DRAFT (approved false)
+  - SC feedback         SharePoint Lessons/feedback/*.md  (logged by sc-guide when an SC says something didn't work)
+  - onboarding          SharePoint Lessons/onboarding/*.json  (each SC's step and stage)
 Prints a short summary and writes the full JSON for Claude to read and judge.
 """
 import argparse
@@ -99,12 +101,22 @@ def main():
         if not o.get("approved"):
             rep["recaps_draft"].append(os.path.relpath(p, deals))
 
+    fb = os.path.join(root, "Lessons", "feedback")
+    rep["sc_feedback"] = [os.path.basename(p) for p in recent(glob.glob(os.path.join(fb, "*.md")), since)]
+    rep["onboarding"] = []
+    for p in glob.glob(os.path.join(root, "Lessons", "onboarding", "*.json")):
+        try:
+            o = json.load(open(p, encoding="utf-8"))
+            rep["onboarding"].append({k: o.get(k) for k in ("sc", "step", "stage", "updated")})
+        except ValueError:
+            pass
+
     out = a.out or os.path.join(root, "Lessons", "weekly", "%s-evidence.json" % rep["week"])
     os.makedirs(os.path.dirname(out), exist_ok=True)
     json.dump(rep, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("Week %s (since %s)" % (rep["week"], rep["since"]))
     for k in ("deck_reviews", "meeting_reviews", "demo_plans", "transcripts", "coverage", "lessons_files",
-              "inbox_waiting", "patterns_waiting", "harvest_missing", "recaps_draft"):
+              "inbox_waiting", "patterns_waiting", "harvest_missing", "recaps_draft", "sc_feedback", "onboarding"):
         print("  %-17s %d" % (k, len(rep[k])))
     print(out)
 
