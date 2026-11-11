@@ -552,7 +552,8 @@ def _cards(deck, slide, d, n):
                 T.ACC if r["tag"] == "C" else T.GREY, bold=True)
             yy += 0.3
         run(textbox(slide, "Card %d" % (i + 1), x, yy, w, 0.4), r["topic"], 17, T.INK, bold=True)
-        yy += est_h(r["topic"], 17, w) + 0.1
+        # Narrow cards (4-5 in a row) wrap more than the estimate says: allow for it.
+        yy += est_h(r["topic"], 17, w) * (1.35 if w < 2.6 else 1.0) + 0.1
         text = r.get("text", "")
         if r.get("tag") == "C" and text and not text.startswith("“"):
             text = "“" + text + "”"

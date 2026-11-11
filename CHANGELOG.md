@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 (11 Nov 2026)
+- `build_deck.py`: narrow card rows (4–5 cards) leave room for titles that wrap to three lines.
+- Lessons from the Suntory demo review (`lessons/2026-11-11-suntory-oceania.md`).
+
 ## 0.7.0 (11 Nov 2026): weekly digest W46, all three proposals applied
 - `DEMO-BAR-v0.2.md` item 7: Full and Proof demos on a clean stand or the library master stand, never next to another
   customer's demo; rehearse on the presenting device, network and login with the fallback ready.
