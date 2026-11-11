@@ -40,6 +40,9 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    private Claude artifact for practice on a phone (`--fragment` writes it without the page wrapper); the customer
    version is sent as a file or published only after approval, and only when the SC asks.
 
+The SC page's **Before you start** always opens with: rehearse on the presenting device, network and login, with
+the fallback ready (demo bar item 7).
+
 ## What goes where
 
 | | SC practice version | Customer version |

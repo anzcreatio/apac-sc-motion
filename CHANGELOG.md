@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 (11 Nov 2026): weekly digest W46, all three proposals applied
+- `DEMO-BAR-v0.2.md` item 7: Full and Proof demos on a clean stand or the library master stand, never next to another
+  customer's demo; rehearse on the presenting device, network and login with the fallback ready.
+- `sc-demo-plan`: asks for the stand and the presenting device alongside the three pre-build questions.
+- `sc-clickpath`: the SC page's "Before you start" always opens with the device rehearsal line.
+- `CORE-PACK-v0.2.md`: J4 field visit (from Suntory) and J5 project or site selling (from H&G).
+
 ## 0.6.0 (11 Nov 2026)
 - New skill `sc-weekly-lessons` (+ `scripts/collect_week.py`): the Friday digest. Collects deck reviews, meeting
   reviews, coverage scores, demo plans, transcripts, lessons, inbox and pattern intake, harvest and recap status;

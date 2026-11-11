@@ -1,4 +1,4 @@
-# Core pack v0.1 (General industry)
+# Core pack v0.2 (General industry)
 
 ## 0. Pack header
 | Field | Value |
@@ -6,9 +6,9 @@
 | Pack | **Core** (= General industry). BFSI and Manufacturing inherit everything here and override only what differs |
 | Inherits from | n/a |
 | Owner (SC) | (to assign) |
-| Version / date | v0.1 · 3 Nov 2026 |
-| Segments covered | Any mid-to-large organisation with customers, cases or applications: services, education, healthcare, utilities, distribution, public sector |
-| Deals harvested | None yet. Content draws on the portfolio (Scentia, GOC, Pertamina, SJOG, Sovico, IJN, Ord Minnett), mock call 01 and W1 test 01 |
+| Version / date | v0.2 · 11 Nov 2026 (J4 field visit and J5 project selling added from live deals) |
+| Segments covered | Any mid-to-large organisation with customers, cases or applications: services, education, healthcare, utilities, distribution, public sector; **field sales and retail execution (FMCG, beverages, distributors) and project or site-based selling (trade supplies, building products, equipment)** |
+| Deals harvested | Hardware & General (J5), Suntory Oceania (J4), Nov 2026. Earlier: Content draws on the portfolio (Scentia, GOC, Pertamina, SJOG, Sovico, IJN, Ord Minnett), mock call 01 and W1 test 01 |
 
 > Status: **draft from experience + research.** §4 benchmarks come from the research pass; everything else is
 > "A (Assumed)" until a deal confirms it. Log hits and misses in §2 and §10. **Only real deals count as hits;** mocks and tests are logged as "test signal".
@@ -83,6 +83,39 @@ Slide wording is an industry observation, ≤12 words, and something the custome
 | 4 | Resolve or escalate | fix, refer, L1–L3 | Agent / specialist | CRM, knowledge base | ⚠ Knowledge hard to find |
 | 5 | Follow-up and approvals | callback, refund approval | Specialist / manager | Email | ⚠ No owner; SLA slips |
 | 6 | Close and learn | close, survey, root cause | Team leader | CRM, survey tool | Root causes not tracked |
+
+### J4 · Field visit (plan → brief → visit → capture)
+*From Suntory Oceania (FMCG field sales, Nov 2026). Library module `field-sales-visit` (L1); patterns P04–P09.*
+
+| Step | Neutral term | Customer terms we've heard | Who | Usual system | Typical break |
+|---|---|---|---|---|---|
+| 1 | Plan the day | call cycle, route, territory plan | Territory manager / system | SFA app, spreadsheet | ⚠ Reps plan by hand; channels planned the same way though they work differently |
+| 2 | Brief before the visit | visit prep, "top 10 things" | Rep | Several systems (ERP, data lake, tickets) | ⚠ Information spread across systems; reps go in unprepared |
+| 3 | Run the visit | check-in, steps, range check, compliance | Rep | Tablet or phone app | ⚠ One app for all channels; steps don't fit licensed vs not |
+| 4 | Take the order | direct order, partner order | Rep ↔ distributor | ERP, partner portal | ⚠ Partner orders invisible to the rep |
+| 5 | Capture what happened | debrief, visit notes, follow-ups | Rep | App notes | ⚠ Insights don't reach support or managers |
+| 6 | Manage the team | execution, distribution, coaching | Manager | Dashboards | ⚠ Numbers lag the visit |
+
+AI moments: briefing agent ranked by business-owned priorities (P07), read aloud on the drive (P08), AI fills the visit
+from the debrief (P12). Usual landscape: SAP or another ERP stays, a data lake, an existing SFA app (often iPad).
+Competitors seen: Salesforce (retail execution), SAP Sales Cloud, in-house build. Users are often all on mobile, so
+show the mobile app first and rehearse on the device (demo bar item 7).
+
+### J5 · Project or site selling (site → stages → wish list → gaps)
+*From Hardware & General (trade supplies, Nov 2026). Library module `site-selling` (L1); patterns P01–P03, P10.*
+
+| Step | Neutral term | Customer terms we've heard | Who | Usual system | Typical break |
+|---|---|---|---|---|---|
+| 1 | New project or site | site, job, build, address | Rep | ERP account (not the site) | ⚠ Managed by customer account, so each build gets lost in the total |
+| 2 | What it could buy | build type, template, wish list | Rep / business | Rep's memory | ⚠ Each rep decides what to chase |
+| 3 | Track by stage | slab, frame, lock-up, fit-out | Rep | Notes, calendar | ⚠ Stages pass before anyone quotes |
+| 4 | Quote and win | quote, order, sale | Rep → ERP | ERP | ⚠ Quoted vs sold not compared by site |
+| 5 | Site history | diary notes, field calls | Rep | Free CRMs, personal laptops | ⚠ History leaves with the rep |
+| 6 | Coach on the gaps | identified on time / late / never | Manager | None | ⚠ Missed work invisible; order takers vs hunters |
+
+AI moments: site summary before a visit, AI drafts the diary note from a field call and flags missed stages (rep
+confirms). Usual landscape: an ERP that groups by account (stays), quotes and invoices in the ERP. Live change:
+add an item to a template (rules as data).
 
 ## 4. KPI benchmarks
 Source URLs and detail: `core-kpi-benchmarks-2026-11-03.md` (design workspace `research/`, not in the plugin).
@@ -194,4 +227,5 @@ application → request / enrolment / referral · opportunity → deal / pipelin
 | Date | Deal | What we learned | Changed in pack |
 |---|---|---|---|
 | 3 Nov 2026 | Mock 01 (fictional bank) | Documents can be the *cause* of slow decisions; "CRM" can be a toxic word | C-H12 added; "words to avoid" default |
+| 11 Nov 2026 | Hardware & General, Suntory Oceania (real deals) + blind tests | Neither fitted a pack; both improvised journeys | **J4 field visit, J5 project selling added** (weekly digest W46, approved) |
 | 3 Nov 2026 | W1 test 01 (GSB, public research) | The incumbent contact-centre platform's AI roadmap shapes the pitch; public data can contradict the pain quote | J3 landscape note; C-H07, C-H11 |

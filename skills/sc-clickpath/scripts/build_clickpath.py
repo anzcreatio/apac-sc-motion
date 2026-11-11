@@ -390,10 +390,12 @@ def sc_page(spec, shots):
              '<span class="hint" id="progressText"></span><label class="check-line"><input type="checkbox" id="onlyTodo"> Only steps not rehearsed</label>'
              '<button type="button" class="text-btn" id="clearTicks">Clear ticks</button></div>')
     explore = '<div class="layout">%s%s</div>' % (rail(order, headings, extra), results("".join(blocks)))
-    before = "".join("<li>%s</li>" % esc(x) for x in spec.get("before_start", []))
+    before = ("<li><b>Rehearse on the device, network and login you'll present with</b> (phone or tablet app, VPN, SSO), "
+              "and have the fallback ready: web view or a recorded clip.</li>")
+    before += "".join("<li>%s</li>" % esc(x) for x in spec.get("before_start", []))
     notes = "".join("<li>%s</li>" % esc(x) for x in spec.get("notes", []) + spec.get("issues", []))
     prep = ('<div class="panel"><h2>Before you start</h2><ol>%s</ol>%s%s%s</div>'
-            % (before or "<li>No checklist in the click path.</li>",
+            % (before,
                ('<p><b>Reset:</b> %s</p>' % esc(spec["reset"])) if spec.get("reset") else "",
                ('<p><b>Login and story:</b> %s</p>' % esc(spec["persona"])) if spec.get("persona") else "",
                ('<h2>Notes</h2><ul>%s</ul>' % notes) if notes else ""))

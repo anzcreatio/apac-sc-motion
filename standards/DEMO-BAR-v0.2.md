@@ -1,4 +1,4 @@
-# Demo bar v0.1: the minimum for every demo configuration
+# Demo bar v0.2: the minimum for every demo configuration
 
 **What it is:** the floor every Creatio demo meets before a customer sees it. It says **what must be true**, never
 **how to build it**. Everything above the floor is the SC's call: their creativity, the pattern book, what the
@@ -23,7 +23,7 @@ customer wants to click through.
 | 4 | **Differentiators.** One rehearsed live change (D1). AI that acts while a person confirms (D3). Plus the track core: **D2 (one platform) for Platform deals, D5 (fits your landscape) for AI Studio deals, both for combined deals; D5 always in manufacturing** (differentiator catalogue) | The plan's differentiator column | Agreed motion rule |
 | 5 | **AI-first floor.** At least one AI moment on a record (AI Twin or a Creatio.ai skill) and one AI step that runs in the background without a click (in a process), where it makes sense for their work. Each has a fallback if it fails live | The plan's Part 2 | Goal (e): AI first, not AI added on |
 | 6 | **UX floor.** Native Freedom UI first; no empty views; a summary or KPI strip on the key pages; short helper text where a screen isn't obvious; no leftover sample-data noise in lists or menus; readable at the meeting's screen size | `creatio-ui-guidelines` review + browser check | The quality the customer judges us on |
-| 7 | **It works every time.** Every use case passes in the browser (`creatio-uc-readiness`), there's a reset, and there are backup screenshots | Readiness verdicts | No live surprises |
+| 7 | **It works every time, where it will be shown.** Every use case passes in the browser (`creatio-uc-readiness`), there's a reset, and there are backup screenshots. **Rehearse the full click path on the device, network and login you'll present with** (phone or tablet app, VPN, SSO), with the fallback ready (web view or recorded clip). **Full and Proof demos run on their own clean stand or the library master stand**, never on a stand that holds another customer's demo; a Light config may use a shared stand, in its own packages, and its screenshots are reviewed before anything reaches the customer | Readiness verdicts, rehearsal on the device, stand named in the plan | No live surprises; no other customer's name on screen |
 | 8 | **It leaves a trail.** Click path with screenshots (`creatio-demo-clickpass` → deck `screen` slides), turned into **two pages by `sc-clickpath`: the SC practice guide and a customer-safe recap** (approved by the SC before it's sent), and an **L1 harvest into the demo library within 2 working days of the demo** (`sc-harvest`) | Library catalogue entry for the deal | Feeds the deck (goal c) and the library (goal d) |
 | 9 | **Built for reuse.** The build follows §6b: its own packages (never `Custom`), module and customer layers apart, neutral schema names, seed data and rules in the package, the things that can't be exported written down | The package plan in the demo plan; `sc-harvest` checks it | An export nobody can reuse isn't a library |
 
@@ -84,6 +84,7 @@ book carries its source and date.
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| v0.2 | 11 Nov 2026 | Item 7: clean stand for Full and Proof demos; rehearse on the presenting device, network and login | Weekly digest W46, approved by Renzo: Suntory (Ord Minnett names in screenshots, mobile AI sign-in failed live), H&G (shared stand, `Custom` default) |
 | v0.1 | 11 Nov 2026 | First bar | Renzo's brief; H&G, Suntory, SAHE builds |
 | v0.1 | 11 Nov 2026 | Item 8 adds the two click-path pages (SC practice + customer-safe recap) | Renzo: keep a click path to practise with, and a customer-ready one |
 | v0.1 | 11 Nov 2026 | Item 8 = L1 harvest within 2 working days; item 9 + §6b build for reuse | Renzo: every demo builds the library, L1 minimum |

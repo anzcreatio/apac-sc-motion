@@ -4,7 +4,7 @@
 | Field | Value |
 |---|---|
 | Pack | **Manufacturing** (overlay). Lists only what differs from or adds to the Core pack; everything else is inherited |
-| Inherits from | Core v0.1 (`CORE-PACK-v0.1.md`) |
+| Inherits from | Core v0.2 (`CORE-PACK-v0.2.md`) |
 | Owner (SC) | (to assign) |
 | Version / date | v0.1 · 3 Nov 2026 |
 | Segments covered | Discrete and process manufacturers selling B2B and through dealers/distributors: industrial equipment, building products, packaging, consumer goods, **contract manufacturing** (incl. TGA-licensed therapeutic goods and food). AU first; then ID, MY, VN, SG, NZ. **Not** covered: MES/shop floor, production planning, batch release (these stay in ERP/MES/QMS) |

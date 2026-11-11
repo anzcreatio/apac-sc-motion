@@ -3,7 +3,7 @@
 ## 0. Pack header
 | Field | Value |
 |---|---|
-| Pack | **BFSI**: overlay. Lists only what differs from or adds to [CORE-PACK-v0.1.md](CORE-PACK-v0.1.md); everything else is inherited |
+| Pack | **BFSI**: overlay. Lists only what differs from or adds to [CORE-PACK-v0.2.md](CORE-PACK-v0.2.md); everything else is inherited |
 | Inherits from | Core v0.1 |
 | Owner (SC) | (to assign) |
 | Version / date | v0.1 · 3 Nov 2026 |

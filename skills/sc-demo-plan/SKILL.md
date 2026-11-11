@@ -16,8 +16,9 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 |---|---|---|
 | What we know about the customer | Deal folder: `01-fm-prep.md`, `NN-meeting-review-*.md`, transcripts, `deck.json`. Older deals: W1 pack, W2 brief, discovery card, hypothesis files: read whatever is there | Ask the SC for the latest transcript or notes; don't plan from the BDR call alone for a full demo |
 | Level | Light (first meeting, ≤ half a day), Full (value demo) or Proof (days or weeks, ending in a readout) | Ask |
-| Time available to build, demo length, stand to use | The SC | Ask; default Full = 2–3 days, 45–60 min demo |
-| Demo bar | `../../standards/DEMO-BAR-v0.1.md` | — |
+| Time available to build, demo length, stand to use | The SC | Ask; default Full = 2–3 days, 45–60 min demo. **Full and Proof: a clean stand of its own or the library master stand**, never one holding another customer's demo (demo bar item 7) |
+| Presenting device, network and login | The SC | Ask: laptop, phone or tablet app, VPN, SSO. Rehearse on exactly that |
+| Demo bar | `../../standards/DEMO-BAR-v0.2.md` | — |
 | Pattern book | `../../patterns/catalogue.json` (+ screenshots in SharePoint `Patterns/`) | — |
 | Demo library | `../../library/catalogue.json` | Skip reuse; note harvest candidates |
 | Knowledge | `../../knowledge/` (packs, differentiator catalogue, governance "can say", M6 live-change kit) | — |
@@ -35,6 +36,8 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    that too. Then: a named competitor → check the differentiator catalogue for what we beat them on and the pattern book
    for their UX patterns; an RFP or document → read it fully and add its requirements to the pains and asks (tag C,
    source = the document), marking hard requirements **Asked (must)**; anything else → fold it into the plan.
+   Also confirm two practical things in the same message: **which stand** (clean, or library master; a shared stand
+   only for a Light config) and **which device, network and login** the demo will be shown on.
 1. **Pains and asks.** List every pain with its evidence tag: **C** the customer said it · **P** a partner said it ·
    **I** we inferred it (call context or research, with source and date) · **A** we assumed it. Plus everything they
    **asked** to see, and any **must** (a stated requirement or constraint). Scenes follow demo bar item 3: C builds;

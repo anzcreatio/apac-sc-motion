@@ -31,7 +31,7 @@ Master stand: a clean library-only instance once Renzo gets one; `11011710-demo`
 3. **List what's inside:** `python scripts/list_package.py "<Library/<id>/packages>"` decodes every export offline
    and writes `contents.json` (schemas, data bindings, files, dependencies). Check `DependsOn` for packages that
    belong to another demo on a shared stand: those won't install on a clean stand.
-4. **Check the build-for-reuse rules** (`../../standards/DEMO-BAR-v0.1.md` §6b): own packages, two layers, neutral
+4. **Check the build-for-reuse rules** (`../../standards/DEMO-BAR-v0.2.md` §6b): own packages, two layers, neutral
    names, seed data in the package, manual steps written down. Note every break; don't fix the stand.
 5. **Write `Library/<module-id>/README.md`** (SharePoint):
    - What it does, in one paragraph, and the pains it served (their words, the deal).

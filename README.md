@@ -3,7 +3,7 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.6.0)
+## What's in it (v0.7.0)
 
 | Skill | Use it for |
 |---|---|
@@ -19,7 +19,7 @@ library for every SC, updated in one place.
 
 | Folder | What |
 |---|---|
-| `standards/` | `DECK-STANDARD-v0.3.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.1.md` (the minimum for every demo) |
+| `standards/` | `DECK-STANDARD-v0.3.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.2.md` (the minimum for every demo) |
 | `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet |
 | `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
 | `patterns/` | Pattern book: demo ideas from our deals, competitors and the Knowledge Hub (screenshots in SharePoint `Patterns/`) |
