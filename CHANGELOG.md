@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0 (11 Nov 2026): demo library and click paths
+- Demo library: every demo harvested to **L1 within 2 working days** (demo bar item 8); item 9 + §6b **build for reuse**
+  (own packages, module and customer layers, neutral schema names, seed data in the package, manual steps written down).
+- New skill `sc-harvest` (+ `scripts/list_package.py` to decode exports offline). First harvest, all L1, read-only:
+  `site-selling` (H&G, 5 packages), `field-sales-visit` (Suntory, 5 packages; shared-stand dependency flagged),
+  `enquiry-recruitment` (SAHE, 3 packages). Packages, source, scripts and READMEs in SharePoint `Library/`.
+- New skill `sc-clickpath` (+ `scripts/build_clickpath.py`): two self-contained HTML pages per demo, SC practice and
+  customer-safe recap; customer page checks text for internal terms and requires a screenshot review; DRAFT until
+  approved. Built for H&G and Suntory; the review caught another customer's agent name, other demos' accounts and
+  orders, a test record and placeholders in the screenshots.
+- `sc-demo-plan`: package plan + harvest in the build order. `sc-meeting-review`: checks the L1 harvest.
+
 ## 0.4.1 (11 Nov 2026)
 - Before any build, `sc-demo-plan` (step 0) and `sc-first-meeting` (step 5b) ask the three pre-build questions:
   competition, anything else the customer gave us (RFP, email, documents), anything else to know. Answers recorded.

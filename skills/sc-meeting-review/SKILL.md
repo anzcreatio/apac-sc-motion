@@ -54,6 +54,8 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
 4. **What landed:** for each scene, the pattern it used (pattern book ID) and the reaction. Patterns that land on 2+
    deals are candidates to build once as a demo library module.
 5. **Commitments:** everything we promised, with owner and date.
+6. **Library:** is the L1 harvest done (`library/catalogue.json` has this deal)? If not, and the demo was more than
+   2 working days ago, say so first and offer to run `sc-harvest`.
 
 ## Part C: lessons
 

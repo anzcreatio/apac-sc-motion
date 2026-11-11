@@ -25,7 +25,8 @@
       "proven": "H&G, 9 Nov 2026",
       "shots": [
         "hardware-and-general/w-01-board.png"
-      ]
+      ],
+      "library": "site-selling (L1)"
     },
     {
       "id": "P02",
@@ -47,7 +48,8 @@
       "proven": "H&G, 9 Nov 2026",
       "shots": [
         "hardware-and-general/t-02-add-garage.png"
-      ]
+      ],
+      "library": "site-selling (L1)"
     },
     {
       "id": "P03",
@@ -70,7 +72,8 @@
       "shots": [
         "hardware-and-general/g-01-home.png",
         "hardware-and-general/g-03-identified.png"
-      ]
+      ],
+      "library": "site-selling (L1)"
     },
     {
       "id": "P04",
@@ -93,7 +96,8 @@
       "shots": [
         "suntory-oceania/uc4-04-priorities.png",
         "suntory-oceania/uc4-05-reordered.png"
-      ]
+      ],
+      "library": "field-sales-visit (L1), enquiry-recruitment (L1)"
     },
     {
       "id": "P05",
@@ -115,7 +119,8 @@
       "proven": "Suntory, 11 Nov 2026",
       "shots": [
         "suntory-oceania/uc1-01-home.png"
-      ]
+      ],
+      "library": "field-sales-visit (L1)"
     },
     {
       "id": "P06",
@@ -138,7 +143,8 @@
       "proven": "Suntory, 11 Nov 2026",
       "shots": [
         "suntory-oceania/uc3-07c-outlet360-full.png"
-      ]
+      ],
+      "library": "field-sales-visit (L1)"
     },
     {
       "id": "P07",
@@ -162,7 +168,8 @@
       "shots": [
         "suntory-oceania/uc2-02-briefing.png",
         "suntory-oceania/uc2-03-saved.png"
-      ]
+      ],
+      "library": "field-sales-visit (L1)"
     },
     {
       "id": "P08",
@@ -183,7 +190,8 @@
       "proven": "Suntory, 11 Nov 2026",
       "shots": [
         "suntory-oceania/uc2-07-voice.png"
-      ]
+      ],
+      "library": "field-sales-visit (L1)"
     },
     {
       "id": "P09",
@@ -206,7 +214,8 @@
       "proven": "Suntory, 11 Nov 2026",
       "shots": [
         "suntory-oceania/uc3-visit-steps-presented.png"
-      ]
+      ],
+      "library": "field-sales-visit (L1)"
     },
     {
       "id": "P10",
@@ -225,7 +234,8 @@
       "ai_part": "AI suggests moving the stage when a note says the job has moved on.",
       "source": "own",
       "proven": "H&G (installed, parked), 6 Nov 2026",
-      "shots": []
+      "shots": [],
+      "library": "site-selling (L1)"
     },
     {
       "id": "P11",
@@ -245,7 +255,8 @@
       "ai_part": "AI reads the enquiry email and fills the form.",
       "source": "own",
       "proven": "SAHE fallback stand, 5 Nov 2026",
-      "shots": []
+      "shots": [],
+      "library": "enquiry-recruitment (L1)"
     },
     {
       "id": "P12",
@@ -282,7 +293,8 @@
       "proven": "H&G, 9 Nov 2026",
       "shots": [
         "hardware-and-general/n-01-sites-list.png"
-      ]
+      ],
+      "library": "site-selling (L1), enquiry-recruitment (L1)"
     },
     {
       "id": "P14",

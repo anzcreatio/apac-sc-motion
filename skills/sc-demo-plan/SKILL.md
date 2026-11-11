@@ -69,7 +69,9 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     test set with the right answers (synthetic unless they approve real data); how each result is scored; a scoreboard
     the customer can see (pattern P16); what is built before the proof and what during it; the readout agenda and who
     must attend (include whoever can veto).
-11. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
+11. **Harvest is part of the plan:** the L1 harvest (`sc-harvest`) is the last line of the build order, due within 2
+    working days of the demo.
+12. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
     candidates for the demo library.
 
@@ -89,6 +91,10 @@ the SC must make.
 
 | Element | What to configure | Their term | Native or custom (why) | Reuse | UX touches (KPI strip, helper text, data) | Hours |
 |---|---|---|---|---|---|---|
+
+**Package plan (build for reuse, demo bar §6b):** module package name and customer package name, neutral schema names
+for the main objects, where seed data and rules live, what can't be exported (manual steps), custom component
+packages. Name a library module here if one is reused, and say what gets promoted (L1 → L2).
 
 **Part 2, AI**
 
