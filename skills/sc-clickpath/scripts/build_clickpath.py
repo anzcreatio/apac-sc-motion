@@ -2,21 +2,25 @@
 
 Usage:
     python build_clickpath.py <cards.json> [--customer <clickpath-customer.json>] [--shots <dir>] [--out <dir>]
-                              [--fragment] [--approved]
+                              [--slug <name>] [--fragment] [--approved]
 
 Inputs
   cards.json        the creatio-demo-clickpass cards (title, persona, before_start, reset, sections, cards[...]).
   --customer        overlay with the customer-facing words (default: clickpath-customer.json beside cards.json):
-                    {customer, title, date, intro, simulated, sections: {UC1: "heading"},
-                     cards: {"UC1-2": "what it means for them"}, hide: ["UC2-4"], approved: false}
+                    {customer, page_name, title, eyebrow, date, intro, simulated, contact, approved,
+                     sections: {UC1: "heading"}, titles: {"UC1-2": "..."}, cards: {"UC1-2": "what it means for them"},
+                     hide: [...], crop: {"UC1-3": [l, t, r, b] fractions}, screens_reviewed: [...]}
   --shots           screenshot folder (default: shots/ beside cards.json)
 
 Outputs (default: the folder of cards.json)
-  <slug>-click-path-sc.html        for the SC: clicks, talk track, watch-outs, reset, practice mode, progress
+  <slug>-click-path-sc.html        for the SC: clicks, talk track, watch-outs, before you start, practice mode, ticks
   <slug>-click-path-customer.html  for the customer: screenshots and plain words only. DRAFT banner until approved
-                                   (overlay "approved": true or --approved, refused while the safety check finds anything)
-Both files are self-contained (screenshots embedded), so they work offline. --fragment writes them without the
-<!doctype>/<html>/<head>/<body> wrapper, for publishing as a Claude artifact.
+                                   ("approved": true or --approved), refused while a check fails or a shown screenshot
+                                   is not in screens_reviewed.
+Layout: the Creatio explorer shell (masthead + stat strip, clickable flow strip, tabs, sticky filter rail, collapsible
+use cases with step rows). One light brand theme (Creatio brand: no dark backgrounds). Both files are self-contained
+(screenshots and logo embedded) and work offline. --fragment writes them without the <!doctype>/<html>/<body>
+wrapper, for publishing as a Claude artifact.
 """
 import argparse
 import base64
@@ -35,6 +39,9 @@ try:
     from build_deck import VENDOR_WORDS, AI_TELLS  # same style rules as the deck
 except Exception:  # pragma: no cover
     VENDOR_WORDS, AI_TELLS = re.compile(r"$^"), []
+
+LOGO_FILE = os.path.join(HERE, "creatio-logo.txt")
+LOGO = open(LOGO_FILE).read().strip() if os.path.isfile(LOGO_FILE) else ""
 
 # Anything that must never reach a customer.
 INTERNAL = [
@@ -72,160 +79,331 @@ def img_data(path, max_w=1400, crop=None):
     return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode(), im.width, im.height
 
 
+FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+         '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600'
+         '&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">')
+
 STYLE = """
 <style>
-/* Layout: one reading column of numbered steps, grouped by use case; screenshot first, words beside or below. */
-:root {
-  --bg: #f7f6f4; --surface: #ffffff; --ink: #1d1b19; --muted: #5f5a54; --line: #e3dfda;
-  --accent: #e8400f; --accent-soft: #fdebe4; --warn: #8a5a00; --warn-soft: #fff4dc; --ok: #2f7a4b;
-  --font-display: "Montserrat", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
-  --radius: 10px;
+/* Layout: the Creatio explorer shell (masthead + stat strip, demo-flow strip, tabs, sticky filter rail,
+   use case > step rows). Creatio brand forbids dark backgrounds, so the page commits to one light theme
+   and paints every colour explicitly. */
+:root{
+  --bg:#FFFFFF; --bg-alt:#F0F0F0; --bg-alt2:#E7E7E7;
+  --text-primary:#0A0A0A; --text-body:#5C5C5C; --text-caption:#888888;
+  --accent:#FF4013; --accent-deep:#C6350F; --accent-tint:#FFF1EC;
+  --say-bg:#FFF1EC; --watch-bg:#FFF6E0; --watch-text:#7A5300; --draft-bg:#FFF6E0; --draft-text:#7A5300;
+  --font-head:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #161514; --surface: #201f1d; --ink: #f1eeea; --muted: #b3ada6; --line: #34312e;
-  --accent: #ff6a3d; --accent-soft: #3a2219; --warn: #f2c66b; --warn-soft: #33290f; --ok: #7cc79a; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #161514; --surface: #201f1d; --ink: #f1eeea; --muted: #b3ada6; --line: #34312e;
-  --accent: #ff6a3d; --accent-soft: #3a2219; --warn: #f2c66b; --warn-soft: #33290f; --ok: #7cc79a; color-scheme: dark }
-* { box-sizing: border-box }
-body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--font-body); margin: 0 }
-.wrap { max-width: 1040px; margin: 0 auto; padding-block: 28px 64px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
-header.top { display: grid; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--line) }
-.eyebrow { font: 600 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--accent) }
-h1 { font: 600 clamp(26px, 4vw, 36px)/1.15 var(--font-display); margin: 0; text-wrap: balance }
-h2 { font: 600 22px/1.25 var(--font-display); margin: 0; text-wrap: balance }
-h3 { font: 600 17px/1.3 var(--font-display); margin: 0; text-wrap: balance }
-.lede { color: var(--muted); max-width: 68ch; margin: 0 }
-.meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--muted); font-size: 13px }
-.banner { background: var(--warn-soft); color: var(--warn); border: 1px solid var(--warn); border-radius: var(--radius);
-  padding: 10px 14px; font-weight: 600 }
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px }
-.panel h3 { margin-bottom: 8px }
-.panel ul, .panel ol { margin: 0; padding-left: 20px; display: grid; gap: 4px }
-.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
-button { font: 600 13px/1 var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line);
-  border-radius: 999px; padding: 9px 14px; cursor: pointer }
-button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff }
-button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
-nav.toc { display: flex; flex-wrap: wrap; gap: 6px }
-nav.toc a { color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px;
-  font-size: 13px; background: var(--surface) }
-section.uc { display: grid; gap: 16px; padding-top: 36px }
-.flow { display: flex; flex-wrap: wrap; gap: 6px; color: var(--muted); font-size: 13px }
-.flow span + span::before { content: "→"; margin-right: 6px; color: var(--accent) }
-article.step { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 18px; align-items: start;
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px }
-article.step.done { opacity: .62 }
-.shot { margin: 0; display: grid; gap: 6px }
-.shot img { width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); background: var(--bg) }
-.shot figcaption { color: var(--muted); font-size: 12px }
-.words { display: grid; gap: 10px; min-width: 0 }
-.num { font: 600 12px/1 var(--font-display); color: var(--accent); letter-spacing: .06em }
-.label { font: 600 11px/1.2 var(--font-display); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 2px }
-.say { background: var(--accent-soft); border-radius: 8px; padding: 10px 12px }
-.say.hidden-say p { filter: blur(5px); user-select: none }
-.watch { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 10px 12px; font-size: 14px }
-.words p { margin: 0 }
-.check { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted) }
-.links a { color: var(--accent) }
-footer.end { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: grid; gap: 6px }
-@media (max-width: 760px) { article.step { grid-template-columns: minmax(0, 1fr) } }
-@media (prefers-reduced-motion: no-preference) { article.step { transition: opacity .2s } }
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg); color:var(--text-body); font-family:var(--font-body); font-size:15px; line-height:1.55; margin:0;
+  -webkit-font-smoothing:antialiased; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3,h4{font-family:var(--font-head); color:var(--text-primary); font-weight:500; margin:0; text-wrap:balance}
+a{color:var(--accent-deep)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+button,input{font-family:inherit; font-size:inherit; color:inherit}
+.accent{color:var(--accent)}
+.accent-tab{width:48px; height:3px; background:var(--accent); border-radius:2px}
+.shell{max-width:1400px; margin:0 auto; padding-block:36px 96px; display:flex; flex-direction:column; gap:26px}
+.masthead{display:flex; flex-direction:column; gap:14px}
+.eyebrow{font-family:var(--font-head); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600}
+h1.title{font-size:clamp(24px,3vw,34px); letter-spacing:-.01em}
+.lede{margin:0; max-width:80ch; color:var(--text-body)}
+.draft{background:var(--draft-bg); color:var(--draft-text); border-radius:10px; padding:10px 14px; font-weight:600; font-size:13.5px}
+.stat-strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px}
+.stat-tile{background:var(--bg-alt); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:4px; min-width:0}
+.stat-num{font-family:var(--font-head); font-weight:500; font-size:24px; color:var(--accent); font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
+.stat-label{font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-caption)}
+.flow-wrap{display:flex; flex-direction:column; gap:8px}
+.flow-head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap}
+.flow-strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:6px}
+.flow-step{appearance:none; border:none; text-align:left; cursor:pointer; background:var(--bg-alt); border-radius:10px; padding:12px 14px;
+  display:flex; flex-direction:column; gap:4px; position:relative; min-width:0}
+.flow-step:hover{background:var(--bg-alt2)}
+.flow-step[aria-pressed="true"]{background:var(--accent-tint)}
+.flow-step[aria-pressed="true"] .flow-name{color:var(--accent-deep)}
+.flow-strip.filtered .flow-step[aria-pressed="false"]{opacity:.55}
+.flow-top{display:flex; align-items:center; justify-content:space-between; gap:6px}
+.num-badge{font-family:var(--font-mono); font-size:11px; color:var(--accent-deep); border:1.5px solid var(--accent); border-radius:6px; min-width:22px; height:22px;
+  padding:0 4px; display:flex; align-items:center; justify-content:center; flex:none}
+.flow-count{font-family:var(--font-mono); font-size:11.5px; color:var(--text-caption)}
+.flow-name{font-family:var(--font-head); font-weight:600; font-size:13.5px; color:var(--text-primary)}
+.flow-arrow{position:absolute; right:-9px; top:50%; transform:translateY(-50%); width:12px; height:12px; z-index:1; color:var(--accent)}
+.flow-strip .flow-step:last-child .flow-arrow{display:none}
+.hint{font-size:12px; color:var(--text-caption)}
+.tabbar{display:flex; gap:6px; background:var(--bg-alt); padding:4px; border-radius:10px; width:fit-content; max-width:100%; flex-wrap:wrap}
+.tab-btn{appearance:none; border:none; background:transparent; padding:9px 18px; border-radius:7px; font-family:var(--font-head); font-weight:600; font-size:13px;
+  color:var(--text-body); cursor:pointer}
+.tab-btn[aria-selected="true"]{background:var(--bg); color:var(--text-primary); box-shadow:0 1px 3px rgba(10,10,10,.08)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.layout{display:grid; grid-template-columns:270px minmax(0,1fr); gap:28px; align-items:start}
+@media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.rail{background:var(--bg-alt); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:22px; position:sticky;
+  top:calc(20px + env(safe-area-inset-top, 0px)); max-height:calc(100vh - 40px); overflow-y:auto}
+@media (max-width:860px){.rail{position:static; max-height:none}}
+.rail-block{display:flex; flex-direction:column; gap:10px}
+.rail-title{font-family:var(--font-head); font-weight:600; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-primary)}
+.search{width:100%; border:none; border-radius:8px; padding:10px 12px; background:var(--bg); color:var(--text-primary)}
+.search::placeholder{color:var(--text-caption)}
+.chip-row{display:flex; flex-wrap:wrap; gap:6px}
+.chip{appearance:none; border:none; background:var(--bg); color:var(--text-body); padding:7px 11px; border-radius:8px; font-size:12.5px; font-weight:500;
+  cursor:pointer; text-align:left; display:flex; align-items:center; gap:7px}
+.chip .sq{width:9px; height:9px; border-radius:2px; background:var(--text-caption); flex:none}
+.chip[aria-pressed="true"]{background:var(--accent-tint); color:var(--accent-deep); font-weight:600}
+.chip[aria-pressed="true"] .sq{background:var(--accent)}
+.toggle-list{display:flex; flex-direction:column; gap:6px}
+.progress-bar{background:var(--bg); border-radius:999px; height:8px; overflow:hidden}
+.progress-fill{height:100%; width:0; background:var(--accent); border-radius:999px}
+.text-btn{appearance:none; border:none; background:none; font-size:12.5px; font-weight:600; color:var(--accent-deep); cursor:pointer; padding:6px 2px; text-align:left}
+.text-btn:hover{color:var(--accent)}
+.results-head{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px}
+.results-count{font-size:13.5px}
+.results-count b{color:var(--text-primary); font-weight:600}
+.empty{background:var(--bg-alt); border-radius:12px; padding:36px 20px; text-align:center; font-size:14px}
+details.uc-block{margin-bottom:14px; border-radius:14px; background:var(--bg-alt); overflow:hidden}
+details.uc-block > summary{list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+details.uc-block > summary::-webkit-details-marker{display:none}
+.uc-title-wrap{display:flex; align-items:flex-start; gap:12px; min-width:0}
+.uc-text{display:flex; flex-direction:column; gap:3px; min-width:0}
+h2.uc-title{font-size:18px; font-weight:600}
+.uc-flow{font-size:12.5px; color:var(--text-caption)}
+.uc-meta{font-size:12px; color:var(--text-caption); font-family:var(--font-mono); white-space:nowrap}
+.chev{width:9px; height:9px; border-right:2px solid var(--text-caption); border-bottom:2px solid var(--text-caption); transform:rotate(-45deg); transition:transform .15s; flex:none}
+details[open] > summary .chev{transform:rotate(45deg)}
+.uc-body{padding:0 14px 14px; display:flex; flex-direction:column; gap:8px}
+details.step{background:var(--bg); border-radius:10px; overflow:hidden; scroll-margin-top:20px}
+details.step > summary{list-style:none; cursor:pointer; padding:12px 14px; display:flex; align-items:center; gap:12px}
+details.step > summary::-webkit-details-marker{display:none}
+.step-main{display:flex; flex-direction:column; gap:2px; min-width:0; flex:1}
+.step-name{font-weight:600; color:var(--text-primary); font-size:14.5px}
+.step-short{font-size:13px; color:var(--text-caption)}
+.done-pill{font-size:11px; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--accent-tint); color:var(--accent-deep); white-space:nowrap}
+.step-body{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:18px; padding:0 14px 16px; align-items:start}
+@media (max-width:760px){.step-body{grid-template-columns:minmax(0,1fr)}}
+.shot{margin:0}
+.shot img{width:100%; height:auto; border-radius:8px; box-shadow:inset 0 0 0 1px var(--bg-alt2); background:var(--bg-alt); display:block}
+.words{display:flex; flex-direction:column; gap:12px; min-width:0}
+.words p{margin:0; font-size:14px}
+.label{font-family:var(--font-head); font-weight:600; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-caption); margin-bottom:3px}
+.say{background:var(--say-bg); border-radius:8px; padding:10px 12px}
+.say p{color:var(--text-primary)}
+.say.recall p{filter:blur(5px); user-select:none; cursor:pointer}
+.watch{background:var(--watch-bg); border-radius:8px; padding:10px 12px}
+.watch p{color:var(--watch-text)}
+.check-line{display:flex; align-items:center; gap:8px; font-size:13px}
+.check-line input{accent-color:var(--accent); width:16px; height:16px}
+.panel{background:var(--bg-alt); border-radius:14px; padding:22px; display:flex; flex-direction:column; gap:12px; max-width:90ch}
+.panel h2{font-size:18px; font-weight:600}
+.panel ol,.panel ul{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:6px}
+.panel p{margin:0}
+footer.brand{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding-top:12px; border-top:1px solid var(--bg-alt2)}
+footer.brand img{width:112px; height:auto; display:block}
+.footer-meta{font-size:12px; color:var(--text-caption); max-width:90ch}
+body.hide-say .say, body.hide-watch .watch{display:none}
+@media (max-width:520px){.flow-arrow{display:none} .stat-num{font-size:21px}}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
 </style>
 """
 
-FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600&display=swap">'
+ARROW = ('<svg class="flow-arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1l5 5-5 5" fill="none" '
+         'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+
+SCRIPT = """
+<script>
+(function () {
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  var ns = 'clickpath:' + document.title + ':';
+  var steps = Array.prototype.slice.call(document.querySelectorAll('details.step'));
+  var blocks = Array.prototype.slice.call(document.querySelectorAll('details.uc-block'));
+  var flowBtns = Array.prototype.slice.call(document.querySelectorAll('.flow-step'));
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip[data-uc]'));
+  var search = document.getElementById('search');
+  var onlyTodo = document.getElementById('onlyTodo');
+  var active = {};
+  function selected() { return Object.keys(active).filter(function (k) { return active[k]; }); }
+  function apply() {
+    var q = (search && search.value || '').trim().toLowerCase();
+    var ucs = selected(), shown = 0;
+    steps.forEach(function (s) {
+      var ok = (!ucs.length || ucs.indexOf(s.dataset.uc) >= 0) && (!q || s.dataset.text.indexOf(q) >= 0);
+      if (ok && onlyTodo && onlyTodo.checked) { var b = s.querySelector('input[data-key]'); ok = !(b && b.checked); }
+      s.hidden = !ok; if (ok) shown++;
+    });
+    blocks.forEach(function (b) {
+      var any = b.querySelectorAll('details.step:not([hidden])').length > 0;
+      b.hidden = !any; if (q && any) b.open = true;
+    });
+    flowBtns.concat(chips).forEach(function (el) { el.setAttribute('aria-pressed', active[el.dataset.uc] ? 'true' : 'false'); });
+    var strip = document.querySelector('.flow-strip'); if (strip) strip.classList.toggle('filtered', ucs.length > 0);
+    var rc = document.getElementById('resultsCount');
+    if (rc) rc.innerHTML = '<b>' + shown + '</b> of ' + steps.length + ' steps' + (ucs.length ? ' in ' + ucs.length + ' use case' + (ucs.length > 1 ? 's' : '') : '');
+    var empty = document.getElementById('emptyState'); if (empty) empty.hidden = shown > 0;
+  }
+  function toggleUc(uc) { active[uc] = !active[uc]; apply(); }
+  flowBtns.forEach(function (b) { b.addEventListener('click', function () { toggleUc(b.dataset.uc);
+    if (active[b.dataset.uc]) { var blk = document.getElementById('uc-' + b.dataset.uc); if (blk) { blk.open = true; blk.scrollIntoView({behavior: 'smooth', block: 'start'}); } } }); });
+  chips.forEach(function (c) { c.addEventListener('click', function () { toggleUc(c.dataset.uc); }); });
+  if (search) search.addEventListener('input', apply);
+  var reset = document.getElementById('resetFilters');
+  if (reset) reset.addEventListener('click', function () { active = {}; if (search) search.value = ''; if (onlyTodo) onlyTodo.checked = false; apply(); });
+  document.getElementById('expandAll').addEventListener('click', function () { blocks.concat(steps).forEach(function (d) { d.open = true; }); });
+  document.getElementById('collapseAll').addEventListener('click', function () { steps.forEach(function (d) { d.open = false; }); });
+  document.querySelectorAll('.tab-btn').forEach(function (t) { t.addEventListener('click', function () {
+    document.querySelectorAll('.tab-btn').forEach(function (x) { x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
+    document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.toggle('active', p.id === t.getAttribute('aria-controls')); });
+  }); });
+  // SC only: talk track, watch-outs, practice mode, rehearsal ticks
+  function bindToggle(id, cls) { var el = document.getElementById(id); if (!el) return;
+    el.addEventListener('change', function () { document.body.classList.toggle(cls, !el.checked); }); }
+  bindToggle('showSay', 'hide-say'); bindToggle('showWatch', 'hide-watch');
+  var practice = document.getElementById('practice');
+  if (practice) practice.addEventListener('change', function () {
+    document.querySelectorAll('.say').forEach(function (s) { s.classList.toggle('recall', practice.checked); }); });
+  document.querySelectorAll('.say').forEach(function (s) { s.addEventListener('click', function () { s.classList.remove('recall'); }); });
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[data-key]'));
+  function progress() { var n = boxes.filter(function (b) { return b.checked; }).length;
+    var t = document.getElementById('progressText'); if (t) t.textContent = n + ' of ' + boxes.length + ' rehearsed';
+    var f = document.getElementById('progressFill'); if (f) f.style.width = (boxes.length ? 100 * n / boxes.length : 0) + '%';
+    var s = document.getElementById('statRehearsed'); if (s) s.textContent = n + '/' + boxes.length;
+    boxes.forEach(function (b) { var p = b.closest('details.step').querySelector('.done-pill'); if (p) p.hidden = !b.checked; }); }
+  boxes.forEach(function (b) { b.checked = store.get(ns + b.dataset.key) === '1';
+    b.addEventListener('change', function () { store.set(ns + b.dataset.key, b.checked ? '1' : '0'); progress(); apply(); }); });
+  var clear = document.getElementById('clearTicks');
+  if (clear) clear.addEventListener('click', function () { boxes.forEach(function (b) { b.checked = false; store.set(ns + b.dataset.key, '0'); }); progress(); apply(); });
+  if (onlyTodo) onlyTodo.addEventListener('change', apply);
+  progress(); apply();
+})();
+</script>"""
 
 
-def page(title, body, fragment, script=""):
-    head = "<title>%s</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n%s\n%s" % (esc(title), FONTS, STYLE)
+def page(title, body, fragment):
+    head = ('<title>%s</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n%s\n%s'
+            % (esc(title), FONTS, STYLE))
     if fragment:
-        return head + "\n" + body + script
+        return head + "\n" + body + SCRIPT
     return ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
-            + head + "\n</head>\n<body>\n" + body + script + "\n</body>\n</html>\n")
+            + head + "\n</head>\n<body>\n" + body + SCRIPT + "\n</body>\n</html>\n")
 
 
-def sc_page(spec, shots, fragment):
+def clean_heading(h):
+    return re.sub(r"^(UC\d+\s*[—–-]\s*|\d+\.\s*)", "", h or "")
+
+
+def shell(eyebrow, title_html, lede, stats, draft, flow, tabs, panels, footer):
+    stat_html = "".join('<div class="stat-tile"><span class="stat-num"%s>%s</span><span class="stat-label">%s</span></div>'
+                        % ((' id="%s"' % i) if i else "", esc(n), esc(l)) for n, l, i in stats)
+    tab_html = "".join('<button class="tab-btn" role="tab" id="tab-%s" aria-selected="%s" aria-controls="panel-%s">%s</button>'
+                       % (k, "true" if i == 0 else "false", k, esc(label)) for i, (k, label) in enumerate(tabs))
+    panel_html = "".join('<section class="tab-panel%s" id="panel-%s" role="tabpanel" aria-labelledby="tab-%s">%s</section>'
+                         % (" active" if i == 0 else "", k, k, content) for i, (k, content) in enumerate(panels))
+    return ('<div class="shell">%s<header class="masthead"><div class="accent-tab" aria-hidden="true"></div>'
+            '<span class="eyebrow">%s</span><h1 class="title">%s</h1>%s<div class="stat-strip">%s</div></header>'
+            '<section class="flow-wrap" aria-label="Demo flow"><div class="flow-head"><span class="rail-title">Demo flow</span>'
+            '<span class="hint">Click a use case to focus on it</span></div><div class="flow-strip">%s</div></section>'
+            '<div class="tabbar" role="tablist" aria-label="Sections">%s</div>%s'
+            '<footer class="brand"><span class="footer-meta">%s</span>%s</footer></div>'
+            % (draft, esc(eyebrow), title_html, ('<p class="lede">%s</p>' % esc(lede)) if lede else "", stat_html, flow,
+               tab_html, panel_html, footer, ('<img alt="Creatio" src="%s">' % LOGO) if LOGO else ""))
+
+
+def flow_strip(order, headings, counts):
+    return "".join('<button type="button" class="flow-step" data-uc="%s" aria-pressed="false"><span class="flow-top">'
+                   '<span class="num-badge">%d</span><span class="flow-count">%d step%s</span></span>'
+                   '<span class="flow-name">%s</span>%s</button>'
+                   % (esc(uc), i, counts[uc], "" if counts[uc] == 1 else "s", esc(headings[uc]), ARROW)
+                   for i, uc in enumerate(order, 1))
+
+
+def rail(order, headings, extra=""):
+    chips = "".join('<button type="button" class="chip" data-uc="%s" aria-pressed="false"><span class="sq"></span>%s</button>'
+                    % (esc(uc), esc(headings[uc])) for uc in order)
+    return ('<aside class="rail" aria-label="Filters"><div class="rail-block"><label class="rail-title" for="search">Search</label>'
+            '<input type="text" class="search" id="search" placeholder="Screen, step or words…" autocomplete="off"></div>'
+            '<div class="rail-block"><span class="rail-title">Use case</span><div class="chip-row">%s</div></div>%s'
+            '<button type="button" class="text-btn" id="resetFilters">Reset filters</button></aside>' % (chips, extra))
+
+
+def results(blocks_html):
+    return ('<main style="min-width:0"><div class="results-head"><div class="results-count" id="resultsCount" aria-live="polite"></div>'
+            '<div style="display:flex;gap:14px"><button type="button" class="text-btn" id="expandAll">Expand all</button>'
+            '<button type="button" class="text-btn" id="collapseAll">Collapse all</button></div></div>%s'
+            '<div class="empty" id="emptyState" hidden>No steps match. Clear the search or the use case filter.</div></main>' % blocks_html)
+
+
+def uc_block(i, uc, heading, flow_text, steps_html, n):
+    return ('<details class="uc-block" id="uc-%s" open><summary><span class="uc-title-wrap"><span class="num-badge">%d</span>'
+            '<span class="uc-text"><h2 class="uc-title">%s</h2>%s</span></span><span style="display:flex;align-items:center;gap:12px">'
+            '<span class="uc-meta">%d step%s</span><span class="chev"></span></span></summary><div class="uc-body">%s</div></details>'
+            % (esc(uc), i, esc(heading), ('<span class="uc-flow">%s</span>' % esc(flow_text)) if flow_text else "",
+               n, "" if n == 1 else "s", steps_html))
+
+
+def sc_page(spec, shots):
     cards = spec["cards"]
     sections = spec.get("sections", {})
     order = list(dict.fromkeys(c["uc"] for c in cards))
-    toc = "".join('<a href="#%s">%s</a>' % (esc(u), esc(sections.get(u, {}).get("heading", u))) for u in order)
-    before = "".join("<li>%s</li>" % esc(x) for x in spec.get("before_start", []))
-    out = ['<div class="wrap">', '<header class="top">', '<div class="eyebrow">Demo practice · SC only</div>',
-           "<h1>%s</h1>" % esc(spec.get("title", "Demo click path")),
-           '<p class="lede">%s</p>' % esc(spec.get("persona", "")),
-           '<div class="meta"><span>Stand: %s</span><span>%d steps</span><span>Version: %s</span></div>' % (
-               esc(spec.get("instance", "")), len(cards), esc(spec.get("spec_version", ""))),
-           "</header>", '<div style="display:grid;gap:12px;padding-top:20px">']
-    if before or spec.get("reset"):
-        out.append('<div class="panel"><h3>Before you start</h3><ol>%s</ol>%s</div>' % (
-            before, ('<p style="margin:8px 0 0"><strong>Reset:</strong> %s</p>' % esc(spec["reset"])) if spec.get("reset") else ""))
-    out.append('<div class="tools"><button type="button" id="practice" aria-pressed="false">Practice: hide what to say</button>'
-               '<button type="button" id="clear">Clear ticks</button><span class="meta" id="progress"></span></div>')
-    out.append('<nav class="toc" aria-label="Use cases">%s</nav></div>' % toc)
-    for uc in order:
-        sec = sections.get(uc, {})
-        out.append('<section class="uc" id="%s"><h2>%s</h2>' % (esc(uc), esc(sec.get("heading", uc))))
-        if sec.get("flow"):
-            out.append('<div class="flow">%s</div>' % "".join("<span>%s</span>" % esc(f) for f in sec["flow"]))
+    headings = {uc: clean_heading(sections.get(uc, {}).get("heading", uc)) for uc in order}
+    counts = {uc: sum(1 for c in cards if c["uc"] == uc) for uc in order}
+    blocks = []
+    for i, uc in enumerate(order, 1):
+        rows = []
         for c in [c for c in cards if c["uc"] == uc]:
             key = card_key(c)
             fig = ""
             if c.get("shot") and os.path.isfile(os.path.join(shots, c["shot"])):
                 src, w, h = img_data(os.path.join(shots, c["shot"]))
-                fig = '<figure class="shot"><img src="%s" width="%d" height="%d" alt="%s" loading="lazy"><figcaption>%s</figcaption></figure>' % (
-                    src, w, h, esc(c.get("title")), esc(c.get("shot")))
-            parts = ['<div class="num">%s · STEP %s</div><h3>%s</h3>' % (esc(uc), esc(c.get("step")), esc(c.get("title")))]
-            if c.get("who"):
-                parts.append('<div class="meta">Who: %s</div>' % esc(c["who"]))
+                fig = '<figure class="shot"><img src="%s" width="%d" height="%d" alt="%s" loading="lazy"></figure>' % (src, w, h, esc(c.get("title")))
+            words = []
             if c.get("action"):
-                parts.append('<div><div class="label">Click</div><p>%s</p></div>' % esc(c["action"]))
+                words.append('<div><div class="label">Click</div><p>%s</p></div>' % esc(c["action"]))
             if c.get("result"):
-                parts.append('<div><div class="label">You will see</div><p>%s</p></div>' % esc(c["result"]))
+                words.append('<div><div class="label">You will see</div><p>%s</p></div>' % esc(c["result"]))
             if c.get("say"):
-                parts.append('<div class="say"><div class="label">Say</div><p>%s</p></div>' % esc(c["say"]))
+                words.append('<div class="say"><div class="label">Say</div><p>%s</p></div>' % esc(c["say"]))
             if c.get("attention"):
-                parts.append('<div class="watch"><div class="label">Watch out</div><p>%s</p></div>' % esc(c["attention"]))
-            links = c.get("links") or []
-            if links:
-                parts.append('<div class="links">%s</div>' % " · ".join(
-                    '<a href="%s" target="_blank" rel="noopener">%s</a>' % (esc(l.get("url", l) if isinstance(l, dict) else l),
-                                                                         esc(l.get("label", "Open") if isinstance(l, dict) else "Open")) for l in links))
-            parts.append('<label class="check"><input type="checkbox" id="done-%s" data-key="%s"> Rehearsed</label>' % (esc(key), esc(key)))
-            out.append('<article class="step" id="step-%s">%s<div class="words">%s</div></article>' % (esc(key), fig, "".join(parts)))
-        out.append("</section>")
-    notes = "".join("<span>%s</span>" % esc(n) for n in spec.get("notes", []) + spec.get("issues", []))
-    out.append('<footer class="end"><span>For the SC only. Not for the customer: use the customer version instead.</span>%s</footer></div>' % notes)
-    script = """
-<script>
-(function () {
-  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  var ns = "clickpath:" + document.title + ":";
-  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox][data-key]'));
-  function update() {
-    var n = 0;
-    boxes.forEach(function (b) { var a = b.closest('article'); if (b.checked) { n++; a.classList.add('done'); } else { a.classList.remove('done'); } });
-    document.getElementById('progress').textContent = n + ' of ' + boxes.length + ' rehearsed';
-  }
-  boxes.forEach(function (b) { b.checked = store.get(ns + b.dataset.key) === '1';
-    b.addEventListener('change', function () { store.set(ns + b.dataset.key, b.checked ? '1' : '0'); update(); }); });
-  document.getElementById('clear').addEventListener('click', function () {
-    boxes.forEach(function (b) { b.checked = false; store.set(ns + b.dataset.key, '0'); }); update(); });
-  var btn = document.getElementById('practice');
-  btn.addEventListener('click', function () {
-    var on = btn.getAttribute('aria-pressed') !== 'true';
-    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    document.querySelectorAll('.say').forEach(function (s) { s.classList.toggle('hidden-say', on); });
-  });
-  document.querySelectorAll('.say').forEach(function (s) { s.addEventListener('click', function () { s.classList.remove('hidden-say'); }); });
-  update();
-})();
-</script>"""
-    return "".join(out), script
+                words.append('<div class="watch"><div class="label">Watch out</div><p>%s</p></div>' % esc(c["attention"]))
+            for l in c.get("links") or []:
+                url = l.get("url") if isinstance(l, dict) else l
+                words.append('<a href="%s" target="_blank" rel="noopener">%s</a>' % (esc(url), esc(l.get("label", "Open in Creatio") if isinstance(l, dict) else "Open in Creatio")))
+            words.append('<label class="check-line"><input type="checkbox" id="done-%s" data-key="%s"> Rehearsed</label>' % (esc(key), esc(key)))
+            text = " ".join(str(c.get(k) or "") for k in ("title", "short", "action", "result", "say", "attention")).lower()
+            rows.append('<details class="step" data-uc="%s" data-text="%s" id="step-%s"><summary><span class="num-badge">%s</span>'
+                        '<span class="step-main"><span class="step-name">%s</span><span class="step-short">%s</span></span>'
+                        '<span class="done-pill" hidden>Rehearsed</span><span class="chev"></span></summary>'
+                        '<div class="step-body">%s<div class="words">%s</div></div></details>'
+                        % (esc(uc), esc(text), esc(key), esc(c.get("step")), esc(c.get("title")),
+                           esc(c.get("short") or ""), fig, "".join(words)))
+        flow_txt = " → ".join(sections.get(uc, {}).get("flow", []))
+        blocks.append(uc_block(i, uc, headings[uc], flow_txt, "".join(rows), counts[uc]))
+    extra = ('<div class="rail-block"><span class="rail-title">Show</span><div class="toggle-list">'
+             '<label class="check-line"><input type="checkbox" id="showSay" checked> What to say</label>'
+             '<label class="check-line"><input type="checkbox" id="showWatch" checked> Watch-outs</label>'
+             '<label class="check-line"><input type="checkbox" id="practice"> Practice mode (blur what to say)</label></div></div>'
+             '<div class="rail-block"><span class="rail-title">Rehearsal</span><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>'
+             '<span class="hint" id="progressText"></span><label class="check-line"><input type="checkbox" id="onlyTodo"> Only steps not rehearsed</label>'
+             '<button type="button" class="text-btn" id="clearTicks">Clear ticks</button></div>')
+    explore = '<div class="layout">%s%s</div>' % (rail(order, headings, extra), results("".join(blocks)))
+    before = "".join("<li>%s</li>" % esc(x) for x in spec.get("before_start", []))
+    notes = "".join("<li>%s</li>" % esc(x) for x in spec.get("notes", []) + spec.get("issues", []))
+    prep = ('<div class="panel"><h2>Before you start</h2><ol>%s</ol>%s%s%s</div>'
+            % (before or "<li>No checklist in the click path.</li>",
+               ('<p><b>Reset:</b> %s</p>' % esc(spec["reset"])) if spec.get("reset") else "",
+               ('<p><b>Login and story:</b> %s</p>' % esc(spec["persona"])) if spec.get("persona") else "",
+               ('<h2>Notes</h2><ul>%s</ul>' % notes) if notes else ""))
+    stats = [(len(order), "Use cases", ""), (len(cards), "Steps", ""),
+             (sum(1 for c in cards if c.get("shot")), "Screens", ""), ("0/%d" % len(cards), "Rehearsed", "statRehearsed")]
+    title = spec.get("title", "Demo click path")
+    return shell("Demo practice · SC only", esc(title), "", stats, "", flow_strip(order, headings, counts),
+                 [("path", "Click path"), ("prep", "Before you start")], [("path", explore), ("prep", prep)],
+                 "For the SC only. Stand: %s · version %s. Not for the customer: send the customer recap instead."
+                 % (esc(spec.get("instance", "")), esc(spec.get("spec_version", ""))))
 
 
 def check_customer(text):
@@ -242,29 +420,23 @@ def check_customer(text):
     return hits
 
 
-def customer_page(spec, ov, shots, fragment, approved):
-    cards = [c for c in spec["cards"] if card_key(c) not in set(ov.get("hide", []))]
-    sec_names = ov.get("sections", {})
+def customer_page(spec, ov, shots, approved):
+    hidden = set(ov.get("hide", []))
+    cards = [c for c in spec["cards"] if card_key(c) not in hidden]
     order = list(dict.fromkeys(c["uc"] for c in cards))
+    headings = {uc: clean_heading(ov.get("sections", {}).get(uc) or spec.get("sections", {}).get(uc, {}).get("heading", uc)) for uc in order}
+    counts = {uc: sum(1 for c in cards if c["uc"] == uc) for uc in order}
     problems = []
-    for k in ("title", "intro"):
+    for k in ("title", "intro", "simulated", "contact"):
         for h in check_customer(ov.get(k, "")):
             problems.append("%s: %s" % (k, h))
-    out = ['<div class="wrap">']
-    if not approved:
-        out.append('<div class="banner">DRAFT: not yet checked by the solution consultant. Do not send.</div>')
-    out += ['<header class="top" style="padding-top:%s">' % ("16px" if not approved else "0"),
-            '<div class="eyebrow">%s</div>' % esc(ov.get("eyebrow", "What you saw")),
-            "<h1>%s</h1>" % esc(ov.get("title", "%s and Creatio" % ov.get("customer", ""))),
-            '<p class="lede">%s</p>' % esc(ov.get("intro", "")),
-            '<div class="meta"><span>%s</span><span>%d screens</span></div>' % (esc(ov.get("date", "")), len(cards)), "</header>"]
     for uc in order:
-        heading = sec_names.get(uc) or spec.get("sections", {}).get(uc, {}).get("heading", uc)
-        heading = re.sub(r"^(UC\d+\s*[—–-]\s*|\d+\.\s*)", "", heading)
-        for h in check_customer(heading):
+        for h in check_customer(headings[uc]):
             problems.append("section %s heading: %s" % (uc, h))
-        out.append('<section class="uc" id="%s"><h2>%s</h2>' % (esc(uc), esc(heading)))
-        for i, c in enumerate([c for c in cards if c["uc"] == uc], 1):
+    blocks = []
+    for i, uc in enumerate(order, 1):
+        rows = []
+        for j, c in enumerate([c for c in cards if c["uc"] == uc], 1):
             key = card_key(c)
             text = ov.get("cards", {}).get(key)
             if not text:
@@ -277,13 +449,24 @@ def customer_page(spec, ov, shots, fragment, approved):
             if c.get("shot") and os.path.isfile(os.path.join(shots, c["shot"])):
                 src, w, hgt = img_data(os.path.join(shots, c["shot"]), crop=ov.get("crop", {}).get(key))
                 fig = '<figure class="shot"><img src="%s" width="%d" height="%d" alt="%s" loading="lazy"></figure>' % (src, w, hgt, esc(title))
-            out.append('<article class="step">%s<div class="words"><div class="num">%d</div><h3>%s</h3><p>%s</p></div></article>' % (
-                fig, i, esc(title), esc(text)))
-        out.append("</section>")
-    out.append('<footer class="end"><span>%s</span><span>%s</span></footer></div>' % (
-        esc(ov.get("simulated", "Shown on a Creatio demo site with example data. Connections to your other systems were simulated.")),
-        esc(ov.get("contact", ""))))
-    return "".join(out), problems
+            rows.append('<details class="step" data-uc="%s" data-text="%s"><summary><span class="num-badge">%d</span>'
+                        '<span class="step-main"><span class="step-name">%s</span></span><span class="chev"></span></summary>'
+                        '<div class="step-body">%s<div class="words"><p>%s</p></div></div></details>'
+                        % (esc(uc), esc((title + " " + text).lower()), j, esc(title), fig, esc(text)))
+        blocks.append(uc_block(i, uc, headings[uc], "", "".join(rows), counts[uc]))
+    explore = '<div class="layout">%s%s</div>' % (rail(order, headings), results("".join(blocks)))
+    about = ('<div class="panel"><h2>About this demo</h2><p>%s</p>%s</div>'
+             % (esc(ov.get("simulated", "Shown on a Creatio demo site with example data. Connections to your other systems were simulated.")),
+                ('<p>%s</p>' % esc(ov["contact"])) if ov.get("contact") else ""))
+    draft = "" if approved else '<div class="draft">DRAFT: not yet checked by the solution consultant. Do not send.</div>'
+    title = ov.get("title", "%s and Creatio" % ov.get("customer", ""))
+    stats = [(len(order), "Use cases", ""), (sum(1 for c in cards if c.get("shot")), "Screens", ""),
+             (ov.get("date", "").replace("Demo on ", ""), "Demo", "")]
+    body = shell(ov.get("eyebrow", "What you saw"), esc(title), ov.get("intro", ""), stats, draft,
+                 flow_strip(order, headings, counts), [("path", "What you saw"), ("about", "About this demo")],
+                 [("path", explore), ("about", about)],
+                 esc(ov.get("simulated", "Example data on a Creatio demo site.")))
+    return body, problems
 
 
 def slugify(s):
@@ -308,9 +491,9 @@ def main():
     ov = json.load(open(ov_path, encoding="utf-8")) if os.path.isfile(ov_path) else {}
     slug = a.slug or slugify(ov.get("customer") or spec.get("artifact_title") or "demo")
 
-    body, script = sc_page(spec, shots, a.fragment)
     sc_file = os.path.join(out_dir, "%s-click-path-sc.html" % slug)
-    open(sc_file, "w", encoding="utf-8").write(page("%s practice" % (ov.get("customer") or spec.get("artifact_title", "Demo")), body, a.fragment, script))
+    name = "%s practice" % (ov.get("customer") or spec.get("artifact_title", "Demo"))
+    open(sc_file, "w", encoding="utf-8").write(page(name, sc_page(spec, shots), a.fragment))
     print("SC version:", sc_file, "(%d KB)" % (os.path.getsize(sc_file) // 1024))
 
     if not ov:
@@ -322,22 +505,19 @@ def main():
     if approved and unreviewed:
         print("REFUSED: %d screenshot(s) not reviewed yet; it stays a DRAFT." % len(unreviewed))
         approved = False
-    body, problems = customer_page(spec, ov, shots, a.fragment, approved)
+    body, problems = customer_page(spec, ov, shots, approved)
     if problems and approved:
         print("REFUSED: the customer version still has %d problem(s); it stays a DRAFT." % len(problems))
         approved = False
-        body, problems = customer_page(spec, ov, shots, a.fragment, False)
+        body, problems = customer_page(spec, ov, shots, False)
     cu_file = os.path.join(out_dir, "%s-click-path-customer.html" % slug)
     open(cu_file, "w", encoding="utf-8").write(page(ov.get("page_name", "%s demo recap" % ov.get("customer", "Demo")), body, a.fragment))
     print("Customer version:", cu_file, "(%d KB)" % (os.path.getsize(cu_file) // 1024), "APPROVED" if approved else "DRAFT")
     for p in problems:
         print("CHECK", p)
-    shown = [card_key(c) for c in spec["cards"] if card_key(c) not in set(ov.get("hide", [])) and c.get("shot")]
-    reviewed = set(ov.get("screens_reviewed", []))
-    todo = [k for k in shown if k not in reviewed]
-    if todo:
+    if unreviewed:
         print("LOOK at %d screenshot(s) before approving (other customers' names, test records, logins, URLs, "
-              "placeholders): %s. List them in 'screens_reviewed' once checked." % (len(todo), ", ".join(todo)))
+              "placeholders): %s. List them in 'screens_reviewed' once checked." % (len(unreviewed), ", ".join(unreviewed)))
 
 
 if __name__ == "__main__":

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1 (11 Nov 2026)
+- Click path pages now use the Creatio Workflow Explorer navigation (Renzo's preference): stat strip, demo-flow
+  strip, tabs (Click path / Before you start; What you saw / About this demo), sticky filter rail, collapsible use
+  cases and steps, Creatio logo. Same safety checks.
+
 ## 0.5.0 (11 Nov 2026): demo library and click paths
 - Demo library: every demo harvested to **L1 within 2 working days** (demo bar item 8); item 9 + §6b **build for reuse**
   (own packages, module and customer layers, neutral schema names, seed data in the package, manual steps written down).

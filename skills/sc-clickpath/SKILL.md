@@ -6,7 +6,11 @@ description: Turn a Creatio demo's click path into two self-contained HTML pages
 # sc-clickpath
 
 Two pages from one click path (Renzo, 11 Nov 2026): one for us to prepare and practise, one the customer can keep.
-Both are single HTML files with the screenshots inside, so they open offline and can be kept or sent.
+Both are single HTML files with the screenshots and Creatio logo inside, so they open offline and can be kept or sent.
+Layout follows the Creatio **Workflow Explorer** (Renzo's preferred navigation): masthead with a stat strip, a
+clickable demo-flow strip, tabs, a sticky filter rail (search, use-case chips; SC: show/hide talk track and
+watch-outs, practice mode, rehearsal progress), and collapsible use cases with step rows that open to the
+screenshot and words. One light Creatio brand theme.
 
 Paths are relative to this skill's folder; plugin root = `../..`.
 
