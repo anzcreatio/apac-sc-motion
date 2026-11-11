@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.1 (12 Nov 2026): fixes from the Pegadaian POC plan test
+- POC brief: hours labelled as configuration only (plan 2-3x); full draft tests; new section 2b lists claims already
+  submitted that say more than our fit-gap (the POC is tested against them).
+- `rfp.py coverage`: in a markdown plan a ref must start a table row (a passing mention no longer counts).
+- `sc-demo-plan` proof mode: ask whether the customer sets the POC format (their scenarios replace ours), the readout
+  language and local test accounts for each channel; TOR-only labels (requirement = Asked (must), C; pain = I);
+  plan submitted claims with the bid team.
+
 ## 0.10.0 (12 Nov 2026): RFP → POC hand-off
 - `rfp.py poc`: POC brief from the fit-gap (Build lines grouped with draft tests, must-have gaps to handle in the story,
   Show evidence, questions, low-confidence lines) + a JSON of the refs.

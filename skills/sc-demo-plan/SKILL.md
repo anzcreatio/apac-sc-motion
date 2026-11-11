@@ -73,9 +73,16 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     test set with the right answers (synthetic unless they approve real data); how each result is scored; a scoreboard
     the customer can see (pattern P16); what is built before the proof and what during it; the readout agenda and who
     must attend (include whoever can veto).
-    **POC after an RFP:** start from `rfp/05-poc-brief.md`. Every **Build** ref gets a scene and a sharpened test (their
+    **POC after an RFP:** ask first whether **the customer sets the POC format** (their scenarios, scoring sheet, session
+    length, who attends): if they do, their scenarios are the scenes, in their order, and "3–4 scenes in 45–60 min"
+    doesn't apply. Ask the **readout language** (Bahasa or English; the demo data and labels follow it) and get **local
+    test accounts** for every channel shown (WhatsApp and SMS to a local number) into the device rehearsal. With only a
+    TOR and no meetings: a TOR requirement is **Asked (must)** tagged **C** (they wrote it), a pain behind it is **I**
+    until someone confirms it. Start from `rfp/05-poc-brief.md`. Every **Build** ref gets a scene and a sharpened test (their
     data, what they click, what they must see) in a **Requirement coverage** table (`Ref · Scene · Test · Status`);
-    every must-have **gap** gets a line in the story (the workaround shown or said). Put the refs in the demo script and
+    every must-have **gap** gets a line in the story (the workaround shown or said); every **claim already submitted**
+    (brief §2b) gets an agreed line with the SC and bid team. The brief's hours are configuration only: plan the data
+    model, seed data, channels, AI, rehearsal and buffer on top (usually 2–3×). Put the refs in the demo script and
     the click path card notes too, so they show up at readout. Check with
     `python ../sc-rfp/scripts/rfp.py coverage --brief rfp/05-poc-brief.json <plan.md> [clickpath/cards.json]`
     before the build starts and again before the readout; a missing ref is a gap to fix or to explain to the SC.

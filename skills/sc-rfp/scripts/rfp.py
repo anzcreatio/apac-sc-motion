@@ -384,7 +384,7 @@ def poc(a):
          "> From the fit-gap (`sc-rfp`), %s. Input for `sc-demo-plan` in **proof mode**: it maps every Build line to a "
          "scene and a test. Internal." % datetime.date.today().isoformat(), "",
          "| | |", "|---|---|",
-         "| Build (live in the POC) | %d lines, about %s h |" % (len(build), sum(float(ver[q["rid"]].get("hours") or 0) for q in build)),
+         "| Build (live in the POC) | %d lines, about %s h of configuration per requirement (the plan adds data model, seed data, channels, AI, rehearsal and buffer: expect 2–3×) |" % (len(build), sum(float(ver[q["rid"]].get("hours") or 0) for q in build)),
          "| Show (screenshot or clip) | %d |" % len(show), "| Tell (written answer; the bid team) | %d |" % len(tell),
          "| Must-have fit | %s%% (%s) |" % (mt["must_fit_pct"], mt["recommendation"]), "",
          "## 1. Build: every line needs a scene and a test", "",
@@ -398,7 +398,7 @@ def poc(a):
         for q in qs:
             v = ver[q["rid"]]
             L.append("| %s | %s | %s (%s) | %s | %s |" % (q["rid"], short(eng(q)).replace("|", "/"), short(v.get("how"), 120).replace("|", "/"),
-                                                     v.get("fit"), "they see it work live on their example data: " + short(v.get("how"), 80).replace("|", "/"),
+                                                     v.get("fit"), "Draft: they see it work live on their example data (%s)" % " ".join(str(v.get("how") or "").split()).replace("|", "/"),
                                                      v.get("hours") or ""))
         L.append("")
     L += ["## 2. Gaps to handle in the POC story", "",
@@ -413,6 +413,18 @@ def poc(a):
           "| Ref | Requirement | Evidence |", "|---|---|---|"]
     for q in show:
         L.append("| %s | %s | %s |" % (q["rid"], short(eng(q), 110).replace("|", "/"), short(ver[q["rid"]].get("evidence"), 110).replace("|", "/")))
+    claims = []
+    for q in ours:
+        r, t = claim(q.get("answer", {}).get("compliance"))
+        f = ver[q["rid"]].get("fit")
+        if r is not None and f in FITS and FITS[f]["rank"] is not None and r > FITS[f]["rank"]:
+            claims.append((q, t, f))
+    if claims:
+        L += ["", "## 2b. Claims already submitted that the POC will be tested on", "",
+              "The customer-facing answers say more than our fit-gap found. Evaluators test the POC against the answers, "
+              "so agree with the SC and bid team how each is shown or explained.", "",
+              "| Ref | Requirement | Submitted | Our fit |", "|---|---|---|---|"]
+        L += ["| %s | %s | %s | %s |" % (q["rid"], short(eng(q)).replace("|", "/"), t, FITS[f]["label"]) for q, t, f in claims]
     qs = [q for q in ours if ver[q["rid"]].get("question")]
     L += ["", "## 4. Questions to settle before building", ""] + \
          ["- **%s**: %s" % (q["rid"], short(ver[q["rid"]]["question"], 220)) for q in qs] + \
@@ -433,7 +445,12 @@ def coverage(a):
         texts[f] = open(f, encoding="utf-8", errors="replace").read()
     rows, missing = [], 0
     for rid in brief["build"] + brief["gaps"]:
-        found = {os.path.basename(f): bool(re.search(r"(?<![\w-])%s(?![\w.])" % re.escape(rid), t)) for f, t in texts.items()}
+        found = {}
+        for f, t in texts.items():
+            if f.lower().endswith(".md"):  # must be a row of a table (the coverage table), not a passing mention
+                found[os.path.basename(f)] = bool(re.search(r"(?m)^\|\s*\**%s\**\s*\|" % re.escape(rid), t))
+            else:
+                found[os.path.basename(f)] = bool(re.search(r"(?<![\w-])%s(?![\w.])" % re.escape(rid), t))
         if not all(found.values()):
             missing += 1
         rows.append((rid, "gap" if rid in brief["gaps"] and rid not in brief["build"] else "build", found))
