@@ -1,0 +1,25 @@
+{
+  "name": "creatio-2026",
+  "description": "Creatio POV slide frame (white, orange accent, Montserrat). Frame shapes copied from slide 2 of base.pptx.",
+  "base": "base.pptx",
+  "frame_slide": 1,
+  "shapes": {
+    "title": "Text 0",
+    "subtitle": "TextBox 15",
+    "page": "Text 50"
+  },
+  "title_width": 11.6,
+  "area": { "left": 0.5, "top": 1.1, "width": 12.33, "bottom": 6.85 },
+  "font": "Montserrat",
+  "colours": {
+    "accent": "FF4013",
+    "tint": "FFECE6",
+    "ink": "0A0A0A",
+    "grey": "666666",
+    "rule": "D9DCE1",
+    "white": "FFFFFF",
+    "soft": "F2F3F5"
+  },
+  "brand": "Creatio",
+  "cover_fill": "FF0000"
+}

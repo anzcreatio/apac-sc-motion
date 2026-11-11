@@ -1,0 +1,53 @@
+---
+name: sc-deck
+description: Build, rebuild, restyle or check a Creatio APAC customer deck from a deal's deck.json using the team deck standard - cover, current understanding, hypothesis, component, screen, solution summary, roadmap and next-steps slides, plus corporate slides pulled from the SharePoint Slide-library. Also renders every slide to PNG for checking, extracts slides into the slide library, and adds a new corporate PowerPoint template. Use whenever an SC asks to make, update, fix or render a deck or slides for a deal, change the solution summary, add corporate slides, or apply a new template.
+---
+
+# sc-deck
+
+The deck is data: `deck.json` in the deal folder is the source, the `.pptx` is built from it. Edit the JSON and
+rebuild; don't hand-edit the built deck unless the SC asks (hand edits are lost on the next build, and the
+`sc-meeting-review` skill learns from what the SC changed in the presented deck).
+
+Standard: `../../standards/DECK-STANDARD-v0.3.md` (slide order, word rules, every field). Read it before writing JSON.
+
+## Commands
+
+| Task | Command (from this skill's folder) |
+|---|---|
+| Build + render | `python scripts/build_deck.py <deal>/deck.json --render` → `<out>.pptx` and `<out>-png/slide-NN.png` |
+| Build to another file | add `--out <file.pptx>` |
+| Render any deck | `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/office_deck.ps1 -Action render -Deck <pptx> -OutDir <dir>` |
+| Put corporate slides in the library | `... office_deck.ps1 -Action extract -Deck <pptx> -Slides "4,5,6" -Out "<team root>/Slide-library/<name>-<yyyy-mm>.pptx"` |
+
+Needs Python 3 with `python-pptx` and `Pillow`; PowerPoint only to render. Library slides are copied in Python
+(PowerPoint automation is refused on Creatio 'Confidential'-labelled decks). `office_deck.ps1` opens decks read-only,
+quits PowerPoint afterwards unless the SC already had it open, and never removes a sensitivity label. If a hidden
+`POWERPNT.EXE` is left running after a failure, tell the SC rather than killing it.
+
+## Words
+
+Follow `../../standards/WRITING-STYLE-v0.1.md`. The builder prints `style:` warnings (vendor words, colon titles,
+long titles, semicolons, em dashes): fix them in `deck.json`, don't ignore them.
+
+## After every build
+
+1. Read the warnings. Each one is a fix or a deliberate choice you can explain.
+2. **Open every PNG** and look: text cut off, overlaps, empty areas, wrong screenshot, placeholder text.
+3. Fix in `deck.json`, rebuild, look again.
+4. Tell the SC the deck path and anything they must check (numbers, quotes, claims).
+
+## Library slides
+
+`{"type": "library", "file": "library:<name>.pptx", "slides": [1, 2]}` pulls slides from the SharePoint
+`Slide-library` (what's there: `Slide-library/catalogue.json`; new material arrives through the `sc-inbox` skill). The team root comes from `~/.apac-sc-motion.json` (`sc-setup`), the
+`APAC_SC_ROOT` variable, or the nearest parent folder that holds `Slide-library`.
+
+## New corporate template
+
+1. Make `templates/<name>/`, copy the template as `base.pptx`, keep one content slide with the title, subtitle and
+   page-number shapes on it.
+2. Write `template.json` like `templates/creatio-2026/template.json`: those three shape names, the content area in
+   inches, colours, font, cover colour.
+3. Build `../../tests/deck/sample-fictional/deck.json` with `"template": "<name>"`, render, check every slide.
+4. Bump the deck standard's version and changelog if the default template changes.

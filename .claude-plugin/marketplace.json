@@ -1,0 +1,14 @@
+{
+  "name": "apac-sc",
+  "owner": {
+    "name": "Creatio APAC Solution Consulting"
+  },
+  "plugins": [
+    {
+      "name": "apac-sc-motion",
+      "source": "./",
+      "description": "Creatio APAC SC motion: first-meeting pack, standard deck, demo library and reviews."
+    }
+  ],
+  "description": "Plugins for the Creatio APAC solution consulting team."
+}

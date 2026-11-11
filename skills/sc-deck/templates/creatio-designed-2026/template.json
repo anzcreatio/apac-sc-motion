@@ -1,0 +1,38 @@
+{
+  "name": "creatio-designed-2026",
+  "description": "Creatio designed style from the Suntory deck as presented (11 Nov 2026): white, Creatio logo top right (from the layout), 40 pt Montserrat Medium title, small orange caps label above it, orange line icons, grey body text.",
+  "base": "base.pptx",
+  "frame_slide": 1,
+  "shapes": {
+    "title": "Rectangle 22",
+    "subtitle": "TextBox 23"
+  },
+  "subtitle_case": "upper",
+  "title_width": 11.7,
+  "area": {
+    "left": 0.8,
+    "top": 1.9,
+    "width": 11.7,
+    "bottom": 6.9
+  },
+  "font": "Montserrat",
+  "font_bold": "Montserrat SemiBold",
+  "body": "grey",
+  "icons": "icons",
+  "cover_layout": "Blank",
+  "plain_layout": "Blank",
+  "colours": {
+    "accent": "FF4013",
+    "tint": "FFECE6",
+    "ink": "0A0A0A",
+    "grey": "666666",
+    "rule": "D9DCE1",
+    "white": "FFFFFF",
+    "soft": "F2F3F5"
+  },
+  "brand": "Creatio",
+  "cover_fill": "FF4013",
+  "title_pt": 40,
+  "title_pt_2_lines": 30,
+  "title_pt_3_lines": 25
+}

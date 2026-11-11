@@ -1,0 +1,55 @@
+# apac-sc-motion
+
+The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
+library for every SC, updated in one place.
+
+## What's in it (v0.3.0, Phase 0)
+
+| Skill | Use it for |
+|---|---|
+| `sc-setup` | First run on a machine: finds the synced SharePoint folder, checks Python, PowerPoint, toolkit |
+| `sc-first-meeting` | Discovery/BDR transcript → standard deck + light-config brief (Business Studio, then AI) + meeting plan |
+| `sc-deck` | Build, rebuild, render or restyle a deck from a deal's `deck.json`; slide library; new templates |
+| `sc-meeting-review` | After a meeting: presented deck vs generated deck (`deck_diff.py`), transcript scorecard, living solution summary update, next-session enhancements, lessons |
+| `sc-inbox` | Review new Knowledge Hub / corporate decks dropped in SharePoint `_inbox`; propose library and catalogue updates |
+
+| Folder | What |
+|---|---|
+| `standards/` | `DECK-STANDARD-v0.3.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) |
+| `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet |
+| `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
+| `library/` | Reusable demo modules catalogue (Phase 2) |
+| `lessons/` | What we learned from the field and what changed because of it |
+| `tests/deck/` | Fictional sample deck that exercises every slide type |
+
+Coming next: `sc-demo-plan` (Phase 1), `sc-harvest` + library (Phase 2), `sc-clickpath`, `sc-weekly-lessons` (Phase 3).
+
+## Where things live
+
+| What | Where | Why |
+|---|---|---|
+| Skills, standards, templates, catalogue | This repo | Versioned; everyone updates with one command |
+| Deals, transcripts, presented decks | SharePoint **APAC Solution Consulting** → Documents → `Deals/<account>/` | Customer data stays in the Creatio tenant; synced to each SC |
+| Corporate slides | SharePoint `Slide-library/` | Large binaries; `library:<file>` in `deck.json` |
+| New templates and corporate content | SharePoint `_inbox/` | Download from the Knowledge Hub, drop here; `sc-inbox` reviews |
+| Weekly digests | SharePoint `Lessons/` | Readable by the team |
+
+## Install (each SC, once)
+
+1. Sync the SharePoint library: site **APAC Solution Consulting** → Documents → **Add shortcut to OneDrive**.
+2. Install the plugin (repo host to be confirmed; until then from a local clone):
+   ```
+   claude plugin marketplace add <path or git URL of this repo>
+   claude plugin install apac-sc-motion@apac-sc
+   ```
+3. In Claude Code: "run sc-setup".
+
+Update: `claude plugin update apac-sc-motion@apac-sc`.
+
+## Changing the motion
+
+1. Change the skill, standard or template here. Bump the version in the file name for standards
+   (`DECK-STANDARD-v0.3.md`) and in `.claude-plugin/plugin.json`.
+2. Rebuild `tests/deck/sample-fictional/deck.json` with `--render` and look at every slide.
+3. Add a line to `CHANGELOG.md` and, if it came from the field, a file in `lessons/`.
+4. A change to the standard needs evidence from **2+ deals or 2+ SCs**, or one serious failure.

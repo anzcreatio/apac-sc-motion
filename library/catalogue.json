@@ -1,0 +1,10 @@
+{
+  "updated": "2026-11-11",
+  "note": "Reusable demo modules (Phase 2). Empty until the first harvest: sc-first-meeting and sc-demo-plan check here before planning a build. Candidates are listed so a plan can say 'harvest first' instead of 'build from scratch'.",
+  "modules": [],
+  "candidates": [
+    {"pattern": "Site / project-based selling: build board, stage wish list from a template, gap and coaching view", "source_deal": "hardware-and-general", "stand": "11011710-demo", "packages": ["UsrHgSite", "UsrHgBuildBoard", "UsrHgTemplateBuilder", "UsrHgSalesOverview"]},
+    {"pattern": "Field sales: territory home, outlet 360, visit briefing agent with a priorities table", "source_deal": "suntory-oceania", "packages": ["outlet360-ws (Angular)", "Rsw field sales home"]},
+    {"pattern": "Student / enquiry recruitment: lead quick-add, assignment process, overview home", "source_deal": "southern-academy-of-higher-education", "stand": "11013018-demo", "packages": ["UsrStudentRecruitment"]}
+  ]
+}
