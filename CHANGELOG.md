@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.0 (11 Nov 2026): Phase 1, demo configuration
+- `standards/DEMO-BAR-v0.1.md`: the minimum for every demo (8 items; Light, Full and Proof levels), element labels
+  (Pain, Asked, Asked (must), Differentiator, SC idea), nothing banned, time and buffer, custom components, outside
+  best practice, prospect branding.
+- `patterns/`: pattern book (16 patterns: 14 from our builds, 2 from the PRC test), SharePoint `Patterns/` for
+  screenshots and `_inbox` for new ideas (`sc-inbox` handles intake).
+- New skill `sc-demo-plan`: pains and asks, hero journey, labelled scenes, Business Studio then AI, reuse, custom
+  components, live change, open space for the SC, demo bar check, hours, proof mode, demo script for the toolkit.
+- Tested on Perth Radiological Clinic (`tests/demo-plan/`, not shipped): 12 findings fixed the same day.
+- `sc-first-meeting` uses the Light bar; `sc-meeting-review` records which patterns landed. Knowledge links fixed.
+
 ## 0.3.1 (11 Nov 2026)
 - Published to SharePoint (`Plugin/apac-sc-motion`) with `publish.ps1`; README install and update steps for SCs.
 

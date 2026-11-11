@@ -3,26 +3,28 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.3.1, Phase 0)
+## What's in it (v0.4.0, Phase 1)
 
 | Skill | Use it for |
 |---|---|
 | `sc-setup` | First run on a machine: finds the synced SharePoint folder, checks Python, PowerPoint, toolkit |
 | `sc-first-meeting` | Discovery/BDR transcript → standard deck + light-config brief (Business Studio, then AI) + meeting plan |
 | `sc-deck` | Build, rebuild, render or restyle a deck from a deal's `deck.json`; slide library; new templates |
+| `sc-demo-plan` | Plan a demo build: demo bar (the floor), Business Studio first then AI, library and pattern book reuse, custom components where they earn it, open space for the SC, demo script for the toolkit |
 | `sc-meeting-review` | After a meeting: presented deck vs generated deck (`deck_diff.py`), transcript scorecard, living solution summary update, next-session enhancements, lessons |
 | `sc-inbox` | Review new Knowledge Hub / corporate decks dropped in SharePoint `_inbox`; propose library and catalogue updates |
 
 | Folder | What |
 |---|---|
-| `standards/` | `DECK-STANDARD-v0.3.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) |
+| `standards/` | `DECK-STANDARD-v0.3.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.1.md` (the minimum for every demo) |
 | `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet |
 | `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
+| `patterns/` | Pattern book: demo ideas from our deals, competitors and the Knowledge Hub (screenshots in SharePoint `Patterns/`) |
 | `library/` | Reusable demo modules catalogue (Phase 2) |
 | `lessons/` | What we learned from the field and what changed because of it |
 | `tests/deck/` | Fictional sample deck that exercises every slide type |
 
-Coming next: `sc-demo-plan` (Phase 1), `sc-harvest` + library (Phase 2), `sc-clickpath`, `sc-weekly-lessons` (Phase 3).
+Coming next: `sc-harvest` + demo library (Phase 2), `sc-clickpath`, `sc-weekly-lessons` (Phase 3).
 
 ## Where things live
 

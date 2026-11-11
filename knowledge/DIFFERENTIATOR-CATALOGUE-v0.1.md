@@ -1,7 +1,7 @@
 # Differentiator catalogue v0.1 (draft)
 
 Owner: APAC SC team (we define our own differentiators). Status: **draft**. Proof points and competitor facts were checked
-in the research pass [differentiators-research-2026-11-03.md](research/differentiators-research-2026-11-03.md) (3 Nov 2026).
+in the research pass `differentiators-research-2026-11-03.md` (design workspace `research/`, not in the plugin) (3 Nov 2026).
 Always attribute claims as shown here ("customers reported, per…"), and recheck prices before quoting them.
 
 ## 1. The rule: what every demo must show (core set **approved by Renzo, 3 Nov 2026**)
@@ -25,7 +25,7 @@ feature tour. **Gate A checks the core set**, and the rest are optional.
 | BFSI example | A new product, a regulatory form or a hardship rule takes months to land in the system |
 | Manufacturing example | A new dealer programme or warranty rule waits for an ERP/CRM change cycle |
 | **Discovery question** | "When the business needs a change in your current system, how long does it take, and who has to do it?" |
-| **Proof moment (≤ 1 min)** | The customer corrects one of our assumptions in the demo → the SC changes the rule live (a value or a new row, e.g. a separate limit for investment loans) and re-runs a record that now routes differently. (Validation moments are designed to create this.) Adding a field takes ~1.5 min; a process change takes 3–6 min and is a planned set piece only (measured at Scentia; see [M6 live-change kit](modules/M6-LIVE-CHANGE-KIT-v0.1.md)). A: change a rule the agent reads, and the agent behaves differently on the next request; don't edit the agent's prompt live |
+| **Proof moment (≤ 1 min)** | The customer corrects one of our assumptions in the demo → the SC changes the rule live (a value or a new row, e.g. a separate limit for investment loans) and re-runs a record that now routes differently. (Validation moments are designed to create this.) Adding a field takes ~1.5 min; a process change takes 3–6 min and is a planned set piece only (measured at Scentia; see [M6 live-change kit](M6-LIVE-CHANGE-KIT-v0.1.md)). A: change a rule the agent reads, and the agent behaves differently on the next request; don't edit the agent's prompt live |
 | **Sandbox asset** | Scentia: 3 rehearsed live changes (`CHANGES.md`). To build: a standard "live change" kit per Core/Industry module |
 | **Competitor contrast** | Show, don't argue: competitors also sell low-code. Our point is that a business analyst makes the change live in the meeting. Never say "they can't" |
 | **Proof point** | "Customers reported a 68% reduction in application development time" (Nucleus Research 26077, Apr 2026; customer-interview based). **Don't use** "10x faster" (a roadmap deck title, not a measurement) |

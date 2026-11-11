@@ -8,7 +8,7 @@
 | Owner (SC) | (to assign) |
 | Version / date | v0.1 · 3 Nov 2026 |
 | Segments covered | **Banking + lending first:** retail and business banking; home, personal and SME lending; the broker channel; customer-owned banks and credit unions; contact centre; complaints and hardship. **Wealth:** short note only (B-W rows in §2, B-M8, AI-B9). **Insurance: later** (not in v0.1). Markets: **AU first**, then ID, MY, VN, SG, NZ (regulation in §6; NZ not researched yet) |
-| Deals harvested | None real yet. Seeded from **Mock 01 Harbourline** (fictional bank, lending) and **W1 test 01 Great Southern Bank** (real bank, public research, no call). Research: [bfsi-pack-research-2026-11-03.md](../research/bfsi-pack-research-2026-11-03.md) |
+| Deals harvested | None real yet. Seeded from **Mock 01 Harbourline** (fictional bank, lending) and **W1 test 01 Great Southern Bank** (real bank, public research, no call). Research: `bfsi-pack-research-2026-11-03.md` (design workspace `research/`, not in the plugin) |
 
 > **Status: draft.** Anything without a footnote is **A (Assumed)** until a deal confirms it. Footnote numbers match the
 > research file's source list. **Mock results are logged as "mock", never as hits:** a fictional call can't confirm a

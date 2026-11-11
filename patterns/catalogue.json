@@ -1,0 +1,354 @@
+{
+  "updated": "2026-11-11",
+  "note": "Pattern book: good ideas for demo configuration, from our own deals, competitors' and other vendors' public UX and documentation, the Knowledge Hub and anything an SC spots. Ideas, not rules: sc-demo-plan suggests them, the SC chooses. Screenshots live in SharePoint Patterns/<id>/. New patterns arrive through SharePoint Patterns/_inbox (sc-inbox).",
+  "fields": "id, name, what, why_it_works, pains (in plain words), build (native | custom | ai), how (in Creatio), effort_h, differentiators, ai_part, source, proven (deal + date) or idea, shots",
+  "patterns": [
+    {
+      "id": "P01",
+      "name": "Whole job on one board",
+      "what": "One screen per project or site with a column per stage, cards for what to sell at each stage, and won / still to win / lost at the top.",
+      "why_it_works": "The customer sees their whole job the way they think about it, not as a list of records.",
+      "pains": [
+        "projects get lost inside the customer account",
+        "missed upsell at each stage",
+        "reps can't see what's left to win"
+      ],
+      "build": "custom",
+      "how": "Custom Freedom UI component (usr.HgBuildBoard, JS only, no compile) as the first tab of the site page; status menu on each card.",
+      "effort_h": 6,
+      "differentiators": [
+        "D1",
+        "D2"
+      ],
+      "ai_part": "AI flags items past their stage with nothing quoted.",
+      "source": "own",
+      "proven": "H&G, 9 Nov 2026",
+      "shots": [
+        "hardware-and-general/w-01-board.png"
+      ]
+    },
+    {
+      "id": "P02",
+      "name": "Templates the business owns",
+      "what": "Pick a type (job type, product, case type) and the record fills itself from a template the business edits: stages, lines, checklists.",
+      "why_it_works": "Shows the business changing the system the same day, which is the live change.",
+      "pains": [
+        "every rep does it differently",
+        "new products take months to set up"
+      ],
+      "build": "native",
+      "how": "Template object + lines, a business process on create copies the lines; template builder page (H&G used a custom builder, a native list works).",
+      "effort_h": 3,
+      "differentiators": [
+        "D1"
+      ],
+      "ai_part": "AI proposes template lines from a description.",
+      "source": "own",
+      "proven": "H&G, 9 Nov 2026",
+      "shots": [
+        "hardware-and-general/t-02-add-garage.png"
+      ]
+    },
+    {
+      "id": "P03",
+      "name": "Gaps that become coaching",
+      "what": "A home page that shows, per site and per rep, what was identified on time, late or never, so missed work becomes a coaching list.",
+      "why_it_works": "Turns data into a manager's conversation; managers buy this.",
+      "pains": [
+        "we don't know what we missed",
+        "order takers versus hunters"
+      ],
+      "build": "custom",
+      "how": "Custom home (usr.HgSalesOverview) with a site-by-stage map and rep scorecards; a native dashboard with a chart by rep is the light version.",
+      "effort_h": 5,
+      "differentiators": [
+        "D2"
+      ],
+      "ai_part": "Weekly AI summary of each rep's gaps for the manager.",
+      "source": "own",
+      "proven": "H&G, 10 Nov 2026",
+      "shots": [
+        "hardware-and-general/g-01-home.png",
+        "hardware-and-general/g-03-identified.png"
+      ]
+    },
+    {
+      "id": "P04",
+      "name": "Rules as data",
+      "what": "A small table the business owns (priorities, thresholds, steps per channel) that processes and AI read, so behaviour changes without touching a process.",
+      "why_it_works": "The safest, fastest live change: edit a row, see the system behave differently.",
+      "pains": [
+        "changes need IT",
+        "every channel works differently"
+      ],
+      "build": "native",
+      "how": "One rules object per stand (labPackRule pattern, M6 kit §3); processes and AI skills read it.",
+      "effort_h": 1.5,
+      "differentiators": [
+        "D1"
+      ],
+      "ai_part": "The AI agent reads the table, so its answer changes too.",
+      "source": "own",
+      "proven": "Scentia (Oct 2026), Suntory (11 Nov 2026)",
+      "shots": [
+        "suntory-oceania/uc4-04-priorities.png",
+        "suntory-oceania/uc4-05-reordered.png"
+      ]
+    },
+    {
+      "id": "P05",
+      "name": "My day home page",
+      "what": "A role's home page: their numbers first, today's work planned by the system, and which items are ready.",
+      "why_it_works": "Opens the demo on their outcome (demo bar item 2).",
+      "pains": [
+        "information is spread across systems",
+        "reps plan their own day"
+      ],
+      "build": "native",
+      "how": "Freedom UI home page: KPI tiles, today's list, a status column; see creatio-dashboards-homepages.",
+      "effort_h": 2,
+      "differentiators": [
+        "D2"
+      ],
+      "ai_part": "A 'today' summary from the AI Twin.",
+      "source": "own",
+      "proven": "Suntory, 11 Nov 2026",
+      "shots": [
+        "suntory-oceania/uc1-01-home.png"
+      ]
+    },
+    {
+      "id": "P06",
+      "name": "Customer 360 with 'what to raise next'",
+      "what": "One page per customer or outlet: open issues, orders, what's on the shelf, who decides, and what to raise next time.",
+      "why_it_works": "The rep's question is 'what do I need to know before I walk in'; this answers it on one screen.",
+      "pains": [
+        "information in many systems",
+        "reps go in unprepared"
+      ],
+      "build": "custom",
+      "how": "Custom Angular page (outlet360-ws) for the full version; native record page with tabs and a summary strip for the light version.",
+      "effort_h": 8,
+      "differentiators": [
+        "D2",
+        "D5"
+      ],
+      "ai_part": "The 'what to raise' list comes from the briefing agent (P07).",
+      "source": "own",
+      "proven": "Suntory, 11 Nov 2026",
+      "shots": [
+        "suntory-oceania/uc3-07c-outlet360-full.png"
+      ]
+    },
+    {
+      "id": "P07",
+      "name": "Agent drafts, person confirms",
+      "what": "An AI agent prepares something useful (a briefing, a summary, a reply), ranks it by business rules, and saves only when the user confirms; every confirmation is logged.",
+      "why_it_works": "Shows AI doing real work and shows control: the two things buyers worry about.",
+      "pains": [
+        "no time to prepare",
+        "worried about AI acting on its own"
+      ],
+      "build": "ai",
+      "how": "Creatio.ai skill on the record or AI Studio agent; confirm-then-act through an action process; a log object (see creatio-ai-skill-prompts).",
+      "effort_h": 3,
+      "differentiators": [
+        "D3",
+        "D1"
+      ],
+      "ai_part": "This is the AI part.",
+      "source": "own",
+      "proven": "Suntory, 11 Nov 2026",
+      "shots": [
+        "suntory-oceania/uc2-02-briefing.png",
+        "suntory-oceania/uc2-03-saved.png"
+      ]
+    },
+    {
+      "id": "P08",
+      "name": "Read it to me on the drive",
+      "what": "The same briefing as audio, so a field user hears it on the way to the visit.",
+      "why_it_works": "Memorable, and fits how field people actually work.",
+      "pains": [
+        "reps don't open the app before a visit"
+      ],
+      "build": "ai",
+      "how": "Text-to-speech of the briefing (recorded clip for the demo, voice agent later).",
+      "effort_h": 1,
+      "differentiators": [
+        "D3"
+      ],
+      "ai_part": "This is the AI part.",
+      "source": "own",
+      "proven": "Suntory, 11 Nov 2026",
+      "shots": [
+        "suntory-oceania/uc2-07-voice.png"
+      ]
+    },
+    {
+      "id": "P09",
+      "name": "Steps that follow the channel",
+      "what": "The same visit or case runs different steps depending on its type (licensed vs not, direct vs partner), set by a rule.",
+      "why_it_works": "Proves one platform handles different ways of working without separate apps.",
+      "pains": [
+        "one channel works differently",
+        "the tool was built for one way of selling"
+      ],
+      "build": "native",
+      "how": "Visit or case steps driven by a rules row (P04); mobile page with required steps.",
+      "effort_h": 3,
+      "differentiators": [
+        "D1",
+        "D2"
+      ],
+      "ai_part": "AI fills the visit record from what the rep says at check-out.",
+      "source": "own",
+      "proven": "Suntory, 11 Nov 2026",
+      "shots": [
+        "suntory-oceania/uc3-visit-steps-presented.png"
+      ]
+    },
+    {
+      "id": "P10",
+      "name": "Stage bar on the record",
+      "what": "A stage progress bar (DCM) on the main record, so the record shows where the job is up to.",
+      "why_it_works": "Familiar, clear, and moving it is a natural live moment.",
+      "pains": [
+        "no one knows where a job is up to"
+      ],
+      "build": "native",
+      "how": "Case (DCM) on the object + a page template with a progress bar.",
+      "effort_h": 1.5,
+      "differentiators": [
+        "D1"
+      ],
+      "ai_part": "AI suggests moving the stage when a note says the job has moved on.",
+      "source": "own",
+      "proven": "H&G (installed, parked), 6 Nov 2026",
+      "shots": []
+    },
+    {
+      "id": "P11",
+      "name": "Quick-add with automatic assignment",
+      "what": "A short form to capture an enquiry fast, then a process assigns it to the right person and creates their first task.",
+      "why_it_works": "Shows speed to first response in under a minute.",
+      "pains": [
+        "enquiries sit in an inbox",
+        "no owner for new enquiries"
+      ],
+      "build": "native",
+      "how": "Quick-add mini page + assignment process + task.",
+      "effort_h": 1.5,
+      "differentiators": [
+        "D2"
+      ],
+      "ai_part": "AI reads the enquiry email and fills the form.",
+      "source": "own",
+      "proven": "SAHE fallback stand, 5 Nov 2026",
+      "shots": []
+    },
+    {
+      "id": "P12",
+      "name": "AI step in the background",
+      "what": "A process step where AI reads something that arrives (email, document, note), extracts or classifies it and fills the record, with no click from the user; a person reviews exceptions.",
+      "why_it_works": "Shows AI doing work nobody wants to do, inside a normal process (demo bar item 5).",
+      "pains": [
+        "manual data entry from emails or documents",
+        "triage takes too long"
+      ],
+      "build": "ai",
+      "how": "Business process with an AI step (Creatio.ai) on receipt; review queue for low confidence.",
+      "effort_h": 3,
+      "differentiators": [
+        "D3"
+      ],
+      "ai_part": "This is the AI part.",
+      "source": "own (idea)",
+      "proven": "not built yet (idea; first planned for the PRC referral proof, Nov 2026)",
+      "shots": []
+    },
+    {
+      "id": "P13",
+      "name": "Explainer line and KPI strip on list pages",
+      "what": "Every key list page gets one plain sentence saying what it's for and a small strip of the numbers that matter.",
+      "why_it_works": "Cheap, and it makes a standard list look designed for them (demo bar item 6).",
+      "pains": [],
+      "build": "native",
+      "how": "Freedom UI label + indicator widgets above the list; hide noise columns.",
+      "effort_h": 0.5,
+      "differentiators": [],
+      "ai_part": "",
+      "source": "own",
+      "proven": "H&G, 9 Nov 2026",
+      "shots": [
+        "hardware-and-general/n-01-sites-list.png"
+      ]
+    },
+    {
+      "id": "P14",
+      "name": "Portal for the other side",
+      "what": "A portal for customers, partners or employees on the same data, with their own view and actions.",
+      "why_it_works": "Shows one platform reaching people outside the CRM users.",
+      "pains": [
+        "customers or partners email and call for status",
+        "partner orders are invisible"
+      ],
+      "build": "custom",
+      "how": "Freedom UI portal, or custom Angular portal for a richer experience (Scentia).",
+      "effort_h": 8,
+      "differentiators": [
+        "D2"
+      ],
+      "ai_part": "A portal agent answers status questions from the records.",
+      "source": "own",
+      "proven": "Scentia, Oct 2026",
+      "shots": []
+    },
+    {
+      "id": "P15",
+      "name": "Document beside its extracted fields",
+      "what": "A review screen with the incoming document on one side and the fields AI read from it on the other, unsure fields highlighted, one click to confirm or correct.",
+      "why_it_works": "People trust AI reading when they can see the source next to the result, and the confirm step gets fast.",
+      "pains": [
+        "manual re-keying from documents",
+        "staff don't trust automatic reading"
+      ],
+      "build": "native",
+      "how": "Native record page with the file preview and the extracted fields side by side; a custom side-by-side viewer is the richer option (+4 h).",
+      "effort_h": 3,
+      "differentiators": [
+        "D3"
+      ],
+      "ai_part": "Pairs with P12 (the background AI step).",
+      "source": "outside: Google Document AI human review documentation (read 11 Nov 2026), via the PRC plan",
+      "proven": "not built yet (idea)",
+      "shots": []
+    },
+    {
+      "id": "P16",
+      "name": "Proof scoreboard",
+      "what": "A page that tracks a proof against its success criteria: items processed, accuracy against the right answers, time saved, exceptions, updated as the proof runs.",
+      "why_it_works": "The readout is about their numbers, not our demo, and it feeds the business case.",
+      "pains": [
+        "hard to justify the licence",
+        "we need evidence before we decide"
+      ],
+      "build": "native",
+      "how": "A proof-results object plus a dashboard with one indicator per success criterion.",
+      "effort_h": 2,
+      "differentiators": [
+        "D3"
+      ],
+      "ai_part": "AI summary of the week's results for the readout.",
+      "source": "own (PRC plan)",
+      "proven": "not built yet (idea)",
+      "shots": []
+    }
+  ],
+  "to_gather": [
+    "Competitor field-sales patterns (visit planning, retail execution): Salesforce Consumer Goods Cloud, Microsoft Dynamics 365 Sales, SAP Sales Cloud. Collect from public demos and docs, with source and date.",
+    "Competitor AI assistant patterns (Agentforce, Copilot, Joule): how they show confirm-before-act and governance.",
+    "Banking (BFSI pack) and manufacturing patterns from the Knowledge Hub and Marketplace.",
+    "Healthcare and intake patterns (referrals, document intake, consent, keeping no data after the work runs): none yet. First deal: PRC."
+  ]
+}

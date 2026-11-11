@@ -34,6 +34,14 @@ files there (download from the Knowledge Hub, then drag in). This skill turns th
 6. **File the original:** move it to `_inbox/_done/<yyyy-mm-dd>/` and add a short entry to `../../lessons/`
    (what arrived, what we took, what we ignored).
 
+## Patterns (SharePoint `Patterns/_inbox`)
+
+SCs drop demo ideas there: a screenshot, a link, two lines on why it's good (from a competitor demo, the Knowledge
+Hub, a partner, their own build). For each: write a draft entry for `../../patterns/catalogue.json` (what, why it
+works, pains, native / custom / AI, how to build it in Creatio, hours, **source and date**), put the screenshot in
+`Patterns/<source>/`, and show the drafts to Renzo with the inbox table. Competitor patterns: learn the idea, never copy
+screens, branding or wording. Approved entries go in; the original moves to `Patterns/_inbox/_done/<date>/`.
+
 ## Rules
 
 - Customer-facing claims only from the catalogue: a deck in the inbox is a *source* for the catalogue, not a licence

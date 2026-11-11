@@ -49,8 +49,11 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    shown parts marked `shown: true`. Update `understanding` rows with corrections (now tag **C**). Rebuild with `sc-deck`.
 3. **Configuration enhancements for the next session:** a table, Business Studio first, then AI:
    `pain (their words) · enhancement · Freedom UI or custom component (why) · AI part · library module to reuse · hours`.
-   Only for pains they confirmed or raised. Check the demo library first.
-4. **Commitments:** everything we promised, with owner and date.
+   Pains they confirmed or raised first, then anything they asked to see. Check the demo library and the pattern book
+   first; for a bigger next demo, hand over to `sc-demo-plan`.
+4. **What landed:** for each scene, the pattern it used (pattern book ID) and the reaction. Patterns that land on 2+
+   deals are candidates to build once as a demo library module.
+5. **Commitments:** everything we promised, with owner and date.
 
 ## Part C: lessons
 

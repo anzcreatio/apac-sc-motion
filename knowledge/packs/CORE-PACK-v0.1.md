@@ -85,7 +85,7 @@ Slide wording is an industry observation, ≤12 words, and something the custome
 | 6 | Close and learn | close, survey, root cause | Team leader | CRM, survey tool | Root causes not tracked |
 
 ## 4. KPI benchmarks
-Source URLs and detail: [core-kpi-benchmarks-2026-11-03.md](../research/core-kpi-benchmarks-2026-11-03.md).
+Source URLs and detail: `core-kpi-benchmarks-2026-11-03.md` (design workspace `research/`, not in the plugin).
 **Rule:** use these to frame *range questions*, not as claims. Only Strong rows may be quoted to a customer, attributed.
 Never cite Salesforce's own reports to a prospect (a direct competitor's research can backfire).
 

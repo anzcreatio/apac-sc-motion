@@ -42,9 +42,10 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    approves. No AI for show.
 6. **Track:** AI CRM and custom apps = Platform; AI Studio = AI; combination = both, with AI as the standout.
    Manufacturing always shows how it fits their existing systems (D5).
-7. **Light configuration ≤ half a day (4 hours)**, only for pains they confirmed: their name and logo, their terms and stages,
+7. **Light configuration ≤ half a day (4 hours)**, meeting the **Light** level of `../../standards/DEMO-BAR-v0.1.md`, only for pains they confirmed: their name and logo, their terms and stages,
    1–2 example records, **one prepared live change** (`M6-LIVE-CHANGE-KIT`). No code, no real integration; a simulated
-   connection is labelled simulated. Reuse library modules first.
+   connection is labelled simulated. Reuse library modules first, then the pattern book (`../../patterns/catalogue.json`).
+   For the full value demo after discovery, use the `sc-demo-plan` skill.
 8. **Write like an SC talking across the table:** follow `../../standards/WRITING-STYLE-v0.1.md`. Short titles
    (about 8 words, no colons), their words, simple verbs, no vendor words. Fix every `style:` warning from the builder.
 9. **Timing:** if the meeting is today or less than a working day away, or already past, say so first: no new

@@ -59,7 +59,7 @@ To build after sign-off with the first modules (M4, then M2/B-M2). Pattern: Scen
 
 ## 4. Change catalogue (rehearse before use; times are targets until measured)
 
-ID scheme: `LC-<module>-<nn>`. "Rehearsed" is filled in when an SC has timed it on a stand.
+ID scheme: `LC-<module>-<nn>` for kit entries; a change planned for one deal is `LC-<DEAL>-<nn>` (from `sc-demo-plan`) and moves into the kit once it's rehearsed and reusable. "Rehearsed" is filled in when an SC has timed it on a stand.
 
 ### Core
 | ID | Module | "We assumed…" | Change | Tier | Proof | Rehearsed |
@@ -94,7 +94,7 @@ ID scheme: `LC-<module>-<nn>`. "Rehearsed" is filled in when an SC has timed it 
 | LC-MM3-02 | MM3 | "…these words flag a possible reportable event" | Add a keyword to the reportability list | T2 | Complaint with that word is flagged for QA | — |
 | LC-MM4-01 | MM4 Quote → order | "…margin under 18% needs approval" | Margin threshold | T1 | Quotes at 17% and 19% | — |
 
-New entries come from W3 Output 6 ("new for rehearsal") and are added here after the demo with their measured time.
+New entries come from the `sc-demo-plan` live change (LC-<DEAL>-<nn>) and are added here after the demo with their measured time.
 
 ## 5. Presenter protocol
 

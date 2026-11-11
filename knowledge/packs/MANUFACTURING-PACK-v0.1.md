@@ -8,7 +8,7 @@
 | Owner (SC) | (to assign) |
 | Version / date | v0.1 · 3 Nov 2026 |
 | Segments covered | Discrete and process manufacturers selling B2B and through dealers/distributors: industrial equipment, building products, packaging, consumer goods, **contract manufacturing** (incl. TGA-licensed therapeutic goods and food). AU first; then ID, MY, VN, SG, NZ. **Not** covered: MES/shop floor, production planning, batch release (these stay in ERP/MES/QMS) |
-| Deals harvested | Pact Group (AU, contract manufacturing + packaging), discovery stage. Research: [manufacturing-pack-research-2026-11-03.md](../research/manufacturing-pack-research-2026-11-03.md) |
+| Deals harvested | Pact Group (AU, contract manufacturing + packaging), discovery stage. Research: `manufacturing-pack-research-2026-11-03.md` (design workspace `research/`, not in the plugin) |
 
 > **Status: draft.** §4 and §6 come from the research pass (each row flagged). Everything in §1–§3, §5, §8 and §9
 > without a footnote is **A (Assumed)** until a deal confirms it.
@@ -118,7 +118,7 @@ GMP records, PIC/S Annex 11 (computerised systems) applies [13] and the *custome
 "GMP-compliant" or "validated".
 
 ## 4. KPI benchmarks (manufacturing additions)
-Detail and caveats: [research file](../research/manufacturing-pack-research-2026-11-03.md). Core rule applies: use for
+Detail and caveats: `the research file` (design workspace `research/`, not in the plugin). Core rule applies: use for
 **range questions**, quote only Strong rows (attributed), and never cite competitor research.
 
 | KPI | Journey | Typical range | Range question | Source + date | Quality |
