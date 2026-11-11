@@ -71,7 +71,8 @@
       "sharepoint": "Library/site-selling/",
       "harvested": "2026-11-11",
       "owner": "Renzo",
-      "notes": "Built before the build-for-reuse rules; promote to L2 on first reuse (split layers, seed script, remap prefix)."
+      "notes": "Built before the build-for-reuse rules; promote to L2 on first reuse (split layers, seed script, remap prefix).",
+      "ai": []
     },
     {
       "id": "field-sales-visit",
@@ -122,7 +123,7 @@
         }
       ],
       "manual_steps": [
-        "AI Studio agent re-created from PROJECT-NOTE (not exported); deploy to the stand's Studio environment",
+        "AI Studio agent: rebuild from ai/agent-visit-briefing.md (instructions still to be copied in from Studio); deploy to the stand's Studio environment",
         "C# tools compile + restart",
         "workplace SQL + cache reset; home page set live",
         "reset function + snapshot",
@@ -145,7 +146,27 @@
       "sharepoint": "Library/field-sales-visit/",
       "harvested": "2026-11-11",
       "owner": "Renzo",
-      "notes": "Built on a shared stand before the build-for-reuse rules. Best candidate for L2/L3 once a second field-sales deal appears (FMCG journey is also missing from the packs)."
+      "notes": "Built on a shared stand before the build-for-reuse rules. Best candidate for L2/L3 once a second field-sales deal appears (FMCG journey is also missing from the packs).",
+      "ai": [
+        {
+          "type": "agent",
+          "name": "Suntory Visit Briefing (AI Studio)",
+          "file": "ai/agent-visit-briefing.md",
+          "complete": false
+        },
+        {
+          "type": "mcp_tool",
+          "name": "suntory_get_visit_briefing",
+          "file": "ai/mcp-tools.json",
+          "complete": true
+        },
+        {
+          "type": "mcp_tool",
+          "name": "suntory_save_visit_briefing",
+          "file": "ai/mcp-tools.json",
+          "complete": true
+        }
+      ]
     },
     {
       "id": "enquiry-recruitment",
@@ -200,7 +221,8 @@
       "sharepoint": "Library/enquiry-recruitment/",
       "harvested": "2026-11-11",
       "owner": "Renzo",
-      "notes": "Neutral names already; easiest to promote to a generic 'enquiry to owner' L2/L3 module."
+      "notes": "Neutral names already; easiest to promote to a generic 'enquiry to owner' L2/L3 module.",
+      "ai": []
     }
   ],
   "candidates": []

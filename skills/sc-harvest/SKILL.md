@@ -15,7 +15,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 | Level | Contains | Promote when |
 |---|---|---|
 | **L0 Pattern** | An idea in `../../patterns/catalogue.json` | It's built on a deal → L1 |
-| **L1 Reference** (minimum) | Read-only **package export** of what was built · build log · screenshots and click path · **customer-specific list** · manual steps that don't export · patterns covered · catalogue entry | Someone reuses it once → L2 |
+| **L1 Reference** (minimum) | Read-only **package export** of what was built · build log · screenshots and click path · **the AI as text** (agent instructions, skill prompts, tool definitions) · **customer-specific list** · manual steps that don't export · patterns covered · catalogue entry | Someone reuses it once → L2 |
 | **L2 Package** | L1 + installs cleanly on a fresh stand with its seed data and a reset; customer layer split out | Used on 2+ deals → L3 |
 | **L3 Module** | Generic (`lab` prefix, neutral names and example data), passes `creatio-uc-readiness` on the master stand, own click path | — |
 
@@ -31,6 +31,20 @@ Master stand: a clean library-only instance once Renzo gets one; `11011710-demo`
 3. **List what's inside:** `python scripts/list_package.py "<Library/<id>/packages>"` decodes every export offline
    and writes `contents.json` (schemas, data bindings, files, dependencies). Check `DependsOn` for packages that
    belong to another demo on a shared stand: those won't install on a clean stand.
+3b. **Capture the AI as text** (Renzo, 11 Nov 2026). A package export doesn't carry AI Studio agents and often misses
+   the tool registrations, so save every AI element of the demo to `Library/<module-id>/ai/`:
+
+   | File | What | Where it comes from |
+   |---|---|---|
+   | `agent-<name>.md` | Agent name, mode, model, channel, the environments it's deployed to, the tools it uses, and its **full instructions, word for word** | AI Studio: read-only (Studio CLI/API `GET`), or ask the SC to copy it from the agent page |
+   | `skill-<name>.md` | Creatio.ai skill prompts (all 7 sections) and the action processes they call | The skill page, or the package if it's bound |
+   | `mcp-tools.json` | Each MCP tool: external name, description, input and output schema, source (process or C# action) | The `McpTool` rows or the build script that registered them |
+   | `ai-steps.md` | AI steps inside business processes: the process, the prompt, what a person confirms | The process designer or the package |
+   | `register-*.py` / `.sql` | Any script that set the AI up | The deal's `build/` folder |
+   | `README.md` | Install order for the AI part, what to rename per customer, and how it was tested (questions asked, answers expected) | Write it |
+
+   If an agent's instructions only exist in AI Studio and you can't read them, mark the file **"instructions
+   missing"** and ask the SC to paste them in. Never save credentials, tokens or real customer data.
 4. **Check the build-for-reuse rules** (`../../standards/DEMO-BAR-v0.2.md` §6b): own packages, two layers, neutral
    names, seed data in the package, manual steps written down. Note every break; don't fix the stand.
 5. **Write `Library/<module-id>/README.md`** (SharePoint):
@@ -54,7 +68,7 @@ Master stand: a clean library-only instance once Renzo gets one; `11011710-demo`
 ## Catalogue format (`library/catalogue.json` → `modules[]`)
 
 `{id, name, level, what, pains, patterns, source_deal, built, stand, packages: [{name, file, layer: module|customer}],
-manual_steps, customer_specific, reuse_estimate_h, sharepoint, harvested, owner, notes}`
+manual_steps, customer_specific, ai: [{type: agent|skill|mcp_tool|process_step, name, file, complete: true|false}], reuse_estimate_h, sharepoint, harvested, owner, notes}`
 
 ## Rules
 

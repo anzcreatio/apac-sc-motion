@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.2 (11 Nov 2026)
+- `sc-harvest` step 3b: the AI is saved as text in `Library/<id>/ai/` (agent instructions word for word, skill
+  prompts, MCP tool definitions, AI process steps, set-up scripts, tests). Catalogue modules get an `ai` list.
+- Backfill: `field-sales-visit` AI folder (tools complete; agent instructions still to copy from AI Studio).
+
 ## 0.7.1 (11 Nov 2026)
 - `build_deck.py`: narrow card rows (4–5 cards) leave room for titles that wrap to three lines.
 - Lessons from the Suntory demo review (`lessons/2026-11-11-suntory-oceania.md`).
