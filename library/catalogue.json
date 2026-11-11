@@ -123,7 +123,7 @@
         }
       ],
       "manual_steps": [
-        "AI Studio agent: rebuild from ai/agent-visit-briefing.md (instructions still to be copied in from Studio); deploy to the stand's Studio environment",
+        "AI Studio agent: rebuild from ai/agent-visit-briefing.md; deploy to the stand's Studio environment",
         "C# tools compile + restart",
         "workplace SQL + cache reset; home page set live",
         "reset function + snapshot",
@@ -152,7 +152,7 @@
           "type": "agent",
           "name": "Suntory Visit Briefing (AI Studio)",
           "file": "ai/agent-visit-briefing.md",
-          "complete": false
+          "complete": true
         },
         {
           "type": "mcp_tool",
