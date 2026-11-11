@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1 (11 Nov 2026)
+- Published to SharePoint (`Plugin/apac-sc-motion`) with `publish.ps1`; README install and update steps for SCs.
+
 ## 0.3.0 (11 Nov 2026)
 - `platform` slide type: the whole platform set (01 AI Studio, 02 AI Twin, 03 Business Studio, 04 AI Coding Agent) from
   `Slide-library/catalogue.json` → `standard_sets.platform`, with speaker notes; required in every deck.

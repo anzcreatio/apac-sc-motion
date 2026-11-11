@@ -3,7 +3,7 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.3.0, Phase 0)
+## What's in it (v0.3.1, Phase 0)
 
 | Skill | Use it for |
 |---|---|
@@ -34,17 +34,34 @@ Coming next: `sc-demo-plan` (Phase 1), `sc-harvest` + library (Phase 2), `sc-cli
 | New templates and corporate content | SharePoint `_inbox/` | Download from the Knowledge Hub, drop here; `sc-inbox` reviews |
 | Weekly digests | SharePoint `Lessons/` | Readable by the team |
 
-## Install (each SC, once)
+## Install (each SC, once, about 5 minutes)
 
-1. Sync the SharePoint library: site **APAC Solution Consulting** → Documents → **Add shortcut to OneDrive**.
-2. Install the plugin (repo host to be confirmed; until then from a local clone):
+The plugin is published to the team SharePoint site: **APAC Solution Consulting → Documents → `Plugin/apac-sc-motion`**.
+
+1. Sync the site if you haven't: open it in SharePoint → Documents → **Add shortcut to OneDrive**. Wait until the
+   `Plugin` folder shows up in File Explorer.
+2. In a terminal (PowerShell), with your own synced path:
    ```
-   claude plugin marketplace add <path or git URL of this repo>
+   claude plugin marketplace add "C:\Users\<you>\OneDrive - Creatio\APAC Solution Consulting - Documents\Plugin\apac-sc-motion"
    claude plugin install apac-sc-motion@apac-sc
    ```
-3. In Claude Code: "run sc-setup".
+3. Restart Claude Code, then say: **"run sc-setup"**. It finds your SharePoint folder and checks Python, PowerPoint
+   and the demo toolkit.
 
-Update: `claude plugin update apac-sc-motion@apac-sc`.
+**Updates:** when Renzo announces a new version, run `claude plugin marketplace update apac-sc`, then
+`claude plugin update apac-sc-motion@apac-sc`, and restart Claude Code. `PUBLISHED.txt` in the folder shows the
+version and date.
+
+**Don't edit files in the SharePoint `Plugin` folder.** Every publish overwrites it. Send changes to Renzo.
+
+## Publishing a new version (Renzo)
+
+1. Change and test here (the git repo), bump `version` in `.claude-plugin/plugin.json`, add a `CHANGELOG.md` line, commit.
+2. `powershell -ExecutionPolicy Bypass -File publish.ps1` (refuses uncommitted work or an unchanged version).
+3. Tell the SCs to update.
+
+Later, when Creatio IT gives us a company GitHub repo: push this repo there, and each SC runs
+`claude plugin marketplace add <repo URL>` once. Nothing else changes.
 
 ## Changing the motion
 
