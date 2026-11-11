@@ -1,0 +1,54 @@
+---
+name: sc-weekly-lessons
+description: Run the APAC SC team's weekly lessons digest - gather the week's evidence (presented-deck comparisons, meeting reviews, first-meeting coverage scores, demo plans, lessons files, inbox and pattern intake, library harvests, customer recaps waiting) and propose at most three changes to the motion (skills, standards, packs, templates, library), each backed by two or more deals or SCs, for Renzo to approve; then apply only what he approves and publish. Use on Fridays, when Renzo asks for the weekly digest or lessons, asks what should change in the motion, or asks how the team is tracking.
+---
+
+# sc-weekly-lessons
+
+The motion improves every week, by evidence, with Renzo deciding (agreed 11 Nov 2026). Fifteen minutes of his time.
+
+Paths are relative to this skill's folder; plugin root = `../..`.
+
+## Steps
+
+1. **Collect:** `python scripts/collect_week.py` (default: last 7 days) → `Lessons/weekly/<yyyy-Www>-evidence.json`
+   on SharePoint. Read it, then read the files it lists (deck reviews, meeting reviews, demo plans, new transcripts,
+   lessons files, open inbox items).
+2. **Find patterns, not anecdotes.** For each candidate change: what happened, on which deals or with which SCs,
+   and what it cost or gained. Group the same signal across deals.
+3. **Propose at most 3 changes**, ranked by impact. Each needs **evidence from 2+ deals or 2+ SCs**, or one serious
+   failure (a customer saw something they shouldn't, a demo broke live, a wrong claim). For each: the change in one
+   line, the evidence, the exact file and edit, the effort, and the risk if we don't.
+4. **Watch list:** signals from one deal only. Carry them forward; promote when a second deal shows the same.
+5. **Measures** (one table, trend against last week's digest where there is one):
+
+   | Measure | Source |
+   |---|---|
+   | Share of each presented deck that came from the kit | deck reviews |
+   | Six-question coverage per new deal (n / 6) | first-meeting preps |
+   | Demos harvested to L1 within 2 working days | library catalogue vs builds |
+   | Customer recaps waiting for SC approval | click path overlays |
+   | Inbox and pattern items waiting | `_inbox`, `Patterns/_inbox` |
+   | Proposals approved / applied last week | last digest |
+
+6. **Write `Lessons/weekly/<yyyy-Www>.md`** (SharePoint, the team reads it). Questions first: the proposals to
+   approve (numbered), then anything else waiting on Renzo. Then measures, proposals in detail, watch list, and
+   housekeeping (drafts to approve, harvests due, inbox). Plain words (`../../standards/WRITING-STYLE-v0.1.md`).
+7. **Ask Renzo** which proposals to apply (at the top of your message).
+8. **Apply only what's approved:** edit the files, bump the version in the file name when a standard or pack
+   changes materially, update `../../CHANGELOG.md` and the plugin version, commit, `publish.ps1`, then tell the SCs to
+   update. Record "Applied" or "Declined (why)" against each proposal in the digest.
+
+## Rules
+
+- Never change the motion without Renzo's yes. The digest proposes; he decides.
+- Three proposals at most. If there are more, pick the three with the most evidence and impact; the rest go on the
+  watch list.
+- Evidence means files: a deck review, a transcript quote with time, a meeting review, a lessons entry. Not memory.
+- Customer names stay in the deal folders; the digest names deals by account, never quotes customer data beyond
+  what's needed.
+
+## Talking to the SC
+
+Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is
+none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).

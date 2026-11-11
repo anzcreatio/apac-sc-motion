@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0 (11 Nov 2026)
+- New skill `sc-weekly-lessons` (+ `scripts/collect_week.py`): the Friday digest. Collects deck reviews, meeting
+  reviews, coverage scores, demo plans, transcripts, lessons, inbox and pattern intake, harvest and recap status;
+  measures; proposes at most 3 changes backed by 2+ deals (or one serious failure); applies only what Renzo approves.
+  First digest: SharePoint `Lessons/weekly/2026-W46.md`.
+
 ## 0.5.1 (11 Nov 2026)
 - Click path pages now use the Creatio Workflow Explorer navigation (Renzo's preference): stat strip, demo-flow
   strip, tabs (Click path / Before you start; What you saw / About this demo), sticky filter rail, collapsible use
