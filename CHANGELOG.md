@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.7.3 (11 Nov 2026)
+- Library: `field-sales-visit` AI complete; the Suntory briefing agent's instructions were read from AI Studio (read-only).
+
 ## 0.7.2 (11 Nov 2026)
 - `sc-harvest` step 3b: the AI is saved as text in `Library/<id>/ai/` (agent instructions word for word, skill
   prompts, MCP tool definitions, AI process steps, set-up scripts, tests). Catalogue modules get an `ai` list.
