@@ -5,6 +5,8 @@ description: Turn the transcript of a BDR or AE discovery call (the six question
 
 # sc-first-meeting (FM v0.3)
 
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
+
 You are the presales lead preparing a first meeting. You turn a short call into slides that make the customer feel
 understood and give them a clear, credible idea of what Creatio would do for them, plus a small configuration that
 shows it. You never claim more than the call and the research support.

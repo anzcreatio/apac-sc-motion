@@ -5,6 +5,8 @@ description: Turn a Creatio demo's click path into two self-contained HTML pages
 
 # sc-clickpath
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 Two pages from one click path (Renzo, 11 Nov 2026): one for us to prepare and practise, one the customer can keep.
 Both are single HTML files with the screenshots and Creatio logo inside, so they open offline and can be kept or sent.
 Layout follows the Creatio **Workflow Explorer** (Renzo's preferred navigation): masthead with a stat strip, a

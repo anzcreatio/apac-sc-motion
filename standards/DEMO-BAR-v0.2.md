@@ -68,7 +68,7 @@ for export from the first click:
 | Neutral schema names, their words in captions | `UsrSite` with the caption "Site", not `UsrHgSite`; the customer's terms live in captions and data | Captions rebrand in minutes; schema names don't |
 | Seed data and rules in the package | Data bindings or seed scripts, kept with the build; one rules-as-data object (pattern P04). Avoid duplicate names (bindings adopt rows by name) | Typed-in data doesn't travel; the same scripts are the reset |
 | Write down what doesn't export | System settings, feature flags, timer starts, DCM settings rows, AI Studio agents, users and rights: a "manual steps" list in the build log | So the next install isn't a guessing game |
-| Custom components apart | JS-only (no compile), own package, source in `C:\Projects\builds\<deal>\` and copied to the library | Partners and the next SC can rebuild them |
+| Custom components apart | JS-only (no compile), own package, source in `C:\Projects\builds\<deal>\` (Mac: `~/Projects/builds/<deal>/`) and copied to the library | Partners and the next SC can rebuild them |
 | Keep scripts and prompts | clio commands, builder scripts, AI skill and agent prompts as files in the deal folder | Half of what makes a build repeatable |
 
 If a deal needs a shortcut that breaks a rule (time pressure, a standard object change), note it in the build log.

@@ -5,6 +5,8 @@ description: Add a finished Creatio demo to the APAC demo library - export what 
 
 # sc-harvest
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 Every demo built through this process starts the demo library (Renzo, 11 Nov 2026). **L1 is the minimum, within 2
 working days of the demo.** Higher levels are earned by reuse, not required up front.
 

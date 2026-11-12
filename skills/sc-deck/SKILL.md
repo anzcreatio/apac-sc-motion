@@ -5,6 +5,8 @@ description: Build, rebuild, restyle or check a Creatio APAC customer deck from 
 
 # sc-deck
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 The deck is data: `deck.json` in the deal folder is the source, the `.pptx` is built from it. Edit the JSON and
 rebuild; don't hand-edit the built deck unless the SC asks (hand edits are lost on the next build, and the
 `sc-meeting-review` skill learns from what the SC changed in the presented deck).
@@ -17,10 +19,10 @@ Standard: `../../standards/DECK-STANDARD-v0.3.md` (slide order, word rules, ever
 |---|---|
 | Build + render | `python scripts/build_deck.py <deal>/deck.json --render` → `<out>.pptx` and `<out>-png/slide-NN.png` |
 | Build to another file | add `--out <file.pptx>` |
-| Render any deck | `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/office_deck.ps1 -Action render -Deck <pptx> -OutDir <dir>` |
-| Put corporate slides in the library | `... office_deck.ps1 -Action extract -Deck <pptx> -Slides "4,5,6" -Out "<team root>/Slide-library/<name>-<yyyy-mm>.pptx"` |
+| Render any deck | `python scripts/render_deck.py <pptx> <dir>` (Windows: PowerPoint; Mac: PowerPoint for Mac, else LibreOffice, then PyMuPDF). If it can't render, the deck is still fine |
+| Put corporate slides in the library (**Windows only**) | `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/office_deck.ps1 -Action extract -Deck <pptx> -Slides "4,5,6" -Out "<team root>/Slide-library/<name>-<yyyy-mm>.pptx"` |
 
-Needs Python 3 with `python-pptx` and `Pillow`; PowerPoint only to render. Library slides are copied in Python
+Needs Python 3 with `python-pptx` and `Pillow` (Mac: plus `pymupdf` to render); PowerPoint only to render. Library slides are copied in Python
 (PowerPoint automation is refused on Creatio 'Confidential'-labelled decks). `office_deck.ps1` opens decks read-only,
 quits PowerPoint afterwards unless the SC already had it open, and never removes a sensitivity label. If a hidden
 `POWERPNT.EXE` is left running after a failure, tell the SC rather than killing it.

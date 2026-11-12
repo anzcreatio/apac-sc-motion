@@ -1,48 +1,73 @@
 ---
 name: sc-setup
-description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin - finds the synced APAC Solution Consulting SharePoint folder, records it in ~/.apac-sc-motion.json, and checks Python, python-pptx, Pillow, openpyxl, python-docx, PowerPoint, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
+description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin, on Windows or a Mac - finds the synced APAC Solution Consulting SharePoint folder, records it in ~/.apac-sc-motion.json, and checks Python, python-pptx, Pillow, openpyxl, python-docx, PyMuPDF (Mac), PowerPoint, the deck builder, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
 ---
 
 # sc-setup
 
-Run the checks, fix what you can without changing system settings, and report a short table: check · status · fix.
+Run the checks one at a time, fix what you can without changing system settings, and finish with a short table:
+check · status · fix. Explain each fix in one line before you run it, and **ask before installing anything**.
+
+## 0. Which computer
+
+Find out from the session (platform `win32` or `darwin`), don't ask. Then use that column everywhere below.
+
+| | Windows | Mac |
+|---|---|---|
+| Shell | PowerShell (or Git Bash) | Terminal (zsh) |
+| Python command | `python` | `python3` |
+| Home | `C:\Users\<me>` | `/Users/<me>` |
+
+Every skill in this plugin writes commands as `python …`. **On a Mac, run them as `python3 …`.** Record which one
+works in the config file (`"python"` below) so other skills can read it.
 
 ## 1. Find the team folder
 
-The SharePoint site **APAC Solution Consulting** (library Documents) holds `Deals`, `Slide-library`, `_inbox` and
-`Lessons`. It is synced through OneDrive ("Add shortcut to OneDrive" or "Sync"). Look for a folder containing both
-`Deals` and `Slide-library` under the user's profile, typically:
+The SharePoint site **APAC Solution Consulting** (library Documents) holds `Deals`, `Slide-library`, `Plugin`,
+`_inbox` and `Lessons`. It's synced through OneDrive ("Add shortcut to OneDrive" or "Sync"). Look for a folder named
+`APAC Solution Consulting - Documents` that contains `Deals` and `Plugin`:
 
-- `%USERPROFILE%\OneDrive - Creatio\APAC Solution Consulting - Documents`
-- `%USERPROFILE%\Creatio\APAC Solution Consulting - Documents`
+| Windows | Mac |
+|---|---|
+| `C:\Users\<me>\OneDrive - Creatio\APAC Solution Consulting - Documents` | `~/Library/CloudStorage/OneDrive-Creatio/APAC Solution Consulting - Documents` |
+| `C:\Users\<me>\Creatio\APAC Solution Consulting - Documents` | `~/Library/CloudStorage/OneDrive-SharedLibraries-Creatio/APAC Solution Consulting - Documents` |
 
-Not found → tell the SC to open the site in SharePoint → Documents → **Add shortcut to OneDrive**, wait a minute, and
-run this again. Never create the folders locally: they would not sync.
+If none matches, search one level down from the OneDrive folders (Windows: `C:\Users\<me>\OneDrive*`, `C:\Users\<me>\Creatio*`;
+Mac: `~/Library/CloudStorage/*`) for a folder whose name contains "APAC Solution Consulting".
 
-Found → write `~/.apac-sc-motion.json`:
+Not found → tell the SC: open the site in the browser → Documents → **Add shortcut to OneDrive** (or **Sync**), wait
+a minute until it shows in File Explorer or Finder, then say "try again". Never create the folders locally: they
+wouldn't sync.
+
+Found → write `~/.apac-sc-motion.json` (Windows: `C:\Users\<me>\.apac-sc-motion.json`):
 
 ```json
-{"sharepoint_root": "<full path>", "checked": "<yyyy-mm-dd>"}
+{"sharepoint_root": "<full path>", "python": "python | python3", "platform": "windows | mac", "checked": "<yyyy-mm-dd>"}
 ```
 
-Suggest (don't force) right-click `Deals` → **Always keep on this device**, so builds don't wait for downloads.
+Suggest (don't force) keeping `Deals` and `Plugin` downloaded: Windows right-click → **Always keep on this device**;
+Mac right-click in Finder → **Always Keep on This Device**. Builds then don't wait for downloads.
 
 ## 2. Check the tools
 
-| Check | How | Fix |
-|---|---|---|
-| Python 3.10+ | `python --version` | SC installs Python |
-| python-pptx, Pillow, openpyxl, python-docx | `python -c "import pptx, PIL, openpyxl, docx"` | `python -m pip install python-pptx pillow openpyxl python-docx` (ask first; openpyxl and python-docx are for `sc-rfp` and `sc-workshop`) |
-| PowerPoint | `powershell -Command "New-Object -ComObject PowerPoint.Application \| % { $_.Version; $_.Quit() }"` | Install Office desktop |
-| Deck builder | `python ../sc-deck/scripts/build_deck.py ../../tests/deck/sample-fictional/deck.json --out <temp>/sample.pptx --render` | Read the error |
-| Demo toolkit (for configuration) | the `creatio-demo-toolkit` skills are listed in this session | Install the plugin |
-| clio (for configuration) | the clio MCP tools are available | Install clio; the SC registers environments themselves |
+| Check | Windows | Mac | Fix |
+|---|---|---|---|
+| Python 3.10+ | `python --version` | `python3 --version` | Windows: install from python.org, tick **Add python.exe to PATH**. Mac: install from python.org (or `xcode-select --install` gives a python3). The SC installs it; you don't |
+| Python packages | `python -c "import pptx, PIL, openpyxl, docx"` | `python3 -c "import pptx, PIL, openpyxl, docx, pymupdf"` | `python -m pip install --user python-pptx pillow openpyxl python-docx` (Mac: `python3 -m pip install --user python-pptx pillow openpyxl python-docx pymupdf`). If a Mac says "externally managed environment", add `--break-system-packages` only after the SC agrees, or use a virtual environment |
+| PowerPoint | `powershell -Command "New-Object -ComObject PowerPoint.Application \| % { $_.Version; $_.Quit() }"` | `ls "/Applications/Microsoft PowerPoint.app"` | Install Microsoft 365 desktop apps |
+| Deck builder | `python ../sc-deck/scripts/build_deck.py ../../tests/deck/sample-fictional/deck.json --out <temp>/sample.pptx --render` | the same with `python3`; the first render asks the SC to let Terminal or Claude control PowerPoint: they click **OK** | Read the error. On a Mac, if the render can't run, the deck is still built: say so and move on |
+| Demo toolkit (for configuration) | the `creatio-demo-toolkit` skills are listed in this session | same | Install the plugin (Renzo has the instructions) |
+| clio (for configuration) | the clio MCP tools are available | same | Install clio; the SC registers environments themselves |
+
+The toolkit and clio are only needed to **configure** demos. An SC can prepare first meetings, decks, RFP fit-gaps
+and workshops without them: mark them "later", not "failed".
 
 ## 3. Rules
 
 - Never register clio environments, type passwords, create accounts or open `CREDENTIALS.md` files.
-- Never put `node_modules`, build caches or videos in a deal folder: it syncs to every SC. Build workspaces live in
-  `C:\Projects\builds\<account>\`.
+- Never change system settings (PATH, execution policy, security prompts). If one is needed, tell the SC what to do.
+- Never put `node_modules`, build caches or videos in a deal folder: it syncs to every SC. Build workspaces live
+  outside SharePoint: `C:\Projects\builds\<account>\` on Windows, `~/Projects/builds/<account>/` on a Mac.
 
 ## Talking to the SC
 

@@ -8,7 +8,7 @@ to the deck.json folder unless absolute. The template is chosen by deck.json "te
 lives in ../templates/<name>/template.json, so a new corporate template needs a new template.json, not new code.
 
 Slides of type "library" are corporate slides copied (in Python, with their pictures and video) from a .pptx in the
-SharePoint Slide-library. --render exports every slide to PNG through PowerPoint (office_deck.ps1).
+SharePoint Slide-library. --render exports every slide to PNG (render_deck.py: PowerPoint on Windows or Mac).
 """
 import argparse
 import copy
@@ -1125,12 +1125,10 @@ def build(spec_path, out=None, render=False):
     deck.finish(out)
     lib = sum(1 for _, k in deck.slides if k == "library")
     print("built %s (%d slides%s)" % (out, len(deck.slides), ", %d from the slide library" % lib if lib else ""))
-    ps = os.path.join(HERE, "office_deck.ps1")
     if render:
         png_dir = os.path.splitext(out)[0] + "-png"
-        subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps,
-                        "-Action", "render", "-Deck", out, "-OutDir", png_dir], check=True)
-        print("rendered to", png_dir)
+        r = subprocess.run([sys.executable, os.path.join(HERE, "render_deck.py"), out, png_dir])
+        print("rendered to", png_dir) if r.returncode == 0 else print("WARNING render skipped (see above); the deck is built")
     for w in WARNINGS:
         print("WARNING", w)
     return out

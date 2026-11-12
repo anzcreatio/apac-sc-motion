@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.12.0 (12 Nov 2026): self-serve rollout, Windows and Mac
+- `rollout/`: `START-HERE.md` (one prompt: Claude finds the synced folder on Windows or Mac and installs the plugin,
+  with an in-chat `/plugin` fallback when the `claude` command isn't available), the overview deck
+  (`rollout/overview/deck.json` → `APAC-SC-Motion-Overview.pptx`, built with `sc-deck`) and the announcement text.
+  `publish.ps1` copies START-HERE and the deck to `Plugin/`.
+- `sc-setup`: Windows and Mac paths, `python` / `python3`, packages (PyMuPDF on a Mac), PowerPoint check per OS;
+  records `python` and `platform` in `~/.apac-sc-motion.json`.
+- New `sc-deck/scripts/render_deck.py`: renders on Windows (PowerPoint) or Mac (PowerPoint for Mac or LibreOffice,
+  then PyMuPDF); `build_deck.py --render`, `sc-inbox` and `sc-meeting-review` use it. Slide extraction stays Windows only.
+- Every skill that runs scripts says to use `python3` on a Mac. `sc-guide`: opening files and updating the plugin work
+  on both. Builds folder on a Mac: `~/Projects/builds/<account>/`.
+
 ## 0.11.0 (12 Nov 2026): workshops (Australia)
 - New skill `sc-workshop` (+ `scripts/workshop.py`, `AGENDA-120.md`, `CAPTURE-SHEET.md`, `PREWORK-EMAIL.md`,
   `DRAFT-JOURNEY.md`): 2-hour requirements workshops, one journey each, starting from a draft journey the room

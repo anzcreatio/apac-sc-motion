@@ -5,6 +5,8 @@ description: Run the APAC SC team's weekly lessons digest - gather the week's ev
 
 # sc-weekly-lessons
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 The motion improves every week, by evidence, with Renzo deciding (agreed 11 Nov 2026). Fifteen minutes of his time.
 
 Paths are relative to this skill's folder; plugin root = `../..`.

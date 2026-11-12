@@ -5,6 +5,8 @@ description: Fit-gap an RFP, TOR or requirements list for a Creatio APAC deal - 
 
 # sc-rfp
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 The bid team writes the RFP response. **We give them the fit-gap and a bid / no-bid recommendation**, and, before they
 submit, a consistency check of their answers against it (Renzo, 11 Nov 2026). The POC is planned from the same
 register with `sc-demo-plan` (proof mode).

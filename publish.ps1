@@ -29,8 +29,13 @@ if (Test-Path $publishedFile) {
 
 New-Item -ItemType Directory -Force $Target | Out-Null
 # Mirror the repo, leaving out git internals, test outputs (they hold customer content) and caches.
-robocopy $repo $Target /MIR /XD .git out blind __pycache__ /XF '~$*' publish.ps1 /R:1 /W:1 /NFL /NDL /NP /NJH | Out-Null
+robocopy $repo $Target /MIR /XD .git out blind __pycache__ '*-png' /XF '~$*' publish.ps1 /R:1 /W:1 /NFL /NDL /NP /NJH | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed with exit code $LASTEXITCODE" }
+# The self-serve entry points sit one level up, in Plugin/, where SCs look first.
+$pluginDir = Split-Path $Target -Parent
+Copy-Item (Join-Path $repo 'rollout\START-HERE.md') (Join-Path $pluginDir 'START-HERE.md') -Force
+$deck = Join-Path $repo 'rollout\overview\APAC-SC-Motion-Overview.pptx'
+if (Test-Path $deck) { Copy-Item $deck (Join-Path $pluginDir 'APAC-SC-Motion-Overview.pptx') -Force }
 $commit = git -C $repo log -1 --format='%h %s'
 Set-Content -Path (Join-Path $Target 'PUBLISHED.txt') -Value "Version $version, published $(Get-Date -Format 'yyyy-MM-dd HH:mm') from commit $commit" -Encoding UTF8
 Write-Output "Published apac-sc-motion $version to $Target"

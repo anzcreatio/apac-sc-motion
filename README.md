@@ -3,7 +3,7 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.11.0)
+## What's in it (v0.12.0)
 
 | Skill | Use it for |
 |---|---|
@@ -42,19 +42,25 @@ New SCs: open SharePoint `Plugin/START-HERE.md` and paste its prompt into Claude
 | New templates and corporate content | SharePoint `_inbox/` | Download from the Knowledge Hub, drop here; `sc-inbox` reviews |
 | Weekly digests | SharePoint `Lessons/` | Readable by the team |
 
-## Install (each SC, once, about 5 minutes)
+## Install (each SC, once, Windows or Mac)
 
-The plugin is published to the team SharePoint site: **APAC Solution Consulting → Documents → `Plugin/apac-sc-motion`**.
+**Self-serve:** open SharePoint **APAC Solution Consulting → Documents → `Plugin/START-HERE.md`** and paste its prompt
+into Claude. Claude finds the synced folder and installs the plugin. After a restart, `sc-guide` takes the SC through
+setup (`sc-setup`) and onboarding. The overview deck is `Plugin/APAC-SC-Motion-Overview.pptx` (source: `rollout/overview/`).
 
-1. Sync the site if you haven't: open it in SharePoint → Documents → **Add shortcut to OneDrive**. Wait until the
-   `Plugin` folder shows up in File Explorer.
-2. In a terminal (PowerShell), with your own synced path:
-   ```
-   claude plugin marketplace add "C:\Users\<you>\OneDrive - Creatio\APAC Solution Consulting - Documents\Plugin\apac-sc-motion"
-   claude plugin install apac-sc-motion@apac-sc
-   ```
-3. Restart Claude Code, then say: **"run sc-setup"**. It finds your SharePoint folder and checks Python, PowerPoint
-   and the demo toolkit.
+By hand, in a terminal, with your own synced path:
+
+| | Path to the plugin |
+|---|---|
+| Windows | `C:\Users\<you>\OneDrive - Creatio\APAC Solution Consulting - Documents\Plugin\apac-sc-motion` |
+| Mac | `~/Library/CloudStorage/OneDrive-Creatio/APAC Solution Consulting - Documents/Plugin/apac-sc-motion` (or under `OneDrive-SharedLibraries-Creatio`) |
+
+```
+claude plugin marketplace add "<path>"
+claude plugin install apac-sc-motion@apac-sc
+```
+
+Then restart Claude and say **"start the sc-guide"**.
 
 **Updates:** when Renzo announces a new version, run `claude plugin marketplace update apac-sc`, then
 `claude plugin update apac-sc-motion@apac-sc`, and restart Claude Code. `PUBLISHED.txt` in the folder shows the

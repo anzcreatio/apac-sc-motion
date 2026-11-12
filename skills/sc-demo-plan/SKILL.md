@@ -5,6 +5,8 @@ description: Plan the configuration of a Creatio demo for an APAC deal - turn wh
 
 # sc-demo-plan
 
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
+
 You help the SC plan a demo, you don't dictate it. The plan meets the **demo bar** (the floor) and then offers
 options. The SC's creativity, the customer's requests and best practice from anywhere fill the rest.
 

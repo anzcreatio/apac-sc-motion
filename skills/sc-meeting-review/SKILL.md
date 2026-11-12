@@ -5,6 +5,8 @@ description: After a Creatio APAC customer meeting, review it and feed what we l
 
 # sc-meeting-review
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 Run per meeting, in the deal folder (`<team root>/Deals/<account>/`). Three parts; do the ones the inputs allow.
 Nothing customer-facing is sent from here.
 
@@ -16,7 +18,7 @@ Nothing customer-facing is sent from here.
 2. Run `python scripts/deck_diff.py --deal-dir "<deal folder>"` (or `--generated --presented --spec` explicitly).
    It writes `Lessons/deck-edits/deck-review-<deal>-<date>.md` + `.json` on SharePoint.
 3. Read the report and, for the edited and hand-made slides, look at the presented slides (render with
-   `../sc-deck/scripts/office_deck.ps1 -Action render`). Classify each change:
+   `python ../sc-deck/scripts/render_deck.py <pptx> <dir>`). Classify each change:
 
    | Kind | Example | Goes to |
    |---|---|---|

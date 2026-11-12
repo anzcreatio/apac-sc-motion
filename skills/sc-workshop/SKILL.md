@@ -5,6 +5,8 @@ description: Plan, run and capture 2-hour requirements workshops for a Creatio A
 
 # sc-workshop
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 Australia doesn't send us an RFP: we run workshops and write the requirements ourselves (Renzo, 12 Nov 2026). That's
 an advantage: the playback the customer signs off often becomes their evaluation criteria. Do it well and in their words.
 

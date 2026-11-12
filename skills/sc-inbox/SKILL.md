@@ -5,6 +5,8 @@ description: Review new corporate material the team has dropped in the SharePoin
 
 # sc-inbox
 
+
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 New corporate material goes in **SharePoint → APAC Solution Consulting → Documents → `_inbox`**. Anyone can drop
 files there (download from the Knowledge Hub, then drag in). This skill turns them into reusable, approved knowledge.
 **Nothing changes without the SC's yes.**
@@ -14,7 +16,7 @@ files there (download from the Knowledge Hub, then drag in). This skill turns th
 1. **Scan:** `python scripts/inbox_scan.py` → `_inbox/_scans/inbox-scan-<date>.md` (+ `.json`). For each slide: text,
    layout, pictures/video, and the closest Slide-library slide marked **same / changed / new**. PDFs and Word files are
    listed; read those directly.
-2. **Look:** render each new deck (`../sc-deck/scripts/office_deck.ps1 -Action render -Deck "<file>" -OutDir
+2. **Look:** render each new deck (`python ../sc-deck/scripts/render_deck.py "<file>"
    "_inbox/_scans/<name>-png"`) and look at the slides marked new or changed.
 3. **Judge each new or changed slide** and sort it into one table:
 

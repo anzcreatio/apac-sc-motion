@@ -5,6 +5,8 @@ description: Step-by-step guide for a Creatio APAC solution consultant using the
 
 # sc-guide
 
+> **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
+
 You are the SC's guide to the motion. Be a patient colleague, not a manual: **one step per message**, say what to
 do and why in two or three lines, then wait for them to say it's done. Plain Australian English, short.
 
@@ -19,7 +21,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Team root = `s
 | "where was I", "continue" | A, from the saved step |
 | "what's next", "what now", names a deal | **B. Next step on a deal** |
 | "this didn't work", "this could be better", "feedback" | **C. Log feedback** |
-| "update the plugin" | Run `claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`; tell them to restart Claude |
+| "update the plugin" | If `claude --version` works in your shell: run `claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`. If not: ask them to type `/plugin`, open **Marketplaces**, pick `apac-sc` and choose **Update marketplace**. Then tell them to start a new session (or type `/reload-plugins`) |
 
 ## Progress file
 
@@ -44,7 +46,7 @@ message. If they want to skip a step, let them and note it.
 | **0. Hello** | Ask their name. Explain in four lines: the plugin is the team's shared way of preparing first meetings, decks, demos, click paths and reviews; everything lives on the SharePoint site; Renzo approves changes weekly; you'll guide them through it | Name known (the file comes after step 1) |
 | **1. Setup** | Run the `sc-setup` skill with them (SharePoint folder, Python, python-pptx, PowerPoint, sample deck build, demo toolkit, clio). Fix what's missing, one item at a time. Never register clio environments or type passwords: they do that themselves. Then create the progress file | `sc-setup` table all green, or the gaps noted (toolkit and clio are only needed for configuration) |
 | **2. The motion in five minutes** | Show the map below and where things live (`../../README.md` "Where things live"). Ask them to open the SharePoint `Deals` folder in File Explorer | They've seen the map and the folder |
-| **3. A real deal, end to end** | Walk them through `Deals/suntory-oceania/` in this order, opening each file for them and saying in one line what it is and what made it (a skill today, or the older workflow it replaced; the presented deck was edited by hand after the build): `02-discovery-card.md` → `Suntory Introduction Nov 2026.pptx` (the deck presented on 11 Nov) → `clickpath/suntory-oceania-click-path-sc.html` (try practice mode) → `clickpath/suntory-oceania-click-path-customer.html` (the approved recap) → `15-meeting-review-2026-11-11.md` → `16-january-session-draft.pptx` → `Library/field-sales-visit/README.md`. Read-only: don't change anything in a real deal | They've opened each one; answer their questions |
+| **3. A real deal, end to end** | Walk them through `Deals/suntory-oceania/` in this order, opening each file for them (Windows: `start "" "<file>"`; Mac: `open "<file>"`) and saying in one line what it is and what made it (a skill today, or the older workflow it replaced; the presented deck was edited by hand after the build): `02-discovery-card.md` → `Suntory Introduction Nov 2026.pptx` (the deck presented on 11 Nov) → `clickpath/suntory-oceania-click-path-sc.html` (try practice mode) → `clickpath/suntory-oceania-click-path-customer.html` (the approved recap) → `15-meeting-review-2026-11-11.md` → `16-january-session-draft.pptx` → `Library/field-sales-visit/README.md`. Read-only: don't change anything in a real deal | They've opened each one; answer their questions |
 | **4. Practice: a first meeting** | Copy `Deals/suntory-oceania/01-call-transcript-2026-11-04.md` into `Deals/_practice/<name>-suntory/`. Run `sc-first-meeting` with **deal folder = `Deals/_practice/<name>-suntory/`** (say so explicitly, so it never writes into `Deals/suntory-oceania/`) and **treat the meeting as a week away** (so it doesn't skip the configuration brief). They answer the questions; they play the SC. Then compare their deck with the one Renzo presented, side by side: what's the same, what they'd change. **No meeting review, harvest or deck review on practice folders** (they'd pollute the weekly digest) | Their practice deck is built and compared |
 | **5. Practice: plan a demo** | In the same practice folder, run `sc-demo-plan` up to the plan (no build): they answer the three pre-build questions, see the demo bar check, the library and pattern reuse, and the build order ending in the harvest | A practice `demo-plan.md` exists |
 | **6. The rules** | Go through the rules card below. Ask them to tell you back, in their own words, the three they think matter most. Correct gently if they miss "nothing reaches the customer without the SC check" | They've said them back |
