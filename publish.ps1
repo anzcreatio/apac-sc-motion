@@ -37,7 +37,7 @@ if (git -C $repo tag --list "v$version") { throw "Tag v$version already exists. 
 
 New-Item -ItemType Directory -Force $Target | Out-Null
 # Mirror the repo, leaving out git internals, test outputs (they hold customer content) and caches.
-robocopy $repo $Target /MIR /XD .git out blind __pycache__ '*-png' /XF '~$*' publish.ps1 release-notes.ps1/R:1 /W:1 /NFL /NDL /NP /NJH | Out-Null
+robocopy $repo $Target /MIR /XD .git out blind __pycache__ '*-png' /XF '~$*' publish.ps1 release-notes.ps1 /R:1 /W:1 /NFL /NDL /NP /NJH | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed with exit code $LASTEXITCODE" }
 # The self-serve entry points sit one level up, in Plugin/, where SCs look first.
 $pluginDir = Split-Path $Target -Parent
