@@ -11,6 +11,7 @@ Creatio logo top right, 40 pt title with a small orange caps label above it, ora
 | # | Slide type | Required? | What it does | Field source |
 |---|---|---|---|---|
 | 1 | `cover` | Yes (not in a partner-led slot) | Customer + the outcome in their words. A photo (`image`) with the title on orange blocks, or plain orange | H&G 1, Suntory 1 |
+| 1b | `agenda` | **Yes for demo meetings** (Renzo, 12 Nov 2026) | The AE opens with it: minutes, what, who on the left; "At the end, we'll ask you" with the decision question and what happens if it fits or not yet on the right. No open "what would make this a success?" slot: get success criteria before the meeting | Examples: `Deals/_examples/agenda-and-ae-brief/` |
 | 2 | `understanding` | **Yes** | What we currently understand about their pains: **Today → where they want to be**, plus timing. Or cards when we only have what we heard | H&G 2, Suntory 2–3, Telkomsel 1 |
 | 3 | `platform` | **Yes, always the whole set** (Renzo, 11 Nov 2026) | The platform story from the Slide-library's standard set: AI Platform + AI CRM, the three studios, **01 AI Studio, 02 AI Twin, 03 Business Studio, 04 AI Coding Agent**, with speaker notes. Extras (AI Studio callouts, AI Twin concept) with `add`. Other corporate slides (analysts, customers, telecom) with `library` | H&G 3–11, Suntory 4–11 |
 | 4 | `why` | Optional | Why Creatio fits *them*: 3–4 reasons = our differentiators in their terms | H&G 12, Suntory 9 |
@@ -79,6 +80,7 @@ titles, titles over 12 words, semicolons and em dashes.
 | `next_steps` | `questions`?, `actions`: `[{when, what, who?, icon?}]`; `layout`: `timeline` (default in the designed look, ≤ 5 steps, one question in a box) or `table` |
 | `build` | `lead`?, `platform`: `[{name, what, icon?, see?}]`, `ai`: same, `caption`? (`see` = the demo step, e.g. "Step 2" or "Next time") |
 | `section` | `text`, `sub`? |
+| `agenda` | `items`: `[{min, what, who}]`, `length`? (warns if the minutes don't add up), `decision`, `outcomes`: `[{if, then}]`, `decision_label`? |
 | `platform` | nothing required. `add`: extra slide numbers from the set's `optional` list · `drop`: only with a reason in the notes (the builder warns) · `slide_notes`: override a slide's speaker note. The set itself lives in `Slide-library/catalogue.json` → `standard_sets.platform` |
 | `library` | `file`: `library:<name>.pptx` (SharePoint `Slide-library`, listed in its `catalogue.json`), `slides`: `[1, 2, …]`. Copied with pictures and video; best on the designed template, which holds the corporate layouts |
 

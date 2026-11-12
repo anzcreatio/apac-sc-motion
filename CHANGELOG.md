@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.13.0 (12 Nov 2026): requirements checklist and agenda slide
+- New skill `sc-requirements` (+ `scripts/requirements.py`): after the demo build, a neutral requirements checklist
+  for the AE to send before any RFP (Read me, Requirements with a vendor-response drop-down, suggested Scoring), built
+  from an internal master that traces each line to the source, scene, fit and differentiator. Refuses to build on
+  our product terms or competitor names in customer text, a Must that isn't C + high confidence, or a fit we'd fail.
+  Example: Suntory `17-requirements-checklist.xlsx` (46 lines).
+- `sc-deck`: new `agenda` slide type (run of the meeting + the decision we'll ask for); deck standard slide 1b, yes for
+  demo meetings; no open "what would make this a success?" slot.
+- `sc-guide` and `sc-demo-plan` point to `sc-requirements` after the build.
+
 ## 0.12.0 (12 Nov 2026): self-serve rollout, Windows and Mac
 - `rollout/`: `START-HERE.md` (one prompt: Claude finds the synced folder on Windows or Mac and installs the plugin,
   with an in-chat `/plugin` fallback when the `claude` command isn't available), the overview deck

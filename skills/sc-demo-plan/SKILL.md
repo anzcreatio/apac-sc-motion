@@ -94,6 +94,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     (outcomes) and the live change (a `disputed` rule). Its tags carry over: C builds, I and A open the next workshop as
     questions. The playback build between workshops is **Light** (one journey, about a day) on a clean stand with the
     package plan, so it grows into the Full demo. Requirements refs (`W1-03`) go in the scene table's pain column.
+    **After the build:** if no RFP has been issued yet, add `sc-requirements` (a requirements checklist the AE sends) to the build order, after the click path.
 11. **Harvest is part of the plan:** the L1 harvest (`sc-harvest`) is the last line of the build order, due within 2
     working days of the demo.
 12. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the

@@ -65,6 +65,7 @@ message. If they want to skip a step, let them and note it.
 | Before building a demo | `sc-demo-plan` | The three pre-build questions, the demo plan, the script for the toolkit |
 | Building | `creatio-demo-toolkit` (`creatio-demo-build`) | The configured demo, click path cards |
 | After the build | `sc-clickpath` | SC practice page + customer recap (DRAFT until the SC approves) |
+| After the build, before any RFP | `sc-requirements` | A neutral requirements checklist in their words for the AE to send, so their RFP asks for what we've shown |
 | After every meeting | `sc-meeting-review` | Deck comparison, review, updated summary, next-session ideas, lessons |
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
@@ -120,6 +121,7 @@ customer-facing output with a reminder of what Renzo still needs to check.
    | a review whose next step is a demo | a `demo-plan` | `sc-demo-plan` (three pre-build questions first) |
    | a demo plan | build notes or click path cards | Build with `creatio-demo-toolkit` |
    | click path cards | the two click path pages | `sc-clickpath` |
+   | a demo built or shown, no RFP issued yet | a `*requirements-checklist*` | `sc-requirements` (ask who receives it) |
    | a customer recap | `"approved": true` | Review the recap screen by screen, then approve |
    | a demo that's happened | the deal in `library/catalogue.json` | `sc-harvest` (overdue after 2 working days: say so first) |
    | everything above for the last meeting, and a next meeting is planned | a deck or demo plan newer than the latest review | `sc-demo-plan` (for a demo) or `sc-deck` (update the deck from the review's summary) for the next meeting |

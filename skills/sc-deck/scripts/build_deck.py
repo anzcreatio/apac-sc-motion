@@ -957,6 +957,50 @@ def s_next_steps(deck, slide, d, n):
         warn(n, "no action has a date; the standard asks for a named person and a date")
 
 
+def s_agenda(deck, slide, d, n):
+    """The AE's opening: today's run of the meeting (left) and the decision we'll ask for at the end (right)."""
+    items = d["items"]
+    right_w = 4.3
+    gap = 0.5
+    left_w = T.W - right_w - gap
+    min_w, who_w = 0.9, 1.7
+    what_w = left_w - min_w - who_w
+    y = T.T + 0.15
+    for lbl, x, w in (("Minutes", T.L, min_w), ("What we'll do", T.L + min_w, what_w), ("Who", T.L + min_w + what_w, who_w)):
+        run(textbox(slide, "Agenda %s label" % lbl, x, y, w, 0.35), lbl, 13, T.GREY, bold=True)
+    y += 0.45
+    pitch = min(0.82, (T.B - y - 0.1) / max(1, len(items)))
+    for i, it in enumerate(items):
+        rule(slide, "Agenda rule %d" % i, T.L, y, left_w)
+        run(textbox(slide, "Agenda min %d" % (i + 1), T.L, y + 0.12, min_w - 0.1, pitch - 0.1), str(it.get("min", "")), 18, T.ACC, bold=True)
+        run(textbox(slide, "Agenda what %d" % (i + 1), T.L + min_w, y + 0.12, what_w - 0.15, pitch - 0.1), it["what"], 15, T.INK)
+        run(textbox(slide, "Agenda who %d" % (i + 1), T.L + min_w + what_w, y + 0.14, who_w, pitch - 0.1), it.get("who", ""), 14, T.GREY)
+        if est_h(it["what"], 15, what_w - 0.15) > pitch - 0.15:
+            warn(n, "agenda item %d may not fit" % (i + 1))
+        y += pitch
+    rule(slide, "Agenda rule end", T.L, y, left_w)
+    total = sum(float(it.get("min") or 0) for it in items)
+    if d.get("length") and total and abs(total - float(d["length"])) > 0.5:
+        warn(n, "agenda adds up to %g min, the meeting is %s" % (total, d["length"]))
+    # Right: the decision box
+    x = T.L + left_w + gap
+    top = T.T + 0.15
+    h = T.B - top - 0.1
+    shape(slide, MSO_SHAPE.RECTANGLE, "Decision box", x, top, right_w, h, fill=T.TINT)
+    pad = 0.3
+    run(textbox(slide, "Decision label", x + pad, top + pad, right_w - 2 * pad, 0.35), d.get("decision_label", "At the end, we'll ask you").upper(), 12, T.ACC, bold=True)
+    tf = textbox(slide, "Decision", x + pad, top + pad + 0.45, right_w - 2 * pad, 1.6)
+    run(tf, d["decision"], 20, T.INK, bold=True)
+    yy = top + pad + 0.55 + est_h(d["decision"], 20, right_w - 2 * pad) + 0.25
+    for i, o in enumerate(d.get("outcomes", [])):
+        rule(slide, "Outcome rule %d" % i, x + pad, yy, right_w - 2 * pad)
+        run(textbox(slide, "Outcome if %d" % (i + 1), x + pad, yy + 0.1, right_w - 2 * pad, 0.35), o["if"], 15, T.INK, bold=True)
+        run(textbox(slide, "Outcome then %d" % (i + 1), x + pad, yy + 0.45, right_w - 2 * pad, 0.9), o["then"], 14, T.BODY)
+        yy += 0.45 + est_h(o["then"], 14, right_w - 2 * pad) + 0.2
+    if yy > top + h:
+        warn(n, "decision box runs past the bottom: shorten the outcomes")
+
+
 def s_section(deck, slide, d, n):
     run(textbox(slide, "Section", T.L, 2.6, T.W, 1.4, anchor=MSO_ANCHOR.MIDDLE), d["text"], 32, T.INK, bold=True)
     if d.get("sub"):
@@ -1087,6 +1131,7 @@ TYPES = {
     "cover": s_cover, "understanding": s_understanding, "facts": s_facts, "why": s_why,
     "hypothesis": s_hypothesis, "component": s_component, "screen": s_screen, "summary": s_summary,
     "roadmap": s_roadmap, "next_steps": s_next_steps, "section": s_section, "library": s_library, "build": s_build,
+    "agenda": s_agenda,
     "platform": s_library,
 }
 NO_TITLE = {"cover", "library", "section"}
