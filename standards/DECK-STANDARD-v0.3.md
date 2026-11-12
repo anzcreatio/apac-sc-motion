@@ -80,6 +80,8 @@ titles, titles over 12 words, semicolons and em dashes.
 | `next_steps` | `questions`?, `actions`: `[{when, what, who?, icon?}]`; `layout`: `timeline` (default in the designed look, ≤ 5 steps, one question in a box) or `table` |
 | `build` | `lead`?, `platform`: `[{name, what, icon?, see?}]`, `ai`: same, `caption`? (`see` = the demo step, e.g. "Step 2" or "Next time") |
 | `section` | `text`, `sub`? |
+| `flow` | `steps`: `[{title, skills?: [..], who?, highlight?}]` (up to 8, one row), `loop`?, `title_size`?, `skill_size`? · internal and training decks |
+| `outputs` | `rows`: `[{step, customer, internal}]`, `labels`?, `size`? · what each step produces |
 | `agenda` | `items`: `[{min, what, who}]`, `length`? (warns if the minutes don't add up), `decision`, `outcomes`: `[{if, then}]`, `decision_label`? |
 | `platform` | nothing required. `add`: extra slide numbers from the set's `optional` list · `drop`: only with a reason in the notes (the builder warns) · `slide_notes`: override a slide's speaker note. The set itself lives in `Slide-library/catalogue.json` → `standard_sets.platform` |
 | `library` | `file`: `library:<name>.pptx` (SharePoint `Slide-library`, listed in its `catalogue.json`), `slides`: `[1, 2, …]`. Copied with pictures and video; best on the designed template, which holds the corporate layouts |

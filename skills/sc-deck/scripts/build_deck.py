@@ -1001,6 +1001,67 @@ def s_agenda(deck, slide, d, n):
         warn(n, "decision box runs past the bottom: shorten the outcomes")
 
 
+def s_flow(deck, slide, d, n):
+    """A process in one row of numbered boxes with arrows (up to 8), and an optional loop line underneath."""
+    steps = d["steps"]
+    gap = 0.24
+    w = (T.W - gap * (len(steps) - 1)) / len(steps)
+    top = T.T + 0.35
+    h = min(3.3, T.B - top - (1.0 if d.get("loop") else 0.2))
+    pad = 0.1
+    tw = w - 2 * pad
+    ts, ss = d.get("title_size", 11.5), d.get("skill_size", 9.5)
+    title_h = max(est_h(st["title"], ts, tw) for st in steps) * 1.3  # one baseline for every box's skills
+    for i, st in enumerate(steps):
+        x = T.L + i * (w + gap)
+        shape(slide, MSO_SHAPE.RECTANGLE, "Flow box %d" % (i + 1), x, top, w, h, fill=T.TINT if st.get("highlight") else T.SOFT)
+        c = shape(slide, MSO_SHAPE.OVAL, "Flow num %d" % (i + 1), x + pad, top + 0.14, 0.36, 0.36, fill=T.ACC)
+        c.text_frame.margin_left = c.text_frame.margin_right = 0
+        run(c.text_frame, str(i + 1), 11, T.WHITE, bold=True, align=PP_ALIGN.CENTER)
+        run(textbox(slide, "Flow title %d" % (i + 1), x + pad, top + 0.62, tw, title_h), st["title"], ts, T.INK, bold=True)
+        y = top + 0.62 + title_h + 0.12
+        for j, line in enumerate(st.get("skills", [])):
+            run(textbox(slide, "Flow skill %d.%d" % (i + 1, j), x + pad, y, tw, 0.4), line, ss, T.GREY)
+            y += est_h(line, ss, tw) * 1.15 + 0.03
+        if st.get("who"):
+            run(textbox(slide, "Flow who %d" % (i + 1), x + pad, top + h - 0.5, tw, 0.4), st["who"].upper(), 8.5, T.ACC, bold=True)
+        if y > top + h - 0.45:
+            warn(n, "flow step %d text runs into its 'who' line: shorten it" % (i + 1))
+        if i < len(steps) - 1:
+            shape(slide, MSO_SHAPE.RIGHT_ARROW, "Flow arrow %d" % (i + 1), x + w + 0.04, top + h / 2 - 0.09, gap - 0.08, 0.18, fill=T.GREY)
+    if d.get("loop"):
+        y = top + h + 0.3
+        shape(slide, MSO_SHAPE.LEFT_ARROW, "Loop arrow", T.L, y + 0.02, 0.35, 0.2, fill=T.ACC)
+        run(textbox(slide, "Loop", T.L + 0.5, y, T.W - 0.5, 0.6), d["loop"], 13, T.INK)
+
+
+def s_outputs(deck, slide, d, n):
+    """What each step produces: one row per step, customer-facing and internal outputs side by side."""
+    rows = d["rows"]
+    step_w, cust_w = 2.3, 4.7
+    int_w = T.W - step_w - cust_w - 0.4
+    xs = [T.L, T.L + step_w + 0.2, T.L + step_w + cust_w + 0.4]
+    ws = [step_w, cust_w, int_w]
+    labels = d.get("labels", ["Step", "The customer gets (after the SC check)", "We keep (internal)"])
+    y = T.T + 0.05
+    for i, lbl in enumerate(labels):
+        run(textbox(slide, "Outputs head %d" % i, xs[i], y, ws[i], 0.3), lbl, 11, T.ACC if i == 1 else T.GREY, bold=True)
+    y += 0.38
+    size = d.get("size", 11)
+    need = sum(max(est_h(r["step"], size, step_w), est_h(r.get("customer", "") or "-", size, cust_w), est_h(r.get("internal", ""), size, int_w)) + 0.16 for r in rows)
+    spare = max(0.0, (T.B - y - 0.05 - need) / max(1, len(rows)))
+    for i, r in enumerate(rows):
+        rule(slide, "Outputs rule %d" % i, T.L, y, T.W)
+        cells = [r["step"], r.get("customer") or "-", r.get("internal", "")]
+        hh = max(est_h(c, size, ws[k]) for k, c in enumerate(cells))
+        for k, c in enumerate(cells):
+            run(textbox(slide, "Outputs %d.%d" % (i, k), xs[k], y + 0.08, ws[k], hh + 0.05), c, size, T.INK if k < 2 else T.GREY, bold=(k == 0))
+        y += hh + 0.16 + min(spare, 0.25)
+    rule(slide, "Outputs rule end", T.L, y, T.W)
+    if y > T.B + 0.05:
+        warn(n, "outputs table runs past the bottom (%.1f in): shorten rows or set size 10" % y)
+
+
 def s_section(deck, slide, d, n):
     run(textbox(slide, "Section", T.L, 2.6, T.W, 1.4, anchor=MSO_ANCHOR.MIDDLE), d["text"], 32, T.INK, bold=True)
     if d.get("sub"):
@@ -1131,7 +1192,7 @@ TYPES = {
     "cover": s_cover, "understanding": s_understanding, "facts": s_facts, "why": s_why,
     "hypothesis": s_hypothesis, "component": s_component, "screen": s_screen, "summary": s_summary,
     "roadmap": s_roadmap, "next_steps": s_next_steps, "section": s_section, "library": s_library, "build": s_build,
-    "agenda": s_agenda,
+    "agenda": s_agenda, "flow": s_flow, "outputs": s_outputs,
     "platform": s_library,
 }
 NO_TITLE = {"cover", "library", "section"}

@@ -3,7 +3,7 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.13.0)
+## What's in it (v0.14.0)
 
 | Skill | Use it for |
 |---|---|

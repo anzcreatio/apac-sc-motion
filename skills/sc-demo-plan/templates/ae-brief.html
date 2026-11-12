@@ -1,0 +1,341 @@
+<title>AE Brief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a meeting run-sheet. Sticky clock and time strip on top, five steps in meeting order below, summary at the end. */
+:root {
+  --bg: #FFFFFF; --surface: #F4F5F7; --tint: #FFECE6; --ink: #0A0A0A; --muted: #5E6168; --rule: #D9DCE1;
+  --accent: #FF4013; --accent-ink: #FFFFFF; --good: #1F7A4D; --good-bg: #E3F3EA; --warn: #9A5B00; --warn-bg: #FFF1D6;
+  --font: "Montserrat", "Segoe UI", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121316; --surface: #1C1E22; --tint: #3A1E16; --ink: #F2F2F3; --muted: #A2A6AE; --rule: #33363C;
+  --accent: #FF6A43; --accent-ink: #121316; --good: #6FD39C; --good-bg: #17301F; --warn: #F1B455; --warn-bg: #33270F; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121316; --surface: #1C1E22; --tint: #3A1E16; --ink: #F2F2F3; --muted: #A2A6AE; --rule: #33363C;
+  --accent: #FF6A43; --accent-ink: #121316; --good: #6FD39C; --good-bg: #17301F; --warn: #F1B455; --warn-bg: #33270F; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.bar-in { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px 12px; display: grid; gap: 8px; }
+.bar-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.clock { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.5px; min-width: 5ch; }
+.now { flex: 1 1 200px; min-width: 0; }
+.now b { display: block; font-size: 15px; }
+.now span { color: var(--muted); font-size: 13px; }
+.btn { border: 1px solid var(--rule); background: var(--surface); border-radius: 6px; padding: 7px 12px; font-weight: 600; font-size: 13px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.strip { position: relative; display: flex; height: 26px; border-radius: 4px; overflow: hidden; background: var(--surface); }
+.seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted); border-right: 2px solid var(--bg); white-space: nowrap; overflow: hidden; }
+.seg.ae { background: var(--surface); }
+.seg.sc { background: var(--tint); color: var(--ink); }
+.seg.past { opacity: .45; }
+.head { width: 2px; background: var(--accent); position: absolute; top: 0; bottom: 0; left: 0; transition: left .5s linear; }
+.legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+header.deal { padding-block: 24px 8px; display: grid; gap: 14px; }
+.eyebrow { text-transform: uppercase; letter-spacing: 1.2px; font-size: 12px; font-weight: 700; color: var(--accent); }
+.deal h1 { font-size: 28px; line-height: 1.2; }
+.meta { color: var(--muted); font-size: 14px; }
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.person { background: var(--surface); border-radius: 8px; padding: 10px 12px; min-width: 0; }
+.person small { display: block; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; font-weight: 700; color: var(--muted); }
+.person b { display: block; }
+.person span { font-size: 13px; color: var(--muted); }
+.job { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; }
+
+.step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding-block: 22px; border-top: 1px solid var(--rule); }
+.num { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; border: 2px solid var(--rule); color: var(--muted); }
+.step.current .num { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.step.done .num { border-color: var(--good); color: var(--good); }
+.step.done .body { opacity: .7; }
+.body { min-width: 0; display: grid; gap: 12px; }
+.step h2 { font-size: 19px; }
+.when { font-size: 13px; color: var(--muted); font-weight: 500; }
+.say { background: var(--tint); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; }
+.say p { margin: 0; font-size: 16px; font-weight: 500; }
+.say .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.say small { text-transform: uppercase; letter-spacing: 1px; font-size: 11px; font-weight: 700; color: var(--accent); }
+.checks { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.check { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; background: var(--surface); border-radius: 8px; padding: 10px 12px; }
+.check p { margin: 0; min-width: 0; }
+.seg-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { border: 1px solid var(--rule); background: var(--bg); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; }
+.pill.good.on { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.pill.warn.on { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
+ul.tips { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.log-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.log-in { display: flex; gap: 8px; }
+.log-in input { flex: 1; min-width: 0; border: 1px solid var(--rule); border-radius: 6px; padding: 7px 10px; background: var(--bg); }
+.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.log li { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; align-items: baseline; }
+.log time { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.log .x { border: 0; background: none; color: var(--muted); padding: 0 4px; }
+.empty { color: var(--muted); font-size: 14px; margin: 0; }
+.answers { display: flex; gap: 8px; flex-wrap: wrap; }
+.reply { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; margin: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); min-width: 0; }
+label.f input, label.f textarea { border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; background: var(--bg); color: var(--ink); font-weight: 400; font-size: 15px; width: 100%; }
+.hint { font-weight: 400; font-size: 12px; }
+.dont { background: var(--surface); border-radius: 8px; padding: 12px 14px; }
+.dont h3 { font-size: 14px; margin-bottom: 6px; }
+.summary { border-top: 2px solid var(--ink); padding-block: 22px 0; display: grid; gap: 12px; }
+.summary pre { background: var(--surface); border-radius: 8px; padding: 12px 14px; white-space: pre-wrap; font-family: var(--font); font-size: 13px; margin: 0; max-height: 360px; overflow: auto; }
+.confirm { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+.foot { color: var(--muted); font-size: 12px; margin-top: 24px; }
+@media (prefers-reduced-motion: reduce) { .head { transition: none; } }
+</style>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="bar-top">
+      <div class="clock" id="clock" aria-live="off">00:00</div>
+      <div class="now" id="now"><b>Not started</b><span>Press Start when the call begins</span></div>
+      <button class="btn primary" id="startBtn" type="button">Start meeting</button>
+      <button class="btn" id="resetBtn" type="button">Reset</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="deal">
+    <div class="eyebrow">AE brief · Demo session</div>
+    <h1 id="h1"></h1>
+    <div class="meta" id="meta"></div>
+    <div class="people" id="people"></div>
+    <div class="job"><b>Your job in one line:</b> say what decision we want at the start, ask for it at the end, and don't hang up without a dated next step.</div>
+  </header>
+
+  <section class="step">
+    <div class="num">1</div>
+    <div class="body">
+      <div><h2>Check we heard them right</h2><div class="when">You · read each one, then ask "still right?"</div></div>
+      <ul class="checks" id="recap"></ul>
+      <p class="empty">Then: <b id="overTo"></b></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="num">2</div>
+    <div class="body">
+      <div><h2>During the demo</h2><div class="when" id="demoWho"></div></div>
+      <ul class="tips">
+        <li id="tipWatch"></li>
+        <li id="tipTech"></li>
+        <li id="tipPause"></li>
+      </ul>
+      <div class="log-btns">
+        <button class="btn" type="button" data-log="They liked it">They liked it</button>
+        <button class="btn" type="button" data-log="Doubt or frown">Doubt or frown</button>
+        <button class="btn" type="button" data-log="Asked a question">Asked a question</button>
+        <button class="btn" type="button" data-log="Asked about price or timing">Price or timing</button>
+      </div>
+      <form class="log-in" id="logForm">
+        <input id="logText" type="text" placeholder="Add a few words (optional)" aria-label="Note">
+        <button class="btn" type="submit">Add note</button>
+      </form>
+      <ul class="log" id="log"></ul>
+      <p class="empty" id="logEmpty">No reactions noted yet.</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="num">3</div>
+    <div class="body">
+      <div><h2>Ask the question</h2><div class="when">You · word for word</div></div>
+      <div class="say">
+        <div class="row"><small>Ask</small><button class="btn copy" type="button" data-copy="question">Copy</button></div>
+        <p id="question"></p>
+      </div>
+      <div><b>What did they say?</b></div>
+      <div class="answers" id="answers">
+        <button class="btn" type="button" data-ans="yes">Yes</button>
+        <button class="btn" type="button" data-ans="partly">Not fully</button>
+        <button class="btn" type="button" data-ans="think">"We need to think"</button>
+      </div>
+      <p class="reply" id="reply" hidden></p>
+      <label class="f" for="ansNote">Their words, or what's missing
+        <input id="ansNote" type="text">
+      </label>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="num">4</div>
+    <div class="body">
+      <div><h2>Close</h2><div class="when">You · don't hang up without this</div></div>
+      <p class="empty" style="color:var(--ink)" id="suggest"></p>
+      <div class="grid2">
+        <label class="f" for="nsWhat">Next step<input id="nsWhat" type="text"></label>
+        <label class="f" for="nsWho">Who<input id="nsWho" type="text"></label>
+        <label class="f" for="nsDate">Date<input id="nsDate" type="date"></label>
+      </div>
+      <div id="licHead"><b>If it fits, also ask</b> <span class="hint">(for the licence options)</span></div>
+      <div class="grid2" id="lic"></div>
+      <div class="dont">
+        <h3>Don't</h3>
+        <ul class="tips" id="dont"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="summary">
+    <h2 id="sumHead"></h2>
+    <p class="empty" id="sumHint"></p>
+    <pre id="sum"></pre>
+    <div><button class="btn primary" id="copySum" type="button">Copy summary</button></div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<div id="resetConfirm" hidden style="position:fixed;inset:auto 0 0 0;z-index:20;background:var(--ink);color:var(--bg);padding:14px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))">
+  <div class="confirm" style="max-width:860px;margin:0 auto">Clear the clock, ticks and notes?
+    <button class="btn primary" id="resetYes" type="button">Clear everything</button>
+    <button class="btn" id="resetNo" type="button" style="color:var(--ink)">Keep</button>
+  </div>
+</div>
+
+<script>
+var D = /*AE_BRIEF_DATA*/{};
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function first(n) { return String(n || "").split(" ")[0]; }
+  var sc = first(D.sc.name), them = D.them.map(function (p) { return first(p.name); });
+  var themTxt = them.length > 1 ? them.slice(0, -1).join(", ") + " and " + them[them.length - 1] : them[0];
+  var TOTAL = D.minutes || 60;
+
+  $("h1").textContent = D.deal + ": " + D.title;
+  $("meta").textContent = D.when;
+  var people = [{ k: "You", n: D.ae.name, r: "Open, keep time, close" }, { k: "SC", n: D.sc.name, r: "Runs the demo" }]
+    .concat(D.them.map(function (p) { return { k: "Them", n: p.name, r: p.role }; }));
+  people.forEach(function (p) {
+    var d = document.createElement("div"); d.className = "person";
+    d.innerHTML = "<small></small><b></b><span></span>";
+    d.querySelector("small").textContent = p.k; d.querySelector("b").textContent = p.n; d.querySelector("span").textContent = p.r || "";
+    $("people").appendChild(d);
+  });
+  $("overTo").textContent = "\"Over to " + sc + ".\"";
+  $("demoWho").textContent = sc + " demos · you watch";
+  $("tipWatch").textContent = "Watch " + themTxt + ". Tap a button below every time they react. You'll use it at step 3.";
+  $("tipTech").textContent = "Technical question: \"" + sc + ", can you take that?\" Don't answer it yourself.";
+  $("tipPause").textContent = "Five minutes before the end, if " + sc + " is still going: \"" + sc + ", let's pause there so we can hear from " + themTxt + ".\"";
+  $("question").textContent = "\"" + D.question + "\"";
+  $("ansNote").placeholder = D.answer_placeholder || "e.g. what they said is missing";
+  $("suggest").textContent = D.next_step.suggestion;
+  $("nsWhat").placeholder = D.next_step.what || "";
+  $("nsWho").placeholder = D.next_step.who || "";
+  (D.licence || []).forEach(function (q, i) {
+    var l = document.createElement("label"); l.className = "f"; l.htmlFor = "lic" + i;
+    l.appendChild(document.createTextNode(q.q));
+    if (q.hint) { var h = document.createElement("span"); h.className = "hint"; h.textContent = q.hint; l.appendChild(h); }
+    var inp = document.createElement("input"); inp.type = "text"; inp.id = "lic" + i; l.appendChild(inp);
+    $("lic").appendChild(l);
+  });
+  $("licHead").hidden = !(D.licence || []).length;
+  D.dont.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; $("dont").appendChild(li); });
+  $("sumHead").textContent = "After the call: send this to " + sc;
+  $("sumHint").textContent = "It builds itself from what you ticked and typed above. Paste it into Teams. " + sc + " uses it for the meeting review.";
+  $("foot").textContent = "Made by sc-demo-plan from the " + D.deal + " deal folder. Your ticks and notes stay in this browser only. SC check required before the AE uses it.";
+  document.title = D.deal + " AE brief";
+
+  var REPLY = {
+    yes: "Say: \"Great. What would you need from us to take it to the next step?\" Then go to step 4.",
+    partly: "Say: \"Which part's missing?\" Write it below. " + sc + " says what we'd show next, then go to step 4 and book that session.",
+    think: "Say: \"Sure. Is it whether it fits, whether it's worth it, or getting others on board?\" Write the answer below, then book the next step."
+  };
+  var FIELDS = ["ansNote", "nsWhat", "nsWho", "nsDate"].concat((D.licence || []).map(function (_, i) { return "lic" + i; }));
+  var KEY = D.storage_key || ("ae-brief-" + D.deal);
+  function fresh() { return { startedAt: null, pausedAt: null, offset: 0, recap: {}, log: [], ans: null, fields: {} }; }
+  var S = fresh();
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) S = Object.assign(S, saved); } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} render(); }
+  function elapsedMs() { if (!S.startedAt) return S.offset || 0; return (S.offset || 0) + ((S.pausedAt || Date.now()) - S.startedAt); }
+  function mmss(ms) { var s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
+
+  D.recap.forEach(function (t, i) {
+    var li = document.createElement("li"); li.className = "check";
+    li.innerHTML = '<p></p><div class="seg-btns"><button type="button" class="pill good" data-r="' + i + '" data-v="ok">Still right</button><button type="button" class="pill warn" data-r="' + i + '" data-v="fix">Corrected</button></div>';
+    li.querySelector("p").textContent = (i + 1) + ". " + t; $("recap").appendChild(li);
+  });
+  $("recap").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-r]"); if (!b) return; var k = b.dataset.r; S.recap[k] = S.recap[k] === b.dataset.v ? null : b.dataset.v; save();
+  });
+  function addLog(kind, text) { S.log.push({ t: mmss(elapsedMs()), kind: kind, text: text || "" }); save(); }
+  document.querySelectorAll("[data-log]").forEach(function (b) {
+    b.addEventListener("click", function () { var inp = $("logText"); addLog(b.dataset.log, inp.value.trim()); inp.value = ""; });
+  });
+  $("logForm").addEventListener("submit", function (e) { e.preventDefault(); var inp = $("logText"); if (!inp.value.trim()) return; addLog("Note", inp.value.trim()); inp.value = ""; });
+  $("log").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (!b) return; S.log.splice(+b.dataset.del, 1); save(); });
+  $("answers").addEventListener("click", function (e) { var b = e.target.closest("[data-ans]"); if (!b) return; S.ans = S.ans === b.dataset.ans ? null : b.dataset.ans; save(); });
+  FIELDS.forEach(function (id) { var el = $(id); el.value = S.fields[id] || ""; el.addEventListener("input", function () { S.fields[id] = el.value; save(); }); });
+
+  function copy(text, btn) {
+    function done(msg) { var o = btn.textContent; btn.textContent = msg; setTimeout(function () { btn.textContent = o; }, 1500); }
+    try { navigator.clipboard.writeText(text).then(function () { done("Copied"); }, function () { done("Select and copy"); }); } catch (e) { done("Select and copy"); }
+  }
+  document.querySelectorAll("[data-copy]").forEach(function (b) { b.addEventListener("click", function () { copy($(b.dataset.copy).textContent, b); }); });
+  $("copySum").addEventListener("click", function () {
+    copy($("sum").textContent, this);
+    var range = document.createRange(); range.selectNodeContents($("sum")); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  });
+  $("startBtn").addEventListener("click", function () {
+    if (!S.startedAt) { S.startedAt = Date.now(); S.pausedAt = null; }
+    else if (S.pausedAt) { S.offset = elapsedMs(); S.startedAt = Date.now(); S.pausedAt = null; }
+    else { S.pausedAt = Date.now(); }
+    save();
+  });
+  $("resetBtn").addEventListener("click", function () { $("resetConfirm").hidden = false; });
+  $("resetNo").addEventListener("click", function () { $("resetConfirm").hidden = true; });
+  $("resetYes").addEventListener("click", function () { S = fresh(); FIELDS.forEach(function (id) { $(id).value = ""; }); $("resetConfirm").hidden = true; save(); });
+
+  function summary() {
+    var L = [D.deal + ", " + (D.when.split(" · ")[0] || "") + ": AE notes for " + sc, "", "Recap:"];
+    D.recap.forEach(function (t, i) { L.push("- " + t + " → " + (S.recap[i] === "ok" ? "still right" : S.recap[i] === "fix" ? "CORRECTED" : "not checked")); });
+    L.push("", "Reactions during the demo:");
+    if (!S.log.length) L.push("- none noted");
+    S.log.forEach(function (x) { L.push("- " + x.t + " " + x.kind + (x.text ? ": " + x.text : "")); });
+    L.push("", D.question + " " + ({ yes: "Yes", partly: "Not fully", think: "Need to think" }[S.ans] || "NOT ASKED") + (S.fields.ansNote ? " (" + S.fields.ansNote + ")" : ""));
+    L.push("", "Next step: " + (S.fields.nsWhat || "NOT AGREED") + " · who: " + (S.fields.nsWho || "?") + " · date: " + (S.fields.nsDate || "NO DATE"));
+    var lic = (D.licence || []).map(function (q, i) { return [q.q, S.fields["lic" + i]]; }).filter(function (p) { return p[1]; });
+    if (lic.length) { L.push("", "Licence answers:"); lic.forEach(function (p) { L.push("- " + p[0] + " " + p[1]); }); }
+    return L.join("\n");
+  }
+  function render() {
+    var ms = elapsedMs(), min = ms / 60000;
+    $("clock").textContent = mmss(ms);
+    var sb = $("startBtn");
+    sb.textContent = !S.startedAt ? "Start meeting" : S.pausedAt ? "Resume" : "Pause";
+    sb.className = "btn " + (!S.startedAt || S.pausedAt ? "primary" : "on");
+    var now = $("now"); now.innerHTML = "<b></b><span></span>";
+    if (!S.startedAt) { now.querySelector("b").textContent = "Not started"; now.querySelector("span").textContent = "Press Start when the call begins"; }
+    else if (min < TOTAL - 5) { now.querySelector("b").textContent = S.pausedAt ? "Paused" : "Meeting running"; now.querySelector("span").textContent = "Watch the reactions and tap them in step 2"; }
+    else { now.querySelector("b").textContent = "Time to ask the question"; now.querySelector("span").textContent = "Pause " + sc + ", then step 3 and step 4"; }
+    document.querySelectorAll("[data-r]").forEach(function (b) { b.classList.toggle("on", S.recap[b.dataset.r] === b.dataset.v); });
+    var log = $("log"); log.innerHTML = "";
+    S.log.forEach(function (x, i) {
+      var li = document.createElement("li");
+      li.innerHTML = '<time></time><span></span><button class="x" type="button" aria-label="Remove">×</button>';
+      li.querySelector("time").textContent = x.t; li.querySelector("span").textContent = x.kind + (x.text ? ": " + x.text : "");
+      li.querySelector("button").dataset.del = i; log.appendChild(li);
+    });
+    $("logEmpty").hidden = S.log.length > 0;
+    document.querySelectorAll("[data-ans]").forEach(function (b) { b.classList.toggle("on", S.ans === b.dataset.ans); });
+    var rep = $("reply"); rep.hidden = !S.ans; rep.textContent = S.ans ? REPLY[S.ans] : "";
+    $("sum").textContent = summary();
+  }
+  render();
+  setInterval(function () { if (S.startedAt && !S.pausedAt) render(); }, 1000);
+})();
+</script>

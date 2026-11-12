@@ -6,7 +6,13 @@
     "date": "November 2026",
     "deck_standard": "v0.3",
     "source": "Internal rollout deck for the SC team. Rebuild with sc-deck: python skills/sc-deck/scripts/build_deck.py rollout/overview/deck.json --render",
-    "waive": ["understanding", "platform", "hypothesis", "summary", "next_steps"]
+    "waive": [
+      "understanding",
+      "platform",
+      "hypothesis",
+      "summary",
+      "next_steps"
+    ]
   },
   "out": "APAC-SC-Motion-Overview.pptx",
   "slides": [
@@ -22,22 +28,141 @@
       "title": "Why we're doing this",
       "subtitle": "The purpose",
       "reasons": [
-        {"title": "Same quality from every SC", "text": "Every first meeting, demo and requirements pack starts from the same standard, whoever runs it."},
-        {"title": "Hours, not days", "text": "Claude does the preparation: research, deck, fit-gap, demo plan. You spend your time on the customer."},
-        {"title": "Every demo makes the next easier", "text": "Each build goes into a shared library within 2 working days, so nobody starts from zero."},
-        {"title": "It gets better every week", "text": "Meeting reviews and your feedback feed a Friday digest. Renzo approves at most 3 changes a week."}
+        {
+          "title": "Same quality from every SC",
+          "text": "Every first meeting, demo and requirements pack starts from the same standard, whoever runs it."
+        },
+        {
+          "title": "Hours, not days",
+          "text": "Claude does the preparation: research, deck, fit-gap, demo plan. You spend your time on the customer."
+        },
+        {
+          "title": "Every demo makes the next easier",
+          "text": "Each build goes into a shared library within 2 working days, so nobody starts from zero."
+        },
+        {
+          "title": "It gets better every week",
+          "text": "Meeting reviews and your feedback feed a Friday digest. Renzo approves at most 3 changes a week."
+        }
       ]
     },
     {
-      "type": "roadmap",
-      "title": "The motion, from first call to proof",
+      "type": "flow",
+      "title": "The motion, step by step",
       "subtitle": "The flow",
       "steps": [
-        {"title": "First meeting", "what": "Call transcript in. Prep, the standard deck and a light config out (sc-first-meeting)", "when": "Before meeting 1"},
-        {"title": "Requirements", "what": "RFP or TOR in Indonesia: a fit-gap (sc-rfp). Australia: 2-hour workshops (sc-workshop)", "when": "After meeting 1"},
-        {"title": "Demo plan", "what": "Three questions, the demo bar, Business Studio first, then AI (sc-demo-plan)", "when": "Before any build"},
-        {"title": "Build and click path", "what": "The demo toolkit builds it. Then a practice page and a customer recap (sc-clickpath)", "when": "Build week"},
-        {"title": "Review and harvest", "what": "What landed, what to change, and the build into the library (sc-meeting-review, sc-harvest)", "when": "After every meeting"}
+        {
+          "title": "Book the meeting",
+          "skills": [
+            "BDR card and handoff"
+          ],
+          "who": "BDR and AE"
+        },
+        {
+          "title": "First meeting",
+          "skills": [
+            "sc-first-meeting",
+            "sc-deck"
+          ],
+          "who": "SC"
+        },
+        {
+          "title": "RFP or workshop",
+          "skills": [
+            "sc-rfp",
+            "sc-workshop"
+          ],
+          "who": "SC"
+        },
+        {
+          "title": "Demo plan",
+          "skills": [
+            "sc-demo-plan"
+          ],
+          "who": "SC"
+        },
+        {
+          "title": "Build",
+          "skills": [
+            "Demo toolkit"
+          ],
+          "who": "SC"
+        },
+        {
+          "title": "Before the demo",
+          "skills": [
+            "sc-clickpath",
+            "sc-requirements"
+          ],
+          "who": "SC, AE sends"
+        },
+        {
+          "title": "Demo session",
+          "skills": [
+            "Agenda slide",
+            "AE brief"
+          ],
+          "who": "AE leads, SC demos",
+          "highlight": true
+        },
+        {
+          "title": "Review, harvest",
+          "skills": [
+            "sc-meeting-review",
+            "sc-harvest"
+          ],
+          "who": "SC"
+        }
+      ],
+      "loop": "Every review feeds the next meeting's deck and plan, and every build goes into the shared library. Fridays: the weekly lessons digest (sc-weekly-lessons).",
+      "notes": "Walk left to right. Step 3 has two doors: an RFP or TOR in Indonesia, workshops in Australia. Step 7 is the AE's Demo Session: we supply the agenda slide and the AE brief."
+    },
+    {
+      "type": "outputs",
+      "title": "What each step produces",
+      "subtitle": "The outputs",
+      "size": 10.5,
+      "rows": [
+        {
+          "step": "1 · Book the meeting",
+          "customer": "",
+          "internal": "Handoff form · call transcript"
+        },
+        {
+          "step": "2 · Prep the first meeting",
+          "customer": "The standard deck (with the agenda slide) · a light demo in their world",
+          "internal": "Prep pack · deck.json · meeting plan · light config brief"
+        },
+        {
+          "step": "3 · RFP or workshop",
+          "customer": "Workshops: pre-work email · follow-up email · playback to sign off",
+          "internal": "Requirements register · fit-gap · bid / no-bid or gaps and effort · bid team answer check · POC brief · solution model"
+        },
+        {
+          "step": "4 · Plan the demo",
+          "customer": "The agenda slide with the decision we'll ask for",
+          "internal": "Demo plan · demo script for the toolkit · AE brief"
+        },
+        {
+          "step": "5 · Build it",
+          "customer": "The demo, in their words and data",
+          "internal": "Build log · click path cards · reset script"
+        },
+        {
+          "step": "6 · Before the demo",
+          "customer": "Requirements checklist for their RFP (AE sends)",
+          "internal": "SC practice page · requirements internal file"
+        },
+        {
+          "step": "7 · Demo session",
+          "customer": "The demo · the decision · a dated next step",
+          "internal": "AE's notes back to the SC (from the AE brief)"
+        },
+        {
+          "step": "8 · Review and harvest",
+          "customer": "Customer recap page (once you approve it) · updated solution summary",
+          "internal": "Meeting review · lessons · library entry · Friday digest"
+        }
       ]
     },
     {
@@ -46,9 +171,21 @@
       "subtitle": "Step 1",
       "lead": "From the BDR call to a meeting-ready deck in about an hour, not a day.",
       "points": [
-        {"title": "Prep", "text": "Company research with sources, likely pains for their industry, the questions to ask", "icon": "checklist"},
-        {"title": "The standard deck", "text": "Built from one deck.json per deal: what we heard, the platform, our starting idea, next steps", "icon": "layers-intersect"},
-        {"title": "A light configuration", "text": "Half a day at most, so the first meeting shows their world, not a generic demo", "icon": "adjustments-horizontal"}
+        {
+          "title": "Prep",
+          "text": "Company research with sources, likely pains for their industry, the questions to ask",
+          "icon": "checklist"
+        },
+        {
+          "title": "The standard deck",
+          "text": "Built from one deck.json per deal: what we heard, the platform, our starting idea, next steps",
+          "icon": "layers-intersect"
+        },
+        {
+          "title": "A light configuration",
+          "text": "Half a day at most, so the first meeting shows their world, not a generic demo",
+          "icon": "adjustments-horizontal"
+        }
       ]
     },
     {
@@ -57,9 +194,21 @@
       "subtitle": "Step 2",
       "lead": "Both end in one requirements register, rated honestly, that the demo plan builds from.",
       "points": [
-        {"title": "RFP or TOR (Indonesia)", "text": "Any layout in. Out come a fit-gap, a bid / no-bid view and a check of the bid team's answers before they submit", "icon": "clipboard-check"},
-        {"title": "Workshops (Australia)", "text": "2 hours, one journey each, starting from a draft they correct. A playback they sign off", "icon": "users-group"},
-        {"title": "Straight into the build", "text": "A POC brief and a solution model in Creatio terms, ready for the demo plan", "icon": "route"}
+        {
+          "title": "RFP or TOR (Indonesia)",
+          "text": "Any layout in. Out come a fit-gap, a bid / no-bid view and a check of the bid team's answers before they submit",
+          "icon": "clipboard-check"
+        },
+        {
+          "title": "Workshops (Australia)",
+          "text": "2 hours, one journey each, starting from a draft they correct. A playback they sign off",
+          "icon": "users-group"
+        },
+        {
+          "title": "Straight into the build",
+          "text": "A POC brief and a solution model in Creatio terms, ready for the demo plan",
+          "icon": "route"
+        }
       ]
     },
     {
@@ -68,9 +217,21 @@
       "subtitle": "Steps 3 and 4",
       "lead": "Every demo meets the same floor, the demo bar, and leaves room for your own ideas.",
       "points": [
-        {"title": "Three questions first", "text": "Who's the competition, what else has the customer given us, what else should we know", "icon": "message-chatbot"},
-        {"title": "Business Studio first, then AI", "text": "Their words and data, opening on their outcome. Every AI moment has a person who confirms", "icon": "sparkles"},
-        {"title": "A trail you can reuse", "text": "A click path to practise with and a customer recap that you approve before it's sent", "icon": "hand-click"}
+        {
+          "title": "Three questions first",
+          "text": "Who's the competition, what else has the customer given us, what else should we know",
+          "icon": "message-chatbot"
+        },
+        {
+          "title": "Business Studio first, then AI",
+          "text": "Their words and data, opening on their outcome. Every AI moment has a person who confirms",
+          "icon": "sparkles"
+        },
+        {
+          "title": "A trail you can reuse",
+          "text": "A click path to practise with and a customer recap that you approve before it's sent",
+          "icon": "hand-click"
+        }
       ]
     },
     {
@@ -79,9 +240,21 @@
       "subtitle": "Step 5",
       "lead": "Ten minutes after a meeting saves hours on the next one, yours and everyone else's.",
       "points": [
-        {"title": "Meeting review", "text": "What landed, what they corrected, the deck you actually presented, the next session's ideas", "icon": "chart-bar"},
-        {"title": "Harvest", "text": "The build goes into the demo library within 2 working days, the AI included", "icon": "database"},
-        {"title": "Your feedback", "text": "Say \"feedback: …\" whenever something doesn't work. It reaches Friday's digest", "icon": "headphones"}
+        {
+          "title": "Meeting review",
+          "text": "What landed, what they corrected, the deck you actually presented, the next session's ideas",
+          "icon": "chart-bar"
+        },
+        {
+          "title": "Harvest",
+          "text": "The build goes into the demo library within 2 working days, the AI included",
+          "icon": "database"
+        },
+        {
+          "title": "Your feedback",
+          "text": "Say \"feedback: …\" whenever something doesn't work. It reaches Friday's digest",
+          "icon": "headphones"
+        }
       ]
     },
     {
@@ -89,22 +262,54 @@
       "title": "The rules that don't bend",
       "subtitle": "Rules",
       "reasons": [
-        {"title": "Your check, always", "text": "Nothing reaches a customer until you've checked it. Recaps stay DRAFT until you approve them."},
-        {"title": "Claims from the catalogue", "text": "Proof points come only from the differentiator catalogue. AI, data and security answers only from the governance pack."},
-        {"title": "Tag the evidence", "text": "C they said it · I we inferred it · A we assumed it. Only C builds a scene straight away."},
-        {"title": "Ask before you build", "text": "The three questions before any configuration. A clean stand, rehearsed on the device you'll present with."},
-        {"title": "Never", "text": "Type passwords, register clio environments, open credentials files, or put build files in a deal folder."}
+        {
+          "title": "Your check, always",
+          "text": "Nothing reaches a customer until you've checked it. Recaps stay DRAFT until you approve them."
+        },
+        {
+          "title": "Claims from the catalogue",
+          "text": "Proof points come only from the differentiator catalogue. AI, data and security answers only from the governance pack."
+        },
+        {
+          "title": "Tag the evidence",
+          "text": "C they said it · I we inferred it · A we assumed it. Only C builds a scene straight away."
+        },
+        {
+          "title": "Ask before you build",
+          "text": "The three questions before any configuration. A clean stand, rehearsed on the device you'll present with."
+        },
+        {
+          "title": "Never",
+          "text": "Type passwords, register clio environments, open credentials files, or put build files in a deal folder."
+        }
       ]
     },
     {
       "type": "next_steps",
       "title": "Getting started takes about two hours",
       "subtitle": "Your next steps",
-      "questions": ["Which live deal will you run first?"],
+      "questions": [
+        "Which live deal will you run first?"
+      ],
       "actions": [
-        {"when": "Today", "who": "You", "what": "Open Plugin / START-HERE.md on SharePoint and paste its prompt into Claude. Windows or Mac", "icon": "login"},
-        {"when": "Same day", "who": "You and Claude", "what": "Restart Claude and say \"start the sc-guide\": 8 short steps, stop whenever you like", "icon": "message-chatbot"},
-        {"when": "First deal", "who": "You and Renzo", "what": "Shadow, then paired, then solo. Renzo moves you on", "icon": "user-check"}
+        {
+          "when": "Today",
+          "who": "You",
+          "what": "Open Plugin / START-HERE.md on SharePoint and paste its prompt into Claude. Windows or Mac",
+          "icon": "login"
+        },
+        {
+          "when": "Same day",
+          "who": "You and Claude",
+          "what": "Restart Claude and say \"start the sc-guide\": 8 short steps, stop whenever you like",
+          "icon": "message-chatbot"
+        },
+        {
+          "when": "First deal",
+          "who": "You and Renzo",
+          "what": "Shadow, then paired, then solo. Renzo moves you on",
+          "icon": "user-check"
+        }
       ]
     }
   ]

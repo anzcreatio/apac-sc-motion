@@ -100,6 +100,31 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 12. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
     candidates for the demo library.
+13. **AE brief (every demo session, Renzo 12 Nov 2026).** Write `ae-brief.json` in the deal folder and build the page:
+    `python scripts/build_ae_brief.py <deal>/ae-brief.json --out <deal>/NN-ae-brief.html`. Also add an `agenda` slide
+    to `deck.json` (deck standard 1b) with the same decision question. Then give it to the AE: publish it as an
+    artifact if this session can and send the link, or send the HTML file (it works offline in any browser).
+    Keep it plain: the AE reads it 5 minutes before the call.
+
+## AE brief (`ae-brief.json`)
+
+```json
+{"deal": "<Customer>", "title": "<what the demo shows, their words>", "when": "Wed 11 Nov · 1:00 pm Sydney · Teams · 60 minutes",
+ "minutes": 60, "ae": {"name": "…"}, "sc": {"name": "…"},
+ "them": [{"name": "…", "role": "what they own, in a few words"}],
+ "recap": ["3 things we heard, confirmed (C), in their words"],
+ "question": "Does what you've seen cover what <your team> needs?",
+ "answer_placeholder": "e.g. …",
+ "next_step": {"suggestion": "Our suggestion: … (and why now)", "what": "…", "who": "…"},
+ "licence": [{"q": "How many users?", "hint": "We heard …"}],
+ "dont": ["Talk price or discounts. Say \"we'll put options together\".", "Compare us with <named competitors> or anyone else.",
+          "Promise a feature <SC> hasn't shown. Say \"let me check with <SC>\"."],
+ "storage_key": "ae-brief-<account>-<yyyy-mm-dd>"}
+```
+
+Rules: no opening line and no durations (the agenda slide does the opening); no "what would make this a success?"
+question in the meeting (ask before it); the recap points are C only; the question matches the agenda slide's
+`decision`; "Don't" always has price, competitors and promises, plus anything a past meeting review flagged.
 
 ## Output: `NN-demo-plan.md` in the deal folder (NN = the next free number)
 
@@ -129,7 +154,7 @@ packages. Name a library module here if one is reused, and say what gets promote
 
 **Live change** · **Example data** (personas, records, numbers; fictional, realistic, no empty lists) · **Simulated**
 (what and how it's labelled) · **Open space** (options for the SC) · **Demo bar check** · **Build order and hours** ·
-**Demo script** (for the toolkit) · **Harvest candidates**.
+**Demo script** (for the toolkit) · **Harvest candidates**. Plus `NN-ae-brief.html` and the agenda slide in `deck.json`.
 
 ## Rules
 

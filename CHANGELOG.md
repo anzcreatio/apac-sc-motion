@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.14.0 (12 Nov 2026): AE brief standard, flow and outputs slides
+- `sc-demo-plan` step 13: the AE brief is a standard output for every demo session (`ae-brief.json` →
+  `scripts/build_ae_brief.py` → `NN-ae-brief.html`, from `templates/ae-brief.html`): recap tick-boxes, a reaction log,
+  the question word for word with replies, the close with licence questions, a Don't list, and a summary back to the SC.
+  No opening line, no durations. The agenda slide goes into `deck.json` with the same decision question.
+- `sc-deck`: new `flow` (step-by-step diagram) and `outputs` (what each step produces) slide types.
+- Rollout deck: the flow slide is now an 8-step diagram, plus a new slide listing what the customer gets and what we
+  keep at each step.
+
 ## 0.13.0 (12 Nov 2026): requirements checklist and agenda slide
 - New skill `sc-requirements` (+ `scripts/requirements.py`): after the demo build, a neutral requirements checklist
   for the AE to send before any RFP (Read me, Requirements with a vendor-response drop-down, suggested Scoring), built
