@@ -59,6 +59,7 @@ message. If they want to skip a step, let them and note it.
 | Before the first meeting | `sc-first-meeting` | Prep, the standard deck (`deck.json` → `.pptx`), light config brief, meeting plan |
 | Any deck change | `sc-deck` | Rebuilt deck from `deck.json` |
 | An RFP, TOR or requirements list arrives | `sc-rfp` | Requirements register, fit-gap, bid / no-bid recommendation; later a check of the bid team's answers |
+| A requirements workshop (Australia, no RFP): 2 hours, one journey | `sc-workshop` | Pre-work email, draft journey, agenda; after it: register, solution model, follow-up email, playback for sign-off |
 | Before building a demo | `sc-demo-plan` | The three pre-build questions, the demo plan, the script for the toolkit |
 | Building | `creatio-demo-toolkit` (`creatio-demo-build`) | The configured demo, click path cards |
 | After the build | `sc-clickpath` | SC practice page + customer recap (DRAFT until the SC approves) |
@@ -112,6 +113,8 @@ customer-facing output with a reminder of what Renzo still needs to check.
    | a transcript or handoff | a first-meeting prep / `deck.json` | `sc-first-meeting` |
    | `deck.json` | its `.pptx` | `sc-deck` build |
    | a deck, and the meeting has happened | a `meeting-review` dated after the meeting | `sc-meeting-review` (ask for the transcript and the deck they presented) |
+   | a workshop planned | `workshop/wN-01-draft-journey.md` and the pre-work email | `sc-workshop` step 1 |
+   | a workshop that's happened | `workshop/solution-model.md` updated after it | `sc-workshop` steps 3–6 (capture, follow-up, playback) |
    | a review whose next step is a demo | a `demo-plan` | `sc-demo-plan` (three pre-build questions first) |
    | a demo plan | build notes or click path cards | Build with `creatio-demo-toolkit` |
    | click path cards | the two click path pages | `sc-clickpath` |

@@ -1,6 +1,6 @@
 ---
 name: sc-setup
-description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin - finds the synced APAC Solution Consulting SharePoint folder, records it in ~/.apac-sc-motion.json, and checks Python, python-pptx, Pillow, PowerPoint, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
+description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin - finds the synced APAC Solution Consulting SharePoint folder, records it in ~/.apac-sc-motion.json, and checks Python, python-pptx, Pillow, openpyxl, python-docx, PowerPoint, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
 ---
 
 # sc-setup
@@ -32,7 +32,7 @@ Suggest (don't force) right-click `Deals` → **Always keep on this device**, so
 | Check | How | Fix |
 |---|---|---|
 | Python 3.10+ | `python --version` | SC installs Python |
-| python-pptx, Pillow | `python -c "import pptx, PIL"` | `python -m pip install python-pptx pillow` (ask first) |
+| python-pptx, Pillow, openpyxl, python-docx | `python -c "import pptx, PIL, openpyxl, docx"` | `python -m pip install python-pptx pillow openpyxl python-docx` (ask first; openpyxl and python-docx are for `sc-rfp` and `sc-workshop`) |
 | PowerPoint | `powershell -Command "New-Object -ComObject PowerPoint.Application \| % { $_.Version; $_.Quit() }"` | Install Office desktop |
 | Deck builder | `python ../sc-deck/scripts/build_deck.py ../../tests/deck/sample-fictional/deck.json --out <temp>/sample.pptx --render` | Read the error |
 | Demo toolkit (for configuration) | the `creatio-demo-toolkit` skills are listed in this session | Install the plugin |

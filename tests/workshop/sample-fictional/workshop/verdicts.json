@@ -1,0 +1,249 @@
+[
+ {
+  "rid": "W1-01",
+  "fit": "integration",
+  "how": "Creatio REST/OData API or a scheduled process pulls new work orders from the two portals that have an API and creates the job; the website-only portal needs RPA or stays manual.",
+  "confidence": "medium",
+  "evidence": "Creatio Academy: REST/OData integration; D5",
+  "tier": "Tell",
+  "mandays": 10,
+  "workaround": "Website-only portal: RPA by a partner, or a monitored manual check",
+  "question": "Which two portals have an API, and can we see the documentation?"
+ },
+ {
+  "rid": "W1-02",
+  "fit": "ai",
+  "how": "Service Creatio turns emails from the shared mailbox into cases; a Creatio.ai skill on the job extracts site, contact and fault and suggests a priority, and the dispatcher confirms before saving.",
+  "confidence": "medium",
+  "evidence": "D3; email-to-case in Service Creatio (Academy); AI-GOVERNANCE-PACK-LITE-v0.1 'can say': in-country AI hosting incl. Australia; residency, retention and per-client switch-off: confirm with Creatio security",
+  "tier": "Show",
+  "mandays": 3
+ },
+ {
+  "rid": "W1-03",
+  "fit": "configure",
+  "how": "Service agreements (Service Creatio) hold response times per priority per contract with a working calendar; a 'waiting on client' status with the paused flag stops the clock, limited to contracts that allow it by a rule on the agreement.",
+  "confidence": "medium",
+  "evidence": "Service Creatio service agreements and case status 'paused' flag (object model: ServicePact, TimeToPrioritize, CaseStatus.IsPaused); D4",
+  "tier": "Build",
+  "mandays": 2,
+  "hours": 4,
+  "question": "Which contracts allow the pause?"
+ },
+ {
+  "rid": "W1-04",
+  "fit": "standard",
+  "how": "Creatio is a browser-based cloud app: after-hours dispatchers log jobs from home without a VPN.",
+  "confidence": "high",
+  "evidence": "Creatio cloud (Academy)",
+  "tier": "Tell",
+  "mandays": 0
+ },
+ {
+  "rid": "W1-05",
+  "fit": "configure",
+  "how": "Site induction requirement on the site and inductions held on the technician; a business rule or process check warns at assignment.",
+  "confidence": "high",
+  "evidence": "Business Studio objects and business rules",
+  "tier": "Show",
+  "mandays": 2
+ },
+ {
+  "rid": "W1-06",
+  "fit": "configure",
+  "how": "After-hours callout approval in a business process, with the limit held as data so the business changes it ($1,500 vs $2,000) without IT.",
+  "confidence": "high",
+  "evidence": "D4 (rules as data); D1 live change: this is the disputed rule",
+  "tier": "Build",
+  "mandays": 1,
+  "hours": 3,
+  "question": "Is the limit $1,500 or $2,000?"
+ },
+ {
+  "rid": "W1-07",
+  "fit": "configure",
+  "how": "Creatio mobile app configured for technicians (job, job sheet, photos) with offline mode and sync when back in signal. Client signature capture offline and Freedom UI mobile offline coverage need a product check.",
+  "confidence": "low",
+  "evidence": "Creatio Academy: Creatio mobile app, offline mode (check current Freedom UI support and signature capture)",
+  "tier": "Build",
+  "mandays": 5,
+  "hours": 4,
+  "workaround": "If signature capture isn't offline-capable: signed photo of the sheet attached offline, synced later"
+ },
+ {
+  "rid": "W1-08",
+  "fit": "marketplace",
+  "how": "A process sends status messages on 'on the way', 'on site' and 'done'; email is standard, SMS needs a Marketplace SMS connector (check).",
+  "confidence": "medium",
+  "evidence": "Creatio Marketplace SMS connector (check)",
+  "tier": "Show",
+  "mandays": 2,
+  "question": "Do clients want SMS, email or both?"
+ },
+ {
+  "rid": "W1-09",
+  "fit": "ai",
+  "how": "A Creatio.ai skill on the job summarises the site's past jobs and job sheets for the technician.",
+  "confidence": "medium",
+  "evidence": "D3; AI-GOVERNANCE-PACK-LITE-v0.1 'can say': in-country AI hosting incl. Australia; residency, retention and per-client switch-off: confirm with Creatio security",
+  "tier": "Show",
+  "mandays": 2
+ },
+ {
+  "rid": "W1-10",
+  "fit": "configure",
+  "how": "A rule on the mobile job page compares the technician's estimate with the contract's NTE and prompts for a quote; whether the rule runs offline needs checking.",
+  "confidence": "low",
+  "evidence": "Business rules on mobile pages (check offline behaviour)",
+  "tier": "Show",
+  "mandays": 1
+ },
+ {
+  "rid": "W1-11",
+  "fit": "configure",
+  "how": "Quote and parts order as their own records with approval processes (quote: supervisor under $10,000, Operations Manager over; parts: technician up to $500, supervisor above), both open on the job at once.",
+  "confidence": "high",
+  "evidence": "Business Studio objects, approvals and processes; D4",
+  "tier": "Build",
+  "mandays": 4,
+  "hours": 4
+ },
+ {
+  "rid": "W1-12",
+  "fit": "integration",
+  "how": "The parts order requests a PO number from MYOB Advanced and stores it on the job, so the supplier invoice can be matched.",
+  "confidence": "medium",
+  "evidence": "Creatio REST/OData integration; D5",
+  "tier": "Tell",
+  "mandays": 2
+ },
+ {
+  "rid": "W1-13",
+  "fit": "configure",
+  "how": "A process books the return visit when the quote is approved and the part is recorded as arrived, and tells dispatch.",
+  "confidence": "high",
+  "evidence": "Business processes (parallel paths with a join)",
+  "tier": "Show",
+  "mandays": 1,
+  "question": "Who records that a part has arrived (depot or site)?"
+ },
+ {
+  "rid": "W1-14",
+  "fit": "configure",
+  "how": "A 'ready to invoice' list and dashboard for finance: jobs complete with the signed job sheet and parts costed.",
+  "confidence": "high",
+  "evidence": "Freedom UI lists and dashboards",
+  "tier": "Show",
+  "mandays": 0.5
+ },
+ {
+  "rid": "W1-15",
+  "fit": "configure",
+  "how": "Return visits are linked to the original job, so a first-time fix measure and dashboard can be built.",
+  "confidence": "high",
+  "evidence": "Business Studio objects and dashboards",
+  "tier": "Show",
+  "mandays": 1
+ },
+ {
+  "rid": "W1-16",
+  "fit": "integration",
+  "how": "Two-way integration with MYOB Advanced through Creatio's REST/OData API: clients and sites in, completed jobs with labour and parts out for invoicing. No standard connector known (check Marketplace).",
+  "confidence": "medium",
+  "evidence": "D5; Creatio Academy: REST/OData integration",
+  "tier": "Tell",
+  "mandays": 15,
+  "question": "How often: as it happens, same day or end of day?"
+ },
+ {
+  "rid": "W1-17",
+  "fit": "ai",
+  "how": "A Creatio.ai skill drafts the invoice line from the tech notes and job sheet; the billing officer reviews and approves it before it goes to MYOB.",
+  "confidence": "medium",
+  "evidence": "D3 (confirm-then-act); AI-GOVERNANCE-PACK-LITE-v0.1 'can say': in-country AI hosting incl. Australia; residency, retention and per-client switch-off: confirm with Creatio security",
+  "tier": "Build",
+  "mandays": 2,
+  "hours": 3
+ },
+ {
+  "rid": "W1-18",
+  "fit": "configure",
+  "how": "A rule flags jobs where the billable amount is more than 10% over the approved quote and routes them to operations before they go to MYOB.",
+  "confidence": "high",
+  "evidence": "Business rules and processes",
+  "tier": "Show",
+  "mandays": 0.5
+ },
+ {
+  "rid": "W1-19",
+  "fit": "integration",
+  "how": "Accounts payable stays in MYOB; matching supplier invoices to jobs needs the PO on the job and an integration or an AI step reading the invoice. Depends on where AP work is done.",
+  "confidence": "low",
+  "evidence": "D5; D3",
+  "tier": "Tell",
+  "mandays": 5,
+  "question": "Should this be in the new system or stay in MYOB AP?"
+ },
+ {
+  "rid": "W1-20",
+  "fit": "integration",
+  "how": "Invoice and signed job sheet pushed to the two portals with an API, with the portal's job number held on the job; the website-only portal stays a manual upload or needs RPA.",
+  "confidence": "low",
+  "evidence": "Creatio REST/OData integration; D5",
+  "tier": "Tell",
+  "mandays": 8,
+  "workaround": "Website-only portal: manual upload from a work list, or RPA by a partner",
+  "question": "Which portals have an API?"
+ },
+ {
+  "rid": "W1-21",
+  "fit": "standard",
+  "how": "Service Creatio customer satisfaction survey sent when the case is closed, with the rating on the record.",
+  "confidence": "high",
+  "evidence": "Service Creatio case satisfaction (object model: Case.SatisfactionLevel)",
+  "tier": "Show",
+  "mandays": 0
+ },
+ {
+  "rid": "W1-22",
+  "fit": "configure",
+  "how": "The job is a Service Creatio case captioned 'Job', with their statuses, including Waiting on client (clock paused), Waiting on parts and Return visit booked.",
+  "confidence": "high",
+  "evidence": "Service Creatio cases and case statuses; D2",
+  "tier": "Build",
+  "mandays": 2,
+  "hours": 3
+ },
+ {
+  "rid": "W1-23",
+  "fit": "integration",
+  "how": "A dispatch dashboard of open jobs and those about to breach is configured; technician locations need van positions from the fleet GPS system.",
+  "confidence": "medium",
+  "evidence": "Freedom UI dashboards; D5",
+  "tier": "Show",
+  "mandays": 5,
+  "workaround": "Without GPS: technician's last status and site on the board",
+  "question": "Which fleet GPS system, and can it share locations?"
+ },
+ {
+  "rid": "W1-24",
+  "fit": "ai",
+  "how": "Every AI step is designed with a person checking before anything reaches a client (confirm-then-act). Hosting: we can host the AI model in-country, including Australia. Retention, PII handling and per-client switch-off: confirm with Creatio security.",
+  "confidence": "low",
+  "evidence": "AI-GOVERNANCE-PACK-LITE-v0.1 'can say': in-country AI hosting incl. Australia; residency, retention and per-client switch-off: confirm with Creatio security",
+  "tier": "Tell",
+  "mandays": 0,
+  "question": "Which client contracts have data clauses?"
+ },
+ {
+  "rid": "W1-27",
+  "fit": "standard",
+  "how": "Written answer on AI data processing, retention and per-client controls, from the governance pack's can-say lines.",
+  "confidence": "low",
+  "evidence": "AI-GOVERNANCE-PACK-LITE can-say lines; confirm with Creatio security",
+  "tier": "Tell",
+  "hours": 0,
+  "mandays": 0,
+  "question": "Which client contracts carry data clauses?"
+ }
+]

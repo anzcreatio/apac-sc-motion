@@ -1,0 +1,589 @@
+{
+ "source": "workshop",
+ "kind": "workshop",
+ "customer": "Kestrel Facility Services",
+ "language": "en",
+ "codes": null,
+ "built": "2026-11-10",
+ "requirements": [
+  {
+   "rid": "W1-01",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:26:10",
+   "section": "1. Request received",
+   "text": "~Jobs logged in the three client portals are picked up as soon as they're logged, without someone checking each portal every fifteen minutes.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "A portal job sits there for two hours because nobody looked, and the SLA clock's been ticking since the client logged it.",
+    "model_refs": [
+     "obj:Job",
+     "sys:ClientPortals",
+     "chn:intake"
+    ]
+   }
+  },
+  {
+   "rid": "W1-02",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:21:02",
+   "section": "1. Request received",
+   "text": "~Something reads the client's email, pulls out the site, the contact and what's broken, and drafts the job; the dispatcher checks every job, and the priority always gets a human eye.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "could",
+    "pain": "They copy the details out of the email into JobTrak: five minutes if it's clean, ten or fifteen if the email's a mess.",
+    "model_refs": [
+     "ai:job-from-email",
+     "obj:Job",
+     "role:dispatcher"
+    ]
+   }
+  },
+  {
+   "rid": "W1-03",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:26:49",
+   "section": "2. Job logged",
+   "text": "~The SLA due time is worked out from each client's contract, not one P1 to P4 list, and the clock pauses while the job is waiting on the client, for the contracts that allow it.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "should",
+    "pain": "JobTrak only has one priority list, same times for everyone, so the spreadsheet has the contract times and we work out the due time by hand. The clock doesn't stop for the client, so the SLA report is fixed by hand, two days a month.",
+    "model_refs": [
+     "obj:Contract",
+     "rule:sla-per-contract",
+     "rule:sla-pause",
+     "out:sla-breach"
+    ]
+   }
+  },
+  {
+   "rid": "W1-04",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:49:57",
+   "section": "2. Job logged",
+   "text": "~The after-hours dispatchers, working from home, log overnight jobs straight into the same system, so nobody re-keys them in the morning.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Overnight jobs are written up in a Word doc because JobTrak is unusable over the VPN; re-keying takes half an hour most mornings, more on Mondays.",
+    "model_refs": [
+     "role:after-hours-dispatcher",
+     "chn:after-hours-home",
+     "obj:Job"
+    ]
+   }
+  },
+  {
+   "rid": "W1-05",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:48:52",
+   "section": "3. Technician assigned",
+   "text": "~At assignment, the dispatcher can see whether the technician has the site's induction.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "C",
+    "priority": "could",
+    "pain": "Some sites want an induction, and if the tech hasn't done it they get turned away: a wasted trip, a couple of times a week.",
+    "model_refs": [
+     "rule:induction",
+     "obj:Site",
+     "obj:Technician"
+    ]
+   }
+  },
+  {
+   "rid": "W1-06",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:29:55",
+   "section": "3. Technician assigned",
+   "text": "~After hours, the dispatcher can approve a callout up to a set limit; above it, the on-call manager approves.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "The limit isn't agreed: the after-hours guide says $1,500, Greg says it went up to $2,000, and the team rings the on-call manager at $1,500.",
+    "model_refs": [
+     "rule:afterhours-callout",
+     "role:on-call-manager",
+     "role:dispatcher"
+    ]
+   }
+  },
+  {
+   "rid": "W1-07",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:32:20",
+   "section": "4. Technician attends and diagnoses",
+   "text": "~Technicians can see the full job, fill in the job sheet, take photos and get the client's sign-off on their phone in basements, plant rooms and hospitals with no signal, and it catches up when they're back in signal.",
+   "mandatory": true,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "C",
+    "priority": "must",
+    "pain": "We tried an app four years ago, it needed signal for every screen, and the guys went back to the carbon book within a month. The SMS is cut at 160 characters, so the tech rings back for the details.",
+    "model_refs": [
+     "chn:tech-mobile",
+     "obj:JobSheet",
+     "role:technician"
+    ]
+   }
+  },
+  {
+   "rid": "W1-08",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:50:47",
+   "section": "4. Technician attends and diagnoses",
+   "text": "~Clients are told when the technician is on the way, on site and done, without ringing dispatch.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Greg Halloran, Operations Manager",
+    "tag": "C",
+    "priority": "could",
+    "pain": "Half the dispatcher's day is on the phone, much of it 'where's my tech' calls. A big client asked for status updates in last year's tender, which comes up again in March.",
+    "model_refs": [
+     "chn:client-updates",
+     "obj:Job"
+    ]
+   }
+  },
+  {
+   "rid": "W1-09",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:21:32",
+   "section": "4. Technician attends and diagnoses",
+   "text": "~Before arriving, the technician gets a summary of the site's job history: the last visits to that plant room and what was done.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Half the time they're going in blind.",
+    "model_refs": [
+     "ai:site-history",
+     "obj:Site"
+    ]
+   }
+  },
+  {
+   "rid": "W1-10",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:47:14",
+   "section": "4. Technician attends and diagnoses",
+   "text": "~When the technician's estimate goes over the client's not-to-exceed amount, the technician is prompted to raise a quote before doing the work, even with no signal.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "I",
+    "priority": "unconfirmed",
+    "pain": "Anything over the NTE without an approved quote can't be billed and is written off; techs do the work because they're in a basement with no signal and the client says 'just fix it'.",
+    "model_refs": [
+     "rule:nte",
+     "rule:nte-overage",
+     "obj:Quote"
+    ]
+   }
+  },
+  {
+   "rid": "W1-11",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:42:35",
+   "section": "5. Quote and parts (in parallel)",
+   "text": "~The quote to the client (over the NTE) and the parts order to the supplier can run at the same time on the job, with the approval limits: quotes under $10,000 by a supervisor and over $10,000 by the Operations Manager; parts up to $500 by the technician, above that by a supervisor.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "C",
+    "priority": "should",
+    "pain": "Sometimes the part is ordered straight away because the lead time is two weeks; the job sits as 'On Site' the whole time and gets lost.",
+    "model_refs": [
+     "stg:Job",
+     "obj:Quote",
+     "obj:PartsOrder",
+     "rule:quote-approval",
+     "rule:parts-approval"
+    ]
+   }
+  },
+  {
+   "rid": "W1-12",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:41:05",
+   "section": "5. Quote and parts (in parallel)",
+   "text": "~Every parts order is recorded against the job with its purchase order number, so the supplier's invoice can be matched to the job.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Nobody writes the PO number into JobTrak, so finance can't match the supplier invoice to the job and can't invoice until the parts cost is known: a good chunk of the nineteen days.",
+    "model_refs": [
+     "obj:PartsOrder",
+     "rule:po-on-parts",
+     "sys:MYOB"
+    ]
+   }
+  },
+  {
+   "rid": "W1-13",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:42:40",
+   "section": "5. Quote and parts (in parallel)",
+   "text": "~The return visit is booked as soon as both are done: the client has said yes and the part has arrived, and dispatch is told when the part arrives.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "The part arrives at the depot three days later, nobody tells dispatch, so nobody rebooks the tech. Return visits cost about $250 to $300 each and often can't be charged.",
+    "model_refs": [
+     "rule:return-visit-trigger",
+     "obj:Visit",
+     "stg:Job"
+    ]
+   }
+  },
+  {
+   "rid": "W1-14",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:59:51",
+   "section": "6. Job sheet in, job closed",
+   "text": "~Finance can see which jobs are ready to invoice before they land on the desk.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Leanne Cho, Finance & Billing Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Right now I've no idea what's coming until it lands on my desk.",
+    "model_refs": [
+     "role:billing-officer",
+     "obj:Job",
+     "out:invoice-lag"
+    ]
+   }
+  },
+  {
+   "rid": "W1-15",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:11:48",
+   "section": "6. Job sheet in, job closed",
+   "text": "~A return visit can be told apart from a new job, so first-time fix is measured rather than guessed.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Ravi Menon, Field Technician Supervisor",
+    "tag": "I",
+    "priority": "unconfirmed",
+    "pain": "JobTrak doesn't really know if a job's a revisit or a new job; first-time fix is a guess, seventy-odd percent.",
+    "model_refs": [
+     "out:first-time-fix",
+     "obj:Visit"
+    ]
+   }
+  },
+  {
+   "rid": "W1-16",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:44:08",
+   "section": "7. Invoice raised",
+   "text": "~MYOB Advanced stays: completed jobs, with labour and parts, go to MYOB so finance can raise the invoice there, and clients and sites come across from MYOB.",
+   "mandatory": true,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Darren Pike, IT Manager",
+    "tag": "C",
+    "priority": "must",
+    "pain": "Labour and parts are keyed into MYOB Advanced by hand from the job sheet and the supplier invoice.",
+    "model_refs": [
+     "sys:MYOB",
+     "obj:Client",
+     "obj:Site",
+     "obj:Job"
+    ]
+   }
+  },
+  {
+   "rid": "W1-17",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:20:28",
+   "section": "7. Invoice raised",
+   "text": "~The invoice line description is drafted from the technician's notes and the job sheet in client-friendly wording, and a billing officer checks it before it goes.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Leanne Cho, Finance & Billing Lead",
+    "tag": "C",
+    "priority": "should",
+    "pain": "My team reads hundreds of tech notes a month and rewrites them: a couple of minutes a job, ten if you have to ring the tech.",
+    "model_refs": [
+     "ai:invoice-line",
+     "role:billing-officer",
+     "obj:JobSheet"
+    ]
+   }
+  },
+  {
+   "rid": "W1-18",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:46:58",
+   "section": "7. Invoice raised",
+   "text": "~If the invoice is more than ten percent over the quote, it goes back to operations to explain before it's sent.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Leanne Cho, Finance & Billing Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Checked by hand today.",
+    "model_refs": [
+     "rule:over-quote-check",
+     "obj:Quote"
+    ]
+   }
+  },
+  {
+   "rid": "W1-19",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:23:14",
+   "section": "7. Invoice raised",
+   "text": "~Maybe: the supplier's invoice is read and matched to the job by the PO number or the site address (depends on accounts payable staying in MYOB).",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Leanne Cho, Finance & Billing Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Supplier invoices can't be matched to jobs, so the parts can't be on-charged.",
+    "model_refs": [
+     "ai:supplier-invoice-match",
+     "sys:MYOB",
+     "obj:PartsOrder"
+    ]
+   }
+  },
+  {
+   "rid": "W1-20",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:47:28",
+   "section": "8. Invoice sent",
+   "text": "~For portal clients, the invoice and the signed job sheet go into the client's portal with the job number the portal expects.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Leanne Cho, Finance & Billing Lead",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Uploaded by hand into three portals; if the job number doesn't match, they reject it and it goes to the back of their payment run. 'Everyone always forgets the portal uploads.'",
+    "model_refs": [
+     "sys:ClientPortals",
+     "chn:portal-upload",
+     "obj:JobSheet"
+    ]
+   }
+  },
+  {
+   "rid": "W1-21",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:49:40",
+   "section": "9. After the job",
+   "text": "~A quick client feedback survey after the job.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Greg Halloran, Operations Manager",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "We don't do it, but we should.",
+    "model_refs": [
+     "obj:Job"
+    ]
+   }
+  },
+  {
+   "rid": "W1-22",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:59:16",
+   "section": "Across the journey",
+   "text": "~One job record from the client's request to the invoice, with the full set of statuses, including waiting on client, waiting on parts and return visit booked.",
+   "mandatory": true,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "must",
+    "pain": "Jobs that wait on a quote or a part disappear, because there's no status for it; they sit as 'On Site'.",
+    "model_refs": [
+     "obj:Job",
+     "stg:Job"
+    ]
+   }
+  },
+  {
+   "rid": "W1-23",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "00:13:35",
+   "section": "Across the journey",
+   "text": "~Dispatch sees every open job, what's about to breach and where the technicians are, so a P1 about to breach is caught before the client rings.",
+   "mandatory": false,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Shannon Doyle, Dispatch Team Lead",
+    "tag": "C",
+    "priority": "should",
+    "pain": "Right now I find out when they ring. Van GPS is on the fleet system and nobody in dispatch has a login.",
+    "model_refs": [
+     "out:sla-breach",
+     "sys:FleetGPS",
+     "chn:dispatch-room",
+     "role:dispatcher"
+    ]
+   }
+  },
+  {
+   "rid": "W1-24",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:21:58",
+   "section": "Across the journey",
+   "text": "~Client data in emails and job notes (names, phone numbers, hospital ward details, photos) is handled in line with the clients' contract clauses on where their data goes, and a person checks AI output before anything goes to a client.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Darren Pike, IT Manager",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Two clients have clauses about where their data goes; 'if we're sending their emails off to some AI in America, I've got a problem'.",
+    "model_refs": [
+     "ai:job-from-email",
+     "ai:invoice-line"
+    ]
+   }
+  },
+  {
+   "rid": "W1-25",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:49:57",
+   "section": "Commercial and project",
+   "text": "~An indicative price for the board in December.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "bid",
+   "answer": {},
+   "extra": {
+    "speaker": "Greg Halloran, Operations Manager",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "The board's going to ask; JobTrak won't last forever.",
+    "model_refs": []
+   }
+  },
+  {
+   "rid": "W1-26",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:50:03",
+   "section": "Commercial and project",
+   "text": "~Ideally live before the March tender; JobTrak has about eighteen months before it falls over.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "bid",
+   "answer": {},
+   "extra": {
+    "speaker": "Greg Halloran, Operations Manager",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "The big client's tender comes up again in March. Darren: 'Live by March is very ambitious'.",
+    "model_refs": []
+   }
+  },
+  {
+   "rid": "W1-27",
+   "sheet": "Workshop 1: Reactive job, from client request to invoice",
+   "src_id": "01:22:28",
+   "section": "Commercial and project",
+   "text": "~A written answer on where client data is processed by AI, what's kept and what can be switched off per client, for the risk committee.",
+   "mandatory": null,
+   "weight": null,
+   "scope": "ours",
+   "answer": {},
+   "extra": {
+    "speaker": "Darren Pike, IT Manager",
+    "tag": "C",
+    "priority": "unconfirmed",
+    "pain": "Needed for Kestrel's risk committee.",
+    "model_refs": []
+   }
+  }
+ ]
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.11.0 (12 Nov 2026): workshops (Australia)
+- New skill `sc-workshop` (+ `scripts/workshop.py`, `AGENDA-120.md`, `CAPTURE-SHEET.md`, `PREWORK-EMAIL.md`,
+  `DRAFT-JOURNEY.md`): 2-hour requirements workshops, one journey each, starting from a draft journey the room
+  corrects. From the transcript: a requirements register (same format as RFPs), a solution model in Creatio terms
+  (objects mapped to standard objects, fields, stages, roles, rules, systems, channels, AI moments, example data,
+  outcomes), a gap check that drafts the follow-up email, and a playback .docx for the customer to sign off.
+- `rfp.py`: `validate` for hand-written registers; workshop registers get "gaps and effort" instead of bid / no-bid.
+- `sc-demo-plan` reads the solution model; the playback build between workshops is Light, on a clean stand.
+- `sc-guide`: `sc-workshop` in the motion map and next-step table. `sc-setup` checks openpyxl and python-docx.
+
 ## 0.10.1 (12 Nov 2026): fixes from the Pegadaian POC plan test
 - POC brief: hours labelled as configuration only (plan 2-3x); full draft tests; new section 2b lists claims already
   submitted that say more than our fit-gap (the POC is tested against them).

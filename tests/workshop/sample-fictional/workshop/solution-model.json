@@ -1,0 +1,717 @@
+{
+ "customer": "Kestrel Facility Services",
+ "updated": "2026-11-12",
+ "outcomes": [
+  {
+   "id": "out:sla-breach",
+   "measure": "Reactive jobs that breach their SLA (mostly response: the attend-within time)",
+   "baseline": "About 14% (12% to nearly 18% by month); abatements about $41k last quarter on the two contracts that enforce them",
+   "target": "Under 5%",
+   "owner": "Greg Halloran, Operations Manager",
+   "tag": "C",
+   "src": "W1 00:10:12"
+  },
+  {
+   "id": "out:first-time-fix",
+   "measure": "First-time fix",
+   "baseline": "About 70-75%, an estimate: not measured today",
+   "target": "Not set yet: to be agreed once it can be measured",
+   "owner": "Ravi Menon, Field Technician Supervisor",
+   "tag": "C",
+   "src": "W1 00:11:32"
+  },
+  {
+   "id": "out:invoice-lag",
+   "measure": "Days from job complete to invoice sent",
+   "baseline": "19 days on average (3 days to 6 weeks)",
+   "target": "5 days",
+   "owner": "Not agreed: finance (sends the invoice) or operations (closes the job)",
+   "tag": "C",
+   "src": "W1 00:12:29"
+  }
+ ],
+ "objects": [
+  {
+   "id": "obj:Job",
+   "their_word": "Job",
+   "creatio": "Case",
+   "fields": [
+    "Job number",
+    "Client",
+    "Site",
+    "Site contact",
+    "Description",
+    "Priority (P1-P4)",
+    "Contract",
+    "SLA due time",
+    "Source (email, portal, phone)",
+    "Client portal job number",
+    "After hours",
+    "Assigned technician",
+    "Status"
+   ],
+   "volume": "About 5,500/month (more in summer); 600-700 after hours (dispatch estimate, summer)",
+   "tag": "C",
+   "src": "W1 00:11:22, 00:26:35",
+   "kind": "transaction"
+  },
+  {
+   "id": "obj:Client",
+   "their_word": "Client",
+   "creatio": "Account",
+   "fields": [
+    "Name",
+    "Portal client (yes/no)",
+    "Contracts"
+   ],
+   "volume": null,
+   "tag": "C",
+   "src": "W1 00:44:21",
+   "kind": "master"
+  },
+  {
+   "id": "obj:Site",
+   "their_word": "Site",
+   "creatio": "new",
+   "fields": [
+    "Client",
+    "Address",
+    "Induction required",
+    "Access notes"
+   ],
+   "volume": null,
+   "tag": "I",
+   "src": "W1 00:44:21, 00:48:52",
+   "kind": "master",
+   "schema": "UsrSite"
+  },
+  {
+   "id": "obj:Contract",
+   "their_word": "Contract",
+   "creatio": "ServicePact",
+   "fields": [
+    "Client",
+    "Not-to-exceed (NTE) amount",
+    "Response times by priority",
+    "Clock pauses while waiting on client",
+    "Abatements apply"
+   ],
+   "volume": null,
+   "tag": "C",
+   "src": "W1 00:26:49, 00:27:58",
+   "kind": "master"
+  },
+  {
+   "id": "obj:Quote",
+   "their_word": "Quote",
+   "creatio": "new",
+   "fields": [
+    "Job",
+    "Amount",
+    "What's needed",
+    "Built by",
+    "Approved by",
+    "Client decision"
+   ],
+   "volume": "About 1 in 10 jobs (~550/month; Greg's guess, more in summer)",
+   "tag": "C",
+   "src": "W1 00:28:22, 00:33:08",
+   "kind": "transaction",
+   "schema": "UsrQuote"
+  },
+  {
+   "id": "obj:PartsOrder",
+   "their_word": "Parts order",
+   "creatio": "new",
+   "fields": [
+    "Job",
+    "Supplier",
+    "Part",
+    "Cost",
+    "PO number (from MYOB)",
+    "Ordered by",
+    "Approved by",
+    "Deliver to (depot or site)"
+   ],
+   "volume": null,
+   "tag": "C",
+   "src": "W1 00:40:41",
+   "kind": "transaction",
+   "schema": "UsrPartsOrder"
+  },
+  {
+   "id": "obj:JobSheet",
+   "their_word": "Job sheet",
+   "creatio": "new",
+   "fields": [
+    "Job",
+    "Hours",
+    "Parts used",
+    "What was done (tech notes)",
+    "Photos",
+    "Client signature"
+   ],
+   "volume": "One per attendance (about 5,500 jobs/month plus return visits)",
+   "tag": "C",
+   "src": "W1 00:45:43, 01:37:06",
+   "kind": "transaction",
+   "schema": "UsrJobSheet"
+  },
+  {
+   "id": "obj:Visit",
+   "their_word": "Return visit",
+   "creatio": "Activity",
+   "fields": [
+    "Job",
+    "Technician",
+    "Booked for",
+    "On site",
+    "Done"
+   ],
+   "volume": "To confirm (Ravi; JobTrak can't tell, the export may help)",
+   "tag": "C",
+   "src": "W1 00:42:40",
+   "kind": "transaction"
+  },
+  {
+   "id": "obj:Technician",
+   "their_word": "Technician",
+   "creatio": "Contact",
+   "fields": [
+    "Trade",
+    "State / region",
+    "Subcontractor",
+    "Site inductions held",
+    "Mobile"
+   ],
+   "volume": "About 400 (about 60 subcontractors)",
+   "tag": "C",
+   "src": "W1 00:02:13",
+   "kind": "master"
+  },
+  {
+   "id": "obj:Supplier",
+   "their_word": "Supplier",
+   "creatio": "Account",
+   "fields": [
+    "Name",
+    "Trade (HVAC, electrical, plumbing, fire)"
+   ],
+   "volume": "About 5 main suppliers",
+   "tag": "C",
+   "src": "W1 00:40:41",
+   "kind": "master"
+  }
+ ],
+ "stages": [
+  {
+   "id": "stg:Job",
+   "object": "obj:Job",
+   "stages": [
+    "New",
+    "Allocated",
+    "Dispatched",
+    "On Site",
+    "Waiting on client",
+    "Waiting on parts",
+    "Return visit booked",
+    "Complete",
+    "Closed",
+    "Cancelled"
+   ],
+   "who_moves": {
+    "New": "Dispatcher (assigns a technician)",
+    "Allocated": "Dispatcher (rings or texts the technician)",
+    "Dispatched": "Technician ('on site'; today an SMS to dispatch, often forgotten)",
+    "On Site": "Technician / dispatcher (quote or parts needed, or done)",
+    "Waiting on client": "Client approves or declines the quote; dispatch records it (I: dispatch emails the quote, 00:33:29)",
+    "Waiting on parts": null,
+    "Return visit booked": "Technician ('done')",
+    "Complete": "Dispatcher, once the job sheet is in",
+    "Closed": "End: finance invoices in MYOB"
+   },
+   "branches": true,
+   "note": "Quote to client (over NTE) and parts order to supplier can be open at once; the return visit is booked only when both are done. One stage column can't hold that: the Quote and Parts order records carry their own status and a process joins them and moves the job to Return visit booked. New statuses asked for: Waiting on client, Waiting on parts, Return visit booked (W1 00:59:16).",
+   "tag": "C",
+   "src": "W1 00:27:22, 00:42:40, 00:59:16",
+   "end_states": [
+    "Closed",
+    "Cancelled"
+   ]
+  },
+  {
+   "id": "stg:Quote",
+   "object": "obj:Quote",
+   "stages": [
+    "Draft",
+    "Internal approval",
+    "Sent to client",
+    "Approved or declined"
+   ],
+   "who_moves": {
+    "Draft": "Dispatcher (smaller jobs, Word template) or supervisor (big ones)",
+    "Internal approval": "Supervisor under $10,000; Operations Manager over $10,000",
+    "Sent to client": "Client (property manager); the dispatcher records the answer"
+   },
+   "branches": false,
+   "tag": "I",
+   "src": "W1 00:33:20-00:34:14",
+   "end_states": [
+    "Approved or declined"
+   ]
+  },
+  {
+   "id": "stg:PartsOrder",
+   "object": "obj:PartsOrder",
+   "stages": [
+    "Requested",
+    "Ordered",
+    "Arrived"
+   ],
+   "who_moves": {
+    "Requested": "Technician up to $500; a supervisor above that",
+    "Ordered": null
+   },
+   "branches": false,
+   "tag": "I",
+   "src": "W1 00:40:56-00:42:13"
+  }
+ ],
+ "roles": [
+  {
+   "id": "role:dispatcher",
+   "name": "Dispatcher",
+   "does": "Logs jobs, works out the SLA due time, assigns and rings technicians, updates statuses, builds small quotes",
+   "approves": "After-hours callouts up to the limit (disputed)",
+   "count": "22 (14 Parramatta, 5 Melbourne, 3 Brisbane)",
+   "tag": "C",
+   "src": "W1 00:01:55"
+  },
+  {
+   "id": "role:dispatch-lead",
+   "name": "Dispatch Team Lead",
+   "does": "Runs the dispatch team",
+   "approves": null,
+   "count": 1,
+   "tag": "C",
+   "src": "W1 00:01:55"
+  },
+  {
+   "id": "role:after-hours-dispatcher",
+   "name": "After-hours dispatcher",
+   "does": "Covers after hours from home; writes overnight jobs in a Word doc",
+   "approves": "After-hours callouts up to the limit",
+   "count": "Usually 2 on the roster",
+   "tag": "C",
+   "src": "W1 00:01:55, 00:49:57"
+  },
+  {
+   "id": "role:on-call-manager",
+   "name": "On-call manager",
+   "does": "Approves after-hours callouts above the dispatcher's limit",
+   "approves": "After-hours callouts above the limit",
+   "count": null,
+   "tag": "C",
+   "src": "W1 00:29:55"
+  },
+  {
+   "id": "role:technician",
+   "name": "Technician",
+   "does": "Attends, diagnoses, does the work, fills in the job sheet",
+   "approves": "Parts orders up to $500",
+   "count": "About 400 (about 60 subcontractors)",
+   "tag": "C",
+   "src": "W1 00:02:13"
+  },
+  {
+   "id": "role:supervisor",
+   "name": "Field technician supervisor",
+   "does": "Builds quotes for big jobs, orders big parts",
+   "approves": "Quotes under $10,000; parts orders over $500",
+   "count": null,
+   "tag": "C",
+   "src": "W1 00:33:22, 00:41:34"
+  },
+  {
+   "id": "role:ops-manager",
+   "name": "Operations Manager",
+   "does": "Owns SLA reporting to clients; signs off the workshop playback",
+   "approves": "Quotes over $10,000",
+   "count": 1,
+   "tag": "C",
+   "src": "W1 00:34:10"
+  },
+  {
+   "id": "role:ops-coordinator",
+   "name": "Operations coordinator",
+   "does": "Corrects the monthly SLA report by hand (two days a month)",
+   "approves": null,
+   "count": 1,
+   "tag": "C",
+   "src": "W1 00:33:51"
+  },
+  {
+   "id": "role:billing-officer",
+   "name": "Billing officer",
+   "does": "Rewrites tech notes into invoice lines, keys invoices into MYOB, uploads to client portals",
+   "approves": null,
+   "count": "To confirm (Leanne, this week)",
+   "tag": "C",
+   "src": "W1 00:45:56, 00:46:30"
+  }
+ ],
+ "rules": [
+  {
+   "id": "rule:sla-per-contract",
+   "rule": "SLA attend-within time per client contract and priority",
+   "value": "P1 4 hours metro (2 hours for the hospitals); P2 next business day; varies by contract",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:10:26"
+  },
+  {
+   "id": "rule:sla-pause",
+   "rule": "SLA clock pauses while the job is waiting on the client's quote approval, where the contract allows",
+   "value": "Contract by contract: most property managers, not the hospitals (Greg to confirm the list)",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:59:16"
+  },
+  {
+   "id": "rule:nte",
+   "rule": "Not-to-exceed amount per contract: under it the job just gets done; over it needs a quote",
+   "value": "$1,000 for most; $500 for a couple of councils; $2,500 for one shopping centre group",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:27:58"
+  },
+  {
+   "id": "rule:quote-approval",
+   "rule": "Internal approval before a quote goes to the client",
+   "value": "Supervisor under $10,000; Operations Manager over $10,000",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:34:10"
+  },
+  {
+   "id": "rule:parts-approval",
+   "rule": "Parts order approval",
+   "value": "Technician up to $500; supervisor above",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:41:34"
+  },
+  {
+   "id": "rule:afterhours-callout",
+   "rule": "After-hours callout: dispatcher approves up to a limit, the on-call manager above it",
+   "value": "$1,500 (dispatch's after-hours guide) or $2,000 (Greg: raised last financial year)",
+   "disputed": true,
+   "tag": "C",
+   "src": "W1 00:30:08-00:30:43"
+  },
+  {
+   "id": "rule:over-quote-check",
+   "rule": "Invoice more than this over the approved quote goes back to operations to explain before it's sent",
+   "value": "10%",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:46:58"
+  },
+  {
+   "id": "rule:nte-overage",
+   "rule": "Work over the NTE without an approved quote can't be billed (written off)",
+   "value": "Any amount over the NTE",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:46:58"
+  },
+  {
+   "id": "rule:return-visit-trigger",
+   "rule": "Return visit booked only when the client has approved the quote (if any) and the part has arrived (if any)",
+   "value": "Both done",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:42:40"
+  },
+  {
+   "id": "rule:induction",
+   "rule": "Technician must hold the site's induction where the site requires one; checked at assignment",
+   "value": "Per site: induction required yes/no; per technician: inductions held (kept in a spreadsheet today)",
+   "disputed": false,
+   "tag": "C",
+   "src": "W1 00:48:52"
+  },
+  {
+   "id": "rule:po-on-parts",
+   "rule": "Every parts order gets a MYOB purchase order number, recorded on the job",
+   "value": "PO number from MYOB",
+   "disputed": false,
+   "tag": "I",
+   "src": "W1 00:41:50"
+  }
+ ],
+ "systems": [
+  {
+   "id": "sys:JobTrak",
+   "name": "JobTrak (in-house job system)",
+   "owns": "Jobs and statuses today; end of life, about 18 months left; being replaced (board decision)",
+   "direction": "in",
+   "frequency": "One-off (history migration not discussed)",
+   "tag": "I",
+   "src": "W1 00:43:57"
+  },
+  {
+   "id": "sys:MYOB",
+   "name": "MYOB Advanced",
+   "owns": "Finance, payroll, purchasing (PO numbers), AP, invoicing; the client and site list. Stays",
+   "direction": "both",
+   "frequency": null,
+   "tag": "C",
+   "src": "W1 00:44:08-00:44:52"
+  },
+  {
+   "id": "sys:Outlook",
+   "name": "Microsoft 365 / Outlook shared mailbox (jobs@)",
+   "owns": "Client job emails (about 60% of requests). Stays",
+   "direction": "in",
+   "frequency": "Continuous",
+   "tag": "C",
+   "src": "W1 00:25:36, 00:45:09"
+  },
+  {
+   "id": "sys:ClientPortals",
+   "name": "Three client (property manager) portals",
+   "owns": "Clients' work orders (about 25% of requests) and invoice + job sheet uploads. Clients' systems: can't be changed; two may have an API, one is a website only",
+   "direction": "both",
+   "frequency": "Checked by hand, meant to be every 15 minutes",
+   "tag": "C",
+   "src": "W1 00:25:44, 00:44:58, 00:47:28"
+  },
+  {
+   "id": "sys:FleetGPS",
+   "name": "Fleet GPS system (vans)",
+   "owns": "Van locations; dispatch has no login",
+   "direction": "in",
+   "frequency": null,
+   "tag": "I",
+   "src": "W1 00:29:02"
+  },
+  {
+   "id": "sys:Spreadsheets",
+   "name": "Dispatch spreadsheets",
+   "owns": "Contract SLA times per client; site inductions held",
+   "direction": "in",
+   "frequency": "One-off load, then replaced",
+   "tag": "C",
+   "src": "W1 00:26:49, 00:49:08"
+  }
+ ],
+ "channels": [
+  {
+   "id": "chn:intake",
+   "step": "1. Request received",
+   "channel": "email",
+   "where": "About 60% email (shared mailbox), 25% client portals, 15% phone (mostly after hours or urgent)",
+   "tag": "C",
+   "src": "W1 00:25:24"
+  },
+  {
+   "id": "chn:tech-mobile",
+   "step": "4-5. Technician on site",
+   "channel": "phone app",
+   "where": "On site; basements, plant rooms, lifts and hospitals have no signal: must work offline and catch up later",
+   "tag": "C",
+   "src": "W1 00:31:51-00:32:36"
+  },
+  {
+   "id": "chn:after-hours-home",
+   "step": "2. Job logged (after hours)",
+   "channel": "web",
+   "where": "After-hours dispatchers at home; JobTrak is unusable over the VPN",
+   "tag": "C",
+   "src": "W1 00:49:57-00:50:13"
+  },
+  {
+   "id": "chn:client-updates",
+   "step": "3-5. Tech on the way, on site, done",
+   "channel": "SMS",
+   "where": "To the client: on the way, on site, done (channel not discussed; SMS assumed)",
+   "tag": "A",
+   "src": "W1 00:50:41"
+  },
+  {
+   "id": "chn:dispatch-room",
+   "step": "Across the journey",
+   "channel": "web",
+   "where": "Big screen in the dispatch room",
+   "tag": "C",
+   "src": "W1 00:13:35"
+  },
+  {
+   "id": "chn:portal-upload",
+   "step": "8. Invoice sent",
+   "channel": "portal",
+   "where": "Invoice and job sheet uploaded into the client's portal",
+   "tag": "C",
+   "src": "W1 00:47:28"
+  }
+ ],
+ "ai_moments": [
+  {
+   "id": "ai:invoice-line",
+   "task": "Draft the invoice line description from the technician's notes and job sheet, in client-friendly wording",
+   "today": "Billing team rewrites tech notes by hand: 2 minutes a job, 10 if they ring the tech; most of the 5,500 jobs a month",
+   "who_confirms": "Billing officer, before it goes (at least to start with)",
+   "data": "Tech notes, job sheet",
+   "tag": "C",
+   "src": "W1 01:20:28-01:20:59"
+  },
+  {
+   "id": "ai:job-from-email",
+   "task": "Read the client's email and draft the job: site, contact, what's broken, suggested priority",
+   "today": "Dispatcher copies the email into JobTrak: 5-15 minutes a job",
+   "who_confirms": "Dispatcher checks every job; the priority always needs a human eye",
+   "data": "Client emails, which can hold names, phone numbers, hospital ward details and photos (data concern: Darren)",
+   "tag": "C",
+   "src": "W1 01:21:02-01:21:29, 01:21:58"
+  },
+  {
+   "id": "ai:site-history",
+   "task": "Summarise the site's job history for the technician before they arrive",
+   "today": "Techs go in blind",
+   "who_confirms": "Nobody: informational, the technician uses it or not",
+   "data": "Past jobs and job sheets for the site",
+   "tag": "C",
+   "src": "W1 01:21:32-01:21:52"
+  },
+  {
+   "id": "ai:supplier-invoice-match",
+   "task": "Read a supplier invoice and match it to the job by PO number or site address (a 'maybe')",
+   "today": "Finance can't match supplier invoices to jobs",
+   "who_confirms": "Not discussed: depends on the answer in open",
+   "data": "Supplier invoices (AP lives in MYOB)",
+   "tag": "C",
+   "src": "W1 01:23:14-01:23:26"
+  }
+ ],
+ "example_data": [
+  {
+   "id": "ex:job-sheet",
+   "what": "Job sheet spreadsheet used for the big clients, client names stripped (Shannon, this week)",
+   "status": "asked"
+  },
+  {
+   "id": "ex:jobtrak-export",
+   "what": "One month of JobTrak jobs, anonymised: real statuses and timings (Darren, after the privacy officer, about a week)",
+   "status": "asked"
+  },
+  {
+   "id": "ex:sla-spreadsheet",
+   "what": "Contract SLA times spreadsheet",
+   "status": "asked"
+  },
+  {
+   "id": "ex:quote-template",
+   "what": "The Word quote template",
+   "status": "none"
+  }
+ ],
+ "open": [
+  {
+   "about": "rule:afterhours-callout",
+   "ask": "Is the dispatcher's after-hours callout limit $1,500 or $2,000? (The after-hours guide and the team still use $1,500.)",
+   "to": "Greg Halloran"
+  },
+  {
+   "about": "sys:MYOB",
+   "ask": "How often should completed jobs go to MYOB, and clients and sites come back: as it happens, same day, or end of day? (Leanne would like same day at least.)",
+   "to": "Darren Pike"
+  },
+  {
+   "about": "rule:sla-pause",
+   "ask": "Which contracts allow the SLA clock to pause while a quote is with the client?",
+   "to": "Greg Halloran"
+  },
+  {
+   "about": "out:first-time-fix",
+   "ask": "Once first-time fix can be measured, what target would you set? (No number needed yet.)",
+   "to": "Greg Halloran, Ravi Menon"
+  },
+  {
+   "about": "out:invoice-lag",
+   "ask": "Who should own invoice lag (job complete to invoice sent): finance, operations, or both?",
+   "to": "Greg Halloran, Leanne Cho"
+  },
+  {
+   "about": "role:billing-officer",
+   "ask": "How many people in finance process invoices, including the AP helpers at month-end and the part-timer in Melbourne?",
+   "to": "Leanne Cho"
+  },
+  {
+   "about": "obj:Visit",
+   "ask": "Roughly how many return visits a month, and how many of those are waiting on a part?",
+   "to": "Ravi Menon"
+  },
+  {
+   "about": "ai:job-from-email",
+   "ask": "Which client contracts have data clauses we should check our written answer on AI and client data against?",
+   "to": "Darren Pike"
+  },
+  {
+   "about": "sys:ClientPortals",
+   "ask": "Which of the three client portals have an API, and can you share their names or documentation?",
+   "to": "Darren Pike"
+  },
+  {
+   "about": "sys:FleetGPS",
+   "ask": "Which fleet GPS system are the vans on, and could it share van locations with the new system?",
+   "to": "Darren Pike, Ravi Menon"
+  },
+  {
+   "about": "sys:JobTrak",
+   "ask": "Do you want job history brought across from JobTrak, and if so how far back?",
+   "to": "Darren Pike"
+  },
+  {
+   "about": "ai:supplier-invoice-match",
+   "ask": "Is matching supplier invoices to jobs something you'd want in the new system, or does it stay with accounts payable in MYOB?",
+   "to": "Leanne Cho, Darren Pike"
+  },
+  {
+   "about": "W1-22",
+   "ask": "Should a short client feedback survey after each job be on the list? (Not ranked in workshop 1.)",
+   "to": "Greg Halloran"
+  },
+  {
+   "about": "W1-27",
+   "ask": "Send the written answer on where client data is processed by AI, what's kept and what can be switched off (governance pack can-say lines; Creatio security for the rest)",
+   "to": "us"
+  }
+ ],
+ "meta": {
+  "workshop": 1,
+  "date": "2026-11-10",
+  "date_text": "Tuesday 10 November",
+  "journey": "reactive jobs, from client request to invoice",
+  "contact": "Greg",
+  "from": "Tom",
+  "journeys": {
+   "Workshop 1: Reactive job, from client request to invoice": [
+    "Request received",
+    "Job logged",
+    "Technician assigned",
+    "Technician attends and diagnoses",
+    "Quote and parts (in parallel)",
+    "Job sheet in, job closed",
+    "Invoice raised",
+    "Invoice sent",
+    "After the job"
+   ]
+  },
+  "next": {
+   "date": "2026-11-24",
+   "date_text": "Tuesday 24 November",
+   "journey": "planned maintenance"
+  }
+ }
+}

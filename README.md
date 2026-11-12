@@ -3,7 +3,7 @@
 The Creatio APAC solution consulting motion as a Claude Code plugin: the same instructions, standards, templates and
 library for every SC, updated in one place.
 
-## What's in it (v0.9.0)
+## What's in it (v0.11.0)
 
 | Skill | Use it for |
 |---|---|
@@ -12,6 +12,7 @@ library for every SC, updated in one place.
 | `sc-first-meeting` | Discovery/BDR transcript → standard deck + light-config brief (Business Studio, then AI) + meeting plan |
 | `sc-deck` | Build, rebuild, render or restyle a deck from a deal's `deck.json`; slide library; new templates |
 | `sc-rfp` | RFP / TOR in any layout → requirements register, honest fit-gap (standard to no, confidence, evidence, POC tier, effort), bid / no-bid recommendation, and a consistency check of the bid team's answers. The bid team writes the response |
+| `sc-workshop` | Australia (no RFP): 2-hour requirements workshops, one journey each. Pre-work email, draft journey, agenda and capture sheet; then from the transcript a requirements register (rated with the `sc-rfp` engine: gaps and effort, no bid decision), a solution model in Creatio terms for `sc-demo-plan`, a follow-up email from the gaps, and a playback for the customer to sign off |
 | `sc-demo-plan` | Plan a demo build: demo bar (the floor), Business Studio first then AI, library and pattern book reuse, custom components where they earn it, open space for the SC, demo script for the toolkit |
 | `sc-clickpath` | Two HTML pages from the demo click path: SC practice guide (clicks, talk track, watch-outs, practice mode) and a customer-safe recap (DRAFT until the SC approves; text and screenshot checks) |
 | `sc-harvest` | After every demo: L1 into the demo library within 2 working days (read-only package export, build log, customer-specific list, manual steps) |

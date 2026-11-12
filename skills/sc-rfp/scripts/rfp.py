@@ -19,6 +19,12 @@
 
   python rfp.py coverage --brief 05-poc-brief.json <demo-plan.md> [<clickpath/cards.json> ...]
       Every Build ref and must-have gap must appear in each file. Exit 1 if any is missing.
+
+  python rfp.py validate --register register.json
+      Check a register written by hand (sc-workshop): fields, unique refs, scope, mandatory, tags. Exit 1 on errors.
+
+A register with "kind": "workshop" (sc-workshop) gets no bid / no-bid: we wrote the requirements, so the summary is
+"gaps and effort".
 """
 import argparse
 import collections
@@ -27,6 +33,11 @@ import json
 import os
 import re
 import sys
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 try:
     import openpyxl
@@ -168,7 +179,7 @@ def load(a):
     return reg, ver
 
 
-def metrics(reqs, ver):
+def metrics(reqs, ver, kind=None):
     ours = [q for q in reqs if q["scope"] == "ours"]
     rated = [q for q in ours if ver.get(q["rid"], {}).get("fit") in FITS and FITS[ver[q["rid"]]["fit"]]["fit"] is not None]
 
@@ -178,13 +189,16 @@ def metrics(reqs, ver):
 
     fit = lambda q: FITS[ver[q["rid"]]["fit"]]["fit"]
     nob = lambda q: ver[q["rid"]]["fit"] in NO_BUILD
-    must = [q for q in rated if q["mandatory"] is not False]
+    # RFPs: unmarked counts as must (conservative). Workshops: only what the room voted must; unranked is reported apart.
+    must = [q for q in rated if (q["mandatory"] is True if kind == "workshop" else q["mandatory"] is not False)]
     gaps = [q for q in must if not fit(q)]
     hard = [q for q in gaps if ver[q["rid"]]["fit"] == "no" and not ver[q["rid"]].get("workaround")]
     soft = [q for q in gaps if ver[q["rid"]]["fit"] in ("custom", "partner")]
     mf = share(must, fit)
     if mf is None:
         rec = "Not enough rated"
+    elif kind == "workshop":
+        rec = "n/a (workshop: no bid decision)"
     elif mf >= 90 and not hard and len(soft) <= 1 and not [q for q in gaps if ver[q["rid"]]["fit"] == "no"]:
         rec = "Bid"
     elif mf < 75 or hard:
@@ -196,7 +210,9 @@ def metrics(reqs, ver):
         "fit_pct": share(rated, fit), "no_build_pct": share(rated, nob),
         "must_n": len(must), "must_fit_pct": mf, "must_no_build_pct": share(must, nob),
         "by_fit": collections.Counter(ver[q["rid"]]["fit"] for q in rated),
-        "must_gaps": gaps, "hard_gaps": hard, "low_conf": [q for q in rated if ver[q["rid"]].get("confidence") == "low"],
+        "must_gaps": gaps, "hard_gaps": hard,
+        "unranked_gaps": [q for q in rated if q["mandatory"] is None and not fit(q)] if kind == "workshop" else [],
+        "must_low": [q for q in must if ver[q["rid"]].get("confidence") == "low"], "low_conf": [q for q in rated if ver[q["rid"]].get("confidence") == "low"],
         "tiers": collections.Counter(ver[q["rid"]].get("tier") for q in rated),
         "build_hours": sum(float(ver[q["rid"]].get("hours") or 0) for q in rated if ver[q["rid"]].get("tier") == "Build"),
         "custom_days": sum(float(ver[q["rid"]].get("mandays") or 0) for q in rated),
@@ -208,7 +224,7 @@ def fitgap(a):
     reg, ver = load(a)
     reqs = reg["requirements"]
     codes = json.load(open(a.codes, encoding="utf-8")) if a.codes else (reg.get("codes") or {})
-    mt = metrics(reqs, ver)
+    mt = metrics(reqs, ver, reg.get("kind"))
     wb = openpyxl.Workbook()
     hdr = Font(bold=True, color="FFFFFF")
     fill = PatternFill("solid", fgColor="0058EF")
@@ -248,7 +264,8 @@ def fitgap(a):
              ("Fit without building anything %", mt["no_build_pct"]), ("Must-haves", mt["must_n"]),
              ("Must-have fit %", mt["must_fit_pct"]), ("Must-haves needing custom, partner, roadmap or no", len(mt["must_gaps"])),
              ("POC Build hours", mt["build_hours"]), ("Implementation man-days beyond standard (first estimate)", mt["custom_days"]),
-             ("Low-confidence verdicts (check)", len(mt["low_conf"])), ("Recommendation", mt["recommendation"]), ("", "")]
+             ("Low-confidence verdicts (check)", len(mt["low_conf"]))] + \
+            ([] if reg.get("kind") == "workshop" else [("Recommendation", mt["recommendation"])]) + [("", "")]
     lines += [("Fit: " + FITS[k]["label"], n) for k, n in mt["by_fit"].most_common()]
     lines += [("", "")] + [("POC tier: %s" % k, n) for k, n in mt["tiers"].most_common()]
     for k, v in lines:
@@ -256,7 +273,7 @@ def fitgap(a):
     s.column_dimensions["A"].width = 52
     s.column_dimensions["B"].width = 30
 
-    b = wb.create_sheet("Bid team (not ours)")
+    b = wb.create_sheet("Not product (commercial)" if reg.get("kind") == "workshop" else "Bid team (not ours)")
     b.append(["Ref", "Sheet", "Their ID", "Requirement"])
     for q in reqs:
         if q["scope"] != "ours":
@@ -280,6 +297,8 @@ def fitgap(a):
 
 
 def summary_md(reg, ver, mt, deal, xlsx="fit-gap.xlsx"):
+    if reg.get("kind") == "workshop":
+        return workshop_md(reg, ver, mt, deal, xlsx)
     L = ["# Bid / no-bid: %s" % (deal or reg.get("customer") or reg["source"]), "",
          "> `sc-rfp` from `%s`, %s. Internal: for the SC, AE and bid team. Fit-gap: `%s`." % (reg["source"], datetime.date.today().isoformat(), xlsx),
          "", "## Recommendation: **%s**" % mt["recommendation"], "",
@@ -304,6 +323,85 @@ def summary_md(reg, ver, mt, deal, xlsx="fit-gap.xlsx"):
          ["| %s | %d |" % (FITS[k]["label"], n) for k, n in mt["by_fit"].most_common()]
     L += ["", "SC check required before this is used with the customer or the bid team."]
     return "\n".join(L) + "\n"
+
+
+def workshop_md(reg, ver, mt, deal, xlsx):
+    """Workshop deals: no bid decision. The gaps to handle honestly and the effort beyond standard."""
+    L = ["# Gaps and effort: %s" % (deal or reg.get("customer") or reg["source"]), "",
+         "> `sc-workshop` with the `sc-rfp` engine, %s. Internal. Fit-gap: `%s`. No bid / no-bid: we wrote these "
+         "requirements from the workshops, so the fit %% runs high and means little. What matters is below."
+         % (datetime.date.today().isoformat(), xlsx), "",
+         "| Measure | Value |", "|---|---|",
+         "| Requirements (ours) | %d (%d rated; %d voted must) |" % (mt["ours"], mt["rated"], mt["must_n"]),
+         "| Met without building anything (standard, configure, AI) | %s%% (must-haves %s%%) |" % (mt["no_build_pct"], mt["must_no_build_pct"]),
+         "| Must-haves needing custom, partner, roadmap or no | %d |" % len(mt["must_gaps"]),
+         "| Implementation man-days beyond standard (first estimate) | %s |" % mt["custom_days"],
+         "| Build hours for the next demo (configuration only) | %s |" % mt["build_hours"],
+         "| Low-confidence verdicts to check | %d |" % len(mt["low_conf"]), "",
+         "## Gaps to handle honestly (must-haves)", "", "| Ref | Requirement | Fit | Workaround |", "|---|---|---|---|"]
+    for q in mt["must_gaps"]:
+        v = ver[q["rid"]]
+        L.append("| %s | %s | %s | %s |" % (q["rid"], short(q["text"], 160).replace("|", "/"), FITS[v["fit"]]["label"],
+                                             (v.get("workaround") or "").replace("|", "/")))
+    if not mt["must_gaps"]:
+        L.append("| | None | | |")
+    if mt["unranked_gaps"]:
+        L += ["", "## Gaps in lines nobody has ranked yet", "", "Rank these with the customer before the proposal.", "",
+              "| Ref | Requirement | Fit | Workaround |", "|---|---|---|---|"]
+        L += ["| %s | %s | %s | %s |" % (q["rid"], short(q["text"], 160).replace("|", "/"), FITS[ver[q["rid"]]["fit"]]["label"],
+                                          (ver[q["rid"]].get("workaround") or "").replace("|", "/")) for q in mt["unranked_gaps"]]
+    if mt["must_low"]:
+        L += ["", "## Must-haves we're not sure of (low confidence)", "", "A fit we can't stand behind yet is a risk "
+              "as big as a gap: confirm these with Creatio product before the next session.", "",
+              "| Ref | Requirement | Fit | How |", "|---|---|---|---|"]
+        L += ["| %s | %s | %s | %s |" % (q["rid"], short(q["text"], 140).replace("|", "/"), ver[q["rid"]]["fit"],
+                                          short(ver[q["rid"]].get("how"), 140).replace("|", "/")) for q in mt["must_low"]]
+    eff = [q for q in reg["requirements"] if q["scope"] == "ours" and float(ver.get(q["rid"], {}).get("mandays") or 0) > 0]
+    eff.sort(key=lambda q: -float(ver[q["rid"]]["mandays"]))
+    L += ["", "## Where the implementation effort sits", "", "| Ref | Requirement | Fit | Man-days |", "|---|---|---|---|"] + \
+         ["| %s | %s | %s | %s |" % (q["rid"], short(q["text"], 120).replace("|", "/"), ver[q["rid"]]["fit"], ver[q["rid"]]["mandays"])
+          for q in eff[:15]]
+    L += ["", "## Fit by category", "", "| Fit | Count |", "|---|---|"] + \
+         ["| %s | %d |" % (FITS[k]["label"], n) for k, n in mt["by_fit"].most_common()]
+    L += ["", "SC check required before this is used with the customer."]
+    return "\n".join(L) + "\n"
+
+
+def validate(a):
+    reg = json.load(open(a.register, encoding="utf-8"))
+    E, seen = [], set()
+    for k in ("source", "requirements"):
+        if k not in reg:
+            E.append("register: no %s" % k)
+    for i, q in enumerate(reg.get("requirements", [])):
+        where = q.get("rid") or "row %d" % (i + 1)
+        for k in ("rid", "sheet", "src_id", "section", "text", "mandatory", "scope"):
+            if k not in q:
+                E.append("%s: no %s" % (where, k))
+        if q.get("rid") in seen:
+            E.append("%s: duplicate ref" % where)
+        seen.add(q.get("rid"))
+        if q.get("scope") not in ("ours", "bid"):
+            E.append("%s: scope must be ours or bid" % where)
+        if q.get("mandatory") not in (True, False, None):
+            E.append("%s: mandatory must be true, false or null" % where)
+        if not str(q.get("text") or "").strip():
+            E.append("%s: empty text" % where)
+        if reg.get("kind") == "workshop":
+            ex = q.get("extra") or {}
+            if ex.get("tag") not in ("C", "I", "A"):
+                E.append("%s: extra.tag must be C, I or A" % where)
+            pr = ex.get("priority")
+            if pr not in ("must", "should", "could", "unconfirmed"):
+                E.append("%s: extra.priority must be must, should, could or unconfirmed" % where)
+            elif (pr == "must") != (q.get("mandatory") is True) or (pr == "unconfirmed") != (q.get("mandatory") is None):
+                E.append("%s: priority %s doesn't match mandatory %s" % (where, pr, q.get("mandatory")))
+            if ex.get("tag") == "C" and not ex.get("speaker"):
+                E.append("%s: tagged C but no speaker" % where)
+    print("%d requirements, %d errors" % (len(reg.get("requirements", [])), len(E)))
+    for e in E:
+        print("  " + e)
+    sys.exit(1 if E else 0)
 
 
 def claim(text):
@@ -378,7 +476,7 @@ def poc(a):
     ours = [q for q in reg["requirements"] if q["scope"] == "ours" and q["rid"] in ver]
     tier = lambda t: [q for q in ours if ver[q["rid"]].get("tier") == t]
     build, show, tell = tier("Build"), tier("Show"), tier("Tell")
-    mt = metrics(reg["requirements"], ver)
+    mt = metrics(reg["requirements"], ver, reg.get("kind"))
     eng = lambda q: ver[q["rid"]].get("english") or q["text"]
     L = ["# POC brief: %s" % (a.deal or reg.get("customer") or reg["source"]), "",
          "> From the fit-gap (`sc-rfp`), %s. Input for `sc-demo-plan` in **proof mode**: it maps every Build line to a "
@@ -386,7 +484,8 @@ def poc(a):
          "| | |", "|---|---|",
          "| Build (live in the POC) | %d lines, about %s h of configuration per requirement (the plan adds data model, seed data, channels, AI, rehearsal and buffer: expect 2–3×) |" % (len(build), sum(float(ver[q["rid"]].get("hours") or 0) for q in build)),
          "| Show (screenshot or clip) | %d |" % len(show), "| Tell (written answer; the bid team) | %d |" % len(tell),
-         "| Must-have fit | %s%% (%s) |" % (mt["must_fit_pct"], mt["recommendation"]), "",
+         ("| Must-have fit | %s%% (%s) |" % (mt["must_fit_pct"], mt["recommendation"]) if reg.get("kind") != "workshop"
+          else "| Must-haves met without building anything | %s%% |" % mt["must_no_build_pct"]), "",
          "## 1. Build: every line needs a scene and a test", "",
          "Group these into 3–5 scenes around their journeys (and their named use cases, if the RFP has them). The plan's "
          "coverage table must list every ref below; `rfp.py coverage` checks it.", ""]
@@ -473,8 +572,10 @@ def main():
     p = sp.add_parser("poc"); p.add_argument("--register", required=True); p.add_argument("--verdicts", required=True)
     p.add_argument("--out", required=True); p.add_argument("--deal")
     p = sp.add_parser("coverage"); p.add_argument("--brief", required=True); p.add_argument("files", nargs="+")
+    p = sp.add_parser("validate"); p.add_argument("--register", required=True)
     a = ap.parse_args()
-    {"scan": scan, "register": register, "fitgap": fitgap, "check": check, "poc": poc, "coverage": coverage}[a.cmd](a)
+    {"scan": scan, "register": register, "fitgap": fitgap, "check": check, "poc": poc, "coverage": coverage,
+     "validate": validate}[a.cmd](a)
 
 
 if __name__ == "__main__":

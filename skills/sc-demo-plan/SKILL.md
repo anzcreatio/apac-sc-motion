@@ -15,6 +15,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 | Input | Where | If missing |
 |---|---|---|
 | What we know about the customer | Deal folder: `01-fm-prep.md`, `NN-meeting-review-*.md`, transcripts, `deck.json`. Older deals: W1 pack, W2 brief, discovery card, hypothesis files: read whatever is there | Ask the SC for the latest transcript or notes; don't plan from the BDR call alone for a full demo |
+| Workshop outputs (Australia: no RFP) | `workshop/solution-model.md` + `register.json` from `sc-workshop`; after rating, `workshop/poc-brief.md` | Run `sc-workshop` step 3 first if a workshop happened and nothing's captured |
 | Level | Light (first meeting, ≤ half a day), Full (value demo) or Proof (days or weeks, ending in a readout) | Ask |
 | RFP POC brief (Proof after an RFP or TOR) | `rfp/05-poc-brief.md` + `.json` from `sc-rfp` | Run `sc-rfp` first if there's an RFP and no fit-gap |
 | Time available to build, demo length, stand to use | The SC | Ask; default Full = 2–3 days, 45–60 min demo. **Full and Proof: a clean stand of its own or the library master stand**, never one holding another customer's demo (demo bar item 7) |
@@ -86,6 +87,11 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     the click path card notes too, so they show up at readout. Check with
     `python ../sc-rfp/scripts/rfp.py coverage --brief rfp/05-poc-brief.json <plan.md> [clickpath/cards.json]`
     before the build starts and again before the readout; a missing ref is a gap to fix or to explain to the SC.
+    **After a workshop (`sc-workshop`):** the solution model is the source for Part 1 (objects with their Creatio
+    mapping and captions, stages, roles, rules), Part 2 (AI moments, with who confirms), the example data, the home page
+    (outcomes) and the live change (a `disputed` rule). Its tags carry over: C builds, I and A open the next workshop as
+    questions. The playback build between workshops is **Light** (one journey, about a day) on a clean stand with the
+    package plan, so it grows into the Full demo. Requirements refs (`W1-03`) go in the scene table's pain column.
 11. **Harvest is part of the plan:** the L1 harvest (`sc-harvest`) is the last line of the build order, due within 2
     working days of the demo.
 12. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
