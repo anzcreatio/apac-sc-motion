@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.1 (12 Nov 2026): first meeting asks for the website and customer documents
+- `sc-first-meeting` (FM v0.4): new inputs. **Company website** (required; ask in the first message, but keep going
+  with research and say which site was used) anchors the "right company" check. **Anything the customer has sent**
+  (email, brief, RFP): if it arrives after the deck, save it as `00-customer-…` and rework the hypothesis, components
+  and next steps against it, because their written criteria outrank the call. From the Navalo deal (Renzo, 12 Nov).
+
 ## 0.14.0 (12 Nov 2026): AE brief standard, flow and outputs slides
 - `sc-demo-plan` step 13: the AE brief is a standard output for every demo session (`ae-brief.json` →
   `scripts/build_ae_brief.py` → `NN-ae-brief.html`, from `templates/ae-brief.html`): recap tick-boxes, a reaction log,

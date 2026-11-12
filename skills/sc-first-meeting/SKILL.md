@@ -3,7 +3,7 @@ name: sc-first-meeting
 description: Turn the transcript of a BDR or AE discovery call (the six questions), or a partner call about a customer, into the first-meeting pack for a Creatio APAC solution consultant - the standard customer deck (current understanding, solution hypothesis, one slide per solution component with Business Studio first and AI second, solution summary, next steps), a light-configuration brief split into Business Studio then AI, and a meeting plan with the closing question. Use when an SC shares a discovery or BDR call transcript, asks to prepare a first meeting, a first demo deck or a playback, or names a new deal.
 ---
 
-# sc-first-meeting (FM v0.3)
+# sc-first-meeting (FM v0.4)
 
 > **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 
@@ -18,6 +18,8 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 | Input | Required? | If missing |
 |---|---|---|
 | Transcript (BDR/AE call using the six questions, or a partner call) | **Yes** | Stop and ask for it |
+| Company website (the customer's own site; for a new brand or a group, the site of the entity we're selling to) | **Yes** | Ask for it in your first message, but don't stop: research it, and say which site you used. It anchors rule 3's "right company" check (Navalo, 12 Nov 2026: the new brand was the renamed Payright) |
+| Anything the customer has sent (email, brief, RFP, requirements) | Preferred | Ask (it's pre-build question 2). If it arrives after the deck is built, save it as `00-customer-<what>-<date>.md` and rework the hypothesis, components and next steps against it: their written criteria outrank the call (Navalo, 12 Nov 2026) |
 | Deal folder: `<team root>/Deals/<kebab-case-account>/` (team root from `~/.apac-sc-motion.json`, set by `sc-setup`). If the caller names another folder (for example a practice folder from `sc-guide`), use that one and never write to the real deal | Yes | Create it; save the transcript as `00-<source>-transcript-<yyyy-mm-dd>.md` |
 | Opportunity type: AI CRM / AI Studio / Custom apps (no-code) / combination | Preferred | Infer from the answers and say so |
 | Meeting date, attendees, length, language | Preferred | From the transcript; list what's missing |
@@ -33,8 +35,8 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    hosting or feature promises) under "claims to check" in the internal notes, and don't repeat them on a slide.
 2. **Six answers are thin. Don't stretch them.** Not asked or not answered → say so and make it a meeting question.
 3. **Research the company:** 6–10 searches, country in every search. News, strategy and technology signals from the
-   last 18 months; company basics (history, ownership, scale, systems they run) from any date. Confirm it's the right
-   company first. Every fact gets a source and date in the notes.
+   last 18 months; company basics (history, ownership, scale, systems they run) from any date. Start from their
+   website and confirm it's the right company first. Every fact gets a source and date in the notes.
 4. **The hypothesis answers their top pain**, in their vocabulary, with an outcome and a KPI (a range is fine). Claims
    only from the catalogue; nothing on its "don't use" list. AI/data/hosting lines only from the governance pack's
    "can say" list.
