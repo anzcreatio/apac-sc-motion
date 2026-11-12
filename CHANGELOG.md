@@ -1,5 +1,14 @@
 # Changelog
 
+Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what changed for SCs, and any one-off action
+as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
+`sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
+
+## 0.15.2 (12 Nov 2026): release discipline (maintainer only)
+- `publish.ps1` stops if this changelog has no entry for the version, and tags each published commit `v<version>`.
+- New `release-notes.ps1` prints entries by version or date. A Monday 8 am task drafts the weekly release message
+  from it for Renzo to share. Nothing changes for SCs.
+
 ## 0.15.1 (12 Nov 2026): deal folders carry the creator's initials
 - `sc-setup` step 1b stores the SC's initials as `"sc"` in `~/.apac-sc-motion.json` (`rh` Renzo, `wn` Willy, `fa`
   Ferdhi; suggested from the computer login, the SC confirms). New "Deal folder rule": `<account>-<sc>`, deal folder
