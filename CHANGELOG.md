@@ -4,6 +4,12 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.16.0 (12 Nov 2026): Claude tells you about updates
+- When you open Claude, the plugin now checks SharePoint. If a newer version is published, Claude tells you and
+  gives you the update command. After you update, Claude shows what's new once, and offers any one-off step.
+- Runs on Windows and Mac, reads only the synced SharePoint folder, and stays silent when there's nothing new.
+- **Each SC: update this once by hand. From now on Claude reminds you.**
+
 ## 0.15.2 (12 Nov 2026): release discipline (maintainer only)
 - `publish.ps1` stops if this changelog has no entry for the version, and tags each published commit `v<version>`.
 - New `release-notes.ps1` prints entries by version or date. A Monday 8 am task drafts the weekly release message
