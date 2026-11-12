@@ -97,7 +97,11 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     **After the build:** if no RFP has been issued yet, add `sc-requirements` (a requirements checklist the AE sends) to the build order, after the click path.
 11. **Harvest is part of the plan:** the L1 harvest (`sc-harvest`) is the last line of the build order, due within 2
     working days of the demo.
-12. **Hand-off.** Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
+12a. **⛔ Build plan for the SC, before the hand-off** (Renzo, 12 Nov 2026). Write `NN-build-plan.html` (see "Build
+    plan" below), give it to the SC (a private artifact link if this session can publish, else the file), and stop.
+    Nothing is built and no stand is touched until the SC approves it in chat; record the approval in the demo plan.
+    A change after approval is shown and approved again.
+12. **Hand-off** (only after 12a is approved). Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
     candidates for the demo library.
 13. **AE brief (every demo session, Renzo 12 Nov 2026).** Write `ae-brief.json` in the deal folder and build the page:
@@ -125,6 +129,48 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 Rules: no opening line and no durations (the agenda slide does the opening); no "what would make this a success?"
 question in the meeting (ask before it); the recap points are C only; the question matches the agenda slide's
 `decision`; "Don't" always has price, competitors and promises, plus anything a past meeting review flagged.
+
+## Build plan (`NN-build-plan.html`): what the SC reviews before we build
+
+One page that lets the SC see the demo before a minute of build time is spent. Plain HTML, works offline, the
+deal's words. In this order:
+
+| Section | What it shows |
+|---|---|
+| 1. The demo in one line + the decision we'll ask for | Their top pain, the hero journey, the agenda decision question |
+| 2. **Storyboard** | One card per demo step, in demo order: a **wireframe of the screen** the customer will see (page name, the fields and values on it, buttons, the stage bar, the list or chart), what the presenter clicks, the one line to say, and which pain or criterion it proves (quote, tag). The live change gets its own before/after card |
+| 3. What we'll build | Business Studio then AI: each element, native or custom (why), hours. Total against the demo bar's level (Light ≤ 4 h) |
+| 4. How it fits together | A small picture of the objects and links, and where each system sits (built, simulated, not shown) |
+| 5. Example data | The personas and hero records by name, the volume behind each list and chart |
+| 6. Not in this build | What we don't build or only simulate, and what we'll say if asked |
+| 7. Decisions for the SC | Numbered, each with our recommendation |
+
+Wireframes are boxes and real labels, not screenshots and not invented Creatio chrome: they show **what** is on the
+screen and in which order, so the SC can say "move that, drop this" before it's built. Example data only, captioned.
+
+**How to make it (cheap per deal):** write `build-plan.json` in the deal folder, then
+`python scripts/build_build_plan.py <deal>/build-plan.json --out <deal>/NN-build-plan.html`. Never hand-write the HTML.
+Fix every `Not built` error and read every warning. Worked example: `Deals/metrics-credit-partners/build-plan.json`.
+
+| Field | What goes in it |
+|---|---|
+| `deal`, `title`, `date`, `stand`, `sc`, `level`, `budget_hours`, `demo_minutes` | Header, hours budget (Light 4) and the agenda's demo slot |
+| `one_line`, `decision` | The demo in one sentence; the agenda's decision question |
+| `sources` | The deal's transcript and customer documents (paths relative to the JSON). **Every C or P quote is checked word for word against them; a quote that isn't there stops the build** |
+| `steps[]` | `title`, `minutes`, `chips` (built / simulated / existing), `screen`, `click`, `say`, `differentiator`, `reuse`?, `build_note`?, and **either** `triggers` **or** `our_idea` |
+| `steps[].triggers[]` | Why we show it: `{quote, who, at, tag}`. The quote is verbatim (use `...` to skip words). `who` is the customer or partner, never our own AE |
+| `steps[].our_idea` | A blind spot they didn't raise: `{why, source, ask}`. `source` = industry pack, research, pattern book or a past deal (tag I); `ask` = the question we put to them. **At most 2 per demo, after their own scenes**, about 10-20% of the time, ≤ 0.5 h to build. The SC decides in the plan |
+| `steps[].differentiator` | `{id: D1-D7, line, competitor}`: the point this scene wins, and the angle against the likely competitor. Only catalogue claims; never "they can't" |
+| `steps[].reuse` | Why another deal could reuse this scene (feeds the demo library) |
+| `steps[].screen` | `type`: `record` (`fields`, `stages` + `stage`, `tabs`, `list`, `panel`, `buttons`, `highlight`), `list` / `table` (`columns`, `rows`, `numeric`, `kpis`, `highlight_rows`), `dashboard` (`kpis`, `bars`, `bars2`), `panel`, or `beforeafter` (`before`, `after`, `change`) for the live change |
+| `criteria[]`, `criteria_source` | Their criteria (RFP, email) in their words: `{criterion, coverage: covered / partly / not shown, steps, say}`. Every gap gets what we say about it |
+| `build[]`, `build_note` | `{part, element, how, hours, status?: parked}`. Over budget needs a `build_note` |
+| `model`, `data`, `not_built`, `decisions` | Objects (new / stock / simulated), example data, what we don't build and what we say, decisions with our recommendation |
+
+**Finding blind spots (do this every time):** before writing the plan, look for 2-3 candidates the customer didn't
+raise but that follow from a pain they did: the industry pack (pains they didn't name, regulation hooks, KPIs), the
+company research (news, regulation that applies to them), the pattern book, lessons from past deals. Keep the best
+one or two, cheap to build, each tied to their goal and asked as a question.
 
 ## Output: `NN-demo-plan.md` in the deal folder (NN = the next free number)
 

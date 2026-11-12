@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.15.0 (12 Nov 2026): build plan before any build
+- **New gate:** `sc-first-meeting` step 6b and `sc-demo-plan` step 12a. The SC approves a visual build plan before any
+  stand is touched (Renzo stopped the Navalo build to add it).
+- `sc-demo-plan/scripts/build_build_plan.py` + `templates/build-plan.html`: `build-plan.json` → `NN-build-plan.html`.
+  A wireframe per demo step drawn from standard layouts (record, list, dashboard, rules table, before/after), so a deal
+  writes content, not HTML. Per step: the customer's verbatim quote (**checked against the transcript and email; a
+  quote that isn't there stops the build**), or an **"our idea"** blind spot with its source and the question we ask
+  (at most 2, after their scenes); minutes against the demo slot; the differentiator and competitor angle; reuse.
+  Plus their criteria against our demo (covered / partly / not shown, and what we say about each gap), the build list
+  and hours against the budget, data model, example data, what's not built, and decisions with our recommendation.
+- First use: Navalo (`Deals/metrics-credit-partners/03-build-plan.html`).
+
 ## 0.14.1 (12 Nov 2026): first meeting asks for the website and customer documents
 - `sc-first-meeting` (FM v0.4): new inputs. **Company website** (required; ask in the first message, but keep going
   with research and say which site was used) anchors the "right company" check. **Anything the customer has sent**

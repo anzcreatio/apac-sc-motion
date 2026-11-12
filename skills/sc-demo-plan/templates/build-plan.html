@@ -1,0 +1,200 @@
+<title>Build Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column; storyboard cards = wireframe left, notes right; stacks on phones */
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#1d2430; --muted:#5d6878; --line:#d9dee6; --wire:#eef1f5;
+  --accent:#ff4013; --accent-soft:#fff0eb; --idea:#5b3fc4; --idea-soft:#f1edff; --ok:#1f8a5b; --sim:#a15c00; --sim-soft:#fff4e0; --park:#6b7280;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161c; --surface:#1a2028; --ink:#e7ebf0; --muted:#9aa5b4; --line:#2e3744; --wire:#222a35;
+  --accent:#ff6a3d; --accent-soft:#3a2018; --idea:#b3a1ff; --idea-soft:#2a2342; --ok:#4cc38a; --sim:#f0a948; --sim-soft:#352812; --park:#9aa1ad; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161c; --surface:#1a2028; --ink:#e7ebf0; --muted:#9aa5b4; --line:#2e3744; --wire:#222a35;
+  --accent:#ff6a3d; --accent-soft:#3a2018; --idea:#b3a1ff; --idea-soft:#2a2342; --ok:#4cc38a; --sim:#f0a948; --sim-soft:#352812; --park:#9aa1ad; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px}
+main{max-width:1100px;margin:0 auto;display:grid;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:30px;line-height:1.2} h2{font-size:21px;margin-bottom:12px} h3{font-size:16px}
+.eyebrow{font:600 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)} .small{font-size:13px}
+header{display:grid;gap:10px}
+.oneline{font-size:18px;max-width:70ch}
+.decision{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.steps{display:grid;gap:22px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:20px}
+.step.wide{grid-template-columns:1fr}
+@media (max-width:820px){.step{grid-template-columns:1fr}}
+.step-head{grid-column:1/-1;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.stepnum{font:600 13px var(--display);background:var(--ink);color:var(--surface);border-radius:999px;min-width:26px;height:26px;display:inline-grid;place-items:center}
+.chip{font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;border:1px solid var(--line)}
+.chip.built{color:var(--ok);border-color:var(--ok)} .chip.simulated{color:var(--sim);border-color:var(--sim);background:var(--sim-soft)}
+.chip.existing{color:var(--muted)} .chip.parked{color:var(--park);border-style:dashed}
+.notes{display:grid;gap:12px;align-content:start;min-width:0}
+.notes dt{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.notes dd{margin:2px 0 0}
+.say{font-style:italic}
+.tag{font:600 11px var(--body);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:4px;color:var(--muted)}
+/* wireframes */
+.wf{border:1.5px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden;min-width:0;font-size:13px}
+.wf-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:var(--wire);border-bottom:1px solid var(--line)}
+.wf-title{font-weight:600}
+.wf-body{padding:12px;display:grid;gap:10px}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:6px;padding:2px 9px;background:var(--surface);font-size:12px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.stages{display:flex;gap:3px;flex-wrap:wrap}
+.stage{flex:1 1 80px;font-size:11.5px;text-align:center;padding:4px 6px;background:var(--wire);border:1px solid var(--line);clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,8% 50%)}
+.stage.done{background:var(--surface);color:var(--muted)} .stage.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 14px}
+@media (max-width:520px){.cols{grid-template-columns:1fr}}
+.field{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:6px;border-bottom:1px dashed var(--line);padding:3px 0}
+.field span:first-child{color:var(--muted)}
+.hl{background:var(--accent-soft);outline:1.5px solid var(--accent);border-radius:4px}
+.tabs{display:flex;gap:14px;border-bottom:1px solid var(--line);font-size:12.5px;overflow-x:auto}
+.tabs span{padding:4px 0} .tabs .on{border-bottom:2px solid var(--accent);font-weight:600}
+.split{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px}
+@media (max-width:520px){.split{grid-template-columns:1fr}}
+.panel{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:8px 10px;display:grid;gap:4px;align-content:start}
+.panel b{font-size:12px}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600;background:var(--wire)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.kpi b{display:block;font:600 18px var(--display);font-variant-numeric:tabular-nums}
+.kpi span{font-size:11.5px;color:var(--muted)}
+.bars{display:grid;gap:4px}
+.bar{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr) 44px;gap:8px;align-items:center;font-size:12px}
+.bar i{display:block;height:10px;border-radius:3px;background:var(--accent)}
+.bar em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.ba{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media (max-width:620px){.ba{grid-template-columns:1fr}}
+.ba-label{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.change{border-left:3px solid var(--accent);padding:4px 10px;background:var(--accent-soft);border-radius:0 6px 6px 0}
+.caption{font-size:12px;color:var(--muted)}
+/* sections */
+section{display:grid;gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.total{font:600 15px var(--display)}
+.over{color:var(--accent)}
+.model{display:flex;flex-wrap:wrap;gap:10px}
+.obj{border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface);min-width:150px;flex:1 1 150px}
+.obj.new{border-color:var(--ok)} .obj.simulated{border-color:var(--sim);border-style:dashed}
+.obj small{display:block;color:var(--muted)}
+ol.decisions{margin:0;padding-left:20px;display:grid;gap:8px}
+ul{margin:0;padding-left:20px}
+footer{font-size:13px;color:var(--muted)}
+.chip.idea{color:var(--idea);border-color:var(--idea);background:var(--idea-soft)} .chip.reuse{color:var(--muted);border-style:dotted}
+.mins{margin-left:auto;font:600 13px var(--display);color:var(--muted);font-variant-numeric:tabular-nums}
+.step.is-idea{border-color:var(--idea);border-width:1.5px}
+.idea{border-left:3px solid var(--idea);padding-left:10px;background:var(--idea-soft);border-radius:0 6px 6px 0;padding-block:6px}
+.idea dt{color:var(--idea)}
+q{font-weight:500;quotes:"\201C" "\201D"}
+.cov{font-size:12px;font-weight:600;border-radius:999px;padding:1px 8px;border:1px solid var(--line)}
+.cov.covered{color:var(--ok);border-color:var(--ok)} .cov.partly{color:var(--sim);border-color:var(--sim);background:var(--sim-soft)}
+.cov.not-shown{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+</style>
+
+<main id="app"></main>
+
+<script>
+const D = /*BUILD_PLAN_DATA*/{};
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const isHl = (s, label) => (s.highlight || []).includes(label);
+
+function field([label, value], s){
+  return `<div class="field ${isHl(s,label)?"hl":""}"><span>${esc(label)}</span><span>${esc(value)}</span></div>`;
+}
+function table(t, s){
+  if (!t) return "";
+  const n = (t.numeric || []);
+  const th = t.columns.map((c,i)=>`<th class="${n.includes(i)?"num":""}">${esc(c)}</th>`).join("");
+  const rows = t.rows.map((r,ri)=>`<tr class="${(t.highlight_rows||[]).includes(ri)?"hl":""}">${r.map((c,i)=>`<td class="${n.includes(i)?"num":""}">${esc(c)}</td>`).join("")}</tr>`).join("");
+  return `${t.title?`<b class="small">${esc(t.title)}</b>`:""}<div class="tbl-wrap"><table><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function kpis(k){ return k ? `<div class="kpis">${k.map(([l,v])=>`<div class="kpi"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("")}</div>` : ""; }
+function bars(b){
+  if (!b) return "";
+  const max = Math.max(...b.items.map(i=>Number(i[1])||0), 1);
+  return `<b class="small">${esc(b.title)}</b><div class="bars">${b.items.map(([l,v])=>`<div class="bar"><span>${esc(l)}</span><i style="width:${Math.max(4,(Number(v)||0)/max*100)}%"></i><em>${esc(v)}${esc(b.unit||"")}</em></div>`).join("")}</div>`;
+}
+function stages(s){
+  if (!s.stages) return "";
+  return `<div class="stages">${s.stages.map((x,i)=>`<div class="stage ${i<s.stage?"done":i===s.stage?"on":""}">${esc(x)}</div>`).join("")}</div>`;
+}
+function panel(p){
+  if (!p) return "";
+  return `<div class="panel ${p.highlight?"hl":""}"><b>${esc(p.title)}</b>${(p.lines||[]).map(l=>`<span class="small">${esc(l)}</span>`).join("")}</div>`;
+}
+function screen(s){
+  if (s.type === "beforeafter"){
+    return `<div class="ba"><div><div class="ba-label">Before</div>${screen(s.before)}</div><div><div class="ba-label">After</div>${screen(s.after)}</div></div>${s.change?`<div class="change small">${esc(s.change)}</div>`:""}`;
+  }
+  const btns = (s.buttons||[]).map((b,i)=>`<span class="btn ${i===0?"primary":""}">${esc(b)}</span>`).join("");
+  let body = "";
+  if (s.type === "record"){
+    const fields = `<div class="cols">${(s.fields||[]).map(f=>field(f,s)).join("")}</div>`;
+    const tabs = s.tabs ? `<div class="tabs">${s.tabs.map((t,i)=>`<span class="${i===(s.active_tab||0)?"on":""}">${esc(t)}</span>`).join("")}</div>` : "";
+    const main = `${fields}${tabs}${table(s.list,s)}`;
+    body = `${stages(s)}${s.panel?`<div class="split"><div style="display:grid;gap:10px;min-width:0">${main}</div>${panel(s.panel)}</div>`:main}`;
+  } else if (s.type === "list" || s.type === "table"){
+    body = `${s.note?`<div class="caption">${esc(s.note)}</div>`:""}${kpis(s.kpis)}${table({columns:s.columns,rows:s.rows,numeric:s.numeric,highlight_rows:s.highlight_rows},s)}`;
+  } else if (s.type === "dashboard"){
+    body = `${kpis(s.kpis)}${bars(s.bars)}${bars(s.bars2)}`;
+  } else if (s.type === "panel"){
+    body = `${(s.lines||[]).map(l=>`<div>${esc(l)}</div>`).join("")}`;
+  }
+  return `<div class="wf"><div class="wf-bar"><span class="wf-title">${esc(s.page)}</span><span class="btns">${btns}</span></div><div class="wf-body">${body}</div></div>`;
+}
+
+function render(){
+  const total = (D.build||[]).filter(b=>b.status!=="parked").reduce((a,b)=>a+(Number(b.hours)||0),0);
+  const budget = D.budget_hours || 0;
+  const why = st => {
+    if (st.our_idea) { const o = st.our_idea; return `<div class="idea"><dt>Our idea, not asked</dt><dd>${esc(o.why)}</dd><dd class="small muted">Source: ${esc(o.source)}<span class="tag">I</span></dd><dd><b>We ask:</b> <span class="say">"${esc(o.ask)}"</span></dd></div>`; }
+    return (st.triggers||[]).map(t=>`<div><dt>Why we show it</dt><dd><q>${esc(t.quote)}</q></dd><dd class="small muted">${esc(t.who)}${t.at?` · ${esc(t.at)}`:""}<span class="tag">${esc(t.tag||"C")}</span></dd></div>`).join("");
+  };
+  const steps = (D.steps||[]).map((st,i)=>`
+    <article class="step ${st.screen&&st.screen.type==="beforeafter"?"wide":""} ${st.our_idea?"is-idea":""}" id="step-${i+1}">
+      <div class="step-head"><span class="stepnum">${i+1}</span><h3>${esc(st.title)}</h3>${(st.chips||[]).map(c=>`<span class="chip ${esc(c)}">${esc(c)}</span>`).join("")}${st.our_idea?`<span class="chip idea">our idea</span>`:""}${st.reuse?`<span class="chip reuse" title="${esc(st.reuse)}">reusable</span>`:""}${st.minutes?`<span class="mins">${esc(st.minutes)} min</span>`:""}</div>
+      <div style="display:grid;gap:10px;min-width:0">${screen(st.screen)}</div>
+      <dl class="notes">
+        ${why(st)}
+        <div><dt>Presenter does</dt><dd>${esc(st.click)}</dd></div>
+        <div><dt>Says</dt><dd class="say">"${esc(st.say)}"</dd></div>
+        ${st.differentiator?`<div><dt>Where we win</dt><dd><b>${esc(st.differentiator.id)}</b> ${esc(st.differentiator.line)}</dd>${st.differentiator.competitor?`<dd class="small muted">Against ${esc(st.differentiator.competitor)}</dd>`:""}</div>`:""}
+        ${st.reuse?`<div><dt>Reuse</dt><dd class="small muted">${esc(st.reuse)}</dd></div>`:""}
+        ${st.build_note?`<div><dt>Build note</dt><dd class="small muted">${esc(st.build_note)}</dd></div>`:""}
+      </dl>
+    </article>`).join("");
+  const mins = (D.steps||[]).reduce((a,s)=>a+(Number(s.minutes)||0),0);
+  const cov = (D.criteria||[]).map(c=>`<tr><td style="white-space:normal">${esc(c.criterion)}</td><td><span class="cov ${esc(c.coverage.replace(/ /g,"-"))}">${esc(c.coverage)}</span></td><td>${esc((c.steps||[]).join(", ")||"—")}</td><td style="white-space:normal">${esc(c.say||"")}</td></tr>`).join("");
+  const build = (D.build||[]).map(b=>`<tr class="${b.status==="parked"?"muted":""}"><td>${esc(b.part)}</td><td style="white-space:normal">${esc(b.element)}</td><td style="white-space:normal">${esc(b.how)}</td><td>${esc(b.status||"in plan")}</td><td class="num">${esc(b.hours)}</td></tr>`).join("");
+  const objs = ((D.model||{}).objects||[]).map(o=>`<div class="obj ${esc(o.kind)}"><b>${esc(o.name)}</b><small>${esc(o.kind)}${o.links?` · links to ${esc(o.links.join(", "))}`:""}</small></div>`).join("");
+  document.getElementById("app").innerHTML = `
+  <header>
+    <div class="eyebrow">Build plan for SC review · ${esc(D.level||"")} demo</div>
+    <h1>${esc(D.title)}</h1>
+    <div class="meta"><span>${esc(D.deal)}</span><span>${esc(D.date)}</span><span>Stand ${esc(D.stand||"")}</span><span>Prepared for ${esc(D.sc||"the SC")}</span></div>
+    <p class="oneline">${esc(D.one_line)}</p>
+    <div class="decision"><span class="eyebrow">We'll ask at the end</span><div><b>${esc(D.decision)}</b></div></div>
+  </header>
+  <section><h2>The demo, step by step</h2><p class="caption">Wireframes show what is on each screen and in what order, not the final look. ${esc(D.example_caption||"Example data on fictional customers.")}</p>
+    ${D.demo_minutes?`<p class="total ${mins>D.demo_minutes?"over":""}">${mins} min of scenes in a ${esc(D.demo_minutes)} min demo slot</p>`:""}<div class="steps">${steps}</div></section>
+  ${cov?`<section><h2>Their criteria against our demo</h2><div class="card tbl-wrap"><table><thead><tr><th>Their criterion</th><th>In the demo</th><th>Steps</th><th>For the gaps, we say</th></tr></thead><tbody>${cov}</tbody></table>${D.criteria_source?`<p class="caption">From ${esc(D.criteria_source)}</p>`:""}</div></section>`:""}
+  <section><h2>What we'll build</h2><div class="card tbl-wrap"><table><thead><tr><th>Part</th><th>Element</th><th>Native or custom</th><th>Status</th><th class="num">Hours</th></tr></thead><tbody>${build}</tbody></table>
+    <p class="total ${budget&&total>budget?"over":""}">Total ${Math.round(total*10)/10} h${budget?` against a ${budget} h budget`:""}</p>${D.build_note?`<p class="small muted">${esc(D.build_note)}</p>`:""}</div></section>
+  <section><h2>How it fits together</h2><div class="model">${objs}</div><p class="caption">Green = we build it · grey = standard Creatio · dashed = simulated in the demo</p></section>
+  <section><h2>Example data</h2><div class="card"><ul>${(D.data||[]).map(x=>`<li><b>${esc(x.what)}</b>: ${esc(x.detail)}</li>`).join("")}</ul></div></section>
+  <section><h2>Not in this build</h2><div class="card tbl-wrap"><table><thead><tr><th>What</th><th>If they ask, we say</th></tr></thead><tbody>${(D.not_built||[]).map(x=>`<tr><td style="white-space:normal">${esc(x.what)}</td><td style="white-space:normal">${esc(x.say)}</td></tr>`).join("")}</tbody></table></div></section>
+  <section><h2>Decisions for you</h2><div class="card"><ol class="decisions">${(D.decisions||[]).map(x=>`<li>${esc(x.q)} <span class="muted">Our recommendation: ${esc(x.rec)}</span></li>`).join("")}</ol></div></section>
+  <footer>Approve in chat before anything is built. SC check required before this is used with the customer.</footer>`;
+}
+render();
+</script>

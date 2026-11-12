@@ -80,6 +80,12 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    `../sc-demo-plan/SKILL.md` step 0 (competition, anything else the customer gave us, anything else we should know),
    at the top of your message, and record the answers in `01-fm-prep.md`.
 6. **Write `01-fm-prep.md`** in the deal folder with the outputs below.
+6b. **⛔ Build plan for the SC, before anything is built** (Renzo, 12 Nov 2026). Write `NN-build-plan.html` in the deal
+   folder per `../sc-demo-plan/SKILL.md` "Build plan" and give it to the SC (publish it as a private artifact if this
+   session can, and send the link). **No write to any Creatio stand until the SC approves it in chat.** Record the
+   approval (date, who, changes asked for) in `01-fm-prep.md`. If the plan changes after approval, show the change and
+   get it approved again. Why: on Navalo the build started from the text brief and was stopped, because nobody could
+   see what the demo would look like before resources were spent.
 7. **After the light config is built** (same skill, second pass, when the SC says the demo is ready): take the
    screenshots from the click path (`creatio-demo-clickpass` shots in the deal folder), add a `build` slide ("What
    we've set up for today": each configured element, Business Studio then AI, with its demo step) before the section
