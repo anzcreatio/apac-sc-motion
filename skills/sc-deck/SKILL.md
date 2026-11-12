@@ -35,8 +35,12 @@ long titles, semicolons, em dashes): fix them in `deck.json`, don't ignore them.
 ## After every build
 
 1. Read the warnings. Each one is a fix or a deliberate choice you can explain.
-2. **Open every PNG** and look: text cut off, overlaps, empty areas, wrong screenshot, placeholder text.
-3. Fix in `deck.json`, rebuild, look again.
+2. **First build: open every PNG** and look: text cut off, overlaps, empty areas, wrong screenshot, placeholder text.
+3. Fix in `deck.json`, rebuild, then **open the PNGs of the slides you changed only** (each slide is built from its
+   own entry, so the others can't have moved). Keep a list of the slide numbers you edited. **Open every PNG again**
+   when the change could touch every slide: template, theme, deal name or other fields shared by all slides, slides
+   added, removed or reordered (numbers shift), library slides changed, or a new version of the builder. Each slide
+   image costs about 1.2k tokens, so a 15-slide deck is ~18k per full look.
 4. Tell the SC the deck path and anything they must check (numbers, quotes, claims).
 
 ## Library slides

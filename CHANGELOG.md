@@ -4,6 +4,11 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.16.1 (12 Nov 2026): faster deck checks
+- `sc-deck` and `sc-first-meeting`: Claude still looks at every slide on the first build. After a fix it looks
+  again only at the slides it changed, unless the change can affect every slide (template, shared fields, slides added
+  or moved, library slides, new builder). Same checks, roughly half the tokens on a typical deck.
+
 ## 0.16.0 (12 Nov 2026): Claude tells you about updates
 - When you open Claude, the plugin now checks SharePoint. If a newer version is published, Claude tells you and
   gives you the update command. After you update, Claude shows what's new once, and offers any one-off step.

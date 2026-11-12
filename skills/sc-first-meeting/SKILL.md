@@ -75,7 +75,8 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    the designed timeline shows **one** question, the most important of the 3 meeting questions; the other two go in
    the slide's notes). Talk track in each slide's `notes`.
 5. **Build and check the deck:** run the `sc-deck` skill (`python ../sc-deck/scripts/build_deck.py <deal>/deck.json
-   --render`). Read every warning, open every PNG, fix and rebuild until clean. **If the render is skipped** (a Mac without a working PowerPoint export): open the .pptx for the SC, ask them to look at every slide the builder warned about and tell you or paste a screenshot of anything wrong.
+   --render`). Read every warning, open every PNG on the first build, fix and rebuild until clean; after a fix, look
+   again at the changed slides only, unless the change can touch every slide (`sc-deck` "After every build", step 3). **If the render is skipped** (a Mac without a working PowerPoint export): open the .pptx for the SC, ask them to look at every slide the builder warned about and tell you or paste a screenshot of anything wrong.
 5b. **Before the light configuration is built,** ask the SC the three pre-build questions in
    `../sc-demo-plan/SKILL.md` step 0 (competition, anything else the customer gave us, anything else we should know),
    at the top of your message, and record the answers in `01-fm-prep.md`.
@@ -91,7 +92,7 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    we've set up for today": each configured element, Business Studio then AI, with its demo step) before the section
    slide, and replace each `component` slide with 1–2 `screen` slides: the real screenshot, numbered callouts or icon
    headings that summarise the element in one line each, and the customer's quote. Keep `component` slides only for
-   parts that weren't built. Rebuild, render, look at every slide.
+   parts that weren't built. Rebuild, render, look at every slide (slides were added and replaced, so numbers moved).
 8. **Report back** in ≤ 10 lines: coverage score, track, top pain, the deck path, what the SC must check, and open gaps.
 
 ## `01-fm-prep.md` outputs
