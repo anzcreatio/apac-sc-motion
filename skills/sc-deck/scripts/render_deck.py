@@ -30,6 +30,13 @@ def pdf_to_png(pdf, out_dir, width=1600):
 
 
 def mac_pdf(deck, tmp):
+    # PowerPoint for Mac is sandboxed: it can write inside its own container without a "Grant File Access" prompt.
+    box = os.path.expanduser("~/Library/Containers/com.microsoft.Powerpoint/Data/tmp")
+    try:
+        os.makedirs(box, exist_ok=True)
+        tmp = tempfile.mkdtemp(prefix="sc-render-", dir=box)
+    except OSError:
+        pass
     pdf = os.path.join(tmp, os.path.splitext(os.path.basename(deck))[0] + ".pdf")
     # A copy, so PowerPoint never holds or changes the original (OneDrive-synced files lock easily).
     copy = os.path.join(tmp, os.path.basename(deck))
@@ -78,7 +85,10 @@ def render(deck, out_dir):
         if not pdf:
             print("Couldn't render: no PowerPoint export and no LibreOffice. The deck is fine; open it in PowerPoint to check it.")
             sys.exit(2)
-        return pdf_to_png(pdf, out_dir)
+        n = pdf_to_png(pdf, out_dir)
+        if "com.microsoft.Powerpoint" in pdf:  # the copy and PDF in PowerPoint's container
+            shutil.rmtree(os.path.dirname(pdf), ignore_errors=True)
+        return n
 
 
 if __name__ == "__main__":

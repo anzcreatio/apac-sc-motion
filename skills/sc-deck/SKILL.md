@@ -19,7 +19,7 @@ Standard: `../../standards/DECK-STANDARD-v0.3.md` (slide order, word rules, ever
 |---|---|
 | Build + render | `python scripts/build_deck.py <deal>/deck.json --render` → `<out>.pptx` and `<out>-png/slide-NN.png` |
 | Build to another file | add `--out <file.pptx>` |
-| Render any deck | `python scripts/render_deck.py <pptx> <dir>` (Windows: PowerPoint; Mac: PowerPoint for Mac, else LibreOffice, then PyMuPDF). If it can't render, the deck is still fine |
+| Render any deck | `python scripts/render_deck.py <pptx> <dir>` (Windows: PowerPoint; Mac: PowerPoint for Mac, else LibreOffice, then PyMuPDF). If it can't render (exit 2), the deck is still fine: open it for the SC and ask them to check the slides by eye |
 | Put corporate slides in the library (**Windows only**) | `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/office_deck.ps1 -Action extract -Deck <pptx> -Slides "4,5,6" -Out "<team root>/Slide-library/<name>-<yyyy-mm>.pptx"` |
 
 Needs Python 3 with `python-pptx` and `Pillow` (Mac: plus `pymupdf` to render); PowerPoint only to render. Library slides are copied in Python

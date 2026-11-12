@@ -8,8 +8,11 @@ For the why and the flow, flick through `APAC-SC-Motion-Overview.pptx` in this f
 - **The SharePoint folder on your computer.** If you can see this file in File Explorer (Windows) or Finder (Mac), you're
   done. If you're reading it in the browser: open the site → Documents → **Add shortcut to OneDrive** (or **Sync**),
   then wait until `APAC Solution Consulting - Documents` appears in File Explorer or Finder.
-- **Python 3.** Windows: install from python.org and tick **Add python.exe to PATH**. Mac: install from python.org.
-  Not sure? Skip it: Claude checks during setup and tells you what to do.
+- **Keep it downloaded.** Right-click the `Plugin` folder → **Always keep on this device** (Windows: File Explorer;
+  Mac: Finder). Do the same for `Deals` later.
+- **Python 3.10 or newer.** Windows: install from python.org and tick **Add python.exe to PATH**. Mac: install from
+  python.org. Not sure? Skip it: Claude checks during setup and tells you what to do.
+- **Mac only:** when macOS asks whether Claude can access files in OneDrive, click **Allow**.
 - **Claude.** Open the **Claude desktop app → Code tab** and start a new session in any folder, for example Documents.
 
 ## 2. Paste this into Claude
@@ -25,11 +28,12 @@ Please set me up for the Creatio APAC SC motion. I'm an SC on the APAC team.
    If it does, run:
      claude plugin marketplace add "<full path to Plugin/apac-sc-motion>"
      claude plugin install apac-sc-motion@apac-sc
-   If it doesn't, give me these two lines to type into this chat box myself, one at a time, with the real path filled in
-   (for the second one I choose "user" scope in the panel that opens):
+   If it doesn't, give me these two lines to paste into this chat box myself, one at a time, with the real absolute
+   path filled in (no ~, quotes kept; for the second one I choose "user" scope in the panel that opens):
      /plugin marketplace add "<full path to Plugin/apac-sc-motion>"
      /plugin install apac-sc-motion@apac-sc
-4. Check it worked, then tell me to start a new session (or type /reload-plugins) and say "start the sc-guide".
+4. Check it worked (`claude plugin list`, or ask me to type /plugin and look for apac-sc-motion under Installed),
+   then tell me to start a new session (or type /reload-plugins) and say "start the sc-guide".
 Don't change any system settings, and ask me before installing anything else.
 ```
 

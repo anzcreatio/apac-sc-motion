@@ -73,7 +73,7 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    the designed timeline shows **one** question, the most important of the 3 meeting questions; the other two go in
    the slide's notes). Talk track in each slide's `notes`.
 5. **Build and check the deck:** run the `sc-deck` skill (`python ../sc-deck/scripts/build_deck.py <deal>/deck.json
-   --render`). Read every warning, open every PNG, fix and rebuild until clean.
+   --render`). Read every warning, open every PNG, fix and rebuild until clean. **If the render is skipped** (a Mac without a working PowerPoint export): open the .pptx for the SC, ask them to look at every slide the builder warned about and tell you or paste a screenshot of anything wrong.
 5b. **Before the light configuration is built,** ask the SC the three pre-build questions in
    `../sc-demo-plan/SKILL.md` step 0 (competition, anything else the customer gave us, anything else we should know),
    at the top of your message, and record the answers in `01-fm-prep.md`.
@@ -134,7 +134,7 @@ any is missing, say so and let the SC decide.
 - [ ] Every component has Business Studio first and at least one real AI line
 - [ ] Every "shown today" is in the configuration brief, and the brief fits half a day
 - [ ] No claim outside the catalogue; no AI/data line outside "can say"
-- [ ] Deck rendered, every slide looked at, no builder warnings left unexplained
+- [ ] Deck rendered (or, if rendering was skipped, the SC has looked at every slide), no builder warnings left unexplained
 - [ ] The deck's last notes and `01-fm-prep.md` end with "SC check required before this is used with the customer."
 
 ## Talking to the SC
