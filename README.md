@@ -38,7 +38,7 @@ New SCs: open SharePoint `Plugin/START-HERE.md` and paste its prompt into Claude
 | What | Where | Why |
 |---|---|---|
 | Skills, standards, templates, catalogue | This repo | Versioned; everyone updates with one command |
-| Deals, transcripts, presented decks | SharePoint **APAC Solution Consulting** → Documents → `Deals/<account>/` | Customer data stays in the Creatio tenant; synced to each SC |
+| Deals, transcripts, presented decks | SharePoint **APAC Solution Consulting** → Documents → `Deals/<account>-<initials>/` (rule in `sc-setup`) | Customer data stays in the Creatio tenant; synced to each SC |
 | Corporate slides | SharePoint `Slide-library/` | Large binaries; `library:<file>` in `deck.json` |
 | New templates and corporate content | SharePoint `_inbox/` | Download from the Knowledge Hub, drop here; `sc-inbox` reviews |
 | Weekly digests | SharePoint `Lessons/` | Readable by the team |

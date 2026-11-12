@@ -101,8 +101,9 @@ customer-facing output with a reminder of what Renzo still needs to check.
 
 ## B. Next step on a deal
 
-1. Find the deal folder (`<team root>/Deals/<account>/`; ask which if unclear; offer to create it in kebab case for a
-   new deal).
+1. Find the deal folder (`<team root>/Deals/<account>/` or `<account>-<initials>/`; ask which if unclear). For a new
+   deal, offer to create `<kebab-case-account>-<sc>/` by the deal folder rule in `sc-setup` (one folder per account;
+   `sc` initials from `~/.apac-sc-motion.json`).
 2. **Ask first, at the top:** "When was your last meeting with them, and what's the next one?" File names can't tell
    whether a meeting happened. Then read the folder, matching loosely (numbers and names vary between older and newer
    deals): prep = `*fm-prep*` or `*W1*pack*`; transcript = `*transcript*`; click path = any `click*/` folder; review =

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.1 (12 Nov 2026): deal folders carry the creator's initials
+- `sc-setup` step 1b stores the SC's initials as `"sc"` in `~/.apac-sc-motion.json` (`rh` Renzo, `wn` Willy, `fa`
+  Ferdhi; suggested from the computer login, the SC confirms). New "Deal folder rule": `<account>-<sc>`, deal folder
+  only, one folder per account (reuse it whatever its suffix), never renamed. Folders made before 12 Nov keep their names.
+- Applied in `sc-first-meeting`, `sc-guide`, `sc-rfp` and `sc-workshop`. **Each SC: run `sc-setup` once after updating.**
+
 ## 0.15.0 (12 Nov 2026): build plan before any build
 - **New gate:** `sc-first-meeting` step 6b and `sc-demo-plan` step 12a. The SC approves a visual build plan before any
   stand is touched (Renzo stopped the Navalo build to add it).

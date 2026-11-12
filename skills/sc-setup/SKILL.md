@@ -1,6 +1,6 @@
 ---
 name: sc-setup
-description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin, on Windows or a Mac - finds the synced APAC Solution Consulting SharePoint folder, records it in ~/.apac-sc-motion.json, and checks Python, python-pptx, Pillow, openpyxl, python-docx, PyMuPDF (Mac), PowerPoint, the deck builder, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
+description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin, on Windows or a Mac - finds the synced APAC Solution Consulting SharePoint folder, records it and the SC's initials (rh, wn, fa: the suffix on new deal folders) in ~/.apac-sc-motion.json, holds the deal folder naming rule, and checks Python, python-pptx, Pillow, openpyxl, python-docx, PyMuPDF (Mac), PowerPoint, the deck builder, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
 ---
 
 # sc-setup
@@ -42,11 +42,37 @@ wouldn't sync.
 Found → write `~/.apac-sc-motion.json` (Windows: `C:\Users\<me>\.apac-sc-motion.json`):
 
 ```json
-{"sharepoint_root": "<full path>", "python": "python | python3", "platform": "windows | mac", "checked": "<yyyy-mm-dd>"}
+{"sharepoint_root": "<full path>", "python": "python | python3", "platform": "windows | mac", "sc": "rh | wn | fa", "checked": "<yyyy-mm-dd>"}
 ```
 
 Suggest (don't force) keeping `Deals` and `Plugin` downloaded: Windows right-click → **Always keep on this device**;
 Mac right-click in Finder → **Always Keep on This Device**. Builds then don't wait for downloads.
+
+## 1b. Who is this SC (initials)
+
+New deal folders carry the creator's initials as a suffix (see "Deal folder rule" below). Claude can't see which
+Claude account is signed in, so the initials are stored once in the config as `"sc"`:
+
+| SC | `sc` |
+|---|---|
+| Renzo | `rh` |
+| Willy | `wn` |
+| Ferdhi | `fa` |
+
+Suggest one from the computer login (Windows `$env:USERNAME`, Mac `whoami`; e.g. `r.huruiti` → `rh`) and **ask the SC
+to confirm** it; never save a guess. A new SC not in the table: ask for two lowercase letters and tell Renzo to add
+them here. Keep any other keys already in the file.
+
+## Deal folder rule (every skill that creates a deal folder follows it)
+
+1. Name: `<team root>/Deals/<kebab-case-account>-<sc>/`, e.g. `adira-finance-rh`. The suffix goes on the deal folder
+   only, never on subfolders (`rfp/`, `workshop/`, `click*/`) or files.
+2. **One folder per account.** Before creating, look in `Deals/` for the account with no suffix or any suffix
+   (`<account>`, `<account>-rh`, `<account>-wn`, …). Found → use it, don't create a second one. Close match (e.g.
+   `bank-mandiri` vs `mandiri`) → ask the SC.
+3. No `sc` in the config → run step 1b first. Never guess the initials.
+4. The suffix records who **created** the folder. Never rename it, even when the deal moves to another SC (renaming
+   breaks saved paths). Folders made before 12 Nov 2026 have no suffix and stay as they are.
 
 ## 2. Check the tools
 

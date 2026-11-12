@@ -20,6 +20,9 @@ calling the scripts by their full path. On Windows, set `PYTHONIOENCODING=utf-8`
 
 ## Files (deal folder `<team root>/Deals/<account>/workshop/`)
 
+No deal folder yet → create `<kebab-case-account>-<sc>/` by the deal folder rule in `sc-setup` (reuse the account's
+folder if it exists with any suffix).
+
 | File | Made in step | Who sees it |
 |---|---|---|
 | `wN-00-prework-email.md` | 1 | Customer (via the AE), SC check |

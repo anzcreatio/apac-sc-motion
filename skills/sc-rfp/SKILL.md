@@ -18,7 +18,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
 | Input | Required | If missing |
 |---|---|---|
 | The RFP / TOR file(s): xlsx, PDF or Word | Yes | Ask |
-| Deal folder `<team root>/Deals/<account>/` | Yes | Create it; files go in `rfp/`, the original as `00-<name>.<ext>` (never edit it) |
+| Deal folder `<team root>/Deals/<account>/` (or `<account>-<initials>/`) | Yes | Reuse the account's folder if it exists with any suffix; otherwise create `<kebab-case-account>-<sc>/` by the deal folder rule in `sc-setup`. Files go in `rfp/`, the original as `00-<name>.<ext>` (never edit it) |
 | Competition (names), other customer info, the deadline | Ask at the top (the pre-build questions) | Note "unknown" |
 | The customer's scoring or weights | If given | Count every requirement equally |
 
