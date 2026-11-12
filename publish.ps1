@@ -35,7 +35,10 @@ if ($LASTEXITCODE -ge 8) { throw "robocopy failed with exit code $LASTEXITCODE" 
 $pluginDir = Split-Path $Target -Parent
 Copy-Item (Join-Path $repo 'rollout\START-HERE.md') (Join-Path $pluginDir 'START-HERE.md') -Force
 $deck = Join-Path $repo 'rollout\overview\APAC-SC-Motion-Overview.pptx'
-if (Test-Path $deck) { Copy-Item $deck (Join-Path $pluginDir 'APAC-SC-Motion-Overview.pptx') -Force }
+if (Test-Path $deck) {
+  try { Copy-Item $deck (Join-Path $pluginDir 'APAC-SC-Motion-Overview.pptx') -Force -ErrorAction Stop }
+  catch { Write-Warning "Overview deck not copied (open in PowerPoint?). Close it and copy rollout\overview\APAC-SC-Motion-Overview.pptx to Plugin\ by hand." }
+}
 $commit = git -C $repo log -1 --format='%h %s'
 Set-Content -Path (Join-Path $Target 'PUBLISHED.txt') -Value "Version $version, published $(Get-Date -Format 'yyyy-MM-dd HH:mm') from commit $commit" -Encoding UTF8
 Write-Output "Published apac-sc-motion $version to $Target"
