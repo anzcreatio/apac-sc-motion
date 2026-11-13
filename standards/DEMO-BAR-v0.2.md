@@ -72,7 +72,7 @@ for export from the first click:
 | Custom components apart | JS-only (no compile), own package, source in `C:\Projects\builds\<deal>\` (Mac: `~/Projects/builds/<deal>/`) and copied to the library | Partners and the next SC can rebuild them |
 | Keep scripts and prompts | clio commands, builder scripts, AI skill and agent prompts as files in the deal folder | Half of what makes a build repeatable |
 
-While building, follow `BUILD-RULES-v0.1.md` (compile and restart only with the SC's OK; token check first).
+While building, follow `BUILD-RULES-v0.2.md` (compile and restart only with the SC's OK; token check first; a rollback plan before custom components or code).
 
 If a deal needs a shortcut that breaks a rule (time pressure, a standard object change), note it in the build log.
 That's allowed; hiding it isn't.

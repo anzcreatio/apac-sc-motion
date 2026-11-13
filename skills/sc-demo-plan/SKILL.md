@@ -104,8 +104,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     A change after approval is shown and approved again.
 12. **Hand-off** (only after 12a is approved). Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
-    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.1.md`**: refresh before any
-    compile or restart, ask the SC before one, and check the OData token first when calls suddenly fail.
+    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.2.md`**: refresh before any
+    compile or restart, ask the SC before one, check the OData token first when calls suddenly fail, and **write a
+    rollback plan before any custom component or code** (backup, how to undo, how to check, the demo's plan B). The
+    plan lists the rollback for every element marked custom.
 13. **AE brief (every demo session, Renzo 12 Nov 2026).** Write `ae-brief.json` in the deal folder and build the page:
     `python scripts/build_ae_brief.py <deal>/ae-brief.json --out <deal>/NN-ae-brief.html`. Also add an `agenda` slide
     to `deck.json` (deck standard 1b) with the same decision question. Then give it to the AE: publish it as an

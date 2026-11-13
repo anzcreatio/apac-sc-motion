@@ -1,6 +1,6 @@
-# Build rules v0.1: while configuring a demo stand
+# Build rules v0.2: while configuring a demo stand
 
-**What it is:** two habits every demo build follows, whichever tool runs it (the demo toolkit, clio, or Claude by hand).
+**What it is:** three habits every demo build follows, whichever tool runs it (the demo toolkit, clio, or Claude by hand).
 **Agreed:** Renzo, 13 Nov 2026. `sc-setup` copies the short version into the demo toolkit's local notes for
 `creatio-demo-build`, so every build session reads it.
 
@@ -30,8 +30,29 @@ failed", a login page coming back instead of JSON, or calls that worked a minute
 3. Still failing? Only now start debugging the change itself.
 4. Never type a password and never open `CREDENTIALS.md`. If the refresh needs a password or a sign-in, ask the SC to do it.
 
+## 3. A rollback plan before anything risky
+
+**Before** you install a custom component, deploy code (C# source code, a script task, a JS component, a package
+from outside), change a standard object or a shared system setting, or make any change you can't undo with one click,
+write the rollback in the build log, and tell the SC in one line. Needed for anything marked custom in the demo plan;
+not needed for pages, captions, rules or data in our own package.
+
+| Write down | Example |
+|---|---|
+| **Backup taken first** | Package exported (`clio` pull or the toolkit's package backup) to `<deal>/build/pkg-backup/<yyyy-mm-dd>/`; the page's current body saved as `backup-<page>-v<n>.js`; system setting values noted |
+| **What breaks if it fails** | "The Site page won't open"; "compile fails and the stand is down" |
+| **How to roll back, step by step** | Remove the component from the page and save the backed-up body · uninstall or delete the package · restore the setting value · re-run the reset script |
+| **How we check it worked** | The page opens; the click path's first three steps pass |
+| **Plan B for the demo** | Show the native version of the screen, or the backup screenshot / clip from the click path |
+
+Rules:
+- Keep custom components and code in **their own package** (demo bar §6b), so rolling back is removing one package.
+- Never roll back on a stand someone else is using without the SC's OK (it may need a compile or restart: section 1).
+- After a rollback, note in the build log what failed and why, so the next build doesn't repeat it.
+
 ## Changes
 
 | Version | Date | Change |
 |---|---|---|
+| v0.2 | 13 Nov 2026 | Section 3: a rollback plan before custom components, code, standard-object or shared-setting changes (Renzo) |
 | v0.1 | 13 Nov 2026 | First version: compile and restart with permission; token check before debugging (Renzo) |
