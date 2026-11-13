@@ -14,7 +14,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(HERE, "..", "templates", "build-plan.html")
-SCREEN_TYPES = {"record", "list", "table", "dashboard", "panel", "beforeafter"}
+SCREEN_TYPES = {"record", "list", "table", "dashboard", "panel", "beforeafter", "custom"}
+CUSTOM_LAYOUTS = {"journey": "steps", "matrix": "items", "scorer": "criteria", "trace": "rows"}
 CHIPS = {"built", "simulated", "existing", "parked"}
 TAGS = {"C", "P", "I", "A"}
 DIFFS = {"D1", "D2", "D3", "D4", "D5", "D6", "D7"}
@@ -35,6 +36,14 @@ def check_screen(s, where, E):
         return
     if not s.get("page"):
         E.append("%s: screen has no 'page' name" % where)
+    for c, w in ([(s, where)] if t == "custom" else []) + ([(s["custom"], where + ".custom")] if s.get("custom") else []):
+        lay = c.get("layout")
+        if lay not in CUSTOM_LAYOUTS:
+            E.append("%s: custom layout '%s' is not one of %s" % (w, lay, sorted(CUSTOM_LAYOUTS)))
+        elif not c.get(CUSTOM_LAYOUTS[lay]):
+            E.append("%s: custom %s needs '%s'" % (w, lay, CUSTOM_LAYOUTS[lay]))
+        if not c.get("component"):
+            E.append("%s: custom component needs a 'component' name (it's marked custom in the plan)" % w)
     if t == "record" and "stages" in s and not 0 <= s.get("stage", -1) < len(s["stages"]):
         E.append("%s: 'stage' must index into 'stages'" % where)
     for tbl in [s] + ([s["list"]] if s.get("list") else []):

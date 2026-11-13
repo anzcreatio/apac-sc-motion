@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Build Plan</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
@@ -96,6 +97,42 @@ footer{font-size:13px;color:var(--muted)}
 .idea{border-left:3px solid var(--idea);padding-left:10px;background:var(--idea-soft);border-radius:0 6px 6px 0;padding-block:6px}
 .idea dt{color:var(--idea)}
 q{font-weight:500;quotes:"\201C" "\201D"}
+/* custom component wireframes */
+.wf.custom{border-color:var(--idea);border-style:dashed}
+.cbadge{font:600 11px var(--body);color:var(--idea);border:1px solid var(--idea);background:var(--idea-soft);border-radius:999px;padding:1px 8px}
+.journey{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:6px}
+.jstep{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:6px 8px;display:grid;gap:2px;font-size:12px;position:relative}
+.jstep b{font-size:12px}.jstep .muted{font-size:11px}
+.jstep.pain{border-color:var(--accent)} .jstep .pain-txt{color:var(--accent);font-size:11px}
+.jstep.hl{outline:2px solid var(--accent)} .jnum{font:600 11px var(--display);color:var(--muted)}
+.matrix-wrap{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px}
+@media (max-width:620px){.matrix-wrap{grid-template-columns:1fr}}
+.matrix{position:relative;aspect-ratio:4/3;border:1px solid var(--line);border-radius:8px;background:
+  linear-gradient(var(--line),var(--line)) 50% 0/1px 100% no-repeat,linear-gradient(var(--line),var(--line)) 0 50%/100% 1px no-repeat,var(--surface)}
+.matrix .ax{position:absolute;font-size:11px;color:var(--muted)} .matrix .ax.x{bottom:3px;right:8px} .matrix .ax.y{top:4px;left:8px}
+.matrix .q{position:absolute;font-size:10.5px;color:var(--muted);top:6px;right:8px;font-weight:600}
+.dot{position:absolute;transform:translate(-50%,50%);border-radius:999px;background:var(--accent-soft);border:1.5px solid var(--accent);display:grid;place-items:center;font-size:10.5px;font-weight:600;text-align:center;line-height:1.1;padding:2px}
+.dot.top{background:var(--accent);color:#fff}
+.rail{display:grid;gap:5px;align-content:start}
+.rail .ri{display:flex;gap:6px;align-items:baseline;border:1px solid var(--line);border-radius:6px;padding:4px 8px;background:var(--surface);font-size:12px}
+.rail .ri b{font-family:var(--display)} .rail .ri.top{border-color:var(--accent);background:var(--accent-soft)}
+.scorer{display:grid;gap:6px}
+.crit{display:grid;grid-template-columns:minmax(0,.55fr) minmax(0,2.45fr);gap:8px;align-items:center;font-size:12px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.seg span{border:1px solid var(--line);border-radius:5px;padding:3px 5px;font-size:11px;background:var(--surface);text-align:center}
+.seg span.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.ring{justify-self:end;font:600 20px var(--display);border:3px solid var(--accent);border-radius:999px;width:58px;height:58px;display:grid;place-items:center}
+.trace{display:grid;gap:6px}
+.trow{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:0;align-items:stretch}
+.tcell{border:1px solid var(--line);border-radius:7px;background:var(--surface);padding:5px 8px;font-size:11.5px;position:relative;margin-right:18px}
+.tcell:not(:last-child)::after{content:"→";position:absolute;right:-15px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
+.tcell:last-child{margin-right:0}
+.thead .tcell{background:none;border:none;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:0 8px}
+.thead .tcell::after{content:""}
+.trow.hl .tcell{border-color:var(--accent);background:var(--accent-soft)}
+.st{font:600 10.5px var(--body);border-radius:999px;padding:0 6px;border:1px solid var(--line);margin-left:4px;white-space:nowrap}
+.st.shown{color:var(--ok);border-color:var(--ok)} .st.simulated{color:var(--sim);border-color:var(--sim)} .st.planned{color:var(--muted)} .st.gap{color:var(--accent);border-color:var(--accent)}
+@media (max-width:620px){.trow{grid-template-columns:1fr}.tcell{margin:0 0 14px}.tcell:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-15px;transform:none}}
 .cov{font-size:12px;font-weight:600;border-radius:999px;padding:1px 8px;border:1px solid var(--line)}
 .cov.covered{color:var(--ok);border-color:var(--ok)} .cov.partly{color:var(--sim);border-color:var(--sim);background:var(--sim-soft)}
 .cov.not-shown{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
@@ -149,8 +186,34 @@ function screen(s){
     body = `${kpis(s.kpis)}${bars(s.bars)}${bars(s.bars2)}`;
   } else if (s.type === "panel"){
     body = `${(s.lines||[]).map(l=>`<div>${esc(l)}</div>`).join("")}`;
+  } else if (s.type === "custom"){
+    body = custom(s);
   }
-  return `<div class="wf"><div class="wf-bar"><span class="wf-title">${esc(s.page)}</span><span class="btns">${btns}</span></div><div class="wf-body">${body}</div></div>`;
+  const top = s.type === "record" && s.custom ? `${body}<div class="wf custom" style="margin-top:2px"><div class="wf-bar"><span class="wf-title">${esc(s.custom.title||"")}</span><span class="cbadge">custom · ${esc(s.custom.component||"")}</span></div><div class="wf-body">${custom(s.custom)}</div></div>` : body;
+  const badge = s.type === "custom" ? `<span class="cbadge">custom · ${esc(s.component||"")}</span>` : "";
+  return `<div class="wf ${s.type==="custom"?"custom":""}"><div class="wf-bar"><span class="wf-title">${esc(s.page)}</span><span class="btns">${badge}${btns}</span></div><div class="wf-body">${top}</div></div>`;
+}
+function custom(s){
+  const note = s.note ? `<div class="caption">${esc(s.note)}</div>` : "";
+  if (s.layout === "journey"){
+    return `${note}<div class="journey">${(s.steps||[]).map((j,i)=>`<div class="jstep ${j.pain?"pain":""} ${(s.highlight_steps||[]).includes(i)?"hl":""}"><span class="jnum">${i+1}</span><b>${esc(j.title)}</b><span class="muted">${esc(j.who||"")}${j.where?` · ${esc(j.where)}`:""}</span>${j.pain?`<span class="pain-txt">⚑ ${esc(j.pain)}</span>`:""}</div>`).join("")}</div>`;
+  }
+  if (s.layout === "matrix"){
+    const pos = v => ((Number(v)||1)-0.5)/3*100;
+    const dots = (s.items||[]).map((d,i)=>{const z=34+(Number(d.size)||1)*10;return `<div class="dot ${d.top?"top":""}" style="left:${pos(d.x)}%;bottom:${pos(d.y)}%;width:${z}px;height:${z}px" title="${esc(d.label)}">${esc(d.short||d.label)}</div>`;}).join("");
+    const rail = s.rail ? `<div class="rail"><b class="small">${esc(s.rail.title||"")}</b>${s.rail.items.map((r,i)=>`<div class="ri ${i===0?"top":""}"><b>${i+1}</b><span>${esc(r)}</span></div>`).join("")}</div>` : "";
+    return `${note}<div class="matrix-wrap"><div class="matrix">${s.quadrant?`<span class="q">${esc(s.quadrant)}</span>`:""}${dots}<span class="ax x">${esc(s.x_label||"")} →</span><span class="ax y">↑ ${esc(s.y_label||"")}</span></div>${rail}</div>`;
+  }
+  if (s.layout === "scorer"){
+    const rows = (s.criteria||[]).map(c=>`<div class="crit"><span>${esc(c.name)}</span><div class="seg">${(c.levels||[]).map((l,i)=>`<span class="${i+1===Number(c.value)?"on":""}">${i+1} · ${esc(l)}</span>`).join("")}</div></div>`).join("");
+    return `${note}<div class="split"><div class="scorer">${rows}</div><div style="display:grid;justify-items:end;align-content:start;gap:4px"><div class="ring">${esc(s.total||"")}</div><span class="caption">${esc(s.total_label||"")}</span></div></div>`;
+  }
+  if (s.layout === "trace"){
+    const n = (s.columns||[]).length, st = String(s.status_col ?? -1);
+    const cell = (c,i) => i===Number(st) ? `<div class="tcell"><span class="st ${esc(String(c).toLowerCase().split(/[ :]/)[0])}">${esc(c)}</span></div>` : `<div class="tcell">${esc(c)}</div>`;
+    return `${note}<div class="trace" style="--n:${n}"><div class="trow thead">${s.columns.map(c=>`<div class="tcell">${esc(c)}</div>`).join("")}</div>${s.rows.map((r,ri)=>`<div class="trow ${(s.highlight_rows||[]).includes(ri)?"hl":""}">${r.map(cell).join("")}</div>`).join("")}</div>`;
+  }
+  return note;
 }
 
 function render(){
@@ -161,7 +224,7 @@ function render(){
     return (st.triggers||[]).map(t=>`<div><dt>Why we show it</dt><dd><q>${esc(t.quote)}</q></dd><dd class="small muted">${esc(t.who)}${t.at?` · ${esc(t.at)}`:""}<span class="tag">${esc(t.tag||"C")}</span></dd></div>`).join("");
   };
   const steps = (D.steps||[]).map((st,i)=>`
-    <article class="step ${st.screen&&st.screen.type==="beforeafter"?"wide":""} ${st.our_idea?"is-idea":""}" id="step-${i+1}">
+    <article class="step ${st.screen&&(st.screen.type==="beforeafter"||st.screen.wide)?"wide":""} ${st.our_idea?"is-idea":""}" id="step-${i+1}">
       <div class="step-head"><span class="stepnum">${i+1}</span><h3>${esc(st.title)}</h3>${(st.chips||[]).map(c=>`<span class="chip ${esc(c)}">${esc(c)}</span>`).join("")}${st.our_idea?`<span class="chip idea">our idea</span>`:""}${st.reuse?`<span class="chip reuse" title="${esc(st.reuse)}">reusable</span>`:""}${st.minutes?`<span class="mins">${esc(st.minutes)} min</span>`:""}</div>
       <div style="display:grid;gap:10px;min-width:0">${screen(st.screen)}</div>
       <dl class="notes">

@@ -4,6 +4,38 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.17.0 (13 Nov 2026): demo depth, build rules, Bank.AI log, deal dates, custom components
+- Build rules (`standards/BUILD-RULES-v0.2.md`): try a browser refresh before any compile or restart and ask the SC
+  first; when calls suddenly fail (401/403, a login page instead of JSON), check and refresh the OData token first;
+  before a custom component, code, a standard-object or shared-setting change, back up and write a rollback plan (undo
+  steps, how to check, the demo's plan B). `sc-setup` adds a short version to the demo toolkit's local notes for
+  `creatio-demo-build`.
+- New skill `sc-bank-ai-log` (BFSI deals): the customer's requirements in their words, our proposed configuration, fit
+  and gaps, written to SharePoint `Bank-AI-Requirements/` for the Bank.AI team. No demo, meeting, commercial,
+  competitor or people content (the script refuses it). Hooked into sc-first-meeting, sc-rfp, sc-workshop,
+  sc-demo-plan and sc-meeting-review. Backfilled: Pegadaian, Mandiri Sekuritas, Adira Finance (320 lines, 17 gaps);
+  Navalo added 13 Nov (10 lines).
+- Deal dates on every deal: `deal-dates.json` records the first call (BDR, AE or discovery), when the SC got the
+  transcript, and the demo (planned, then done); Claude asks only for missing dates (`sc-guide/scripts/deal_dates.py`).
+  The Friday digest reports the medians in `Lessons/stats/deal-timing.md`.
+- `sc-first-meeting` (FM v0.5) asks first: **introduction to Creatio, or a detailed demo on their pains?**
+  Introduction = the plan as before (light config, ≤ half a day). Detailed = best-practice pains from the pack (tagged
+  I) on the understanding slide, a success-criteria email for the AE so the customer ranks them before the meeting,
+  and the configuration planned at Full level through `sc-demo-plan` (three questions, build plan, approval). Less than
+  3 working days to the meeting → Claude says so and suggests the hero journey only or moving the meeting. `sc-guide`
+  asks the same question on a new deal.
+- `sc-demo-plan` build plan: a new `custom` screen type draws custom Freedom UI components as wireframes
+  (`layout`: `journey` = steps with pain flags, `matrix` = a value × ease board with a ranked list, `scorer` =
+  criteria scored 1–3 with a total, `trace` = what they said → requirement → what we built → status). A `record` screen can carry one too (`"custom": {...}`), and `"wide": true` gives a
+  step the full width. Custom parts show a dashed purple frame and a "custom" badge. First used on East West Bank.
+- Fix: build plan pages now declare UTF-8, so "·", "…" and quotes no longer show as garbled characters.
+- New `standards/UI-KIT-STANDARD-v0.3.md`: the rules for custom Freedom UI components in the shared `labUiKit`
+  (no-code settings, upgrade-safe, one package), which components exist and where they're proven, and the traps when
+  placing them on a page. Three are live on Navalo: Group holdings, Decision checks and Flow timeline (a record's
+  journey with who, when and time between steps). Native next-step banners are the pattern for "what do I do now". Demo bar §6 now points to it:
+  check the kit before building a new component.
+- **Each SC:** after updating, say "run sc-setup" once, so the build rules reach your demo toolkit notes.
+
 ## 0.16.1 (12 Nov 2026): faster deck checks
 - `sc-deck` and `sc-first-meeting`: Claude still looks at every slide on the first build. After a fix it looks
   again only at the slides it changed, unless the change can affect every slide (template, shared fields, slides added
