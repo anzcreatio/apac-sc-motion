@@ -88,6 +88,14 @@ them here. Keep any other keys already in the file.
 The toolkit and clio are only needed to **configure** demos. An SC can prepare first meetings, decks, RFP fit-gaps
 and workshops without them: mark them "later", not "failed".
 
+**Build rules into the toolkit (once the toolkit is installed).** The toolkit reads a local notes file for each skill
+that survives its updates. Ask the SC, then add our build rules to the one for `creatio-demo-build`:
+1. Get the path: `python <toolkit root>/scripts/helpers/local_notes.py path creatio-demo-build` (toolkit root =
+   the newest `creatio-demo-toolkit/<version>` folder under `~/.claude/plugins/cache/`).
+2. If the file doesn't already contain `apac-sc-motion build rules`, append `../../standards/toolkit-local-notes-block.md`
+   to it (create the file if it's missing). If an older version of the block is there, replace just that block.
+   Never change anything else in the file.
+
 ## 3. Rules
 
 - Never register clio environments, type passwords, create accounts or open `CREDENTIALS.md` files.

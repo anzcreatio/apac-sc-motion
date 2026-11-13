@@ -163,6 +163,7 @@ the next workshop.
 
 ## Rules
 
+- **BFSI deal (bank, lender, multi-finance, pawn, securities, insurer):** when this step is done, run `sc-bank-ai-log` to add the customer's requirements and our proposed configuration to the Bank.AI log. Requirements only: nothing about the demo, the meeting, commercials or competitors.
 - One journey per 2-hour workshop. If the customer offers 2 hours for everything, do one journey well and ask for
   the next session.
 - Their words in the register, the model captions and the playback. Our product words only in verdicts.

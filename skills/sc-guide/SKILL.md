@@ -60,6 +60,7 @@ message. If they want to skip a step, let them and note it.
 | BDR/AE books the meeting | (the AE's BDR card and handoff) | `00-handoff-form.md`, the call transcript |
 | Before the first meeting | `sc-first-meeting` | Prep, the standard deck (`deck.json` → `.pptx`), light config brief, meeting plan |
 | Any deck change | `sc-deck` | Rebuilt deck from `deck.json` |
+| Any step on a BFSI deal (bank, lender, insurer, securities) | `sc-bank-ai-log` | The customer's requirements and our proposed configuration added to the Bank.AI log (SharePoint `Bank-AI-Requirements`) |
 | An RFP, TOR or requirements list arrives | `sc-rfp` | Requirements register, fit-gap, bid / no-bid recommendation; later a check of the bid team's answers |
 | A requirements workshop (Australia, no RFP): 2 hours, one journey | `sc-workshop` | Pre-work email, draft journey, agenda; after it: register, solution model, follow-up email, playback for sign-off |
 | Before building a demo | `sc-demo-plan` | The three pre-build questions, the demo plan, the script for the toolkit |

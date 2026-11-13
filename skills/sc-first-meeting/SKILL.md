@@ -28,6 +28,7 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 
 ## Rules
 
+- **BFSI deal (bank, lender, multi-finance, pawn, securities, insurer):** when this step is done, run `sc-bank-ai-log` to add the customer's requirements and our proposed configuration to the Bank.AI log. Requirements only: nothing about the demo, the meeting, commercials or competitors.
 1. **Who said it decides how we write it.** Customer's words → tag **C**, may be quoted. Partner about the customer →
    **P**, "We understand", never shown as the customer's words. Our research → **I** (source + date in notes).
    Our assumption → **A**, "We think", and it becomes a question. What **our own side** said on the call (AE, BDR,

@@ -103,7 +103,8 @@ Paths are relative to this skill's folder; plugin root = `../..`.
     A change after approval is shown and approved again.
 12. **Hand-off** (only after 12a is approved). Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
-    candidates for the demo library.
+    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.1.md`**: refresh before any
+    compile or restart, ask the SC before one, and check the OData token first when calls suddenly fail.
 13. **AE brief (every demo session, Renzo 12 Nov 2026).** Write `ae-brief.json` in the deal folder and build the page:
     `python scripts/build_ae_brief.py <deal>/ae-brief.json --out <deal>/NN-ae-brief.html`. Also add an `agenda` slide
     to `deck.json` (deck standard 1b) with the same decision question. Then give it to the AE: publish it as an
@@ -204,6 +205,7 @@ packages. Name a library module here if one is reused, and say what gets promote
 
 ## Rules
 
+- **BFSI deal (bank, lender, multi-finance, pawn, securities, insurer):** when this step is done, run `sc-bank-ai-log` to add the customer's requirements and our proposed configuration to the Bank.AI log. Requirements only: nothing about the demo, the meeting, commercials or competitors.
 - The SC owns the demo. Present options and trade-offs, recommend one, and let them choose.
 - Plain words, their vocabulary, per `../../standards/WRITING-STYLE-v0.1.md`.
 - Don't touch a Creatio stand from this skill. Building is the toolkit's job, after the SC approves the plan.

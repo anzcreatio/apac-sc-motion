@@ -70,6 +70,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
 
 ## Rules
 
+- **BFSI deal (bank, lender, multi-finance, pawn, securities, insurer):** when this step is done, run `sc-bank-ai-log` to add the customer's requirements and our proposed configuration to the Bank.AI log. Requirements only: nothing about the demo, the meeting, commercials or competitors.
 - Honest verdicts. "Can be met" is not "standard". When unsure: the weaker fit, lower confidence, and a question.
 - AI, data, hosting, security and residency answers come only from the governance pack's "can say" lines.
 - Claims and proof points come only from the differentiator catalogue. No competitor comparisons in the fit-gap.

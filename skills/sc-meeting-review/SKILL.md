@@ -67,6 +67,8 @@ change needs 2+ deals or 2+ SCs (or one serious failure).
 
 End customer-facing drafts with "SC check required before this is used with the customer."
 
+**BFSI deal:** new requirements or pains the customer stated in this meeting go to `sc-bank-ai-log` (`add`): their words and our proposed configuration only, never the scorecard, the deck comparison or the lessons.
+
 ## Talking to the SC
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
