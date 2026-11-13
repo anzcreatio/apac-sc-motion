@@ -1,8 +1,8 @@
-# UI kit standard v0.2: reusable, no-code, upgrade-safe custom components
+# UI kit standard v0.3: reusable, no-code, upgrade-safe custom components
 
 > Applies to every component in `labUiKit`, the team's shared package of custom Freedom UI components. First written
-> for East West Bank (12 Nov 2026), updated after the Navalo build (13 Nov 2026), where two components were built,
-> installed and used live. Sources: the AI-driven development kit's `dev-custom-components` skill, Creatio Academy "Add
+> for East West Bank (12 Nov 2026), updated after the Navalo build (13 Nov 2026), where three components were built,
+> installed and used live (v0.2: two components; v0.3: Flow timeline and its lessons). Sources: the AI-driven development kit's `dev-custom-components` skill, Creatio Academy "Add
 > the remote module to the library of the Freedom UI Designer", and what broke on the two builds. Demo bar §6 points
 > here.
 
@@ -10,8 +10,9 @@
 
 | Component (`type`) | What it does | Set up in the designer (no code) | Status (13 Nov 2026) |
 |---|---|---|---|
-| Group holdings (`usr.GroupHoldings`) | One card per group (business, brand, entity) with the open record's related records: total, record count, status pill, red or amber top bar when a status needs attention; empty groups dashed | Records object, link column, group column, lookup that lists every group, title / second line / amount / status / note columns, statuses to hide, status colours (`Active=positive; Hardship=critical`), empty-card text, currency, reload-on field | **Live** on Navalo (11014108, Creatio 10.0), kit 0.1.2 |
-| Decision checks (`usr.DecisionChecks`) | Each rule that routes a record: passed, not met or waiting, with detail ("$6,000 over $40,000"), limit bar and a result pill | Record object; checks list (yes/no field, field equals a value incl. `Link.Column` paths, all related records done, amount within a limit); result column and label; currency; reload-on field | **Live** on Navalo, kit 0.1.2 |
+| Group holdings (`usr.GroupHoldings`) | One card per group (business, brand, entity) with the open record's related records: total, record count, status pill, red or amber top bar when a status needs attention; empty groups dashed | Records object, link column, group column, lookup that lists every group, title / second line / amount / status / note columns, statuses to hide, status colours (`Active=positive; Hardship=critical`), empty-card text, currency, reload-on field | **Live** on Navalo (11014108, Creatio 10.0), kit 0.1.5 |
+| Decision checks (`usr.DecisionChecks`) | Each rule that routes a record: passed, not met or waiting, with detail ("$6,000 over $40,000"), limit bar and a result pill | Record object; checks list (yes/no field, field equals a value incl. `Link.Column` paths, all related records done, amount within a limit); result column and label; currency; reload-on field | **Live** on Navalo, kit 0.1.5 |
+| Flow timeline (`usr.FlowTimeline`) | The record's journey: each step with who and when, time since the previous step, an open step "so far", steps not reached yet muted; header "so far" until every step is done, then "end to end"; targets per step and end to end | Record object; steps list (a date on the record, dates on related records each or latest, native approval requested and decided); who (column or fixed text); target hours per step; hide until it happens; total target; reload-on field | **Live** on Navalo application page, kit 0.1.5 (rehearsed 13 Nov) |
 | Criteria scorer (`usr.CriteriaScorer`) | Scores a record 1–3 per criterion with descriptions; live weighted total | Criteria object, score object, link and value columns, total column. Criteria are records (name, three descriptions, weight, active, order) | Built for EWB (branch `ewb-components`, kit 0.2.0), not installed |
 | Step strip (`usr.StepStrip`) | Child records as editable steps with a flag and flag text; add between, reorder | Child object, link, order, title, subtitle, flag and flag-text columns, captions | Built for EWB, not installed |
 | Priority matrix (`usr.PriorityMatrix`) | Records on two axes, size by a third, drag to rescore, ranked list | Object, x, y, size, label, rank and filter columns, axis captions | Built for EWB, not installed |
@@ -33,6 +34,8 @@ fill its settings panel, save the page. Every setting and a worked example: the 
 | Every setting optional with a safe default; nothing set shows **Set me up**; a new record shows **Save the record**; a load error shows a short alert inside the component, never an exception into the page | A wrong setting or an upgrade never breaks the page |
 | `type` names never change; settings are added, never renamed or removed (old names still read, like `caption` → `heading` in 0.1.1); the kit carries a version | Pages built on an older kit keep working |
 | A `refreshOn` input bound to a page field (`$PDS_<Column>`) so the component reloads when that field changes; a sequence guard drops stale loads | The live demo needs no Refresh click |
+| Optional steps stay hidden until they happen (Flow timeline `hideUntilDone`); wording never claims "done" or "end to end" while a step is still to come | A straight-through record must not show a pending approval it will never need |
+| Dates show as stored (the user's profile time zone); "so far" uses the browser clock. Present from a machine in the profile's time zone, and seed demo dates relative to the demo day (a future date sorts before a live stamp) | Otherwise an open step is off by the time-zone difference, and a rehearsal before the demo day scrambles the order |
 | Read-only components never write data; components that write say so in their panel | No surprises on a customer stand |
 | `labUiKit` holds components only: no objects, no standard schema changes, depends only on `CrtCore` + `CrtUIv2`, JS only. Delete clio's C# scaffold (`Files/src/cs`, `Files/Libs`) after `new-ui-project` | Installs on any stand without a compile |
 | Accessibility: keyboard use, ARIA labels, visible focus, text beside every colour, visually hidden state text, `role=meter` on bars; loading state; container queries for laptop and tablet | NFR practices in the dev kit |
@@ -50,6 +53,9 @@ Positive `#0C8701`, critical `#D2310D`, accent `#004FD6`.
 | The validator rejects nested `caption`, `label`, `title`, `tooltip`, `placeholder` keys as inline text | Name nested text fields something else (`heading`); top-level captions as `$Resources.Strings.<Key>` plus `resources` |
 | A new item lands first in a tab and reorders the others | Set every `index` in the tab explicitly |
 | A list keeps a user's old column layout after a page change | List menu ⋮ → Restore default settings |
+| A `move` on a component the same body inserts is discarded | Set the insert's own `parentName` and `index`; keep `move` for template components (e.g. `GeneralInfoTab`) |
+| `update-page` reports an external modification after `create-page-business-rules` (rules change the schema but not clio's baseline) | Re-run `get-page`, confirm the live body equals your base plus your change, then pin `checksum` to the live value and pass `target-schema-uid`, with the SC's OK |
+| Next-step guidance per stage | Native: one banner per stage (FlexContainer + two labels, hidden by default) and a show/hide page-rule pair per banner; no component needed |
 
 ## 4. Build, test, ship
 
@@ -63,7 +69,7 @@ Positive `#0C8701`, critical `#D2310D`, accent `#004FD6`.
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
 replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today: `main`
-= 0.1.2 (Navalo, 2 components); `ewb-components` = 0.2.0 (merged 0.1.1, lacks the 0.1.2 look).
+= 0.1.5 (Navalo, 3 components); `ewb-components` = 0.2.0 (merged 0.1.1, lacks the 0.1.2 look and Flow timeline).
 
 ## 5. Where things live
 
@@ -77,7 +83,7 @@ replaces the other on a stand. Merge before installing on a stand that has anoth
 
 | Version | Stand | Result |
 |---|---|---|
-| 10.0 | 11014108-demo (Navalo) | Group holdings and Decision checks installed, placed, used live (13 Nov 2026) |
+| 10.0 | 11014108-demo (Navalo) | Group holdings, Decision checks and Flow timeline installed, placed, used live; full rehearsal of straight-through, approval and lodgement (13 Nov 2026) |
 | 10.1 | 11014930-demo (EWB) | Not installed yet |
 
 Not yet proven: a first install on a stand that never had `labUiKit` (next: master stand `11011710-demo`, which moves
@@ -98,5 +104,6 @@ the kit to L3), keyboard-only pass, zoneless off.
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| v0.3 | 13 Nov 2026 | Flow timeline added (live); rules for optional steps, honest wording and time zones; traps: moves on inserted components, stale baseline after page rules; native next-step banners as the pattern; versions 0.1.5 | Navalo FWP1–FWP6, 13 Nov (labUiKit 0.1.3–0.1.5) |
 | v0.2 | 13 Nov 2026 | Promoted from the EWB deal folder. Two live components added; status per component; look rule changed to kit tokens with measured native fallbacks; refreshOn, read-only and naming rules; page-placement traps; build/test/ship, one-package rule; versions tested | Navalo build 13 Nov (labUiKit 0.1.0–0.1.2, CWP1–CWP7) |
 | v0.1 | 12 Nov 2026 | First standard, six components planned | East West Bank (`Deals/east-west-bank-rh/06-ui-kit-standard.md`) |
