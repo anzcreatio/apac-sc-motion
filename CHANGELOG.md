@@ -4,7 +4,7 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.18.0 (unreleased, 13 Nov 2026): today's goal, feedback loop, /sc-lessons, meeting card
+## 0.18.0 (13 Nov 2026): today's goal, feedback loop, /sc-lessons, meeting card
 - **Today's goal opens every demo deck** (DECK-STANDARD v0.4, FM v0.6). The agenda slide shows "Today's goal": the
   decision we'll ask for at the end, word for word. The SC asks the same question on the next-steps slide. The
   builder warns if a demo deck has no agenda, if the closing question uses different words, or if "not yet" doesn't
