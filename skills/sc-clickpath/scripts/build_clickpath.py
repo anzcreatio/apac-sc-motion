@@ -1,11 +1,24 @@
 """Build the two click-path pages for a demo from the toolkit's click-path cards.
 
 Usage:
-    python build_clickpath.py <cards.json> [--customer <clickpath-customer.json>] [--shots <dir>] [--out <dir>]
-                              [--slug <name>] [--fragment] [--approved]
+    python build_clickpath.py <cards.json> [--customer <clickpath-customer.json>] [--sc <clickpath-sc.json>]
+                              [--credentials <file>] [--shots <dir>] [--out <dir>] [--slug <name>] [--fragment]
+                              [--approved]
 
 Inputs
   cards.json        the creatio-demo-clickpass cards (title, persona, before_start, reset, sections, cards[...]).
+  --sc              SC teaching overlay (default: clickpath-sc.json beside cards.json). Per step: open {record, find,
+                    state}, clicks [...], type [[field, value]], see, they_said [{quote, who, at, tag, partner}],
+                    land {point, why, kpi, d_id, d_line}, say, if_they_ask [{q, a, source}], watch, signed_in.
+                    Per use case (use_cases.UC1): value_story, pain [{quote, who, at, tag}], bridge.
+                    Top level: logins [{role, username, url, steps}], faq [{q, a, source}], notes [...].
+                    Rules the builder enforces: "they said" keeps tag C only (I/A dropped and reported); an answer
+                    without a source becomes "We'll confirm that in writing."; d_id must be in the catalogue.
+  --credentials     the demo passwords. Default: the team's one file <SharePoint root>/Stand-logins/stand-logins.json,
+                    {"<stand>": {"<username>": "<password>"}}, matched on cards.json "instance". Also accepts (JSON {username: password} or
+                    [{username, password}], or text lines "username: password" / "username = password" /
+                    "| username | password |"). Read by this script only; Claude never opens it. Passwords go
+                    into the SC page in plain view (also the --fragment copy), never into the customer page.
   --customer        overlay with the customer-facing words (default: clickpath-customer.json beside cards.json):
                     {customer, page_name, title, eyebrow, date, intro, simulated, contact, approved,
                      sections: {UC1: "heading"}, titles: {"UC1-2": "..."}, cards: {"UC1-2": "what it means for them"},
@@ -13,10 +26,14 @@ Inputs
   --shots           screenshot folder (default: shots/ beside cards.json)
 
 Outputs (default: the folder of cards.json)
-  <slug>-click-path-sc.html        for the SC: clicks, talk track, watch-outs, before you start, practice mode, ticks
+  <slug>-click-path-sc.html        for the SC: per step open / click / you'll see / they said / land this / say /
+                                   if they ask / watch out / signed in as; per use case the value story, pain and
+                                   bridge; before you start with logins; practice mode hides say, land this and
+                                   if they ask until you click; rehearsal ticks
   <slug>-click-path-customer.html  for the customer: screenshots and plain words only. DRAFT banner until approved
                                    ("approved": true or --approved), refused while a check fails or a shown screenshot
-                                   is not in screens_reviewed.
+                                   is not in screens_reviewed. Any login, username or password in its text stops the
+                                   build (exit 2, no customer file written).
 Layout: the Creatio explorer shell (masthead + stat strip, clickable flow strip, tabs, sticky filter rail, collapsible
 use cases with step rows). One light brand theme (Creatio brand: no dark backgrounds). Both files are self-contained
 (screenshots and logo embedded) and work offline. --fragment writes them without the <!doctype>/<html>/<body>
@@ -52,6 +69,85 @@ INTERNAL = [
     (re.compile(r"\b(caution|careful|warning|TODO|TBC|workaround|bug|hack|fake|faked|don't press|do not press|don't say|do not say)\b", re.I), "presenter caution"),
     (re.compile(r"\b(price|pricing|discount|licen[cs]e cost|\$\s?\d+k? per)\b", re.I), "pricing"),
 ]
+# Logins and passwords never reach a customer: any hit stops the build.
+LOGIN_RX = re.compile(r"\b(passwords?|passwd|pwd|log-?ins?|usernames?|user names?|sign(ed)?[- ]in as|credentials?)\b", re.I)
+
+PLUGIN_ROOT = os.path.normpath(os.path.join(HERE, "..", "..", ".."))
+CONFIRM = "We'll confirm that in writing."
+
+
+def catalogue_ids():
+    """D-IDs and titles from knowledge/DIFFERENTIATOR-CATALOGUE-*.md (claims come only from there)."""
+    kdir = os.path.join(PLUGIN_ROOT, "knowledge")
+    ids = {}
+    for f in sorted(os.listdir(kdir)) if os.path.isdir(kdir) else []:
+        if f.startswith("DIFFERENTIATOR-CATALOGUE"):
+            for m in re.finditer(r"^### (D\d+) · (.+?)(?: \(|$)", open(os.path.join(kdir, f), encoding="utf-8").read(), re.M):
+                ids[m.group(1)] = m.group(2).strip()
+    return ids
+
+
+def team_logins_file():
+    """The team's one logins file: <SharePoint root>/Stand-logins/stand-logins.json (root from ~/.apac-sc-motion.json)."""
+    try:
+        root = json.load(open(os.path.join(os.path.expanduser("~"), ".apac-sc-motion.json"), encoding="utf-8"))["sharepoint_root"]
+    except Exception:
+        return None
+    for name in ("stand-logins.json", "stand-logins.json.txt"):  # Notepad often adds .txt
+        p = os.path.join(root, "Stand-logins", name)
+        if os.path.isfile(p):
+            if os.path.getsize(p) == 0:
+                print("Logins file %s is empty: add the stand's logins and save it." % name)
+                return None
+            return p
+    return None
+
+
+def read_credentials(path, usernames, stand=None):
+    """Passwords for the given usernames. The team file is {"<stand>": {"<username>": "<password>"}}; a flat
+    {username: password} file also works. Values are never printed."""
+    found = {}
+    if not path:
+        return found
+    raw = open(path, encoding="utf-8-sig").read()
+    try:
+        data = json.loads(raw)
+        if isinstance(data, dict) and any(isinstance(v, dict) for v in data.values()):
+            data = data.get(stand) or {}
+        if isinstance(data, dict):
+            found = {k: str(v.get("password") if isinstance(v, dict) else v) for k, v in data.items()
+                     if isinstance(v, (str, int)) or (isinstance(v, dict) and v.get("password"))}
+        elif isinstance(data, list):
+            found = {str(d.get("username") or d.get("login")): str(d.get("password")) for d in data
+                     if isinstance(d, dict) and d.get("password")}
+    except ValueError:
+        for line in raw.splitlines():
+            cells = [c.strip().strip("`*") for c in line.strip().strip("|").split("|")] if "|" in line else None
+            for u in usernames:
+                if cells and len(cells) >= 2 and u in cells[:-1]:
+                    i = cells.index(u)
+                    if i + 1 < len(cells) and cells[i + 1]:
+                        found.setdefault(u, cells[i + 1])
+                m = re.match(r"^\s*[-*]?\s*`?%s`?\s*[:=]\s*`?(.+?)`?\s*$" % re.escape(u), line)
+                if m:
+                    found.setdefault(u, m.group(1))
+    return {u: found[u] for u in usernames if u in found}
+
+
+def stand_logins(path, stand):
+    """Every login the team file holds for this stand, as clickpath logins (no passwords): [{role, username, ...}].
+    A value may be a plain password or {"password": ..., "role": ..., "steps": ...}."""
+    try:
+        data = json.load(open(path, encoding="utf-8-sig"))
+    except Exception:
+        return []
+    entries = data.get(stand) if isinstance(data, dict) else None
+    out = []
+    for u, v in (entries or {}).items() if isinstance(entries, dict) else []:
+        v = v if isinstance(v, dict) else {}
+        out.append({"username": u, "role": v.get("role") or "Demo login", "steps": v.get("steps") or "",
+                    "url": "https://%s.creatio.com" % stand if re.match(r"^\d{8}-demo$", stand or "") else ""})
+    return out
 
 
 def esc(s):
@@ -92,7 +188,7 @@ STYLE = """
   --bg:#FFFFFF; --bg-alt:#F0F0F0; --bg-alt2:#E7E7E7;
   --text-primary:#0A0A0A; --text-body:#5C5C5C; --text-caption:#888888;
   --accent:#FF4013; --accent-deep:#C6350F; --accent-tint:#FFF1EC;
-  --say-bg:#FFF1EC; --watch-bg:#FFF6E0; --watch-text:#7A5300; --draft-bg:#FFF6E0; --draft-text:#7A5300;
+  --say-bg:#FFF1EC; --said-bg:#EEF3FA; --said-text:#1B3354; --land-bg:#EAF5EC; --land-text:#1E4D29; --watch-bg:#FFF6E0; --watch-text:#7A5300; --draft-bg:#FFF6E0; --draft-text:#7A5300;
   --font-head:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
@@ -204,7 +300,49 @@ details.step > summary::-webkit-details-marker{display:none}
 footer.brand{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding-top:12px; border-top:1px solid var(--bg-alt2)}
 footer.brand img{width:112px; height:auto; display:block}
 .footer-meta{font-size:12px; color:var(--text-caption); max-width:90ch}
-body.hide-say .say, body.hide-watch .watch{display:none}
+body.hide-say .say, body.hide-say .land, body.hide-say .ask, body.hide-watch .watch{display:none}
+/* SC teaching blocks */
+.teach{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; padding:0 14px 16px}
+.box{border-radius:8px; padding:10px 12px; min-width:0}
+.box p{margin:0; font-size:14px}
+.box p + p{margin-top:6px}
+.open{background:var(--bg-alt)}
+.said{background:var(--said-bg)}
+.said blockquote{margin:0; color:var(--said-text); font-size:14px}
+.said blockquote + blockquote{margin-top:8px}
+.said .who{display:block; font-size:12px; color:var(--text-caption); font-style:normal; margin-top:2px}
+.said .none{color:var(--text-caption); font-size:13.5px}
+.land{background:var(--land-bg)}
+.land p{color:var(--land-text)}
+.land .d{font-family:var(--font-mono); font-size:11px; border:1.5px solid var(--land-text); border-radius:5px; padding:0 4px; margin-right:4px}
+.ask{background:var(--bg-alt)}
+.ask dt{font-weight:600; color:var(--text-primary); font-size:14px}
+.ask dd{margin:2px 0 8px; font-size:14px}
+.ask .src{font-size:11.5px; color:var(--text-caption)}
+.who-in{font-size:13px}
+.chip-label{font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; white-space:nowrap; margin-left:8px; vertical-align:2px}
+.chip-label.theirs{background:var(--said-bg); color:var(--said-text)}
+.chip-label.ours{background:#F1ECFA; color:#4B2C86; box-shadow:inset 0 0 0 1px #B9A6DE}
+.opener{background:#F1ECFA}
+.opener p{color:#2E1A55; font-weight:600}
+.why{background:#F6F3FC}
+.why .notours{font-size:12.5px; color:#4B2C86; font-weight:600}
+.why .src{font-size:11.5px; color:var(--text-caption)}
+ol.clicks{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:4px; font-size:14px}
+ol.clicks b, .box b{color:var(--text-primary)}
+table.typed, table.logins{border-collapse:collapse; font-size:13.5px; margin-top:4px}
+table.typed td, table.logins td, table.logins th{padding:4px 10px 4px 0; text-align:left; vertical-align:top}
+table.logins th{font-family:var(--font-head); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-caption); font-weight:600}
+.pw{font-family:var(--font-mono); white-space:nowrap}
+.recallable.recall > :not(.label){filter:blur(5px); user-select:none}
+.recallable.recall{cursor:pointer; position:relative}
+.ask.recallable.recall > dl{filter:none; user-select:auto}
+.ask.recallable.recall dd{filter:blur(5px); user-select:none}
+.recallable.recall::after{content:"Recall it, then click to check"; position:absolute; right:10px; top:8px; font-size:11px; color:var(--accent-deep); font-weight:600}
+.uc-intro{background:var(--bg); border-radius:10px; padding:14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px}
+.uc-intro p{margin:0; font-size:14px}
+.bridge{background:var(--accent-tint); border-radius:10px; padding:10px 14px}
+.bridge p{margin:0; color:var(--text-primary); font-size:14px}
 @media (max-width:520px){.flow-arrow{display:none} .stat-num{font-size:21px}}
 @media (prefers-reduced-motion: reduce){*{transition:none !important}}
 </style>
@@ -264,8 +402,13 @@ SCRIPT = """
   bindToggle('showSay', 'hide-say'); bindToggle('showWatch', 'hide-watch');
   var practice = document.getElementById('practice');
   if (practice) practice.addEventListener('change', function () {
-    document.querySelectorAll('.say').forEach(function (s) { s.classList.toggle('recall', practice.checked); }); });
-  document.querySelectorAll('.say').forEach(function (s) { s.addEventListener('click', function () { s.classList.remove('recall'); }); });
+    document.querySelectorAll('.recallable').forEach(function (s) { s.classList.toggle('recall', practice.checked); }); });
+  document.querySelectorAll('.recallable').forEach(function (s) { s.addEventListener('click', function () { s.classList.remove('recall'); }); });
+  document.querySelectorAll('.pw-toggle').forEach(function (b) { b.addEventListener('click', function () {
+    var pw = document.getElementById(b.getAttribute('aria-controls')); if (!pw) return;
+    var show = b.getAttribute('aria-pressed') !== 'true';
+    pw.textContent = show ? pw.dataset.pw : '••••••••'; b.setAttribute('aria-pressed', show ? 'true' : 'false');
+    b.textContent = show ? 'Hide' : 'Show'; }); });
   var boxes = Array.prototype.slice.call(document.querySelectorAll('input[data-key]'));
   function progress() { var n = boxes.filter(function (b) { return b.checked; }).length;
     var t = document.getElementById('progressText'); if (t) t.textContent = n + ' of ' + boxes.length + ' rehearsed';
@@ -337,74 +480,294 @@ def results(blocks_html):
             '<div class="empty" id="emptyState" hidden>No steps match. Clear the search or the use case filter.</div></main>' % blocks_html)
 
 
-def uc_block(i, uc, heading, flow_text, steps_html, n):
+def uc_block(i, uc, heading, flow_text, steps_html, n, intro="", outro=""):
     return ('<details class="uc-block" id="uc-%s" open><summary><span class="uc-title-wrap"><span class="num-badge">%d</span>'
             '<span class="uc-text"><h2 class="uc-title">%s</h2>%s</span></span><span style="display:flex;align-items:center;gap:12px">'
-            '<span class="uc-meta">%d step%s</span><span class="chev"></span></span></summary><div class="uc-body">%s</div></details>'
+            '<span class="uc-meta">%d step%s</span><span class="chev"></span></span></summary><div class="uc-body">%s%s%s</div></details>'
             % (esc(uc), i, esc(heading), ('<span class="uc-flow">%s</span>' % esc(flow_text)) if flow_text else "",
-               n, "" if n == 1 else "s", steps_html))
+               n, "" if n == 1 else "s", intro, steps_html, outro))
 
 
-def sc_page(spec, shots):
+def rich(s):
+    """Escape, then **UI label** → bold (clicks name the exact labels on screen) and `file or command` → code."""
+    s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", esc(s))
+    return re.sub(r"`([^`]+)`", r'<code style="font-family:var(--font-mono);font-size:.92em">\1</code>', s)
+
+
+def quote_html(q):
+    who = q.get("who", "")
+    if q.get("partner"):
+        who = "Partner said · " + who
+    at = (" · " + q["at"]) if q.get("at") else ""
+    return '<blockquote>“%s”<span class="who">%s%s</span></blockquote>' % (esc(q.get("quote")), esc(who), esc(at))
+
+
+def confirmed(quotes, where, report):
+    """They said = confirmed customer (or partner) words only. Inferred or assumed lines are dropped and reported."""
+    keep = []
+    for q in quotes or []:
+        if str(q.get("tag", "")).upper() == "C" and q.get("quote") and q.get("who"):
+            keep.append(q)
+        else:
+            report.append("%s: dropped a 'they said' line that isn't confirmed (tag C with who): %s"
+                          % (where, (q.get("quote") or "")[:60]))
+    return keep
+
+
+def answers(items, where, report):
+    out = []
+    for it in items or []:
+        a, src = it.get("a"), it.get("source")
+        if not (a and src):
+            report.append("%s: '%s' has no source in knowledge/ or the approved plan, so the answer is '%s'"
+                          % (where, (it.get("q") or "")[:50], CONFIRM))
+            a, src = CONFIRM, ""
+        out.append('<dt>%s</dt><dd>%s%s</dd>' % (esc(it.get("q")), rich(a), ('<br><span class="src">Source: %s</span>' % esc(src)) if src else ""))
+    return out
+
+
+THEIRS = ("Pain", "Asked", "Asked (must)")
+OURS = ("Differentiator", "SC idea", "Our idea")
+CANT_RX = re.compile(r"\b(can't|cannot|can not|unable to|doesn't have|don't have|no way to)\b", re.I)
+
+
+def plan_steps(sc, base):
+    """build-plan.json (sc-demo-plan) steps, numbered from 1, when clickpath-sc.json names it as "plan"."""
+    p = sc.get("plan")
+    if not p:
+        return {}
+    p = p if os.path.isabs(p) else os.path.normpath(os.path.join(base, p))
+    if not os.path.isfile(p):
+        return {}
+    return {str(i): s for i, s in enumerate(json.load(open(p, encoding="utf-8")).get("steps", []), 1)}
+
+
+def merge_plan(c, st, plan):
+    """Fill a step's label, our_idea, minutes and differentiator from its build-plan step (card runbook_step).
+    What the SC wrote in clickpath-sc.json wins."""
+    ps = plan.get(str(c.get("runbook_step") or ""), {})
+    st = dict(st)
+    if ps.get("our_idea") and not st.get("our_idea"):
+        st["our_idea"] = ps["our_idea"]
+    st.setdefault("label", ps.get("label") or ("Our idea" if st.get("our_idea") else None))
+    d = ps.get("differentiator") or {}
+    if d:
+        ld = dict(st.get("land") or {})
+        ld.setdefault("d_id", d.get("id"))
+        ld.setdefault("d_line", d.get("line"))
+        ld.setdefault("competitor", d.get("competitor"))
+        st["land"] = ld
+    return st
+
+
+def label_chip(label):
+    if not label:
+        return ""
+    return '<span class="chip-label %s">%s</span>' % ("ours" if label in OURS else "theirs", esc(label))
+
+
+def teach_blocks(c, st, cat, report, key):
+    """The SC teaching blocks for one step, from the card plus its clickpath-sc.json entry."""
+    top, low = [], []
+    label = st.get("label")
+    if not label:
+        report.append("%s: no label (Pain · Asked · Asked (must) · Differentiator · SC idea · Our idea)" % key)
+    elif label not in THEIRS + OURS:
+        report.append("%s: label '%s' is not one of Pain · Asked · Asked (must) · Differentiator · SC idea · Our idea" % (key, label))
+    idea = st.get("our_idea") or {}
+    if label == "Our idea":
+        if not (idea.get("why") and idea.get("source") and idea.get("ask")):
+            report.append("%s: an Our idea step needs our_idea {why, source, ask}" % key)
+        if idea.get("ask"):
+            top.append('<div class="box opener"><div class="label">Open with this question</div><p>%s</p></div>' % rich(idea["ask"]))
+    op = st.get("open") or {}
+    if op:
+        lines = [("Record", op.get("record")), ("Find it", op.get("find")), ("Before you start", op.get("state"))]
+        top.append('<div class="box open"><div class="label">Open</div>%s</div>'
+                   % "".join("<p><b>%s:</b> %s</p>" % (esc(k), rich(v)) for k, v in lines if v))
+    else:
+        report.append("%s: no 'open' (record, how to find it, its state before you start)" % key)
+    clicks = st.get("clicks") or ([c["action"]] if c.get("action") else [])
+    if clicks:
+        typed = "".join("<tr><td>%s</td><td><b>%s</b></td></tr>" % (esc(f), esc(v)) for f, v in st.get("type") or [])
+        top.append('<div><div class="label">Click</div><ol class="clicks">%s</ol>%s</div>'
+                   % ("".join("<li>%s</li>" % rich(x) for x in clicks),
+                      ('<div class="label" style="margin-top:8px">Type</div><table class="typed">%s</table>' % typed) if typed else ""))
+    see = st.get("see") or c.get("result")
+    if see:
+        top.append('<div><div class="label">You will see</div><p>%s</p></div>' % rich(see))
+    if st.get("signed_in"):
+        top.append('<p class="who-in"><span class="label" style="display:inline">Signed in as</span> %s</p>' % esc(st["signed_in"]))
+    if label in OURS and (idea.get("why") or st.get("why_showing")):
+        why = idea.get("why") or st.get("why_showing")
+        low.append('<div class="box why"><div class="label">Why we\'re showing this</div>'
+                   '<p class="notours">Not their words: they didn\'t ask for this. %s (I)</p><p>%s</p>%s</div>'
+                   % (esc(label), rich(why), ('<p class="src">Source: %s</p>' % esc(idea["source"])) if idea.get("source") else ""))
+    elif label in OURS:
+        report.append("%s: a %s step needs 'why we're showing this' (our_idea.why or why_showing)" % (key, label))
+    if label == "Our idea":
+        if st.get("they_said"):
+            report.append("%s: Our idea step: 'they said' left out (they didn't raise it)" % key)
+    else:
+        quotes = confirmed(st.get("they_said"), key, report)
+        if quotes or label not in OURS:
+            said = "".join(quote_html(q) for q in quotes) or (
+                '<p class="none">%s</p>' % esc(st.get("they_said_none") or "Nothing they said maps to this step."))
+            low.append('<div class="box said"><div class="label">They said</div>%s</div>' % said)
+    ld = st.get("land") or {}
+    if ld:
+        d_id = ld.get("d_id")
+        if d_id and d_id not in cat:
+            report.append("%s: %s is not in the differentiator catalogue" % (key, d_id))
+        parts = ['<p><b>%s</b></p>' % rich(ld.get("point"))] if ld.get("point") else []
+        if ld.get("why"):
+            parts.append("<p><b>Why it matters to them:</b> %s</p>" % rich(ld["why"]))
+        if ld.get("kpi"):
+            parts.append("<p><b>KPI:</b> %s</p>" % rich(ld["kpi"]))
+        if d_id:
+            parts.append('<p><span class="d">%s</span>%s%s</p>' % (esc(d_id), esc(cat.get(d_id, "")),
+                                                                  (": " + rich(ld["d_line"])) if ld.get("d_line") else ""))
+        if ld.get("competitor"):
+            if CANT_RX.search(ld["competitor"]):
+                report.append("%s: competitor angle says what they can't do; the catalogue says never argue that" % key)
+            parts.append("<p><b>Competitor angle:</b> %s</p>" % rich(ld["competitor"]))
+        elif d_id:
+            report.append("%s: %s has no competitor angle" % (key, d_id))
+        low.append('<div class="box land recallable"><div class="label">Land this</div>%s</div>' % "".join(parts))
+    else:
+        report.append("%s: no 'land this'" % key)
+    say = st.get("say") or c.get("say")
+    if say:
+        low.append('<div class="box say recallable"><div class="label">Say</div><p>%s</p></div>' % rich(say))
+    asks = answers(st.get("if_they_ask"), key, report)
+    if asks:
+        low.append('<div class="box ask recallable"><div class="label">If they ask</div><dl style="margin:0">%s</dl></div>' % "".join(asks))
+    watch = st.get("watch") or c.get("attention")
+    if watch:
+        low.append('<div class="box watch"><div class="label">Watch out</div><p>%s</p></div>' % rich(watch))
+    return top, low
+
+
+def logins_html(sc, creds, fragment, report):
+    rows = []
+    for i, l in enumerate(sc.get("logins") or []):
+        u = l.get("username", "")
+        if u in creds:  # demo stands hold no confidential data: shown in plain view (Renzo, 13 Nov 2026)
+            pw = '<span class="pw" data-pw="%s"><b>%s</b></span>' % (esc(creds[u]), esc(creds[u]))
+        else:
+            pw = '<span class="hint">%s</span>' % esc(l.get("password_hint") or "Not in Stand-logins/stand-logins.json yet")
+            report.append("login %s: no password found%s" % (u, "" if creds else " (no --credentials given)"))
+        rows.append("<tr><td>%s</td><td><b>%s</b>%s</td><td>%s</td><td>%s</td></tr>"
+                    % (esc(l.get("role")), esc(u), ('<br><span class="hint">%s</span>' % esc(l["url"])) if l.get("url") else "",
+                       pw, esc(l.get("steps", ""))))
+    if not rows:
+        return ""
+    return ('<h2>Logins</h2><table class="logins"><tr><th>Role</th><th>Username</th><th>Password</th><th>Steps</th></tr>%s</table>'
+            % "".join(rows))
+
+
+def sc_page(spec, shots, sc=None, creds=None, fragment=False, report=None, base="."):
+    sc, creds, report = sc or {}, creds or {}, report if report is not None else []
+    cat = catalogue_ids()
+    plan = plan_steps(sc, base)
+    if sc.get("plan") and not plan:
+        report.append("plan %s not found: labels, our ideas and competitor angles not read from it" % sc["plan"])
+    labels = []
     cards = spec["cards"]
     sections = spec.get("sections", {})
+    steps_sc = sc.get("steps", {})
+    ucs_sc = sc.get("use_cases", {})
     order = list(dict.fromkeys(c["uc"] for c in cards))
-    headings = {uc: clean_heading(sections.get(uc, {}).get("heading", uc)) for uc in order}
+    headings = {uc: clean_heading(ucs_sc.get(uc, {}).get("heading") or sections.get(uc, {}).get("heading", uc)) for uc in order}
     counts = {uc: sum(1 for c in cards if c["uc"] == uc) for uc in order}
     blocks = []
     for i, uc in enumerate(order, 1):
         rows = []
         for c in [c for c in cards if c["uc"] == uc]:
             key = card_key(c)
+            st = steps_sc.get(key, {})
+            if sc and not st:
+                report.append("%s: no entry in clickpath-sc.json" % key)
+            st = merge_plan(c, st, plan) if sc else st
+            if st.get("label") in THEIRS and any(l == "Our idea" for _, l in labels):
+                report.append("%s: one of their scenes comes after an Our idea step; put our ideas after their own scenes" % key)
+            labels.append((key, st.get("label")))
             fig = ""
             if c.get("shot") and os.path.isfile(os.path.join(shots, c["shot"])):
                 src, w, h = img_data(os.path.join(shots, c["shot"]))
                 fig = '<figure class="shot"><img src="%s" width="%d" height="%d" alt="%s" loading="lazy"></figure>' % (src, w, h, esc(c.get("title")))
-            words = []
-            if c.get("action"):
-                words.append('<div><div class="label">Click</div><p>%s</p></div>' % esc(c["action"]))
-            if c.get("result"):
-                words.append('<div><div class="label">You will see</div><p>%s</p></div>' % esc(c["result"]))
-            if c.get("say"):
-                words.append('<div class="say"><div class="label">Say</div><p>%s</p></div>' % esc(c["say"]))
-            if c.get("attention"):
-                words.append('<div class="watch"><div class="label">Watch out</div><p>%s</p></div>' % esc(c["attention"]))
+            top, low = teach_blocks(c, st, cat, report, key)
             for l in c.get("links") or []:
                 url = l.get("url") if isinstance(l, dict) else l
-                words.append('<a href="%s" target="_blank" rel="noopener">%s</a>' % (esc(url), esc(l.get("label", "Open in Creatio") if isinstance(l, dict) else "Open in Creatio")))
-            words.append('<label class="check-line"><input type="checkbox" id="done-%s" data-key="%s"> Rehearsed</label>' % (esc(key), esc(key)))
-            text = " ".join(str(c.get(k) or "") for k in ("title", "short", "action", "result", "say", "attention")).lower()
+                top.append('<a href="%s" target="_blank" rel="noopener">%s</a>' % (esc(url), esc(l.get("label", "Open in Creatio") if isinstance(l, dict) else "Open in Creatio")))
+            top.append('<label class="check-line"><input type="checkbox" id="done-%s" data-key="%s"> Rehearsed</label>' % (esc(key), esc(key)))
+            text = " ".join([str(c.get(k) or "") for k in ("title", "short", "action", "result", "say", "attention")]
+                            + [json.dumps(st, ensure_ascii=False)]).lower()
+            mins = (" · %s min" % st["minutes"]) if st.get("minutes") else ""
             rows.append('<details class="step" data-uc="%s" data-text="%s" id="step-%s"><summary><span class="num-badge">%s</span>'
-                        '<span class="step-main"><span class="step-name">%s</span><span class="step-short">%s</span></span>'
+                        '<span class="step-main"><span class="step-name">%s%s</span><span class="step-short">%s%s</span></span>'
                         '<span class="done-pill" hidden>Rehearsed</span><span class="chev"></span></summary>'
-                        '<div class="step-body">%s<div class="words">%s</div></div></details>'
-                        % (esc(uc), esc(text), esc(key), esc(c.get("step")), esc(c.get("title")),
-                           esc(c.get("short") or ""), fig, "".join(words)))
+                        '<div class="step-body">%s<div class="words">%s</div></div><div class="teach">%s</div></details>'
+                        % (esc(uc), esc(text), esc(key), esc(c.get("step")), esc(c.get("title")), label_chip(st.get("label")),
+                           esc(c.get("short") or ""), esc(mins), fig, "".join(top), "".join(low)))
+        u = ucs_sc.get(uc, {})
+        intro = ""
+        if sc:
+            pains = confirmed(u.get("pain"), uc + " pain", report)
+            if not u.get("value_story"):
+                report.append("%s: no 30-second value story" % uc)
+            uc_labels = [l for k, l in labels if k.startswith(uc + "-")]
+            ours_only = bool(uc_labels) and all(l in OURS for l in uc_labels)
+            if not pains and not ours_only:
+                report.append("%s: no pain in their words" % uc)
+            intro = ('<div class="uc-intro"><div class="box land recallable"><div class="label">Value story (30 seconds)</div><p>%s</p></div>'
+                     '<div class="box said"><div class="label">The pain, in their words</div>%s</div></div>'
+                     % (rich(u.get("value_story", "")), "".join(quote_html(q) for q in pains) or ("<p class=\"none\">They haven't raised this: it's our idea. Open with the question.</p>"
+                                                         if ours_only else '<p class="none">Not in their words yet.</p>')))
+        outro = ""
+        if u.get("bridge"):
+            outro = '<div class="bridge"><div class="label">Bridge to what comes next</div><p>%s</p></div>' % rich(u["bridge"])
+        elif sc:
+            report.append("%s: no bridge line" % uc)
         flow_txt = " → ".join(sections.get(uc, {}).get("flow", []))
-        blocks.append(uc_block(i, uc, headings[uc], flow_txt, "".join(rows), counts[uc]))
+        blocks.append(uc_block(i, uc, headings[uc], flow_txt, "".join(rows), counts[uc], intro, outro))
     extra = ('<div class="rail-block"><span class="rail-title">Show</span><div class="toggle-list">'
-             '<label class="check-line"><input type="checkbox" id="showSay" checked> What to say</label>'
+             '<label class="check-line"><input type="checkbox" id="showSay" checked> Say, land this, if they ask</label>'
              '<label class="check-line"><input type="checkbox" id="showWatch" checked> Watch-outs</label>'
-             '<label class="check-line"><input type="checkbox" id="practice"> Practice mode (blur what to say)</label></div></div>'
+             '<label class="check-line"><input type="checkbox" id="practice"> Practice mode (hide say, land this and if they ask; click to check)</label></div></div>'
              '<div class="rail-block"><span class="rail-title">Rehearsal</span><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>'
              '<span class="hint" id="progressText"></span><label class="check-line"><input type="checkbox" id="onlyTodo"> Only steps not rehearsed</label>'
              '<button type="button" class="text-btn" id="clearTicks">Clear ticks</button></div>')
     explore = '<div class="layout">%s%s</div>' % (rail(order, headings, extra), results("".join(blocks)))
     before = ("<li><b>Rehearse on the device, network and login you'll present with</b> (phone or tablet app, VPN, SSO), "
               "and have the fallback ready: web view or a recorded clip.</li>")
-    before += "".join("<li>%s</li>" % esc(x) for x in spec.get("before_start", []))
-    notes = "".join("<li>%s</li>" % esc(x) for x in spec.get("notes", []) + spec.get("issues", []))
-    prep = ('<div class="panel"><h2>Before you start</h2><ol>%s</ol>%s%s%s</div>'
-            % (before,
-               ('<p><b>Reset:</b> %s</p>' % esc(spec["reset"])) if spec.get("reset") else "",
+    before += "".join("<li>%s</li>" % rich(x) for x in spec.get("before_start", []) + sc.get("before_start", []))
+    notes = "".join("<li>%s</li>" % rich(x) for x in spec.get("notes", []) + spec.get("issues", []) + sc.get("notes", []))
+    faq = answers(sc.get("faq"), "faq", report)
+    story = sc.get("story")
+    reset = sc.get("reset") or spec.get("reset")
+    prep = ('<div class="panel">%s<h2>Before you start</h2><ol>%s</ol>%s%s%s%s%s</div>'
+            % (('<h2>The story in one line</h2><p>%s</p>' % rich(story)) if story else "",
+               before, logins_html(sc, creds, fragment, report),
+               ('<p><b>Reset:</b> %s</p>' % rich(reset)) if reset else "",
                ('<p><b>Login and story:</b> %s</p>' % esc(spec["persona"])) if spec.get("persona") else "",
+               ('<h2>Hard questions</h2><div class="box ask"><dl style="margin:0">%s</dl></div>' % "".join(faq)) if faq else "",
                ('<h2>Notes</h2><ul>%s</ul>' % notes) if notes else ""))
+    mins = sum(float(s.get("minutes") or 0) for s in steps_sc.values())
     stats = [(len(order), "Use cases", ""), (len(cards), "Steps", ""),
-             (sum(1 for c in cards if c.get("shot")), "Screens", ""), ("0/%d" % len(cards), "Rehearsed", "statRehearsed")]
+             (sum(1 for c in cards if c.get("shot")), "Screens", "")]
+    if mins:
+        stats.append(("%g min" % mins, "Demo time", ""))
+    if any(l for _, l in labels):
+        th = sum(1 for _, l in labels if l in THEIRS)
+        ou = sum(1 for _, l in labels if l in OURS)
+        stats.append(("%d · %d" % (th, ou), "From them · our ideas", ""))
+    stats.append(("0/%d" % len(cards), "Rehearsed", "statRehearsed"))
     title = spec.get("title", "Demo click path")
-    return shell("Demo practice · SC only", esc(title), "", stats, "", flow_strip(order, headings, counts),
+    return shell("Demo practice · SC only", esc(title), sc.get("lede", ""), stats, "", flow_strip(order, headings, counts),
                  [("path", "Click path"), ("prep", "Before you start")], [("path", explore), ("prep", prep)],
-                 "For the SC only. Stand: %s · version %s. Not for the customer: send the customer recap instead."
+                 "For the SC only. Stand: %s · version %s. Not for the customer: send the customer recap instead. "
+                 "Memorise the beats (record, moment, value line), not a word-for-word script."
                  % (esc(spec.get("instance", "")), esc(spec.get("spec_version", ""))))
 
 
@@ -482,6 +845,8 @@ def main():
     ap.add_argument("--shots")
     ap.add_argument("--out")
     ap.add_argument("--slug")
+    ap.add_argument("--sc")
+    ap.add_argument("--credentials")
     ap.add_argument("--fragment", action="store_true")
     ap.add_argument("--approved", action="store_true")
     a = ap.parse_args()
@@ -491,12 +856,35 @@ def main():
     out_dir = a.out or base
     ov_path = a.customer or os.path.join(base, "clickpath-customer.json")
     ov = json.load(open(ov_path, encoding="utf-8")) if os.path.isfile(ov_path) else {}
+    sc_path = a.sc or os.path.join(base, "clickpath-sc.json")
+    sc = json.load(open(sc_path, encoding="utf-8")) if os.path.isfile(sc_path) else {}
     slug = a.slug or slugify(ov.get("customer") or spec.get("artifact_title") or "demo")
+    cred_file = a.credentials or team_logins_file()
+    # Automatic: a click path that lists no logins gets every login the team file holds for its stand.
+    if cred_file and not (sc.get("logins")) and sc is not None:
+        auto = stand_logins(cred_file, spec.get("instance"))
+        if auto:
+            sc["logins"] = auto
+            print("Logins: %d taken from the team file for stand %s" % (len(auto), spec.get("instance")))
+    usernames = [l.get("username") for l in sc.get("logins") or [] if l.get("username")]
+    creds = read_credentials(cred_file, usernames, spec.get("instance")) if cred_file else {}
+    if cred_file:
+        print("Logins file %s: password found for %d of %d login(s) on stand %s%s" % (
+              os.path.basename(cred_file), len(creds), len(usernames), spec.get("instance", "?"),
+              ""))
+    elif usernames:
+        print("No logins file: SharePoint Stand-logins/stand-logins.json not found (or pass --credentials).")
 
-    sc_file = os.path.join(out_dir, "%s-click-path-sc.html" % slug)
+    sc_file = os.path.join(out_dir, "%s-click-path-sc%s.html" % (slug, "-fragment" if a.fragment else ""))
     name = "%s practice" % (ov.get("customer") or spec.get("artifact_title", "Demo"))
-    open(sc_file, "w", encoding="utf-8").write(page(name, sc_page(spec, shots), a.fragment))
+    report = []
+    sc_html = page(name, sc_page(spec, shots, sc, creds, a.fragment, report, base), a.fragment)
+    open(sc_file, "w", encoding="utf-8").write(sc_html)
     print("SC version:", sc_file, "(%d KB)" % (os.path.getsize(sc_file) // 1024))
+    if not sc:
+        print("No SC overlay (%s): the SC page has the cards only. Write clickpath-sc.json to teach the demo." % sc_path)
+    for r in report:
+        print("SC GAP", r)
 
     if not ov:
         print("No customer overlay (%s): customer version not built. Write it first." % ov_path)
@@ -512,6 +900,15 @@ def main():
         print("REFUSED: the customer version still has %d problem(s); it stays a DRAFT." % len(problems))
         approved = False
         body, problems = customer_page(spec, ov, shots, False)
+    # Logins and passwords: a hard stop, not a DRAFT note.
+    plain = re.sub(r"<[^>]+>", " ", re.sub(r'src="data:[^"]+"', "", body))
+    plain = html.unescape(plain)
+    leaks = ["login wording ('%s')" % m.group(0) for m in LOGIN_RX.finditer(plain)]
+    leaks += ["username '%s'" % u for u in usernames if re.search(r"\b%s\b" % re.escape(u), plain, re.I)]
+    leaks += ["a password from the credentials file" for p in creds.values() if p and p in plain]
+    if leaks:
+        print("STOPPED: the customer page would show a login or password: %s. Customer file not written." % "; ".join(leaks))
+        sys.exit(2)
     cu_file = os.path.join(out_dir, "%s-click-path-customer.html" % slug)
     open(cu_file, "w", encoding="utf-8").write(page(ov.get("page_name", "%s demo recap" % ov.get("customer", "Demo")), body, a.fragment))
     print("Customer version:", cu_file, "(%d KB)" % (os.path.getsize(cu_file) // 1024), "APPROVED" if approved else "DRAFT")
