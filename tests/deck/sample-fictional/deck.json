@@ -1,189 +1,236 @@
 {
-  "template": "creatio-designed-2026",
-  "meta": {
-    "title": "Harbourline Credit Union and Creatio (fictional)",
-    "customer": "Harbourline Credit Union (fictional)",
-    "date": "1 December 2026",
-    "deck_standard": "v0.1",
-    "source": "Fictional test deck: one slide of every type. Used to check the builder after a change. No real customer data."
+ "template": "creatio-designed-2026",
+ "meta": {
+  "title": "Harbourline Credit Union and Creatio (fictional)",
+  "customer": "Harbourline Credit Union (fictional)",
+  "date": "1 December 2026",
+  "deck_standard": "v0.1",
+  "source": "Fictional test deck: one slide of every type. Used to check the builder after a change. No real customer data.",
+  "meeting": "first_demo"
+ },
+ "out": "sample-standard.pptx",
+ "slides": [
+  {
+   "type": "cover",
+   "title": "Harbourline: every member request answered in a day",
+   "date": "1 December 2026"
   },
-  "out": "sample-standard.pptx",
-  "slides": [
+  {
+   "type": "agenda",
+   "title": "Every member request answered in a day",
+   "subtitle": "Agenda",
+   "length": 60,
+   "items": [
     {
-      "type": "cover",
-      "title": "Harbourline: every member request answered in a day",
-      "date": "1 December 2026"
+     "min": 5,
+     "what": "Introductions, and today's goal",
+     "who": "AE"
     },
     {
-      "type": "understanding",
-      "title": "Our current understanding",
-      "want_label": "Where Harbourline wants to be",
-      "rows": [
-        {
-          "topic": "One owner",
-          "today": "Member requests pass through email and four teams before anyone owns them",
-          "want": "Every request has one owner from the first minute"
-        },
-        {
-          "topic": "One view",
-          "today": "Lending can't see open service issues when a member calls",
-          "want": "One record of the member that every team sees"
-        },
-        {
-          "topic": "Busy work",
-          "today": "Staff re-key the same details into three systems",
-          "want": "Details captured once and reused"
-        }
-      ],
-      "timing": [
-        {
-          "when": "Now",
-          "what": "Member requests and the member record"
-        },
-        {
-          "when": "Q2 next year",
-          "what": "Lending hand-offs and AI on routine requests"
-        }
-      ],
-      "subtitle": "What we heard"
+     "min": 10,
+     "what": "What we heard from you. Did we get it right?",
+     "who": "SC"
     },
     {
-      "type": "platform",
-      "notes": "The whole platform story, 01 to 04. Five minutes."
+     "min": 30,
+     "what": "One member request from start to finish, in Creatio",
+     "who": "SC"
     },
     {
-      "type": "hypothesis",
-      "title": "Our starting idea",
-      "headline": "If every member request had one owner and one record, Harbourline could answer in a day, not a week.",
-      "parts": [
-        {
-          "title": "One record per member",
-          "text": "Requests, issues and products in one place every team sees",
-          "shown": true
-        },
-        {
-          "title": "Requests routed and tracked",
-          "text": "Each request gets an owner, a due time and an alert before it's late",
-          "shown": true
-        },
-        {
-          "title": "AI on routine requests",
-          "text": "Reads the request, fills the details and drafts the answer for staff to approve",
-          "shown": false
-        }
-      ],
-      "subtitle": "Our starting point"
+     "min": 10,
+     "what": "Your questions, and today's goal again",
+     "who": "Member services"
     },
     {
-      "type": "component",
-      "title": "Requests routed and tracked",
-      "lead": "Every request lands with the right person, with a due time, and nobody has to chase it.",
-      "points": [
-        {
-          "title": "One queue, clear owners",
-          "text": "Requests from email, phone and the member portal arrive in one list, assigned by type and branch",
-          "icon": "users-group"
-        },
-        {
-          "title": "Due times you set",
-          "text": "Each request type has a target your team changes in a table, without a project",
-          "icon": "calendar-event"
-        },
-        {
-          "title": "Alerts before it's late",
-          "text": "The owner and their team lead see what's about to miss its target",
-          "icon": "sparkles"
-        }
-      ],
-      "ai": [
-        "Reads each incoming email and sets the request type and urgency",
-        "Drafts the first reply for the owner to approve before it's sent"
-      ],
-      "shown": true,
-      "quote": {
-        "text": "Nobody owns it until somebody complains",
-        "who": "Member services lead (fictional)"
-      }
-    },
-    {
-      "type": "section",
-      "text": "Let's see it in Creatio",
-      "sub": "On example members, not your data"
-    },
-    {
-      "type": "summary",
-      "title": "Your solution at a glance",
-      "outcome": "Every member request answered within a day.",
-      "parts": [
-        {
-          "title": "One record per member",
-          "text": "Requests, issues and products in one place",
-          "shown": true
-        },
-        {
-          "title": "Requests routed and tracked",
-          "text": "An owner, a due time and an alert for each",
-          "shown": true
-        },
-        {
-          "title": "Rules your team can change",
-          "text": "Targets and routing changed without a project",
-          "shown": true
-        },
-        {
-          "title": "AI on routine requests",
-          "text": "Reads, fills and drafts. Staff approve",
-          "shown": false
-        }
-      ]
-    },
-    {
-      "type": "roadmap",
-      "title": "We'd start with requests and add AI once the data is flowing",
-      "steps": [
-        {
-          "title": "Requests and the member record",
-          "what": "One queue, owners, targets and alerts",
-          "when": "Can start first"
-        },
-        {
-          "title": "Lending hand-offs",
-          "what": "Applications move between teams with their history",
-          "when": "Once requests are live"
-        },
-        {
-          "title": "AI on routine requests",
-          "what": "Classify, fill and draft, with staff approval",
-          "when": "When a month of requests is in"
-        }
-      ]
-    },
-    {
-      "type": "next_steps",
-      "title": "What we need to move this forward",
-      "questions": [
-        "How many member requests a week reach more than one team?"
-      ],
-      "actions": [
-        {
-          "when": "Fri 4 Dec",
-          "who": "Harbourline",
-          "what": "Share a week of request volumes by type",
-          "icon": "database"
-        },
-        {
-          "when": "By 11 Dec",
-          "who": "Creatio",
-          "what": "Working session with member services and IT",
-          "icon": "users-group"
-        },
-        {
-          "when": "By 18 Dec",
-          "who": "Both",
-          "what": "Decide whether to scope a first phase",
-          "icon": "checklist"
-        }
-      ]
+     "min": 5,
+     "what": "Next steps, with names and dates",
+     "who": "AE"
     }
-  ]
+   ],
+   "decision": "Does what you see today get every member request answered in a day?",
+   "outcomes": [
+    {
+     "if": "It fits",
+     "then": "We work out what a first phase takes, who's involved and by when."
+    },
+    {
+     "if": "Not yet",
+     "then": "Which part falls short, and what would it need to do? We show that next."
+    }
+   ],
+   "notes": "The AE opens with this slide and reads today's goal out. The SC asks the same question at the end."
+  },
+  {
+   "type": "understanding",
+   "title": "Our current understanding",
+   "want_label": "Where Harbourline wants to be",
+   "rows": [
+    {
+     "topic": "One owner",
+     "today": "Member requests pass through email and four teams before anyone owns them",
+     "want": "Every request has one owner from the first minute"
+    },
+    {
+     "topic": "One view",
+     "today": "Lending can't see open service issues when a member calls",
+     "want": "One record of the member that every team sees"
+    },
+    {
+     "topic": "Busy work",
+     "today": "Staff re-key the same details into three systems",
+     "want": "Details captured once and reused"
+    }
+   ],
+   "timing": [
+    {
+     "when": "Now",
+     "what": "Member requests and the member record"
+    },
+    {
+     "when": "Q2 next year",
+     "what": "Lending hand-offs and AI on routine requests"
+    }
+   ],
+   "subtitle": "What we heard"
+  },
+  {
+   "type": "platform",
+   "notes": "The whole platform story, 01 to 04. Five minutes."
+  },
+  {
+   "type": "hypothesis",
+   "title": "Our starting idea",
+   "headline": "If every member request had one owner and one record, Harbourline could answer in a day, not a week.",
+   "parts": [
+    {
+     "title": "One record per member",
+     "text": "Requests, issues and products in one place every team sees",
+     "shown": true
+    },
+    {
+     "title": "Requests routed and tracked",
+     "text": "Each request gets an owner, a due time and an alert before it's late",
+     "shown": true
+    },
+    {
+     "title": "AI on routine requests",
+     "text": "Reads the request, fills the details and drafts the answer for staff to approve",
+     "shown": false
+    }
+   ],
+   "subtitle": "Our starting point"
+  },
+  {
+   "type": "component",
+   "title": "Requests routed and tracked",
+   "lead": "Every request lands with the right person, with a due time, and nobody has to chase it.",
+   "points": [
+    {
+     "title": "One queue, clear owners",
+     "text": "Requests from email, phone and the member portal arrive in one list, assigned by type and branch",
+     "icon": "users-group"
+    },
+    {
+     "title": "Due times you set",
+     "text": "Each request type has a target your team changes in a table, without a project",
+     "icon": "calendar-event"
+    },
+    {
+     "title": "Alerts before it's late",
+     "text": "The owner and their team lead see what's about to miss its target",
+     "icon": "sparkles"
+    }
+   ],
+   "ai": [
+    "Reads each incoming email and sets the request type and urgency",
+    "Drafts the first reply for the owner to approve before it's sent"
+   ],
+   "shown": true,
+   "quote": {
+    "text": "Nobody owns it until somebody complains",
+    "who": "Member services lead (fictional)"
+   }
+  },
+  {
+   "type": "section",
+   "text": "Let's see it in Creatio",
+   "sub": "On example members, not your data"
+  },
+  {
+   "type": "summary",
+   "title": "Your solution at a glance",
+   "outcome": "Every member request answered within a day.",
+   "parts": [
+    {
+     "title": "One record per member",
+     "text": "Requests, issues and products in one place",
+     "shown": true
+    },
+    {
+     "title": "Requests routed and tracked",
+     "text": "An owner, a due time and an alert for each",
+     "shown": true
+    },
+    {
+     "title": "Rules your team can change",
+     "text": "Targets and routing changed without a project",
+     "shown": true
+    },
+    {
+     "title": "AI on routine requests",
+     "text": "Reads, fills and drafts. Staff approve",
+     "shown": false
+    }
+   ]
+  },
+  {
+   "type": "roadmap",
+   "title": "We'd start with requests and add AI once the data is flowing",
+   "steps": [
+    {
+     "title": "Requests and the member record",
+     "what": "One queue, owners, targets and alerts",
+     "when": "Can start first"
+    },
+    {
+     "title": "Lending hand-offs",
+     "what": "Applications move between teams with their history",
+     "when": "Once requests are live"
+    },
+    {
+     "title": "AI on routine requests",
+     "what": "Classify, fill and draft, with staff approval",
+     "when": "When a month of requests is in"
+    }
+   ]
+  },
+  {
+   "type": "next_steps",
+   "title": "What we need to move this forward",
+   "questions": [
+    "Does what you see today get every member request answered in a day?"
+   ],
+   "actions": [
+    {
+     "when": "Fri 4 Dec",
+     "who": "Harbourline",
+     "what": "Share a week of request volumes by type",
+     "icon": "database"
+    },
+    {
+     "when": "By 11 Dec",
+     "who": "Creatio",
+     "what": "Working session with member services and IT",
+     "icon": "users-group"
+    },
+    {
+     "when": "By 18 Dec",
+     "who": "Both",
+     "what": "Decide whether to scope a first phase",
+     "icon": "checklist"
+    }
+   ],
+   "notes": "Meeting questions: How many member requests a week reach more than one team?"
+  }
+ ]
 }

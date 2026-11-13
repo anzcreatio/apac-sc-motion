@@ -61,6 +61,8 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
 4. **What landed:** for each scene, the pattern it used (pattern book ID) and the reaction. Patterns that land on 2+
    deals are candidates to build once as a demo library module.
 5. **Commitments:** everything we promised, with owner and date.
+5b. **Meeting card:** if the SC used it, which lines they picked, ranked or rejected (their words, tag C). Feed the
+   ranking into the solution summary, and propose library changes per `sc-requirements` ("How it grows").
 6. **Library:** is the L1 harvest done (`library/catalogue.json` has this deal)? If not, and the demo was more than
    2 working days ago, say so first and offer to run `sc-harvest`.
 

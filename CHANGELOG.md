@@ -4,6 +4,25 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.18.0 (unreleased, 13 Nov 2026): today's goal, feedback loop, /sc-lessons, meeting card
+- **Today's goal opens every demo deck** (DECK-STANDARD v0.4, FM v0.6). The agenda slide shows "Today's goal": the
+  decision we'll ask for at the end, word for word. The SC asks the same question on the next-steps slide. The
+  builder warns if a demo deck has no agenda, if the closing question uses different words, or if "not yet" doesn't
+  pin down what to do next. Wording by meeting type in the standard §1b (`meta.meeting`: first_demo, value_demo, proof).
+  `sc-meeting-review` records the answer, and a "not yet" becomes the next session's first scene.
+- **Feedback as you go** (`standards/FEEDBACK-LOOP-v0.1.md`). Every skill logs your corrections as feedback without
+  asking, and asks one short question at the end of the run. The meeting review asks how it felt (1-5). The Friday
+  digest groups feedback by skill and step and reports patterns, not people.
+- **New: `/sc-lessons`**, a chat of its own for lessons learnt. Paste notes or an R&D email; it files them and
+  updates the shared registers on SharePoint (`Lessons/registers/`): product limitations and questions we should
+  ask. Those go live for everyone straight away; anything that expands what we claim waits for Friday.
+- **Meeting card** for "tell us what we need": `sc-requirements/scripts/meeting_card.py` builds a one-page, phone
+  friendly card from the new requirements library (banking, multifinance lending, omnichannel service): peers → I'd
+  start with → which matter most. Only lines Renzo has approved show (the seed shows as DRAFT until then).
+- `sc-demo-plan`: an "our idea" step stays in the demo even if the customer hasn't answered its question; show it
+  after their scenes and open with the question.
+- **Each SC: update the plugin. Nothing else to do.**
+
 ## 0.17.0 (13 Nov 2026): demo depth, build rules, Bank.AI log, deal dates, custom components
 - Build rules (`standards/BUILD-RULES-v0.2.md`): try a browser refresh before any compile or restart and ask the SC
   first; when calls suddenly fail (401/403, a login page instead of JSON), check and refresh the OData token first;
