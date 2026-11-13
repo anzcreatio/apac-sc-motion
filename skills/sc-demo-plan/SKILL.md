@@ -176,6 +176,11 @@ raise but that follow from a pain they did: the industry pack (pains they didn't
 company research (news, regulation that applies to them), the pattern book, lessons from past deals. Keep the best
 one or two, cheap to build, each tied to their goal and asked as a question.
 
+**No answer before the demo? Keep the step** (Renzo, 13 Nov 2026). If the customer hasn't answered an our-idea
+question by demo day, the step stays: show it **after their own scenes** and **open it with the question** (`ask`),
+so it lands as our point of view, not as something they said. The SC click path shows the question first on that step.
+Drop it only if the SC decides it no longer fits (say why in the plan).
+
 ## Output: `NN-demo-plan.md` in the deal folder (NN = the next free number)
 
 **Before we build:** the three questions and their answers (date, who answered).
