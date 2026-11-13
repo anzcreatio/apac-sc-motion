@@ -139,6 +139,23 @@ def check(d, sources=""):
         W.append("build is %.2g h against a %.2g h budget: say why in build_note, or cut" % (total, budget))
         if not d.get("build_note"):
             E.append("over budget with no build_note")
+    # Where we win: the demo bar's required differentiators (DEMO-BAR item 4), across the whole plan
+    won = {}
+    for i, st in enumerate(d["steps"], 1):
+        dif = st.get("differentiator") or {}
+        if dif.get("id") in DIFFS and "parked" not in st.get("chips", []):
+            won.setdefault(dif["id"], []).append(i)
+    if "D1" not in won and not any(s.get("screen", {}).get("type") == "beforeafter" for s in d["steps"]):
+        W.append("where we win: no D1 (a rehearsed live change); the demo bar requires one")
+    if "D3" not in won:
+        W.append("where we win: no D3 (AI that acts while a person confirms); the demo bar requires one, or say why it's parked")
+    core = {"platform": ["D2"], "ai": ["D5"], "both": ["D2", "D5"]}.get(d.get("track"))
+    if core:
+        for c in core:
+            if c not in won:
+                W.append("where we win: track core %s missing for a %s deal" % (c, d["track"]))
+    elif not ({"D2", "D5"} & set(won)):
+        W.append("where we win: no track core (D2 one platform, or D5 fits your landscape); set 'track' to check it exactly")
     if len(d["steps"]) > 8:
         W.append("%d steps: a 60-minute demo carries 3-4 scenes; check the cut" % len(d["steps"]))
     return E, W

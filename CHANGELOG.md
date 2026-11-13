@@ -19,6 +19,7 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - **Meeting card** for "tell us what we need": `sc-requirements/scripts/meeting_card.py` builds a one-page, phone
   friendly card from the new requirements library (banking, multifinance lending, omnichannel service): peers → I'd
   start with → which matter most. Only lines Renzo has approved show (the seed shows as DRAFT until then).
+- **Where we win** strip at the top of every build plan: steps from them vs our ideas, D1-D7 shown by step, and the demo bar's required set (D1 live change, D3 AI with a person confirming, track core) ticked or flagged in red. Optional `track` in `build-plan.json`; the builder warns on anything missing.
 - `sc-demo-plan`: an "our idea" step stays in the demo even if the customer hasn't answered its question; show it
   after their scenes and open with the question.
 - **Each SC: update the plugin. Nothing else to do.**

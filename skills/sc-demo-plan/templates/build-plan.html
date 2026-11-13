@@ -133,6 +133,11 @@ q{font-weight:500;quotes:"\201C" "\201D"}
 .st{font:600 10.5px var(--body);border-radius:999px;padding:0 6px;border:1px solid var(--line);margin-left:4px;white-space:nowrap}
 .st.shown{color:var(--ok);border-color:var(--ok)} .st.simulated{color:var(--sim);border-color:var(--sim)} .st.planned{color:var(--muted)} .st.gap{color:var(--accent);border-color:var(--accent)}
 @media (max-width:620px){.trow{grid-template-columns:1fr}.tcell{margin:0 0 14px}.tcell:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-15px;transform:none}}
+.win{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.win .eyebrow{display:block;margin-bottom:6px}.win .count b{font-size:22px}.win .count small{color:var(--muted)}
+.dchips{display:flex;flex-wrap:wrap;gap:6px}.dchip{font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;border:1px solid var(--line);color:var(--muted)}
+.dchip.on{color:var(--ok);border-color:var(--ok)}.req{list-style:none;margin:0;padding:0;font-size:13px}.req li.ok{color:var(--ok)}.req li.miss{color:var(--accent);font-weight:600}
+@media (max-width:700px){.win{grid-template-columns:1fr}}
 .cov{font-size:12px;font-weight:600;border-radius:999px;padding:1px 8px;border:1px solid var(--line)}
 .cov.covered{color:var(--ok);border-color:var(--ok)} .cov.partly{color:var(--sim);border-color:var(--sim);background:var(--sim-soft)}
 .cov.not-shown{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
@@ -237,6 +242,17 @@ function render(){
       </dl>
     </article>`).join("");
   const mins = (D.steps||[]).reduce((a,s)=>a+(Number(s.minutes)||0),0);
+  // Where we win: theirs vs ours, D1-D7 coverage, the demo bar's required set
+  const won = {};
+  (D.steps||[]).forEach((s,i)=>{ const d=(s.differentiator||{}).id; if(d && !(s.chips||[]).includes("parked")) (won[d]=won[d]||[]).push(i+1); });
+  const ours = (D.steps||[]).filter(s=>s.our_idea).length, theirs = (D.steps||[]).length - ours;
+  const hasBA = (D.steps||[]).some(s=>(s.screen||{}).type==="beforeafter");
+  const core = {platform:["D2"], ai:["D5"], both:["D2","D5"]}[D.track];
+  const reqs = [["D1 live change", !!won.D1 || hasBA], ["D3 AI, a person confirms", !!won.D3]]
+    .concat(core ? core.map(c=>[c+" track core", !!won[c]]) : [["Track core (D2 or D5)", !!(won.D2||won.D5)]]);
+  const winStrip = `<div class="win"><div class="count"><span class="eyebrow">Where we win</span><b>${theirs}</b> <small>from them</small> · <b>${ours}</b> <small>our idea${ours===1?"":"s"}</small></div>
+    <div><span class="eyebrow">Differentiators shown</span><div class="dchips">${["D1","D2","D3","D4","D5","D6","D7"].map(d=>`<span class="dchip ${won[d]?"on":""}">${d}${won[d]?" · step "+won[d].join(", "):""}</span>`).join("")}</div></div>
+    <div><span class="eyebrow">Demo bar</span><ul class="req">${reqs.map(([t,ok])=>`<li class="${ok?"ok":"miss"}">${ok?"✓":"✗"} ${esc(t)}</li>`).join("")}</ul></div></div>`;
   const cov = (D.criteria||[]).map(c=>`<tr><td style="white-space:normal">${esc(c.criterion)}</td><td><span class="cov ${esc(c.coverage.replace(/ /g,"-"))}">${esc(c.coverage)}</span></td><td>${esc((c.steps||[]).join(", ")||"—")}</td><td style="white-space:normal">${esc(c.say||"")}</td></tr>`).join("");
   const build = (D.build||[]).map(b=>`<tr class="${b.status==="parked"?"muted":""}"><td>${esc(b.part)}</td><td style="white-space:normal">${esc(b.element)}</td><td style="white-space:normal">${esc(b.how)}</td><td>${esc(b.status||"in plan")}</td><td class="num">${esc(b.hours)}</td></tr>`).join("");
   const objs = ((D.model||{}).objects||[]).map(o=>`<div class="obj ${esc(o.kind)}"><b>${esc(o.name)}</b><small>${esc(o.kind)}${o.links?` · links to ${esc(o.links.join(", "))}`:""}</small></div>`).join("");
@@ -247,6 +263,7 @@ function render(){
     <div class="meta"><span>${esc(D.deal)}</span><span>${esc(D.date)}</span><span>Stand ${esc(D.stand||"")}</span><span>Prepared for ${esc(D.sc||"the SC")}</span></div>
     <p class="oneline">${esc(D.one_line)}</p>
     <div class="decision"><span class="eyebrow">We'll ask at the end</span><div><b>${esc(D.decision)}</b></div></div>
+    ${winStrip}
   </header>
   <section><h2>The demo, step by step</h2><p class="caption">Wireframes show what is on each screen and in what order, not the final look. ${esc(D.example_caption||"Example data on fictional customers.")}</p>
     ${D.demo_minutes?`<p class="total ${mins>D.demo_minutes?"over":""}">${mins} min of scenes in a ${esc(D.demo_minutes)} min demo slot</p>`:""}<div class="steps">${steps}</div></section>
