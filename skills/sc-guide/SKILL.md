@@ -100,12 +100,21 @@ message. If they want to skip a step, let them and note it.
 Renzo moves an SC to the next stage; update `stage` when the SC says Renzo has moved them. While shadow or paired, end each
 customer-facing output with a reminder of what Renzo still needs to check.
 
+## Deal dates (every deal, Renzo 13 Nov 2026)
+
+Each deal keeps `deal-dates.json` with three dates, so we can measure how fast deals move: **when the first call
+happened** (BDR, AE or discovery), **when the SC got the transcript or first heard of the deal**, and **when the demo
+is** (planned, then done). Check with `python scripts/deal_dates.py show --deal <deal folder>`. Take a date from what
+you already have (the handoff form, the transcript's date or file name, the SC's message) and record it with
+`set ... --source "<where it came from>"`. **Only when a date is missing, ask for it at the top of your message**, one
+line each. Don't guess a date. If a date changes (the demo moves), set it again: the old one stays in the history.
+
 ## B. Next step on a deal
 
 1. Find the deal folder (`<team root>/Deals/<account>/` or `<account>-<initials>/`; ask which if unclear). For a new
    deal, offer to create `<kebab-case-account>-<sc>/` by the deal folder rule in `sc-setup` (one folder per account;
    `sc` initials from `~/.apac-sc-motion.json`).
-2. **Ask first, at the top:** "When was your last meeting with them, and what's the next one?" File names can't tell
+2. **Ask first, at the top:** "When was your last meeting with them, and what's the next one?" Run `deal_dates.py show` and add a question for any missing deal date (see Deal dates). File names can't tell
    whether a meeting happened. Then read the folder, matching loosely (numbers and names vary between older and newer
    deals): prep = `*fm-prep*` or `*W1*pack*`; transcript = `*transcript*`; click path = any `click*/` folder; review =
    `*meeting-review*`; plan = `*demo-plan*`. Also read `deck.json`, `click*/clickpath-customer.json` and

@@ -29,6 +29,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 
 ## Steps
 
+0. **Deal dates:** make sure the demo date is recorded (`python ../sc-guide/scripts/deal_dates.py set --field demo --status planned`); ask for it at the top if nobody has said. Same for the first-call and SC-notified dates if they're missing.
 0. **Before we build: ask these three questions, every time** (Renzo, 11 Nov 2026). Ask them at the top of your
    message, in these words, before any configuration starts, even if you think you know the answers:
    

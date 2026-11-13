@@ -13,6 +13,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 
 ## Steps
 
+0. **Deal timing:** `python ../sc-guide/scripts/deal_dates.py stats` → `Lessons/stats/deal-timing.md` (medians: first call → SC notified → demo). Put the three medians and the deals missing a date in the digest.
 1. **Collect:** `python scripts/collect_week.py` (default: last 7 days) → `Lessons/weekly/<yyyy-Www>-evidence.json`
    on SharePoint. Read it, then read the files it lists (deck reviews, meeting reviews, demo plans, new transcripts,
    lessons files, open inbox items).

@@ -34,6 +34,7 @@ Nothing customer-facing is sent from here.
 
 Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-review-<yyyy-mm-dd>.md`:
 
+0. **Deal dates:** if this meeting was the demo, record it as done (`python ../sc-guide/scripts/deal_dates.py set --field demo --date <date> --status done`); if the demo moved, set the new date.
 1. **Scorecard**
 
    | Check | Result | Evidence (quote, time) |

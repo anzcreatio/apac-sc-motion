@@ -60,6 +60,10 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 
 ## Steps
 
+0. **Deal dates** (every deal): record when the first call happened, when you (the SC) got the transcript, and when
+   the meeting or demo is, with `python ../sc-guide/scripts/deal_dates.py set` (see `sc-guide` "Deal dates"). Take them from the handoff and the
+   transcript; ask at the top only for the ones you can't find.
+
 1. **Extract the six answers** (quote, timestamp, who said it, answered / partly / not asked): opener pick or what
    prompted them · Q1 where it gets hard · Q2 how they handle it now and what has to stay · Q3 if nothing changes ·
    Q4 why now, by when · Q5 who runs it and who signs off · Q6 which job AI would take first. **Score coverage** (the
