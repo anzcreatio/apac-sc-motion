@@ -666,6 +666,28 @@ def logins_html(sc, creds, fragment, report):
             % "".join(rows))
 
 
+def meeting_card(sc, base, report):
+    """The deal's meeting card (sc-requirements/scripts/meeting_card.py) as a tab, isolated in an iframe so its styles
+    don't mix with the click path's. clickpath-sc.json "meeting_card" names the file; otherwise the newest
+    meeting-card-*.html in the deal folder (the click path folder's parent) is used."""
+    import glob as _glob
+    path = sc.get("meeting_card")
+    if path:
+        path = path if os.path.isabs(path) else os.path.join(base, path)
+    else:
+        found = sorted(_glob.glob(os.path.join(os.path.dirname(base), "meeting-card-*.html")), key=os.path.getmtime)
+        path = found[-1] if found else None
+    if not path:
+        return None
+    if not os.path.exists(path):
+        report.append("meeting card %s not found: no 'If they ask what they need' tab" % path)
+        return None
+    with open(path, encoding="utf-8") as fh:
+        doc = fh.read()
+    return ('<div class="panel"><iframe title="Meeting card" srcdoc="%s" style="width:100%%;height:80vh;border:0;'
+            'border-radius:10px;background:#fff"></iframe></div>' % html.escape(doc, quote=True))
+
+
 def sc_page(spec, shots, sc=None, creds=None, fragment=False, report=None, base="."):
     sc, creds, report = sc or {}, creds or {}, report if report is not None else []
     cat = catalogue_ids()
@@ -764,8 +786,13 @@ def sc_page(spec, shots, sc=None, creds=None, fragment=False, report=None, base=
         stats.append(("%d · %d" % (th, ou), "From them · our ideas", ""))
     stats.append(("0/%d" % len(cards), "Rehearsed", "statRehearsed"))
     title = spec.get("title", "Demo click path")
+    tabs, panels = [("path", "Click path"), ("prep", "Before you start")], [("path", explore), ("prep", prep)]
+    card = meeting_card(sc, base, report)
+    if card:
+        tabs.append(("needs", "If they ask what they need"))
+        panels.append(("needs", card))
     return shell("Demo practice · SC only", esc(title), sc.get("lede", ""), stats, "", flow_strip(order, headings, counts),
-                 [("path", "Click path"), ("prep", "Before you start")], [("path", explore), ("prep", prep)],
+                 tabs, panels,
                  "For the SC only. Stand: %s · version %s. Not for the customer: send the customer recap instead. "
                  "Memorise the beats (record, moment, value line), not a word-for-word script."
                  % (esc(spec.get("instance", "")), esc(spec.get("spec_version", ""))))

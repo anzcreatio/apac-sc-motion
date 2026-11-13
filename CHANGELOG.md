@@ -22,7 +22,16 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - **Where we win** strip at the top of every build plan: steps from them vs our ideas, D1-D7 shown by step, and the demo bar's required set (D1 live change, D3 AI with a person confirming, track core) ticked or flagged in red. Optional `track` in `build-plan.json`; the builder warns on anything missing.
 - `sc-demo-plan`: an "our idea" step stays in the demo even if the customer hasn't answered its question; show it
   after their scenes and open with the question.
-- **Each SC: update the plugin. Nothing else to do.**
+- **SC click path that teaches the demo** (`sc-clickpath`). Per step: Open (record, how to find it, its state),
+  numbered Click steps with exact labels, You'll see, They said (confirmed words only), Land this (point, KPI,
+  differentiator and competitor angle), Say, If they ask (sourced, otherwise "we'll confirm in writing"), Watch out,
+  Signed in as. Per use case: a 30-second value story and a bridge to the next. Every step shows whether it's theirs
+  or our idea. Practice mode hides the talk track so you recall it. A third tab shows the deal's meeting card. Demo
+  logins appear on the SC page (and its phone copy) from SharePoint `Stand-logins/stand-logins.json`; never on the
+  customer page. New `second_browser.py` takes screenshots that need two users signed in at once.
+- **Each SC:** update the plugin. Add the logins of any stand you demo on to SharePoint
+  `Stand-logins/stand-logins.json` yourself (Claude never does). For two-user screenshots, `pip install playwright`
+  once.
 
 ## 0.17.0 (13 Nov 2026): demo depth, build rules, Bank.AI log, deal dates, custom components
 - Build rules (`standards/BUILD-RULES-v0.2.md`): try a browser refresh before any compile or restart and ask the SC

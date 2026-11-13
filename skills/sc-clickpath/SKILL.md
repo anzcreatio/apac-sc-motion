@@ -101,6 +101,11 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 The SC page's **Before you start** always opens with: rehearse on the presenting device, network and login, with
 the fallback ready (demo bar item 7).
 
+**"If they ask what they need" tab.** If the deal folder has a meeting card (`meeting-card-<industry>.html`, built
+by `sc-requirements/scripts/meeting_card.py`), the SC page shows it as a third tab, so the SC can answer "tell us
+what we need" without leaving the click path. `clickpath-sc.json` `"meeting_card"` names a different file. Never on
+the customer page.
+
 ## What goes where
 
 | | SC practice version | Customer version |
@@ -122,3 +127,8 @@ the fallback ready (demo bar item 7).
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is
 none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
+
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects, overrides or rejects what
+you produced, write a feedback file (`Source: chat`, with this skill and step) without asking. At the end of the run,
+ask **one** short question about how it went, tied to what just happened, and log the answer (`Source: asked`).
+Never in practice folders.
