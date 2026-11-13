@@ -68,6 +68,33 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
 | `NN-requirements-checklist.xlsx` | Read me (purpose, how to respond, red DRAFT line), Requirements (vendor response as a drop-down: Standard · Configuration without code · Custom code · Third-party product · Not available), Scoring (suggested weights) | Customer, after the SC check |
 | `NN-requirements-internal.xlsx` | Internal (never send): source, scene, fit, differentiator, why it favours us · Summary | SC, AE |
 
+## The requirements library and the meeting card
+
+Customers often want us to tell them what their requirements should be, not be asked "what do you need?" (Renzo,
+13 Nov 2026). This skill owns the shared answer: `../../knowledge/requirements-library.json`.
+
+| | |
+|---|---|
+| **What a line is** | A best-practice requirement in plain words, by industry → journey → stage: why it matters, a KPI (exact unit, sourced), how we show it, fit (`standard` or `configure` only), **proof** (`proven` = shown live on a demo; `standard` = in the product, not yet shown), `recommend_first`, D-point, source |
+| **Creatio safe** | Only `standard` / `configure`, high confidence. Never custom, partner or roadmap. A line linked to an open product limitation (`Lessons/registers/product-limits.json`) drops out of the card automatically |
+| **Seed** | Banking, multifinance lending, omnichannel customer service (Renzo, 13 Nov 2026) |
+| **Who approves** | Renzo, on Friday. Only `approved: true` lines reach the card |
+
+**The meeting card** (one page, phone friendly, internal):
+`python scripts/meeting_card.py --industry <banking|multifinance|service> [--journey "<name>"] --deal "<deal folder>"`
+→ `<deal>/meeting-card-<industry>.html`. It gives the SC three moves: **peers** ("what we see at organisations like
+yours…", 2–3 lines from their stage) → **recommend** ("for you, I'd start with…", the top 3, proven first) →
+**ask** ("which of these matter most?"; their ranking goes into the meeting review as C). It also lists open product
+limitations under "check first". `sc-first-meeting` and `sc-demo-plan` attach the card to the prep; the SC click path
+shows it as a tab; the SC can publish it as a private artifact to read on a phone.
+
+**How it grows** (every proposal waits for Friday; the asymmetric rule in `../../standards/FEEDBACK-LOOP-v0.1.md`):
+- After step 2 of this skill: propose master lines that aren't in the library, with customer names stripped out,
+  as a feedback file (`Kind: process`, "requirements library proposal") listing the new lines.
+- `sc-meeting-review`: lines they picked, ranked or rejected → proposals (change `recommend_first`, reword, retire).
+- `sc-harvest`: a line shown on a harvested demo → propose `proof: proven` with `proven_on`.
+- Renzo applies approved lines in the plugin (`approved: true`, `added`, `added_by`) and publishes.
+
 ## Rules
 
 - Never write a requirement we'd fail. It comes back in their RFP and scores against us.

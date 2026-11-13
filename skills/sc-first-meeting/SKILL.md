@@ -108,7 +108,9 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 5b. **Before the light configuration is built,** ask the SC the three pre-build questions in
    `../sc-demo-plan/SKILL.md` step 0 (competition, anything else the customer gave us, anything else we should know),
    at the top of your message, and record the answers in `01-fm-prep.md`.
-6. **Write `01-fm-prep.md`** in the deal folder with the outputs below.
+6. **Write `01-fm-prep.md`** in the deal folder with the outputs below. If the deal's industry has a meeting card
+   (banking, multifinance, service), build it and link it in the prep: `python ../sc-requirements/scripts/meeting_card.py
+   --industry <industry> --deal <deal>` (see `sc-requirements`, "The requirements library").
 6b. **⛔ Build plan for the SC, before anything is built** (Renzo, 12 Nov 2026). Write `NN-build-plan.html` in the deal
    folder per `../sc-demo-plan/SKILL.md` "Build plan" and give it to the SC (publish it as a private artifact if this
    session can, and send the link). **No write to any Creatio stand until the SC approves it in chat.** Record the

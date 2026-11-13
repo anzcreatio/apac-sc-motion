@@ -69,6 +69,9 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 8. **Open space for the SC.** 3–5 optional ideas the SC may like: patterns from the pattern book, best practice from
    competitors' UX (source and date; never copy their screens or claim against them outside the catalogue), or
    anything the customer may want to click through. Mark them clearly as options.
+8b. **Meeting card.** If the industry has one (banking, multifinance, service), build it for the SC so they can answer
+   "tell us what we need" on the spot: `python ../sc-requirements/scripts/meeting_card.py --industry <industry>
+   --deal <deal>`. Lines the demo shows should match the card's "start here" lines; say in the plan where they don't.
 9. **Demo bar check.** One row per bar item: met / planned / gap, and what closes each gap.
 10. **Effort and order.** Hours per element at 6 productive hours a day with 20% buffer (demo bar §4), build order
     (Business Studio first, AI second), what's simulated. If it doesn't fit, drop in this order: SC ideas, then Asked;
