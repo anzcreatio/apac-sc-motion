@@ -54,7 +54,8 @@ published or shared with other customers, and never their real customer data.
 
 Propose one when it clearly lifts the experience past what native Freedom UI does well (a whole job on one screen,
 a map, a board) and say why in one line. Always mark it **custom** in the plan and the partner pack: partners have to
-maintain it. Prefer a component that's generic enough to go into the demo library.
+maintain it. Prefer a component that's generic enough to go into the demo library. Check `labUiKit` first, and build
+any new component to `UI-KIT-STANDARD-v0.2.md` (no-code settings, upgrade-safe, one shared package).
 
 ## 6b. Build for reuse (applies while configuring)
 
@@ -84,6 +85,7 @@ book carries its source and date.
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| v0.2 | 13 Nov 2026 | §6 points at `UI-KIT-STANDARD-v0.2.md` and `labUiKit` (pointer only, no rule change) | Kit used on two deals (EWB, Navalo) |
 | v0.2 | 11 Nov 2026 | Item 7: clean stand for Full and Proof demos; rehearse on the presenting device, network and login | Weekly digest W46, approved by Renzo: Suntory (Ord Minnett names in screenshots, mobile AI sign-in failed live), H&G (shared stand, `Custom` default) |
 | v0.1 | 11 Nov 2026 | First bar | Renzo's brief; H&G, Suntory, SAHE builds |
 | v0.1 | 11 Nov 2026 | Item 8 adds the two click-path pages (SC practice + customer-safe recap) | Renzo: keep a click path to practise with, and a customer-ready one |
