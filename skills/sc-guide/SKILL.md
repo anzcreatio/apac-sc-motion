@@ -58,7 +58,7 @@ message. If they want to skip a step, let them and note it.
 | When | Skill | What comes out |
 |---|---|---|
 | BDR/AE books the meeting | (the AE's BDR card and handoff) | `00-handoff-form.md`, the call transcript |
-| Before the first meeting | `sc-first-meeting` | Prep, the standard deck (`deck.json` → `.pptx`), light config brief, meeting plan |
+| Before the first meeting | `sc-first-meeting` (asks first: introduction or detailed demo?) | Prep, the standard deck (`deck.json` → `.pptx`), light config brief (introduction) or a Full demo plan via `sc-demo-plan` (detailed), meeting plan |
 | Any deck change | `sc-deck` | Rebuilt deck from `deck.json` |
 | Any step on a BFSI deal (bank, lender, insurer, securities) | `sc-bank-ai-log` | The customer's requirements and our proposed configuration added to the Bank.AI log (SharePoint `Bank-AI-Requirements`) |
 | An RFP, TOR or requirements list arrives | `sc-rfp` | Requirements register, fit-gap, bid / no-bid recommendation; later a check of the bid team's answers |
@@ -123,7 +123,7 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 
    | If the folder has… | …but not | Next step |
    |---|---|---|
-   | nothing | | Create the folder; ask for the AE's handoff and the call transcript |
+   | nothing | | Create the folder; ask for the AE's handoff and the call transcript, and **the demo depth**: "introduction to Creatio, or a detailed demo on their pains?" (`sc-first-meeting` step 0b) |
    | a transcript or handoff | a first-meeting prep / `deck.json` | `sc-first-meeting` |
    | `deck.json` | its `.pptx` | `sc-deck` build |
    | a deck, and the meeting has happened | a `meeting-review` dated after the meeting | `sc-meeting-review` (ask for the transcript and the deck they presented) |

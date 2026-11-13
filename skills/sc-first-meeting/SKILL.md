@@ -3,7 +3,7 @@ name: sc-first-meeting
 description: Turn the transcript of a BDR or AE discovery call (the six questions), or a partner call about a customer, into the first-meeting pack for a Creatio APAC solution consultant - the standard customer deck (current understanding, solution hypothesis, one slide per solution component with Business Studio first and AI second, solution summary, next steps), a light-configuration brief split into Business Studio then AI, and a meeting plan with the closing question. Use when an SC shares a discovery or BDR call transcript, asks to prepare a first meeting, a first demo deck or a playback, or names a new deal.
 ---
 
-# sc-first-meeting (FM v0.4)
+# sc-first-meeting (FM v0.5)
 
 > **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 
@@ -21,6 +21,7 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 | Company website (the customer's own site; for a new brand or a group, the site of the entity we're selling to) | **Yes** | Ask for it in your first message, but don't stop: research it, and say which site you used. It anchors rule 3's "right company" check (Navalo, 12 Nov 2026: the new brand was the renamed Payright) |
 | Anything the customer has sent (email, brief, RFP, requirements) | Preferred | Ask (it's pre-build question 2). If it arrives after the deck is built, save it as `00-customer-<what>-<date>.md` and rework the hypothesis, components and next steps against it: their written criteria outrank the call (Navalo, 12 Nov 2026) |
 | Deal folder: `<team root>/Deals/<kebab-case-account>-<sc>/` (team root and `sc` initials from `~/.apac-sc-motion.json`, set by `sc-setup`). If the caller names another folder (for example a practice folder from `sc-guide`), use that one and never write to the real deal | Yes | Look for the account with any suffix first and reuse it; otherwise create it by the deal folder rule in `sc-setup`. Save the transcript as `00-<source>-transcript-<yyyy-mm-dd>.md` |
+| **Demo depth**: introduction to Creatio, or a detailed demo on their pains (step 0b) | **Yes** | Ask at the top of your first message; don't build the brief until the SC answers |
 | Opportunity type: AI CRM / AI Studio / Custom apps (no-code) / combination | Preferred | Infer from the answers and say so |
 | Meeting date, attendees, length, language | Preferred | From the transcript; list what's missing |
 | Knowledge: `../../knowledge/` (packs, `DIFFERENTIATOR-CATALOGUE`, `AI-GOVERNANCE-PACK-LITE`, `M6-LIVE-CHANGE-KIT`, call sheet) | **Yes** | — |
@@ -50,7 +51,22 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 7. **Light configuration ≤ half a day (4 hours)**, meeting the **Light** level of `../../standards/DEMO-BAR-v0.2.md`, only for pains they confirmed: their name and logo, their terms and stages,
    1–2 example records, **one prepared live change** (`M6-LIVE-CHANGE-KIT`). No code, no real integration; a simulated
    connection is labelled simulated. Reuse library modules first, then the pattern book (`../../patterns/catalogue.json`).
-   For the full value demo after discovery, use the `sc-demo-plan` skill.
+   For the full value demo after discovery, use the `sc-demo-plan` skill. This rule is for an **introduction**; a
+   **detailed** first meeting follows rule 7b.
+7b. **Detailed first meeting** (Renzo, 13 Nov 2026). Sometimes the booking sets a high bar: the customer expects a
+   detailed session on their own pains, and often hasn't spelled them out, because they expect us to know best practice
+   from our industry experience. Then:
+   - **Fill the gaps from the pack.** Take the pack's best-practice pains and hypotheses that fit their industry, size
+     and what the call did say. Tag them **I** (source = pack + section), keep the top 3–5, and show them on the
+     understanding slide as "What we usually see at [peers like them]", never as their words.
+   - **Check them before the meeting.** Draft the success-criteria email for the AE (Output 5): those pains in plain
+     words, and "which of these matter most to you, and what's missing?". Demo bar item 3 still applies: I builds only
+     after a check. No reply by the time the build starts → the SC decides, and the meeting opens with "Did we get this
+     right?" on the understanding slide.
+   - **Configuration at Full level, through `sc-demo-plan`**, not the light brief: the three pre-build questions, the
+     build plan, the SC's approval, then the build. Output 2 becomes a pointer to the demo plan.
+   - **Time:** Full = 2–3 days of build. If the meeting is less than 3 working days away, say so first and recommend
+     one of: the hero journey only, or moving the meeting. The SC decides.
 8. **Write like an SC talking across the table:** follow `../../standards/WRITING-STYLE-v0.1.md`. Short titles
    (about 8 words, no colons), their words, simple verbs, no vendor words. Fix every `style:` warning from the builder.
 9. **Timing:** if the meeting is today or less than a working day away, or already past, say so first: no new
@@ -63,6 +79,11 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 0. **Deal dates** (every deal): record when the first call happened, when you (the SC) got the transcript, and when
    the meeting or demo is, with `python ../sc-guide/scripts/deal_dates.py set` (see `sc-guide` "Deal dates"). Take them from the handoff and the
    transcript; ask at the top only for the ones you can't find.
+0b. **⛔ Demo depth, before anything else is planned** (Renzo, 13 Nov 2026). Ask the SC at the top of your first
+   message, in these words: "What does the customer expect from this meeting: an **introduction to Creatio**, or a
+   **detailed demo** on their specific pains?" Say what the handoff or transcript suggests, but let the SC answer.
+   Introduction (or anything like it: overview, first look, intro) → the plan as written (rule 7, Light). Detailed →
+   rule 7b. Record the answer at the top of `01-fm-prep.md` (date, who answered).
 
 1. **Extract the six answers** (quote, timestamp, who said it, answered / partly / not asked): opener pick or what
    prompted them · Q1 where it gets hard · Q2 how they handle it now and what has to stay · Q3 if nothing changes ·
@@ -136,12 +157,18 @@ seen today, could this fix it for you?" Yes → "Is it worth working out what it
 part of that?" (a yes needs a named person and a date). "Want to know more" → summary slide: "Which of these would
 you go deeper on?" No / not sure → "What did we miss?"
 
+*Detailed first meeting (rule 7b):* same order, but the Creatio part is the demo plan's scenes and takes 25–30
+minutes; the current-understanding part walks the best-practice pains and asks them to rank them.
+
 **Output 4: Internal notes** — research facts with sources and dates · deal shapers (who decides, competition incl.
 doing nothing, risks, words to avoid) · go / no-go for the light config: pain in their words + owner + timeframe; if
 any is missing, say so and let the SC decide.
 
+**Output 5 (detailed only): success-criteria email for the AE** — 3–5 best-practice pains in plain words, the ask to rank and correct them, and the meeting date. Customer-facing, so it ends with the SC check line.
+
 ## Quality check before you report
 
+- [ ] Demo depth asked and recorded; detailed → best-practice pains tagged I, success-criteria email drafted, config sent to `sc-demo-plan`
 - [ ] Nothing a partner said is shown as the customer's words; only C text in quotes
 - [ ] Every gap is a meeting question, not a guess
 - [ ] The hypothesis answers their top pain, with a KPI
