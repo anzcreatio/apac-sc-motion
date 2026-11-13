@@ -1,4 +1,4 @@
-# Deck standard v0.3
+# Deck standard v0.4
 
 **What it is:** the slides every APAC SC customer deck is made of, their order, and the `deck.json` that builds them.
 **Built from:** the decks presented at H&G (10 Nov 2026), Suntory (11 Nov, `Suntory Introduction Nov 2026.pptx`) and
@@ -11,7 +11,7 @@ Creatio logo top right, 40 pt title with a small orange caps label above it, ora
 | # | Slide type | Required? | What it does | Field source |
 |---|---|---|---|---|
 | 1 | `cover` | Yes (not in a partner-led slot) | Customer + the outcome in their words. A photo (`image`) with the title on orange blocks, or plain orange | H&G 1, Suntory 1 |
-| 1b | `agenda` | **Yes for demo meetings** (Renzo, 12 Nov 2026) | The AE opens with it: minutes, what, who on the left; "At the end, we'll ask you" with the decision question and what happens if it fits or not yet on the right. No open "what would make this a success?" slot: get success criteria before the meeting | Examples: `Deals/_examples/agenda-and-ae-brief/` |
+| 1b | `agenda` | **Yes for every demo meeting** (Renzo, 12-13 Nov 2026) | The AE opens with it: minutes, what, who on the left; on the right **"Today's goal"**: the decision question, then what happens if it fits and what "not yet" pins down. **The goal is the closing question, word for word**: the SC asks it at the end on the next-steps slide. No open "what would make this a success?" slot: get success criteria before the meeting. Wording by meeting type in §1b | Examples: `Deals/_examples/agenda-and-ae-brief/` |
 | 2 | `understanding` | **Yes** | What we currently understand about their pains: **Today → where they want to be**, plus timing. Or cards when we only have what we heard | H&G 2, Suntory 2–3, Telkomsel 1 |
 | 3 | `platform` | **Yes, always the whole set** (Renzo, 11 Nov 2026) | The platform story from the Slide-library's standard set: AI Platform + AI CRM, the three studios, **01 AI Studio, 02 AI Twin, 03 Business Studio, 04 AI Coding Agent**, with speaker notes. Extras (AI Studio callouts, AI Twin concept) with `add`. Other corporate slides (analysts, customers, telecom) with `library` | H&G 3–11, Suntory 4–11 |
 | 4 | `why` | Optional | Why Creatio fits *them*: 3–4 reasons = our differentiators in their terms | H&G 12, Suntory 9 |
@@ -35,6 +35,20 @@ listing it in `meta.waive` with the reason (e.g. Telkomsel: partner-led, Deloitt
 
 Renzo, 11 Nov 2026: "slides that actually contain screenshots and summaries of the main elements of our demo
 configuration. If that is included in the deck then yes I would present most of this."
+
+## 1b. Today's goal, by meeting type
+
+Use **their top pain in their words**, never RFP language ("does it meet your requirements?" invites "we'll think
+about it"). Either answer moves the deal: yes = agree what it takes; not yet = pin down exactly what to do next.
+Set `meta.meeting` in `deck.json` to `first_demo`, `value_demo`, `proof` or `intro`.
+
+| Meeting | Goal / decision (example) | If it fits | Not yet |
+|---|---|---|---|
+| `first_demo` | "Does what you see today fix [top pain] for you?" | Agree what it takes, who's involved and when | "Which part falls short, and what would it need to do?" That becomes the next session |
+| `value_demo` | "Is this worth turning into a proposal?" | Proposal, named sponsor, date | "What's missing before you'd consider it?" |
+| `proof` | "Does this pass your criteria?" | Go: commercial next steps | "Which criterion failed, and what's the fix?" |
+
+`sc-meeting-review` records the answer, and a "not yet" answer becomes the next demo plan's first scene.
 
 ## 2. Rules for the words
 
@@ -82,7 +96,7 @@ titles, titles over 12 words, semicolons and em dashes.
 | `section` | `text`, `sub`? |
 | `flow` | `steps`: `[{title, skills?: [..], who?, highlight?}]` (up to 8, one row), `loop`?, `title_size`?, `skill_size`? · internal and training decks |
 | `outputs` | `rows`: `[{step, customer, internal}]`, `labels`?, `size`? · what each step produces |
-| `agenda` | `items`: `[{min, what, who}]`, `length`? (warns if the minutes don't add up), `decision`, `outcomes`: `[{if, then}]`, `decision_label`? |
+| `agenda` | `items`: `[{min, what, who}]`, `length`? (warns if the minutes don't add up), `decision` (today's goal = the closing question), `outcomes`: `[{if, then}]` (fits, then not yet), `goal_label`? (default "Today's goal") |
 | `platform` | nothing required. `add`: extra slide numbers from the set's `optional` list · `drop`: only with a reason in the notes (the builder warns) · `slide_notes`: override a slide's speaker note. The set itself lives in `Slide-library/catalogue.json` → `standard_sets.platform` |
 | `library` | `file`: `library:<name>.pptx` (SharePoint `Slide-library`, listed in its `catalogue.json`), `slides`: `[1, 2, …]`. Copied with pictures and video; best on the designed template, which holds the corporate layouts |
 
@@ -115,7 +129,9 @@ and page-number shapes and its content area, build `tests/deck/sample-fictional`
 ## 6. What the builder checks
 
 Warnings, not errors: a title too long for two lines (titles shrink to fit two) · a component's right-hand column past the bottom · a required slide missing (unless waived) · row/part counts outside the limits · text that
-probably doesn't fit · a right-hand column that runs off the slide · next steps without dates. **Always render
+probably doesn't fit · a right-hand column that runs off the slide · next steps without dates · **a demo meeting
+without an agenda** · **a closing question that differs from the agenda's goal** · an agenda without a "not yet"
+outcome that pins down the next step. **Always render
 (`--render`) and look at every slide before the SC sees it.**
 
 ## 7. Changes
@@ -128,4 +144,5 @@ probably doesn't fit · a right-hand column that runs off the slide · next step
 | v0.2 | 11 Nov 2026 | Default look = `creatio-designed-2026`; icons; caps label; next steps as a timeline; cover photo; library slides copied in Python | Renzo chose the Suntory deck as presented. PowerPoint automation is blocked on 'Confidential'-labelled decks |
 | v0.3 | 11 Nov 2026 | `platform` slide type: every deck has the whole platform set, 01–04, with speaker notes. 03 Business Studio says "10x": the note tells the SC not to say it and gives the Nucleus figure | Renzo: always include 03 Business Studio and 04 coding agent |
 | v0.3 | 11 Nov 2026 | Writing style guide + builder check; `build` slide; screens replace components once the demo is built; `row` screen layout; titles shrink to fit two lines | Renzo: language too AI-sounding; wants screenshots and summaries of the configuration. Blind test 11 Nov |
+| v0.4 | 13 Nov 2026 | Agenda shows "Today's goal" = the closing question, word for word; required for every demo meeting; "not yet" outcome pins down what to do next; wording by meeting type (§1b); builder checks all three | Renzo: open the deck with the meeting's key goal, asked so either answer moves the deal |
 | v0.2 | 11 Nov 2026 | Next steps may show the month only and no owner on the slide (owners in the notes) | Suntory field edit (1 deal). Builder still warns without dates |

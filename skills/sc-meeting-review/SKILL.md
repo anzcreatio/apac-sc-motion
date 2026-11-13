@@ -45,14 +45,18 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    | Live change done, and their reaction | | |
    | Questions we couldn't answer (and who owes the answer) | | |
    | Differentiators shown (D-IDs) and any we missed | | |
-   | Closing question asked? Answer? Next step with a named person and a date? | | |
+   | **Today's goal** (agenda) asked again at the close, in the same words? Answer: fits / not yet / no | | |
+   | If **not yet**: which part falls short and what it would need to do, **in their exact words** | | |
+   | Next step with a named person and a date? | | |
+   | **SC's own rating** of the meeting (1–5) and one line on why, next to the customer's reactions above | | |
 
 2. **Solution summary update:** copy `deck.json` to `deck-<yyyy-mm-dd>.json` (history), then update the `summary`
    parts: confirmed parts stay, corrected parts reworded in their words, new needs added, rejected parts removed,
    shown parts marked `shown: true`. Update `understanding` rows with corrections (now tag **C**). Rebuild with `sc-deck`.
 3. **Configuration enhancements for the next session:** a table, Business Studio first, then AI:
    `pain (their words) · enhancement · Freedom UI or custom component (why) · AI part · library module to reuse · hours`.
-   Pains they confirmed or raised first, then anything they asked to see. Check the demo library and the pattern book
+   **A "not yet" answer to today's goal comes first** (it's the next session's first scene, tagged C, in their
+   words). Then pains they confirmed or raised, then anything they asked to see. Check the demo library and the pattern book
    first; for a bigger next demo, hand over to `sc-demo-plan`.
 4. **What landed:** for each scene, the pattern it used (pattern book ID) and the reaction. Patterns that land on 2+
    deals are candidates to build once as a demo library module.
@@ -61,6 +65,9 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    2 working days ago, say so first and offer to run `sc-harvest`.
 
 ## Part C: lessons
+
+Ask the SC first, in one line at the top: **"How did it feel, 1–5, and what would you change?"** Put their answer in
+the scorecard and, per `../../standards/FEEDBACK-LOOP-v0.1.md`, in a feedback file (`Source: transcript`).
 
 Append to `../../lessons/<yyyy-mm-dd>-<deal>.md`: what we'd keep, change or stop, each with evidence and a proposed
 change to a skill, standard, pack or template. Don't change the motion here: the weekly lessons run decides, and a
@@ -73,3 +80,8 @@ End customer-facing drafts with "SC check required before this is used with the 
 ## Talking to the SC
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
+
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects, overrides or rejects what
+you produced, write a feedback file (`Source: chat`, with this skill and step) without asking. At the end of the run,
+ask **one** short question about how it went, tied to what just happened, and log the answer (`Source: asked`).
+Never in practice folders.

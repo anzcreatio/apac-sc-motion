@@ -3,7 +3,7 @@ name: sc-first-meeting
 description: Turn the transcript of a BDR or AE discovery call (the six questions), or a partner call about a customer, into the first-meeting pack for a Creatio APAC solution consultant - the standard customer deck (current understanding, solution hypothesis, one slide per solution component with Business Studio first and AI second, solution summary, next steps), a light-configuration brief split into Business Studio then AI, and a meeting plan with the closing question. Use when an SC shares a discovery or BDR call transcript, asks to prepare a first meeting, a first demo deck or a playback, or names a new deal.
 ---
 
-# sc-first-meeting (FM v0.5)
+# sc-first-meeting (FM v0.6)
 
 > **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 
@@ -92,14 +92,16 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    without being asked counts; the opener is reported separately, not scored. Report it as "4.5 / 6".
 2. **Set the track and pick the pack** (BFSI, Manufacturing, Core for anything else).
 3. **Research the company** (rule 3).
-4. **Write `deck.json`** in the deal folder, per `../../standards/DECK-STANDARD-v0.3.md`:
-   `cover` → `understanding` (today → where they want to be; cards if we only have what we heard) → `platform` (the whole standard
+4. **Write `deck.json`** in the deal folder, per `../../standards/DECK-STANDARD-v0.4.md`:
+   `meta.meeting` (`first_demo`, or `intro` when nothing is shown) → `cover` → **`agenda`** (every demo meeting: the
+   AE's run of the meeting and **today's goal = the closing question below, word for word**, with "if it fits" and a
+   "not yet" that pins down what to do next; DECK-STANDARD §1b) → `understanding` (today → where they want to be; cards if we only have what we heard) → `platform` (the whole standard
    platform set, 01 AI Studio to 04 AI Coding Agent; don't pick slides) → `why` (optional)
    → `hypothesis` (headline + 3 parts, `shown` per part) → **one `component` per part** (Business Studio points,
    then `ai`; `shown` for the platform part and `ai_shown` when the AI part comes later) → `section` "Let's see it in Creatio" → `summary` (start from the 3 parts, same words; add what the full
    solution would also need to make 4 or 6; `shown` only if it's in the light config) → `next_steps` (actions with when and who;
-   the designed timeline shows **one** question, the most important of the 3 meeting questions; the other two go in
-   the slide's notes). Talk track in each slide's `notes`.
+   the designed timeline shows **one** question: **the agenda's goal, in the same words**; the 3 meeting questions
+   go in the slide's notes). The builder warns if the two differ. Talk track in each slide's `notes`.
 5. **Build and check the deck:** run the `sc-deck` skill (`python ../sc-deck/scripts/build_deck.py <deal>/deck.json
    --render`). Read every warning, open every PNG on the first build, fix and rebuild until clean; after a fix, look
    again at the changed slides only, unless the change can touch every slide (`sc-deck` "After every build", step 3). **If the render is skipped** (a Mac without a working PowerPoint export): open the .pptx for the SC, ask them to look at every slide the builder warned about and tell you or paste a screenshot of anything wrong.
@@ -145,17 +147,19 @@ Then: example records (fictional, realistic) · the one prepared live change and
 
 | Min | Part | Who |
 |---|---|---|
-| 0–5 | Intros, agree the goal | AE |
+| 0–5 | Intros, then the agenda slide: **today's goal**, read out as the decision we'll ask for at the end | AE |
 | 5–15 | Current understanding: "Did we get this right?" | SC |
 | 15–25 | Hypothesis and components | SC |
 | 25–45 | Creatio: the first take; change something live when they correct us | SC |
 | 45–50 | The 3 meeting questions | AE |
 | 50–60 | Closing question, summary slide if they want more, next steps with dates | AE + SC |
 
-**The closing question** (spoken, with their top pain in their words): "Thinking about [top pain], from what you've
-seen today, could this fix it for you?" Yes → "Is it worth working out what it would take and cost? Who needs to be
+**The closing question = today's goal on the agenda slide, word for word** (Renzo, 13 Nov 2026): the customer hears
+it at minute 1 and again at minute 50, so it's never a surprise. Use their top pain in their words, e.g. "Does what
+you see today fix [top pain] for you?" Yes → "Is it worth working out what it would take and cost? Who needs to be
 part of that?" (a yes needs a named person and a date). "Want to know more" → summary slide: "Which of these would
-you go deeper on?" No / not sure → "What did we miss?"
+you go deeper on?" Not yet → **"Which part falls short, and what would it need to do?"**: write the answer down
+word for word; `sc-meeting-review` turns it into the next session's first scene.
 
 *Detailed first meeting (rule 7b):* same order, but the Creatio part is the demo plan's scenes and takes 25–30
 minutes; the current-understanding part walks the best-practice pains and asks them to rank them.
@@ -181,3 +185,8 @@ any is missing, say so and let the SC decide.
 ## Talking to the SC
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
+
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects, overrides or rejects what
+you produced, write a feedback file (`Source: chat`, with this skill and step) without asking. At the end of the run,
+ask **one** short question about how it went, tied to what just happened, and log the answer (`Source: asked`).
+Never in practice folders.

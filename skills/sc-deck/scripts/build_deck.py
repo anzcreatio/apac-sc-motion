@@ -988,7 +988,8 @@ def s_agenda(deck, slide, d, n):
     h = T.B - top - 0.1
     shape(slide, MSO_SHAPE.RECTANGLE, "Decision box", x, top, right_w, h, fill=T.TINT)
     pad = 0.3
-    run(textbox(slide, "Decision label", x + pad, top + pad, right_w - 2 * pad, 0.35), d.get("decision_label", "At the end, we'll ask you").upper(), 12, T.ACC, bold=True)
+    # The meeting's goal is the decision itself: the AE reads it at minute 1, the SC asks it in the same words at the end
+    run(textbox(slide, "Goal label", x + pad, top + pad, right_w - 2 * pad, 0.35), d.get("goal_label", "Today's goal").upper(), 12, T.ACC, bold=True)
     tf = textbox(slide, "Decision", x + pad, top + pad + 0.45, right_w - 2 * pad, 1.6)
     run(tf, d["decision"], 20, T.INK, bold=True)
     yy = top + pad + 0.55 + est_h(d["decision"], 20, right_w - 2 * pad) + 0.25
@@ -999,6 +1000,11 @@ def s_agenda(deck, slide, d, n):
         yy += 0.45 + est_h(o["then"], 14, right_w - 2 * pad) + 0.2
     if yy > top + h:
         warn(n, "decision box runs past the bottom: shorten the outcomes")
+    outs = d.get("outcomes", [])
+    if len(outs) < 2:
+        warn(n, "agenda needs two outcomes: what happens if it fits, and what 'not yet' pins down")
+    elif not any("?" in (o.get("then", "") + o.get("if", "")) or "which" in o.get("then", "").lower() for o in outs[1:]):
+        warn(n, "the 'not yet' outcome should pin down what to do next, e.g. 'Which part falls short, and what would it need to do?'")
 
 
 def s_flow(deck, slide, d, n):
@@ -1198,6 +1204,31 @@ TYPES = {
 NO_TITLE = {"cover", "library", "section"}
 
 
+DEMO_MEETINGS = ("first_demo", "value_demo", "proof")
+
+
+def _norm(t):
+    return re.sub(r"[^a-z0-9 ]", "", (t or "").lower()).split()
+
+
+def goal_check(spec):
+    """Same words at minute 1 and minute 50: the agenda's decision is the closing question (Renzo, 13 Nov 2026)."""
+    live = [d for d in spec["slides"] if not d.get("skip")]
+    agenda = next((d for d in live if d["type"] == "agenda"), None)
+    meeting = spec.get("meta", {}).get("meeting")
+    demo = meeting in DEMO_MEETINGS or (meeting is None and any(d["type"] in ("section", "screen", "build") for d in live))
+    if demo and agenda is None and "agenda" not in spec.get("meta", {}).get("waive", []):
+        warn("deck", "demo meeting without an 'agenda' slide: the AE opens with today's goal (DECK-STANDARD v0.4)")
+    if agenda is None:
+        return
+    nxt = next((d for d in live if d["type"] == "next_steps"), None)
+    q = (nxt or {}).get("questions") or []
+    if nxt is not None and not q:
+        warn("deck", "next_steps has no question: ask the agenda's decision in the same words")
+    elif q and _norm(q[0]) != _norm(agenda["decision"]):
+        warn("deck", "closing question differs from the agenda's goal: use the same words (agenda: '%s' / next steps: '%s')" % (agenda["decision"][:60], q[0][:60]))
+
+
 def build(spec_path, out=None, render=False):
     with open(spec_path, encoding="utf-8") as fh:
         spec = json.load(fh)
@@ -1224,6 +1255,7 @@ def build(spec_path, out=None, render=False):
             notes_frame(slide).text = d["notes"]
         deck.slides.append((slide, kind))
     kinds = {d["type"] for d in spec["slides"] if not d.get("skip")}
+    goal_check(spec)
     for core in ("understanding", "platform", "hypothesis", "summary", "next_steps"):
         if core not in kinds and core not in spec.get("meta", {}).get("waive", []):
             warn("deck", "no '%s' slide: the standard deck has one (or list it in meta.waive with a reason)" % core)

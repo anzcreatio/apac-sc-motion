@@ -12,6 +12,7 @@ Gathers, for files changed in the window:
   - library             deals with a demo build but no library module (harvest overdue)
   - click paths         customer recaps still DRAFT (approved false)
   - SC feedback         SharePoint Lessons/feedback/*.md  (logged by sc-guide when an SC says something didn't work)
+  - registers           SharePoint Lessons/registers/*.json  (new product limits and discovery questions, from sc-lessons)
   - onboarding          SharePoint Lessons/onboarding/*.json  (each SC's step and stage)
 Prints a short summary and writes the full JSON for Claude to read and judge.
 """
@@ -103,6 +104,17 @@ def main():
 
     fb = os.path.join(root, "Lessons", "feedback")
     rep["sc_feedback"] = [os.path.basename(p) for p in recent(glob.glob(os.path.join(fb, "*.md")), since)]
+    rep["register_new"] = []
+    for p in glob.glob(os.path.join(root, "Lessons", "registers", "*.json")):
+        try:
+            with open(p, encoding="utf-8") as fh:
+                reg = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        for e in reg.get("entries", []):
+            if (e.get("date") or "") >= rep["since"] or (e.get("closed_on") or "") >= rep["since"]:
+                rep["register_new"].append({"register": os.path.basename(p), "id": e.get("id"), "status": e.get("status"),
+                                            "text": e.get("limit") or e.get("question"), "area": e.get("area") or e.get("topic")})
     rep["onboarding"] = []
     for p in glob.glob(os.path.join(root, "Lessons", "onboarding", "*.json")):
         try:
@@ -116,7 +128,7 @@ def main():
     json.dump(rep, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("Week %s (since %s)" % (rep["week"], rep["since"]))
     for k in ("deck_reviews", "meeting_reviews", "demo_plans", "transcripts", "coverage", "lessons_files",
-              "inbox_waiting", "patterns_waiting", "harvest_missing", "recaps_draft", "sc_feedback", "onboarding"):
+              "inbox_waiting", "patterns_waiting", "harvest_missing", "recaps_draft", "sc_feedback", "register_new", "onboarding"):
         print("  %-17s %d" % (k, len(rep[k])))
     print(out)
 

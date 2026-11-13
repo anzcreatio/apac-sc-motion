@@ -11,7 +11,7 @@ The deck is data: `deck.json` in the deal folder is the source, the `.pptx` is b
 rebuild; don't hand-edit the built deck unless the SC asks (hand edits are lost on the next build, and the
 `sc-meeting-review` skill learns from what the SC changed in the presented deck).
 
-Standard: `../../standards/DECK-STANDARD-v0.3.md` (slide order, word rules, every field). Read it before writing JSON.
+Standard: `../../standards/DECK-STANDARD-v0.4.md` (slide order, word rules, every field). Read it before writing JSON.
 
 ## Commands
 
@@ -61,3 +61,8 @@ long titles, semicolons, em dashes): fix them in `deck.json`, don't ignore them.
 ## Talking to the SC
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
+
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects, overrides or rejects what
+you produced, write a feedback file (`Source: chat`, with this skill and step) without asking. At the end of the run,
+ask **one** short question about how it went, tied to what just happened, and log the answer (`Source: asked`).
+Never in practice folders.

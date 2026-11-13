@@ -17,6 +17,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 1. **Collect:** `python scripts/collect_week.py` (default: last 7 days) → `Lessons/weekly/<yyyy-Www>-evidence.json`
    on SharePoint. Read it, then read the files it lists (deck reviews, meeting reviews, demo plans, new transcripts,
    lessons files, open inbox items).
+1b. **Feedback and registers** (`../../standards/FEEDBACK-LOOP-v0.1.md`): read every feedback file and every new
+   register entry the collector lists. **Group them by skill and step** (and by Source: asked / chat / transcript /
+   lessons). New product limitations and discovery questions are already live: list them under "New this week" so
+   Renzo sees them, and flag any that should become a rule. Practice folders never count.
 2. **Find patterns, not anecdotes.** For each candidate change: what happened, on which deals or with which SCs,
    and what it cost or gained. Group the same signal across deals.
 3. **Propose at most 3 changes**, ranked by impact. Each needs **evidence from 2+ deals or 2+ SCs**, or one serious
@@ -48,6 +52,8 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 - Three proposals at most. If there are more, pick the three with the most evidence and impact; the rest go on the
   watch list.
 - Evidence means files: a deck review, a transcript quote with time, a meeting review, a lessons entry. Not memory.
+- **Patterns, not people.** Never put an SC's name next to a "how it felt" note or a rating in the digest; the
+  feedback files keep the name for one-on-one coaching.
 - Customer names stay in the deal folders; the digest names deals by account, never quotes customer data beyond
   what's needed.
 

@@ -19,11 +19,12 @@ library for every SC, updated in one place.
 | `sc-harvest` | After every demo: L1 into the demo library within 2 working days (read-only package export, build log, customer-specific list, manual steps) |
 | `sc-weekly-lessons` | Friday digest: collects the week's evidence, measures, and proposes at most 3 changes (2+ deals each) for Renzo to approve; applies and publishes approved ones |
 | `sc-meeting-review` | After a meeting: presented deck vs generated deck (`deck_diff.py`), transcript scorecard, living solution summary update, next-session enhancements, lessons |
+| `sc-lessons` | A chat of its own for lessons learnt: paste notes or an R&D email; it files feedback and updates the shared registers of product limitations and discovery questions (`Lessons/registers/`) |
 | `sc-inbox` | Review new Knowledge Hub / corporate decks dropped in SharePoint `_inbox`; propose library and catalogue updates |
 
 | Folder | What |
 |---|---|
-| `standards/` | `DECK-STANDARD-v0.3.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.2.md` (the minimum for every demo) |
+| `standards/` | `DECK-STANDARD-v0.4.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.2.md` (the minimum for every demo) |
 | `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet |
 | `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
 | `patterns/` | Pattern book: demo ideas from our deals, competitors and the Knowledge Hub (screenshots in SharePoint `Patterns/`) |
@@ -81,7 +82,7 @@ Later, when Creatio IT gives us a company GitHub repo: push this repo there, and
 ## Changing the motion
 
 1. Change the skill, standard or template here. Bump the version in the file name for standards
-   (`DECK-STANDARD-v0.3.md`) and in `.claude-plugin/plugin.json`.
+   (`DECK-STANDARD-v0.4.md`) and in `.claude-plugin/plugin.json`.
 2. Rebuild `tests/deck/sample-fictional/deck.json` with `--render` and look at every slide.
 3. Add a line to `CHANGELOG.md` and, if it came from the field, a file in `lessons/`.
 4. A change to the standard needs evidence from **2+ deals or 2+ SCs**, or one serious failure.

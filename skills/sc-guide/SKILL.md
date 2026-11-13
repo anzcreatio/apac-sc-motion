@@ -20,7 +20,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Team root = `s
 | "start", "onboard me", new to the motion, or no progress file yet | **A. Onboarding** |
 | "where was I", "continue" | A, from the saved step |
 | "what's next", "what now", names a deal | **B. Next step on a deal** |
-| "this didn't work", "this could be better", "feedback" | **C. Log feedback** |
+| "this didn't work", "this could be better", "feedback" | **C. Log feedback** (a batch of lessons → `/sc-lessons`) |
 | "update the plugin" | If `claude --version` works in your shell: run `claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`. If not: ask them to type `/plugin`, open **Marketplaces**, pick `apac-sc` and choose **Update marketplace**. Then tell them to start a new session (or type `/reload-plugins`) |
 
 ## Progress file
@@ -70,6 +70,7 @@ message. If they want to skip a step, let them and note it.
 | After every meeting | `sc-meeting-review` | Deck comparison, review, updated summary, next-session ideas, lessons |
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
+| Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
 | Fridays | `sc-weekly-lessons` (Renzo) | At most 3 changes to the motion |
 
 ### The rules card
@@ -150,13 +151,16 @@ Write `<team root>/Lessons/feedback/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md
 
 ```
 # <one-line summary>
-- SC: <name> · Deal: <account or practice> · Skill: <skill> · Date: <yyyy-mm-dd>
+- SC: <name> · Deal: <account> · Skill + step: <skill, step> · Source: asked / chat / transcript / lessons · Kind: commercial / functional / process / deal · Date: <yyyy-mm-dd>
 - What happened: <their words>
-- What they expected or suggest: <their words>
+- What they'd change: <their words>
+- How it felt (1-5): <optional>
 - Severity: blocker / annoying / idea
 ```
 
-Keep their words. Don't change the motion here: the Friday digest (`sc-weekly-lessons`) reads these files and Renzo
+Format and rules: `../../standards/FEEDBACK-LOOP-v0.1.md`. For a batch of lessons (meeting notes, an R&D email,
+"we should have asked…"), suggest a chat of its own with `/sc-lessons`: it also updates the shared registers of
+product limitations and discovery questions. Keep their words. Don't change the motion here: the Friday digest (`sc-weekly-lessons`) reads these files and Renzo
 decides. If it's a blocker on a live deal, suggest they message Renzo too.
 
 ## Rules
