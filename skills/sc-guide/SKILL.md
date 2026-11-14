@@ -72,6 +72,7 @@ message. If they want to skip a step, let them and note it.
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
 | Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
+| A customer wants to build on Creatio themselves (after they buy) | `sc-customer-academy` ("customer enablement") | Sessions you run for their business builders (Track 1) and IT (Track 2) with Creatio's public toolkit, in their dev or sandbox only; a customer pack (workbook + Claude coach) they keep, after your SC check |
 | Learning to build, any time | `sc-academy` ("train me") | Guided labs on a fictional deal, one module per skill area (setup → first meeting → demo plan → object model → pages → data → processes → AI → click path and harvest), on your own training stand |
 | Fridays | `sc-weekly-lessons` (Renzo) | At most 3 changes to the motion |
 

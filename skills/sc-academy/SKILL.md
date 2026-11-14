@@ -88,6 +88,9 @@ arguments for help).
    **Only run `--by "Renzo Huruiti"` after his yes in this chat.** Anyone writing or changing a module records
    `stamp --module <id> --authoring` (status **pending**); `weekly` lists pending modules for him to approve.
 
+The same engine runs the customer course: add `--course ../sc-customer-academy/course.json` (its state lives in
+`Lessons/customer-training/`).
+
 ## W. Tips for Renzo
 
 `python scripts/academy.py weekly` → `Lessons/training/weekly/<yyyy-Www>.md`: decisions for him (stale modules,

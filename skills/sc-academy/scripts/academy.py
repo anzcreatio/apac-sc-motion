@@ -25,6 +25,9 @@ Course upkeep (Renzo, Fridays via sc-weekly-lessons)
                                                   only after Renzo's yes: the module is approved as it is
   python academy.py weekly [--days 7]             tips for Renzo -> Lessons/training/weekly/<yyyy-Www>.md
   python academy.py pages [--out <dir>]           readable HTML module pages (default Lessons/training/pages/)
+
+Another course on the same engine: put --course <course.json> before the command (state goes to its "state_dir";
+"watch_docs" adds runbooks and other docs to the fingerprints). Used by sc-customer-academy.
 """
 import argparse
 import datetime
@@ -83,8 +86,13 @@ def team_root(arg=None):
     sys.exit("No team root: run sc-setup, set APAC_SC_ROOT, or pass --root <SharePoint folder>")
 
 
+def state_dir():
+    """Where this course keeps progress and state, relative to the team root (course.json "state_dir")."""
+    return (load_json(COURSE, {}) or {}).get("state_dir", "Lessons/training").split("/")
+
+
 def tdir(root, *parts):
-    p = os.path.join(root, "Lessons", "training", *parts)
+    p = os.path.join(root, *state_dir(), *parts)
     os.makedirs(p if not os.path.splitext(p)[1] else os.path.dirname(p), exist_ok=True)
     return p
 
@@ -243,7 +251,7 @@ def cmd_stand(a):
             if any(n.lower() in text.lower() for n in needles):
                 hits.append("%s/%s" % (base, os.path.relpath(f, d).replace("\\", "/")))
                 break
-    for f in glob.glob(os.path.join(root, "Lessons", "training", "*.json")):
+    for f in glob.glob(os.path.join(root, *state_dir(), "*.json")):
         other = load_json(f) or {}
         if other.get("sc") and other.get("sc") != prog["sc"] and (other.get("stand") or {}).get("name", "").lower() == a.name.lower():
             hits.append("training: already %s's training stand (one stand per trainee)" % other["sc"])
@@ -317,7 +325,8 @@ def frontmatter(text):
 
 
 def scan():
-    """Every SKILL.md we can see: {"toolkit:creatio-object-model": {name, version, hash, path, lines}}."""
+    """Every SKILL.md we can see: {"toolkit:creatio-object-model": {name, version, hash, path, lines}}, plus the
+    course's watch_docs (e.g. "appdev-doc:runbooks/01-environment-setup.md") for guidance that isn't a SKILL.md."""
     found, where = {}, {}
     roots = []
     for src, (prefix, sub) in SOURCES.items():
@@ -340,6 +349,18 @@ def scan():
             key = "%s:%s" % (src, os.path.basename(os.path.dirname(f)))
             found[key] = {"name": name, "version": fm.get("version") or ver, "hash": hashlib.sha256(raw).hexdigest()[:16],
                           "lines": text.count("\n"), "path": f}
+    for src, patterns in ((load_json(COURSE, {}) or {}).get("watch_docs") or {}).items():
+        if src not in where:
+            continue
+        base = os.path.dirname(where[src]["skills"])
+        for pat in patterns:
+            for f in sorted(glob.glob(os.path.join(base, pat))):
+                with open(f, "rb") as fh:
+                    raw = fh.read().replace(b"\r\n", b"\n")
+                rel = os.path.relpath(f, base).replace("\\", "/")
+                found["%s-doc:%s" % (src, rel)] = {"name": rel, "version": where[src]["version"],
+                                                  "hash": hashlib.sha256(raw).hexdigest()[:16],
+                                                  "lines": raw.count(b"\n"), "path": f}
     return found, where
 
 
@@ -356,7 +377,7 @@ def clio_version():
 
 
 def snapshot(root, key, info):
-    p = os.path.join(tdir(root, "_state", "snapshots"), key.replace(":", "__"), "%s.md" % info["hash"])
+    p = os.path.join(tdir(root, "_state", "snapshots"), key.replace(":", "__").replace("/", "__"), "%s.md" % info["hash"])
     if not os.path.exists(p):
         os.makedirs(os.path.dirname(p), exist_ok=True)
         with open(info["path"], encoding="utf-8", errors="replace") as src, open(p, "w", encoding="utf-8") as dst:
@@ -365,7 +386,7 @@ def snapshot(root, key, info):
 
 
 def read_snapshot(root, key, h):
-    p = os.path.join(root, "Lessons", "training", "_state", "snapshots", key.replace(":", "__"), "%s.md" % h)
+    p = os.path.join(root, *state_dir(), "_state", "snapshots", key.replace(":", "__").replace("/", "__"), "%s.md" % h)
     try:
         with open(p, encoding="utf-8") as fh:
             return fh.read().splitlines()
@@ -408,7 +429,9 @@ def cmd_refresh(a):
         if why:
             stale[m["id"]] = {"title": m["title"], "file": m["file"], "why": why}
     ignore = set(c.get("not_taught", {}).keys())
-    uncovered = sorted(k for k in found if k not in covered and k not in ignore and not k.startswith("plugin:sc-academy"))
+    srcs = c.get("teaches_sources") or ["toolkit", "appdev", "plugin"]
+    uncovered = sorted(k for k in found if k not in covered and k not in ignore and k.split(":")[0] in srcs
+                       and not k.startswith(("plugin:sc-academy", "plugin:sc-customer-academy")))
 
     drafts = []
     ddir = tdir(root, "_drafts")
@@ -417,7 +440,7 @@ def cmd_refresh(a):
         lines = ["# Draft update: module %s %s (%s)" % (mid, s["title"], today()), "",
                  "> Written by `academy.py refresh`. **Not live.** Claude fills 'Proposed edits'; Renzo approves; only then",
                  "> the module file changes in the plugin and `academy.py stamp --module %s --by \"Renzo Huruiti\"` runs." % mid,
-                 "", "Module file: `skills/sc-academy/%s`" % s["file"], "", "## What changed", ""]
+                 "", "Module file: `skills/%s/%s`" % (os.path.basename(SKILL_DIR), s["file"]), "", "## What changed", ""]
         for w in s["why"]:
             lines.append("- `%s`: %s%s" % (w["skill"], w["change"],
                                             " (now version %s)" % w.get("version") if w.get("version") else ""))
@@ -496,7 +519,7 @@ def cmd_weekly(a):
     c = course()
     since = (datetime.date.today() - datetime.timedelta(days=a.days)).isoformat()
     mods = {m["id"]: m for m in modules(c)}
-    progs = [load_json(p) for p in glob.glob(os.path.join(root, "Lessons", "training", "*.json"))]
+    progs = [load_json(p) for p in glob.glob(os.path.join(root, *state_dir(), "*.json"))]
     progs = [p for p in progs if p and p.get("sc")]
     stuck, fails, finished = [], {}, []
     for p in progs:
@@ -527,7 +550,7 @@ def cmd_weekly(a):
         fb.setdefault(mm.group(1), []).append({"rating": int(rating.group(1)) if rating else None,
                                               "hard": hard.group(1).strip() if hard else "",
                                               "lab": lab.group(1).strip() if lab else ""})
-    st = load_json(os.path.join(root, "Lessons", "training", "_state", "stale.json"), {}) or {}
+    st = load_json(os.path.join(root, *state_dir(), "_state", "stale.json"), {}) or {}
     week = datetime.date.today().isocalendar()
     wk = "%d-W%02d" % (week[0], week[1])
     L = ["# SC Academy: tips for Renzo, %s" % wk, "",
@@ -536,8 +559,8 @@ def cmd_weekly(a):
     n = 0
     for mid, s in (st.get("stale") or {}).items():
         n += 1
-        L.append("%d. Module %s %s is stale (%s). Draft in `Lessons/training/_drafts/`: approve the update?" % (
-            n, mid, s["title"], "; ".join("%s %s" % (w["skill"], w["change"]) for w in s["why"])))
+        L.append("%d. Module %s %s is stale (%s). Draft in `%s/_drafts/`: approve the update?" % (
+            n, mid, s["title"], "; ".join("%s %s" % (w["skill"], w["change"]) for w in s["why"]), "/".join(state_dir())))
     pend = [m["id"] for m in modules(c) if (m.get("stamped") or {}).get("status") != "approved"]
     if pend:
         n += 1
@@ -667,6 +690,7 @@ def cmd_pages(a):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root")
+    ap.add_argument("--course", help="another course.json using this engine (e.g. ../sc-customer-academy/course.json)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("start"); s.add_argument("--sc", required=True); s.add_argument("--initials", required=True)
     s = sub.add_parser("status"); s.add_argument("--sc", required=True)
@@ -685,6 +709,10 @@ def main():
     s = sub.add_parser("weekly"); s.add_argument("--days", type=int, default=7)
     s = sub.add_parser("pages"); s.add_argument("--out")
     a = ap.parse_args()
+    if a.course:
+        global COURSE, SKILL_DIR
+        COURSE = os.path.abspath(a.course)
+        SKILL_DIR = os.path.dirname(COURSE)
     {"start": cmd_start, "status": cmd_status, "at": cmd_at, "result": cmd_result, "stand": cmd_stand,
      "feedback": cmd_feedback, "refresh": cmd_refresh, "stamp": cmd_stamp, "weekly": cmd_weekly,
      "pages": cmd_pages}[a.cmd](a)

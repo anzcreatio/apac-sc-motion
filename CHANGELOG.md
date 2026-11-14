@@ -42,6 +42,18 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   marks a module stale when a skill it teaches changes, and drafts the update with the diff. Nothing changes in the
   course until Renzo approves it. While a module is being updated, Claude teaches from the current skill and tells you.
 - To start: when you have an hour and your training stand, say "train me".
+- **New: `sc-customer-academy`.** Teach a customer's team to build and extend their own Creatio apps, including on
+  top of their CRM, with Claude and **Creatio's public AI App Development Toolkit** (nothing internal goes in front
+  of the customer). Track 1, business builders, 7 modules: builder kit and ground rules, Business Plan first, extend
+  CRM data, build the app and pages, extend CRM pages safely, brand and mobile, a capstone on their own use case.
+  Track 2, developers and IT, 4 modules: environments and packages, source control and deployment with rollback,
+  Classic to Freedom UI, governance for AI-assisted building. About 14 hours for both.
+- Say "prepare customer enablement for <account>": it asks for their product, people, tracks and **dev or sandbox
+  environment** (it refuses anything that looks like production unless the customer confirms it isn't), then guides
+  each session step by step. Their feedback stays in the deal folder; the team copy names the role, not the person.
+- **Customer pack:** workbook pages plus a Claude skill (`creatio-build-coach`) they keep after we leave. It stays a
+  DRAFT until you've checked every page. You send it; Claude never does.
+- It keeps itself current from the toolkit's own skills and runbooks; Renzo approves every course change.
 
 ## 0.18.1 (14 Nov 2026): approve upfront, build non-stop, safely
 - Build rules v0.4 (`standards/BUILD-RULES-v0.4.md` section 4). With the build plan, `sc-demo-plan` sends one

@@ -40,6 +40,9 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    trainees get stuck under the watch list. Training feedback files (`Source: training`) are about the course, not a
    deal: group them by module, and they don't count towards the 2-deal rule for motion changes. Course changes
    don't use the 3-proposal cap: apply each only on Renzo's yes (`academy.py stamp --by "Renzo Huruiti"`).
+   Same for the customer course: `python ../sc-academy/scripts/academy.py --course ../sc-customer-academy/course.json
+   refresh`, then `python ../sc-customer-academy/scripts/customer_academy.py tips` (feedback `Source:
+   customer-training`, by module and role; accounts named, participants never).
 2. **Find patterns, not anecdotes.** For each candidate change: what happened, on which deals or with which SCs,
    and what it cost or gained. Group the same signal across deals.
 3. **Propose at most 3 changes**, ranked by impact. Each needs **evidence from 2+ deals or 2+ SCs**, or one serious

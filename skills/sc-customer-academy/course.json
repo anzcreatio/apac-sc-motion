@@ -1,0 +1,295 @@
+{
+ "title": "Build on Creatio with Claude",
+ "version": "0.1",
+ "updated": "2026-11-14",
+ "state_dir": "Lessons/customer-training",
+ "teaches_sources": [
+  "appdev"
+ ],
+ "about": "A hands-on course for your team: build and extend Creatio applications, including on top of your Creatio CRM, with Claude and Creatio's AI App Development Toolkit. Track 1 is for business builders (no code). Track 2 is for developers and IT (environments, packages, deployment, migration, integration). Every lab runs in your own development or sandbox environment, never in production.",
+ "deal": {
+  "name": "Your own use case, or the practice scenario: Kestrel Facility Services (fictional)",
+  "fixtures": [
+   "skills/sc-customer-academy/fixtures/practice-scenario.md"
+  ]
+ },
+ "watch_docs": {
+  "appdev": [
+   "AGENTS.md",
+   "runbooks/*.md",
+   "context/*.md"
+  ]
+ },
+ "references": {
+  "toolkit_setup": "https://academy.creatio.com/docs/8.x/no-code-customization/ai-development/creatio-ai-toolkit-setup",
+  "toolkit_repo": "https://github.com/Creatio-Platform/creatio-ai-app-development-toolkit",
+  "clio_repo": "https://github.com/Advance-Technologies-Foundation/clio"
+ },
+ "paths": [
+  {
+   "id": "T1",
+   "title": "Track 1: build and extend apps (business builders)",
+   "status": "live",
+   "modules": [
+    {
+     "id": "B0",
+     "title": "Your builder kit and ground rules",
+     "file": "modules/B0-builder-kit.md",
+     "minutes": 60,
+     "stand": false,
+     "skills": [
+      "appdev-doc:runbooks/01-environment-setup.md",
+      "appdev-doc:AGENTS.md"
+     ],
+     "built_against": {
+      "appdev-doc:runbooks/01-environment-setup.md": "4d0f29b373df361b",
+      "appdev-doc:AGENTS.md": "f569dc70e78db56b"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B1",
+     "title": "From an idea to an approved Business Plan",
+     "file": "modules/B1-business-plan.md",
+     "minutes": 75,
+     "stand": false,
+     "skills": [
+      "appdev:creatio-app-orchestrator",
+      "appdev-doc:runbooks/02-requirements-gathering.md",
+      "appdev-doc:context/business-checklist.md"
+     ],
+     "built_against": {
+      "appdev:creatio-app-orchestrator": "e1108fa47503682c",
+      "appdev-doc:runbooks/02-requirements-gathering.md": "9095cd7fcd635916",
+      "appdev-doc:context/business-checklist.md": "8123bc70ad61830b"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B2",
+     "title": "Extend your CRM data: objects, fields and lookups",
+     "file": "modules/B2-data-model.md",
+     "minutes": 75,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-schema-naming",
+      "appdev-doc:context/naming-conventions.md",
+      "appdev-doc:context/essentials.md"
+     ],
+     "built_against": {
+      "appdev:creatio-schema-naming": "63ed5ff635e275c4",
+      "appdev-doc:context/naming-conventions.md": "6621d8a00a9d9b14",
+      "appdev-doc:context/essentials.md": "baa78fd7510c8326"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B3",
+     "title": "Build the app and its pages",
+     "file": "modules/B3-app-and-pages.md",
+     "minutes": 90,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-app-orchestrator",
+      "appdev:creatio-ui-guidelines",
+      "appdev-doc:runbooks/03-app-implementation.md"
+     ],
+     "built_against": {
+      "appdev:creatio-app-orchestrator": "e1108fa47503682c",
+      "appdev:creatio-ui-guidelines": "cbea2bf19748f34f",
+      "appdev-doc:runbooks/03-app-implementation.md": "67b1222b3dc50657"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B4",
+     "title": "Change what's already there: extend CRM pages safely",
+     "file": "modules/B4-extend-crm.md",
+     "minutes": 60,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-ui-guidelines",
+      "appdev-doc:context/essentials.md"
+     ],
+     "built_against": {
+      "appdev:creatio-ui-guidelines": "cbea2bf19748f34f",
+      "appdev-doc:context/essentials.md": "baa78fd7510c8326"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B5",
+     "title": "Your brand and mobile",
+     "file": "modules/B5-brand-and-mobile.md",
+     "minutes": 60,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-branding-orchestrator",
+      "appdev:creatio-mobile-page-conversion"
+     ],
+     "built_against": {
+      "appdev:creatio-branding-orchestrator": "60fe43bcdee1b1ab",
+      "appdev:creatio-mobile-page-conversion": "af360fc421a374f6"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B6",
+     "title": "Capstone: your own app, end to end",
+     "file": "modules/B6-capstone.md",
+     "minutes": 120,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-app-orchestrator"
+     ],
+     "built_against": {
+      "appdev:creatio-app-orchestrator": "e1108fa47503682c"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    }
+   ]
+  },
+  {
+   "id": "T2",
+   "title": "Track 2: run it like software (developers and IT)",
+   "status": "live",
+   "modules": [
+    {
+     "id": "D1",
+     "title": "Environments, packages and who changes what",
+     "file": "modules/D1-environments-packages.md",
+     "minutes": 75,
+     "stand": true,
+     "skills": [
+      "appdev-doc:runbooks/01-environment-setup.md",
+      "appdev-doc:context/essentials.md",
+      "appdev-doc:context/clio-cli-reference.md"
+     ],
+     "built_against": {
+      "appdev-doc:runbooks/01-environment-setup.md": "4d0f29b373df361b",
+      "appdev-doc:context/essentials.md": "baa78fd7510c8326",
+      "appdev-doc:context/clio-cli-reference.md": "ec537e9b41b4c907"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "D2",
+     "title": "Source control, deployment and rollback",
+     "file": "modules/D2-source-control-deploy.md",
+     "minutes": 90,
+     "stand": true,
+     "skills": [
+      "appdev-doc:context/clio-cli-reference.md",
+      "appdev-doc:AGENTS.md"
+     ],
+     "built_against": {
+      "appdev-doc:context/clio-cli-reference.md": "ec537e9b41b4c907",
+      "appdev-doc:AGENTS.md": "f569dc70e78db56b"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "D3",
+     "title": "Classic UI to Freedom UI",
+     "file": "modules/D3-classic-to-freedom.md",
+     "minutes": 90,
+     "stand": true,
+     "skills": [
+      "appdev:classic-to-freedom-migration",
+      "appdev:classic-ui-expert"
+     ],
+     "built_against": {
+      "appdev:classic-to-freedom-migration": "b7a6f5ee1d97dbf5",
+      "appdev:classic-ui-expert": "f56997639195e34b"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "D4",
+     "title": "Governance for AI-assisted building",
+     "file": "modules/D4-governance.md",
+     "minutes": 60,
+     "stand": false,
+     "skills": [
+      "appdev-doc:AGENTS.md",
+      "appdev-doc:context/product-telemetry.md"
+     ],
+     "built_against": {
+      "appdev-doc:AGENTS.md": "f569dc70e78db56b",
+      "appdev-doc:context/product-telemetry.md": "3656fdf3779ed57b"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    }
+   ]
+  },
+  {
+   "id": "T3",
+   "title": "Planned: when Creatio's public toolkit covers them",
+   "status": "planned",
+   "modules": [
+    {
+     "id": "P1",
+     "title": "Business processes with the toolkit",
+     "skills": []
+    },
+    {
+     "id": "P2",
+     "title": "Creatio.ai skills and AI Studio agents",
+     "skills": []
+    },
+    {
+     "id": "P3",
+     "title": "Integrations (OData, web services)",
+     "skills": []
+    }
+   ]
+  }
+ ],
+ "not_taught": {
+  "appdev:_workflow-core": "Toolkit internals, not a skill"
+ }
+}
