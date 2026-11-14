@@ -29,7 +29,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    customer or call named; Renzo approves).
    **Team lessons** (`Lessons/TEAM-LESSONS.md`): every approved change and every watch-list signal that reaches 2+
    deals or SCs becomes or updates a lesson there, generalised: no SC, deal or customer named, no quotes. Bump its
-   version and add a Changes row. On Renzo's PC, refresh his per-SC view: `python ../sc-coach/scripts/coach_board.py`.
+   version and add a Changes row, then rebuild the easy-read page: `python scripts/team_lessons_page.py` (writes
+   `Lessons/TEAM-LESSONS.html`) and, on Renzo's PC, republish the team Artifact
+   (https://claude.ai/artifact/NGdcrEhPXZvyx1vhpy1Ji6) from `team_lessons_page.py --fragment --out <scratch file>`.
+   On Renzo's PC, refresh his per-SC view: `python ../sc-coach/scripts/coach_board.py`.
 1c. **Training** (`../sc-academy/SKILL.md` modes U and W): `python ../sc-academy/scripts/academy.py refresh` (marks
    course modules stale when a toolkit or plugin SKILL.md changed, drafts updates in `Lessons/training/_drafts/`),
    fill each draft's "Proposed edits", then `python ../sc-academy/scripts/academy.py weekly`. Put its "Decisions for

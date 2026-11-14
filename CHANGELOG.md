@@ -19,7 +19,8 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   10 lessons so far, each with a do, a don't and a drill, anonymised. Read it before your next call.
 - **New: team lessons page, `Lessons/TEAM-LESSONS.md`.** Everything we've learnt across deals so far (before the
   meeting, the deck, building and rehearsing, explaining it, claims and AI, after the meeting), with no names or deals.
-  The Friday digest keeps it up to date; `sc-guide` shows it to new SCs.
+  The Friday digest keeps it up to date; `sc-guide` shows it to new SCs. Easy-read version: `Lessons/TEAM-LESSONS.html`
+  (top 5 before every call, a filter per stage, search, do / avoid cards; works on a phone).
 - `sc-meeting-review` now adds a short "Explaining it" section (no scores, no weak quotes: the review is in the deal
   folder) and writes the full coaching to your private folder.
 - Tell the coach when a rewrite is too long or "a customer wouldn't say that": it logs the feedback and proposes the
