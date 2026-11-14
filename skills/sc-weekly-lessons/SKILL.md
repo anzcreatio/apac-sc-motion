@@ -14,14 +14,16 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 ## Steps
 
 0. **Deal timing:** `python ../sc-guide/scripts/deal_dates.py stats` → `Lessons/stats/deal-timing.md` (medians: first call → SC notified → demo). Put the three medians and the deals missing a date in the digest.
-0b. **SC desk** (`../sc-desk/SKILL.md` mode E): `python ../sc-desk/scripts/desk.py week` (on Renzo's PC add
-   `--private-out "%USERPROFILE%\SC-Coaching"`) → `Lessons/desk/weekly/<yyyy-Www>.md`: each SC's deals by health, next
-   week's load, the quality trend and one or two tips. Put the red deals and any overloaded week under "waiting on
-   Renzo", and link the page in the digest. Per-SC coaching numbers stay in the private file, never in the digest.
+0b. **SC desk** (`../sc-desk/SKILL.md` mode E, Renzo's PC only): `python ../sc-desk/scripts/desk.py week` → team
+   page `Lessons/desk/weekly/<yyyy-Www>.md` (deals by health as team totals, quality trend, tips; no SC or deal named)
+   and Renzo's private per-SC view `%USERPROFILE%\SC-Coaching\desk-<week>.md` (each SC's deals, load, coaching). Show
+   Renzo the red deals and any overloaded week in chat; link only the team page in the digest. Feedback files are
+   in `Lessons/feedback/<sc>/` (private per SC, `../../standards/FEEDBACK-LOOP-v0.2.md` §5): the digest reports
+   patterns, never who said what.
 1. **Collect:** `python scripts/collect_week.py` (default: last 7 days) → `Lessons/weekly/<yyyy-Www>-evidence.json`
    on SharePoint. Read it, then read the files it lists (deck reviews, meeting reviews, demo plans, new transcripts,
    lessons files, open inbox items).
-1b. **Feedback and registers** (`../../standards/FEEDBACK-LOOP-v0.1.md`): read every feedback file and every new
+1b. **Feedback and registers** (`../../standards/FEEDBACK-LOOP-v0.2.md`): read every feedback file and every new
    register entry the collector lists. **Group them by skill and step** (and by Source: asked / chat / transcript /
    lessons). New product limitations and discovery questions are already live: list them under "New this week" so
    Renzo sees them, and flag any that should become a rule. Practice folders never count.

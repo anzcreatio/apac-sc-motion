@@ -274,7 +274,8 @@ def cmd_stand(a):
 def cmd_feedback(a):
     root = team_root(a.root)
     m = module_by_id(course(), a.module)
-    d = os.path.join(root, "Lessons", "feedback")
+    ini = (get_progress(root, a.sc, must=False) or {}).get("initials") or "unknown"
+    d = os.path.join(root, "Lessons", "feedback", ini)  # private per SC (FEEDBACK-LOOP v0.2 section 5)
     os.makedirs(d, exist_ok=True)
     p = os.path.join(d, "%s-%s-academy-%s.md" % (today(), kebab(a.sc), m["id"].lower()))
     n = 2
@@ -532,7 +533,7 @@ def cmd_weekly(a):
                 fails.setdefault(r["module"], []).append(r.get("note", ""))
         finished += [m for m, d in (p.get("done") or {}).items() if d >= since]
     fb = {}
-    for f in glob.glob(os.path.join(root, "Lessons", "feedback", "*.md")):
+    for f in glob.glob(os.path.join(root, "Lessons", "feedback", "*.md")) + glob.glob(os.path.join(root, "Lessons", "feedback", "*", "*.md")):
         try:
             with open(f, encoding="utf-8") as fh:
                 t = fh.read()

@@ -4,7 +4,7 @@
 
 Reads (team root from ~/.apac-sc-motion.json):
   Lessons/coaching/<initials>/*.md   private coaching from sc-coach
-  Lessons/feedback/*.md              feedback files (matched to the SC by the "SC:" line or the file name)
+  Lessons/feedback/<initials>/*.md   feedback files (private per SC; older flat files matched by the "SC:" line or name)
 Writes, in --out (a local folder, NOT OneDrive or SharePoint, so nothing syncs):
   OVERVIEW.md                        one row per SC: calls coached, latest habits, feedback count
   <initials>-<first-name>/README.md  that SC's coaching (date, deal, habits) and feedback (date, skill, severity)
@@ -102,8 +102,9 @@ def main():
         for p in glob.glob(os.path.join(root, "Lessons", "coaching", ini, "*.md")):
             copy_in(p, os.path.join(sc_dir(ini), "coaching"))
     unmatched = []
-    for p in glob.glob(os.path.join(root, "Lessons", "feedback", "*.md")):
-        ini = who_wrote(p, read(p))
+    for p in glob.glob(os.path.join(root, "Lessons", "feedback", "*.md")) + glob.glob(os.path.join(root, "Lessons", "feedback", "*", "*.md")):
+        sub = os.path.basename(os.path.dirname(p))
+        ini = sub if sub in TEAM else who_wrote(p, read(p))
         if ini:
             copy_in(p, os.path.join(sc_dir(ini), "feedback"))
         else:

@@ -8,7 +8,7 @@ description: Take in lessons learnt and feedback for the Creatio APAC sales moti
 > **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 
 A chat of its own for what we learn (Renzo, 13 Nov 2026). The SC pastes; you sort, file and route. It follows
-`../../standards/FEEDBACK-LOOP-v0.1.md`. Team root = `sharepoint_root` in `~/.apac-sc-motion.json`.
+`../../standards/FEEDBACK-LOOP-v0.2.md`. Team root = `sharepoint_root` in `~/.apac-sc-motion.json`.
 
 ## Steps
 

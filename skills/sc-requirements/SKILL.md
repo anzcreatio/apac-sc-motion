@@ -88,7 +88,7 @@ yours…", 2–3 lines from their stage) → **recommend** ("for you, I'd start 
 limitations under "check first". `sc-first-meeting` and `sc-demo-plan` attach the card to the prep; the SC click path
 shows it as a tab; the SC can publish it as a private artifact to read on a phone.
 
-**How it grows** (every proposal waits for Friday; the asymmetric rule in `../../standards/FEEDBACK-LOOP-v0.1.md`):
+**How it grows** (every proposal waits for Friday; the asymmetric rule in `../../standards/FEEDBACK-LOOP-v0.2.md`):
 - After step 2 of this skill: propose master lines that aren't in the library, with customer names stripped out,
   as a feedback file (`Kind: process`, "requirements library proposal") listing the new lines.
 - `sc-meeting-review`: lines they picked, ranked or rejected → proposals (change `recommend_first`, reword, retire).
@@ -108,7 +108,7 @@ shows it as a tab; the SC can publish it as a private artifact to read on a phon
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
 
-**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects, overrides or rejects what
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.2.md`): when the SC corrects, overrides or rejects what
 you produced, write a feedback file (`Source: chat`, with this skill and step) without asking. At the end of the run,
 ask **one** short question about how it went, tied to what just happened, and log the answer (`Source: asked`).
 Never in practice folders.

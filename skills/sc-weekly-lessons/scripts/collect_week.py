@@ -11,7 +11,7 @@ Gathers, for files changed in the window:
   - inbox               _inbox files waiting, latest scan; Patterns/_inbox items waiting
   - library             deals with a demo build but no library module (harvest overdue)
   - click paths         customer recaps still DRAFT (approved false)
-  - SC feedback         SharePoint Lessons/feedback/*.md  (logged by sc-guide when an SC says something didn't work)
+  - SC feedback         SharePoint Lessons/feedback/<sc>/*.md  (private per SC; Renzo's Friday run reads them all)
   - registers           SharePoint Lessons/registers/*.json  (new product limits and discovery questions, from sc-lessons)
   - onboarding          SharePoint Lessons/onboarding/*.json  (each SC's step and stage)
 Prints a short summary and writes the full JSON for Claude to read and judge.
@@ -103,7 +103,7 @@ def main():
             rep["recaps_draft"].append(os.path.relpath(p, deals))
 
     fb = os.path.join(root, "Lessons", "feedback")
-    rep["sc_feedback"] = [os.path.basename(p) for p in recent(glob.glob(os.path.join(fb, "*.md")), since)]
+    rep["sc_feedback"] = [os.path.basename(p) for p in recent(glob.glob(os.path.join(fb, "*.md")) + glob.glob(os.path.join(fb, "*", "*.md")), since)]
     rep["register_new"] = []
     for p in glob.glob(os.path.join(root, "Lessons", "registers", "*.json")):
         try:

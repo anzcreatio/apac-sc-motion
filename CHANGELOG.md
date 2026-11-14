@@ -23,6 +23,13 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - **Outlook (optional, read-only):** with the Microsoft 365 connector on, the brief reads your calendar and checks
   your sent mail for follow-ups and recaps. It never sends, drafts in Outlook or books meetings.
 - **A task desk, not a CRM:** it never tracks pipeline stage, forecast or value. Ask the AE to update their CRM.
+- **Private to you.** Your brief stays on your own PC (never SharePoint), and the desk only ever shows your own
+  deals, commitments and workload: ask about another SC's and Claude will say it's theirs to share. Renzo sees the
+  team's Friday view; the team page shows totals only, no names.
+- **Feedback is private too (feedback loop v0.2).** Feedback files now go in your own folder,
+  `Lessons/feedback/<your initials>/`, and Claude never shows one SC another's feedback or coaching. Renzo reads them
+  for the Friday digest, which reports patterns, never who said what. Renzo is locking each SC's feedback and coaching
+  folder on SharePoint to that SC and himself.
 - **Each SC: run `sc-setup` once more** (or say "set up my daily brief"): it shows your first brief and offers to
   run it every weekday at 8 am on your PC.
 

@@ -112,7 +112,8 @@ doesn't exist yet, say so in the file and carry on).
 ### Where the coaching goes: private (Renzo, 14 Nov 2026)
 
 Coaching notes are **private to the SC and Renzo**: `<team root>/Lessons/coaching/<sc-initials>/<yyyy-mm-dd>-<deal>-coaching.md`.
-They never go in the deal folder (synced to every SC) or `Lessons/feedback/`. The Friday digest gets only
+They never go in the deal folder (synced to every SC) or `Lessons/feedback/`. Show an SC only their own coaching
+(`../../standards/FEEDBACK-LOOP-v0.2.md` §5). The Friday digest gets only
 **anonymised patterns** (FEEDBACK-LOOP §4: patterns, not people): `sc-weekly-lessons` may count habits across
 coaching files ("3 calls this week: answers buried after the explanation") but never names the SC or quotes them.
 
@@ -172,7 +173,7 @@ Source: <transcript path> · Moments scored: N · Private to <SC> and Renzo
 When the SC says "too long", "a customer wouldn't say that", "that's wrong", edits a rewrite, or rejects one:
 
 1. Fix the answer for them now.
-2. Log a feedback file **without asking** (`../../standards/FEEDBACK-LOOP-v0.1.md` §2): `Source: chat`,
+2. Log a feedback file **without asking** (`../../standards/FEEDBACK-LOOP-v0.2.md` §2): `Source: chat`,
    `Skill + step: sc-coach, <mode/step>`, their words, what changed.
 3. If it touches a library entry, propose the fix (`add-explanation --supersedes E-00N`). If it is about how the coach
    writes (length, tone, analogies), propose the style change in the feedback file ("What they'd change") for the

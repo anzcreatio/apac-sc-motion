@@ -76,7 +76,7 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
 ## Part C: lessons
 
 Ask the SC first, in one line at the top: **"How did it feel, 1–5, and what would you change?"** Put their answer in
-the scorecard and, per `../../standards/FEEDBACK-LOOP-v0.1.md`, in a feedback file (`Source: transcript`).
+the scorecard and, per `../../standards/FEEDBACK-LOOP-v0.2.md`, in a feedback file (`Source: transcript`).
 
 Append to `../../lessons/<yyyy-mm-dd>-<deal>.md`: what we'd keep, change or stop, each with evidence and a proposed
 change to a skill, standard, pack or template. Don't change the motion here: the weekly lessons run decides, and a
@@ -90,7 +90,7 @@ End customer-facing drafts with "SC check required before this is used with the 
 
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
 
-**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects, overrides or rejects what
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.2.md`): when the SC corrects, overrides or rejects what
 you produced, write a feedback file (`Source: chat`, with this skill and step) without asking. At the end of the run,
 ask **one** short question about how it went, tied to what just happened, and log the answer (`Source: asked`).
 Never in practice folders.

@@ -15,8 +15,16 @@ the AE's CRM; please ask <AE> to update it." The desk's only deal-level state is
 own work, and "how close to a decision" is worked out fresh from the folder each run (never saved).
 
 Script: `python scripts/desk.py <command>` (paths relative to this skill; team root from `~/.apac-sc-motion.json`;
-`sc` initials from the same file). Ledger: `<deal>/commitments.json`. Briefs: `Lessons/desk/<sc>/<date>-brief.md`.
-Weekly: `Lessons/desk/weekly/<yyyy-Www>.md`.
+`sc` initials from the same file). Ledger: `<deal>/commitments.json`. Briefs: on the SC's own PC only,
+`~/.apac-sc-motion/desk/<date>-brief.md`. Weekly (Renzo): team totals in `Lessons/desk/weekly/<yyyy-Www>.md`, the
+per-SC view in his local `SC-Coaching` folder.
+
+**Private per SC** (Renzo, 14 Nov 2026; `../../standards/FEEDBACK-LOOP-v0.2.md` §5): the desk is the SC's own. Work
+only on the deals of the SC in `~/.apac-sc-motion.json`; the script refuses another SC's deal, brief, ledger or
+workload. If an SC asks about another SC's work ("what's Willy working on?", "is Ferdhi busy?", "show me Renzo's
+brief"), say "That's <name>'s to share: ask them, or Renzo", and don't summarise, count or hint at it. Only Renzo (`rh`,
+team lead) may look across SCs, and he sets who owns a deal (`owner`). Deal folders themselves stay team-readable
+(one folder per account, hand-overs, onboarding): the desk just never surfaces another SC's deals.
 
 ## Pick the mode
 
@@ -34,7 +42,7 @@ Weekly: `Lessons/desk/weekly/<yyyy-Www>.md`.
 
 1. **Outlook first, if connected** (mode F): pull today's and the next 7 days' calendar into a scratch JSON, and
    check sent mail since the last brief for each active deal (record what you find with `touch`).
-2. Run `python scripts/desk.py brief [--calendar <scratch json>]`. Add `--preview` until the SC's deals have a
+2. Run `python scripts/desk.py brief [--calendar <scratch json>]` (written to the SC's own PC, never SharePoint). Add `--preview` until the SC's deals have a
    ledger: it shows the commitments it **would** capture from meeting reviews (marked "preview", nothing written).
 3. Show it in chat, **questions first** (the brief's own Questions section, then any of yours). Then the top 5
    actions table, today's meetings with prep gaps, the follow-up drafts, the open commitments. Keep the SC's words.
@@ -91,16 +99,18 @@ decide, and anything to the customer goes through the AE. Run it before saying y
 
 ## E. Weekly view (Fridays, inside `sc-weekly-lessons` step 0b)
 
-`python scripts/desk.py week` writes `Lessons/desk/weekly/<week>.md` (+ `.json` for next week's trend):
+Renzo only (the script refuses anyone else). `python scripts/desk.py week` writes the **team page**
+`Lessons/desk/weekly/<week>.md` (+ `.json` for next week's trend) with totals only, no SC or deal named, and the
+**per-SC view** to his local `%USERPROFILE%\SC-Coaching\desk-<week>.md` (`--private-out` to change it):
 
-- **Each SC's deals by health:** red (our commitment overdue, demo close with no approved plan, harvest overdue),
-  amber (anything else stalled), green, parked. Plus each SC's load for the coming week.
+- **Each SC's deals by health** (private view): red (our commitment overdue, demo close with no approved plan, harvest overdue),
+  amber (anything else stalled), green, parked. Plus each SC's load for the coming week. The team page shows only
+  the team's count per colour.
 - **Quality trend (team):** demo bar items met or planned in the latest plans, harvests within 2 working days,
   explanations scored ok (coaching, **anonymised team total only**), deal timing medians from `deal-dates.json`.
 - **One or two tips**, from this week's most common stall.
 
-On Renzo's PC add `--private-out "%USERPROFILE%\SC-Coaching"`: the per-SC coaching numbers go there only (local, not
-synced), next to `coach_board.py`'s view. The team page never shows one SC's coaching score.
+Per-SC coaching numbers go only to the private view (local, not synced), next to `coach_board.py`'s view.
 
 ## F. Outlook (Microsoft 365 connector, read-only)
 
@@ -125,7 +135,7 @@ prompt:
 
 > Run the apac-sc-motion skill sc-desk, mode A (daily brief) for SC `<initials>`. If the Microsoft 365 connector is
 > available, read today's and the next 7 days' Outlook calendar and the sent mail since yesterday, read-only, as the
-> skill's mode F says; otherwise use the deal folders only. Write the brief to SharePoint `Lessons/desk/<initials>/`.
+> skill's mode F says; otherwise use the deal folders only. The brief stays on this PC (`~/.apac-sc-motion/desk/`).
 > Put the questions at the top, then the top 5 actions, today's meetings and the follow-up drafts. Never send mail,
 > never draft in Outlook, never change a deal folder except through desk.py's own commands, and don't capture new
 > commitments without the SC: list them as preview.
@@ -139,6 +149,7 @@ The task runs while the Claude app is open; if the PC is off at 8, it runs at th
 - The ledger is the SC's: capture is a dry run until the SC picks what was agreed. Never close a commitment the SC
   didn't confirm, except a recap or follow-up Outlook shows as sent (say so in the brief).
 - Only `commitments.json` is written in a deal folder; everything else the desk reads.
+- **Private per SC** (top of this file): never show one SC another SC's brief, commitments, stalls or workload.
 - Never in practice folders (`Deals/_practice/`).
 
 ## Talking to the SC
@@ -146,7 +157,7 @@ The task runs while the Claude app is open; if the PC is off at 8, it runs at th
 Put every question for the SC at the **top** of your message, numbered, before any summary or detail. If there is
 none, say "No questions" first. SCs often read only the top of a long reply before they approve it (Renzo, 11 Nov 2026).
 
-**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.1.md`): when the SC corrects a ranking, a draft or a
+**Feedback as you go** (`../../standards/FEEDBACK-LOOP-v0.2.md`): when the SC corrects a ranking, a draft or a
 stall ("that's not stalled, they're on leave"), write a feedback file (`Source: chat`, skill `sc-desk` + mode)
 without asking. After a brief, ask **one** short question ("Was the top 5 right today?") and log the answer
 (`Source: asked`).

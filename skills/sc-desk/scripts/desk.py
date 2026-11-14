@@ -4,7 +4,12 @@ An SC TASK DESK, NOT A CRM: it never stores pipeline stage, forecast or deal val
 worked out fresh from the folder each run (demo done, RFP folder, ...) and never saved.
 
 Ledger (one per deal):  <deal>/commitments.json
-Outputs (SharePoint):   Lessons/desk/<sc>/<yyyy-mm-dd>-brief.md   Lessons/desk/weekly/<yyyy-Www>.md + .json
+Daily brief:            the SC's own PC only, ~/.apac-sc-motion/desk/<yyyy-mm-dd>-brief.md (never SharePoint)
+Weekly (Renzo only):    team page Lessons/desk/weekly/<yyyy-Www>.md + .json (totals, no SC named);
+                        per-SC view in his local folder (--private-out, default ~/SC-Coaching)
+
+PRIVATE PER SC (FEEDBACK-LOOP v0.2 section 5): every command works only on the SC's own deals (`sc` in
+~/.apac-sc-motion.json). Another SC's deal, brief or workload is refused, except for the lead (Renzo, rh).
 
   python desk.py add      --deal <deal> --what "..." --owner "..." [--due 2026-11-20 | --due-text "this week"] [--source "..."] [--side us|them]
   python desk.py done     --match "<words>" [--deal <deal>] [--sc rh] [--note "..."] [--id C-003]   ("done: <what>")
@@ -74,8 +79,33 @@ def team_root(arg=None):
     return r
 
 
+LEAD = "rh"  # Renzo leads the team: the only SC who may see another SC's desk (Friday view)
+
+
+def me():
+    sc = cfg().get("sc")
+    if sc not in TEAM:
+        sys.exit("Who are you? No SC initials in ~/.apac-sc-motion.json: run sc-setup first.")
+    return sc
+
+
 def my_sc(arg=None):
-    return arg or cfg().get("sc")
+    """The SC to work for. Anyone but the lead can only ever be themselves."""
+    who = me()
+    if arg and arg != who and who != LEAD:
+        sys.exit("That's %s's desk to share: ask them, or Renzo." % TEAM.get(arg, arg))
+    return arg or who
+
+
+def guard_deal(deal):
+    """Refuse another SC's deal (lead excepted). Deals with no SC set count as the lead's until claimed."""
+    who = me()
+    o = owner_sc(deal)
+    if who == LEAD or o == who:
+        return deal
+    if o is None:
+        sys.exit("No SC is set on %s yet. If it's yours, ask Renzo to set it (desk.py owner)." % os.path.basename(deal))
+    sys.exit("%s is %s's deal: ask them, or Renzo." % (os.path.basename(deal), TEAM.get(o, o)))
 
 
 def iso(d):
@@ -466,7 +496,7 @@ def candidates(deal):
 
 def c_capture(a):
     root = team_root(a.root)
-    deal = resolve_deal(root, a.deal)
+    deal = guard_deal(resolve_deal(root, a.deal))
     L = load_ledger(deal)
     cands, seen = [], []
     for c in candidates(deal):
@@ -504,7 +534,7 @@ def c_capture(a):
 
 def c_add(a):
     root = team_root(a.root)
-    deal = resolve_deal(root, a.deal)
+    deal = guard_deal(resolve_deal(root, a.deal))
     L = load_ledger(deal)
     due = pdate(a.due) if a.due else parse_due(a.due_text, TODAY)
     if a.due and not due:
@@ -521,14 +551,14 @@ def my_deals(root, sc, include_unassigned=True):
     out = []
     for d in all_deals(root):
         o = owner_sc(d)
-        if not sc or o == sc or (include_unassigned and o is None):
+        if o == sc or (include_unassigned and sc == LEAD and o is None):
             out.append(d)
     return out
 
 
 def c_done(a, status="done"):
     root = team_root(a.root)
-    deals = [resolve_deal(root, a.deal)] if a.deal else my_deals(root, my_sc(a.sc))
+    deals = [guard_deal(resolve_deal(root, a.deal))] if a.deal else my_deals(root, my_sc(a.sc))
     hits = []
     for d in deals:
         L = load_ledger(d)
@@ -554,7 +584,7 @@ def c_done(a, status="done"):
 
 def c_list(a):
     root = team_root(a.root)
-    deals = [resolve_deal(root, a.deal)] if a.deal else my_deals(root, my_sc(a.sc))
+    deals = [guard_deal(resolve_deal(root, a.deal))] if a.deal else my_deals(root, my_sc(a.sc))
     for d in deals:
         L = load_ledger(d)
         items = [i for i in L["items"] if a.all or i["status"] == "open"]
@@ -569,7 +599,7 @@ def c_list(a):
 
 def c_meeting(a):
     root = team_root(a.root)
-    deal = resolve_deal(root, a.deal)
+    deal = guard_deal(resolve_deal(root, a.deal))
     L = load_ledger(deal)
     if not pdate(a.date):
         sys.exit("--date must be yyyy-mm-dd")
@@ -581,7 +611,7 @@ def c_meeting(a):
 
 def c_touch(a):
     root = team_root(a.root)
-    deal = resolve_deal(root, a.deal)
+    deal = guard_deal(resolve_deal(root, a.deal))
     L = load_ledger(deal)
     d = a.date or TODAY.isoformat()
     L["last_touch"] = {"date": d, "what": a.what}
@@ -593,7 +623,7 @@ def c_touch(a):
 
 def c_status(a):
     root = team_root(a.root)
-    deal = resolve_deal(root, a.deal)
+    deal = guard_deal(resolve_deal(root, a.deal))
     L = load_ledger(deal)
     L["status"] = a.set
     L["parked_until"] = a.until if a.set == "parked" else None
@@ -604,9 +634,11 @@ def c_status(a):
 
 def c_owner(a):
     root = team_root(a.root)
-    deal = resolve_deal(root, a.deal)
+    deal = guard_deal(resolve_deal(root, a.deal))
     if a.sc not in TEAM:
         sys.exit("--sc must be one of %s" % ", ".join(TEAM))
+    if me() != LEAD:
+        sys.exit("Only Renzo sets who owns a deal on the desk: ask him.")
     L = load_ledger(deal)
     L["sc"] = a.sc
     save_ledger(deal, L, {"event": "owner", "sc": a.sc})
@@ -737,7 +769,7 @@ def load_calendar(root, path):
 
 def c_scan(a):
     root = team_root(a.root)
-    deals = [resolve_deal(root, a.deal)] if a.deal else my_deals(root, my_sc(a.sc))
+    deals = [guard_deal(resolve_deal(root, a.deal))] if a.deal else my_deals(root, my_sc(a.sc))
     cal = load_calendar(root, getattr(a, "calendar", None))
     res = [scan_deal(d, cal, a.preview) for d in deals]
     if a.json:
@@ -944,7 +976,7 @@ def c_brief(a):
     md = "\n".join(L)
     print(md)
     if not a.no_write:
-        out = a.out or os.path.join(root, "Lessons", "desk", sc or "sc", "%s-brief.md" % TODAY.isoformat())
+        out = a.out or os.path.join(os.path.expanduser("~"), ".apac-sc-motion", "desk", "%s-brief.md" % TODAY.isoformat())
         os.makedirs(os.path.dirname(out), exist_ok=True)
         open(out, "w", encoding="utf-8").write(md)
         print("\n-> %s" % out, file=sys.stderr)
@@ -1048,8 +1080,12 @@ def load_check(root, sc, spec=None, cal=None):
         r = builds[0]
         L.append("- **Move build work:** on %s (%s), do only what the next customer session needs this week; the rest goes to next week. "
                  "The deal furthest from a decision goes first." % (r[1], r[2]))
-        L.append("- **Or hand over:** build items on %s to %s (this week: %s h build, %d demos). You keep the demo; they build from the "
-                 "approved plan and its approval pack." % (r[1], TEAM[light[0]], light[1]["build_hours"], light[1]["demos"]))
+        if me() == LEAD:
+            L.append("- **Or hand over:** build items on %s to %s (this week: %s h build, %d demos). You keep the demo; they build from the "
+                     "approved plan and its approval pack." % (r[1], TEAM[light[0]], light[1]["build_hours"], light[1]["demos"]))
+        else:
+            L.append("- **Or hand over:** ask Renzo who has room for build items on %s. You keep the demo; they build from the "
+                     "approved plan and its approval pack." % r[1])
     if keys & {"demos", "customer_meetings", "same_day_demos"}:
         soon = add_wd(TODAY, 2)
         movable = sorted([r for r in me["rows"] if r[0] and r[0] > soon and not r[2].startswith("build")], key=lambda r: r[3])
@@ -1165,6 +1201,8 @@ def tips(per_sc, quality):
 
 
 def c_week(a):
+    if me() != LEAD:
+        sys.exit("The Friday desk view is Renzo's (it covers every SC). Your own deals are in your daily brief.")
     root = team_root(a.root)
     y, w, _ = TODAY.isocalendar()
     wk = "%d-W%02d" % (y, w)
@@ -1193,23 +1231,28 @@ def c_week(a):
         if os.path.basename(p)[:8] != wk:
             prev = rjson(p)
     L = ["# SC desk: week %s (%s)" % (wk, TODAY.strftime("%d %b %Y")), "",
-         "Our task desk, not a CRM: pipeline stage, forecast and value stay in the AEs' CRM.", ""]
+         "Our task desk, not a CRM: pipeline stage, forecast and value stay in the AEs' CRM. Team totals only: each SC "
+         "sees their own deals in their daily brief.", ""]
+    P = ["# SC desk by SC, week %s (private: Renzo only, local folder, never SharePoint)" % wk, ""]
     snap = {"week": wk, "health": {}, "quality": {k: v for k, v in quality.items() if k != "timing"}}
+    team_cnt = {}
     for sc, rows in per_sc.items():
         name = TEAM.get(sc, "SC not set")
         cnt = {}
         for r in rows:
             cnt[health(r)] = cnt.get(health(r), 0) + 1
+            team_cnt[health(r)] = team_cnt.get(health(r), 0) + 1
         snap["health"][sc or "unset"] = cnt
-        L += ["## %s: %s" % (name, " · ".join("%d %s" % (n, h) for h, n in sorted(cnt.items()))), "",
+        P += ["## %s: %s" % (name, " · ".join("%d %s" % (n, h) for h, n in sorted(cnt.items()))), "",
               "| Deal | Health | Why | Next on record |", "|---|---|---|---|"]
         for r in sorted(rows, key=lambda r: ["red", "amber", "green", "parked", "closed"].index(health(r))):
             why = "; ".join(s["text"] for s in r["stalls"][:2]) or "-"
-            L.append("| %s | %s | %s | %s |" % (r["deal"], health(r), why, r["info"].get("next_meeting") or "-"))
-        L.append("")
+            P.append("| %s | %s | %s | %s |" % (r["deal"], health(r), why, r["info"].get("next_meeting") or "-"))
+        P.append("")
         lc, _, _ = load_check(root, sc, None, []) if sc else ("", None, None)
         if lc:
-            L += [lc.replace("## Load check", "### Load next week" if TODAY.weekday() >= 4 else "### Load this week"), ""]
+            P += [lc.replace("## Load check", "### Load next week" if TODAY.weekday() >= 4 else "### Load this week"), ""]
+    L += ["## Deals by health (team)", "", " · ".join("%d %s" % (team_cnt.get(h, 0), h) for h in ("red", "amber", "green", "parked", "closed")), ""]
 
     def pct(t):
         return "%d of %d (%d%%)" % (t[0], t[1], round(100 * t[0] / t[1])) if t and t[1] else "n/a"
@@ -1237,12 +1280,16 @@ def c_week(a):
         open(out, "w", encoding="utf-8").write(md)
         wjson(out[:-3] + ".json", snap)
         print("\n-> %s" % out, file=sys.stderr)
-    if a.private_out and private:
-        os.makedirs(a.private_out, exist_ok=True)
-        P = ["# Coaching by SC, week %s (private: Renzo only, local folder)" % wk, "", "| SC | Calls coached | Moments ok |", "|---|---|---|"]
+    if private:
+        P += ["## Coaching", "", "| SC | Calls coached | Moments ok |", "|---|---|---|"]
         for sc, (ok, tot, n) in private.items():
             P.append("| %s | %d | %s |" % (TEAM[sc], n, pct((ok, tot))))
-        open(os.path.join(a.private_out, "desk-coaching-%s.md" % wk), "w", encoding="utf-8").write("\n".join(P) + "\n")
+    if not a.no_write:
+        pout = a.private_out or os.path.join(os.path.expanduser("~"), "SC-Coaching")
+        os.makedirs(pout, exist_ok=True)
+        pf = os.path.join(pout, "desk-%s.md" % wk)
+        open(pf, "w", encoding="utf-8").write("\n".join(P) + "\n")
+        print("-> %s (private)" % pf, file=sys.stderr)
 
 
 # ---------- main ----------

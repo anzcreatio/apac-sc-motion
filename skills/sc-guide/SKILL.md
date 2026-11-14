@@ -155,7 +155,8 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 
 ## C. Log feedback
 
-Write `<team root>/Lessons/feedback/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md`:
+Write `<team root>/Lessons/feedback/<sc initials>/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md` (private to the SC
+and Renzo: never show an SC another SC's feedback, `../../standards/FEEDBACK-LOOP-v0.2.md` §5):
 
 ```
 # <one-line summary>
@@ -166,7 +167,7 @@ Write `<team root>/Lessons/feedback/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md
 - Severity: blocker / annoying / idea
 ```
 
-Format and rules: `../../standards/FEEDBACK-LOOP-v0.1.md`. For a batch of lessons (meeting notes, an R&D email,
+Format and rules: `../../standards/FEEDBACK-LOOP-v0.2.md`. For a batch of lessons (meeting notes, an R&D email,
 "we should have asked…"), suggest a chat of its own with `/sc-lessons`: it also updates the shared registers of
 product limitations and discovery questions. Keep their words. Don't change the motion here: the Friday digest (`sc-weekly-lessons`) reads these files and Renzo
 decides. If it's a blocker on a live deal, suggest they message Renzo too.
