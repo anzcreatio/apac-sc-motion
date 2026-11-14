@@ -4,7 +4,7 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.20.0 (14 Nov 2026): sc-desk, your work desk so deals never stall on our side
+## 0.20.0 (15 Nov 2026): sc-desk so deals never stall on our side; coaching for you, not about you; every deal learns from the last
 - **New: `sc-desk`.** Say **"what's on today"** and you get your top 5 actions (ranked by deadline and how close the
   deal is to the customer's decision), today's customer meetings with what's ready and what isn't, a ready-to-send
   follow-up draft for each stalled deal (addressed to the AE; your SC check; **never sent automatically**), and your
