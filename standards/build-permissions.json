@@ -1,0 +1,19 @@
+{
+  "_what": "Permission allowlist for unattended demo builds (BUILD-RULES-v0.3 section 4). sc-setup merges it into <the SC's workspace>/.claude/settings.local.json after asking, with <DEALS> and <BUILDS> replaced by the SC's own paths (forward slashes).",
+  "permissions": {
+    "allow": [
+      "mcp__plugin_creatio-ai-app-development-toolkit_clio",
+      "mcp__Claude_Browser",
+      "Bash(clio *)", "Bash(python *)", "Bash(python3 *)", "Bash(node *)", "Bash(npm run *)",
+      "Bash(git status*)", "Bash(git diff*)", "Bash(git log*)",
+      "PowerShell(clio *)", "PowerShell(python *)", "PowerShell(python3 *)", "PowerShell(node *)", "PowerShell(npm run *)",
+      "PowerShell(git status*)", "PowerShell(git diff*)", "PowerShell(git log*)",
+      "Edit(//<DEALS>/**)", "Edit(//<BUILDS>/**)"
+    ],
+    "ask": [
+      "mcp__plugin_creatio-ai-app-development-toolkit_clio__clio-run-destructive",
+      "Bash(rm -rf *)", "PowerShell(Remove-Item *-Recurse*)"
+    ],
+    "deny": ["Read(**/CREDENTIALS.md)", "Bash(git push*)", "PowerShell(git push*)"]
+  }
+}

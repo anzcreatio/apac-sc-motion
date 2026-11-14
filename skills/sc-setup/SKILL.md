@@ -96,6 +96,14 @@ that survives its updates. Ask the SC, then add our build rules to the one for `
    to it (create the file if it's missing). If an older version of the block is there, replace just that block.
    Never change anything else in the file.
 
+**Permission allowlist for unattended builds (ask first).** So a demo build can run without the SC approving
+every command, offer to merge `../../standards/build-permissions.json` into `.claude/settings.local.json` of the
+folder the SC starts build sessions in (ask which; default the folder they use for deals work). Replace `<DEALS>`
+with their `Deals` path and `<BUILDS>` with their builds folder (Windows `C:/Projects/builds`, Mac
+`~/Projects/builds` written out in full), forward slashes. Read the file first and merge, never overwrite; leave
+out the `_what` line. Tell them it loads in the next session. Never touch the user-level settings or the permission
+mode.
+
 ## 3. Rules
 
 - Never register clio environments, type passwords, create accounts or open `CREDENTIALS.md` files.
