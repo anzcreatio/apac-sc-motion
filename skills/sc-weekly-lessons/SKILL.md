@@ -16,10 +16,8 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 0. **Deal timing:** `python ../sc-guide/scripts/deal_dates.py stats` → `Lessons/stats/deal-timing.md` (medians: first call → SC notified → demo). Put the three medians and the deals missing a date in the digest.
 0b. **SC desk** (`../sc-desk/SKILL.md` mode E, Renzo's PC only): `python ../sc-desk/scripts/desk.py week` → team
    page `Lessons/desk/weekly/<yyyy-Www>.md` (deals by health as team totals, quality trend, tips; no SC or deal named)
-   and Renzo's private per-SC view `%USERPROFILE%\SC-Coaching\desk-<week>.md` (each SC's deals, load, coaching). Show
-   Renzo the red deals and any overloaded week in chat; link only the team page in the digest. Feedback files are
-   in `Lessons/feedback/<sc>/` (private per SC, `../../standards/FEEDBACK-LOOP-v0.2.md` §5): the digest reports
-   patterns, never who said what.
+   and Renzo's private per-SC deal view `%USERPROFILE%\SC-Desk\desk-<week>.md` (each SC's deals and load; no
+   coaching). Show Renzo the red deals and any overloaded week in chat; link only the team page in the digest.
 1. **Collect:** `python scripts/collect_week.py` (default: last 7 days) → `Lessons/weekly/<yyyy-Www>-evidence.json`
    on SharePoint. Read it, then read the files it lists (deck reviews, meeting reviews, demo plans, new transcripts,
    lessons files, open inbox items).
@@ -29,16 +27,14 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    Renzo sees them, and flag any that should become a rule. Practice folders never count.
    **Explanations library** (`explanations.json`): list every `proposed` entry for Renzo's yes or no; on yes run
    `registers.py approve-explanation --id E-00N --by "Renzo Huruiti"`, on no `retire-explanation` with his reason.
-   **Coaching** (`Lessons/coaching/`, private): count habits across the week's files and report them anonymised
-   ("4 calls: the answer came after the explanation"). Never name the SC or quote them in the digest. A habit seen on
-   2+ calls becomes a proposed lesson for `Lessons/explaining-it/EXPLAINING-IT-LESSONS.md` (do, don't, drill; no SC,
-   customer or call named; Renzo approves).
+   **Coaching is not in the digest** (`../../standards/FEEDBACK-LOOP-v0.2.md` §5): it stays on each SC's PC. Read
+   only the anonymised lessons SCs agreed to share (`Lessons/explaining-it/_proposed/`) and put each up for Renzo's
+   yes into `Lessons/explaining-it/EXPLAINING-IT-LESSONS.md`. Count approved answers added to the library this week.
    **Team lessons** (`Lessons/TEAM-LESSONS.md`): every approved change and every watch-list signal that reaches 2+
    deals or SCs becomes or updates a lesson there, generalised: no SC, deal or customer named, no quotes. Bump its
    version and add a Changes row, then rebuild the easy-read page: `python scripts/team_lessons_page.py` (writes
    `Lessons/TEAM-LESSONS.html`) and, on Renzo's PC, republish the team Artifact
    (https://claude.ai/artifact/NGdcrEhPXZvyx1vhpy1Ji6) from `team_lessons_page.py --fragment --out <scratch file>`.
-   On Renzo's PC, refresh his per-SC view: `python ../sc-coach/scripts/coach_board.py`.
 1c. **Training** (`../sc-academy/SKILL.md` modes U and W): `python ../sc-academy/scripts/academy.py refresh` (marks
    course modules stale when a toolkit or plugin SKILL.md changed, drafts updates in `Lessons/training/_drafts/`),
    fill each draft's "Proposed edits", then `python ../sc-academy/scripts/academy.py weekly`. Put its "Decisions for

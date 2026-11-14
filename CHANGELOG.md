@@ -26,10 +26,16 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - **Private to you.** Your brief stays on your own PC (never SharePoint), and the desk only ever shows your own
   deals, commitments and workload: ask about another SC's and Claude will say it's theirs to share. Renzo sees the
   team's Friday view; the team page shows totals only, no names.
-- **Feedback is private too (feedback loop v0.2).** Feedback files now go in your own folder,
-  `Lessons/feedback/<your initials>/`, and Claude never shows one SC another's feedback or coaching. Renzo reads them
-  for the Friday digest, which reports patterns, never who said what. Renzo is locking each SC's feedback and coaching
-  folder on SharePoint to that SC and himself.
+- **Coaching is for you, not about you (feedback loop v0.2).** `sc-coach` now keeps your coaching (scores, weak
+  moments, habits) on your own PC only, never on SharePoint. At the end it asks once whether you want to share
+  anything with Renzo (nothing, your top 3 habits, or the full note); you send it yourself. Nothing about how you
+  performed is in the Friday digest, the desk view or a deal folder, and Claude never shows one SC another's coaching.
+- A habit worth teaching becomes a team lesson only if you say yes, anonymised (no SC, deal or customer named).
+- **Meeting reviews** no longer hold your own rating or habits: the review keeps "Better answers to their
+  questions" for the deal. If you rate how you did, it stays in your private coaching note.
+- **Training results** (`sc-academy`) stay on your PC too; only which training stand is yours is shared.
+- **Feedback about the skills and Claude is for everyone**: still in `Lessons/feedback/`, with your name so Renzo
+  can follow up. It's about the tool only, never your performance.
 - **Each SC: run `sc-setup` once more** (or say "set up my daily brief"): it shows your first brief and offers to
   run it every weekday at 8 am on your PC.
 

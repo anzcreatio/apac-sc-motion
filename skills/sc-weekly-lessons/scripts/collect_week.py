@@ -11,7 +11,7 @@ Gathers, for files changed in the window:
   - inbox               _inbox files waiting, latest scan; Patterns/_inbox items waiting
   - library             deals with a demo build but no library module (harvest overdue)
   - click paths         customer recaps still DRAFT (approved false)
-  - SC feedback         SharePoint Lessons/feedback/<sc>/*.md  (private per SC; Renzo's Friday run reads them all)
+  - SC feedback         SharePoint Lessons/feedback/*.md  (about the skills and Claude, shared with everyone)
   - registers           SharePoint Lessons/registers/*.json  (new product limits and discovery questions, from sc-lessons)
   - onboarding          SharePoint Lessons/onboarding/*.json  (each SC's step and stage)
 Prints a short summary and writes the full JSON for Claude to read and judge.

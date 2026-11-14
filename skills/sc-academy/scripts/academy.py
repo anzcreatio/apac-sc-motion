@@ -141,7 +141,18 @@ def module_by_id(c, mid):
 # ---------------------------------------------------------------- progress
 
 def progress_path(root, sc):
+    """Training results are the SC's own (FEEDBACK-LOOP v0.2 section 5): kept on their PC, never SharePoint.
+    The customer course keeps its own state_dir and is unaffected."""
+    if state_dir() == ["Lessons", "training"]:
+        d = os.path.join(os.path.expanduser("~"), ".apac-sc-motion", "training")
+        os.makedirs(d, exist_ok=True)
+        return os.path.join(d, "%s.json" % kebab(sc))
     return os.path.join(tdir(root), "%s.json" % kebab(sc))
+
+
+def stands_path(root):
+    """Shared claim list: stand name -> trainee initials. A resource booking, no results."""
+    return tdir(root, "stands.json")
 
 
 def get_progress(root, sc, must=True):
@@ -251,10 +262,10 @@ def cmd_stand(a):
             if any(n.lower() in text.lower() for n in needles):
                 hits.append("%s/%s" % (base, os.path.relpath(f, d).replace("\\", "/")))
                 break
-    for f in glob.glob(os.path.join(root, *state_dir(), "*.json")):
-        other = load_json(f) or {}
-        if other.get("sc") and other.get("sc") != prog["sc"] and (other.get("stand") or {}).get("name", "").lower() == a.name.lower():
-            hits.append("training: already %s's training stand (one stand per trainee)" % other["sc"])
+    claims = load_json(stands_path(root), {}) or {}
+    owner = claims.get(a.name.lower())
+    if owner and owner != prog["initials"]:
+        hits.append("training: already %s's training stand (one stand per trainee)" % owner)
     if hits and not a.renzo_ok:
         print("REFUSED: %s is named in real deal notes or used by another trainee:" % a.name)
         for h in hits[:10]:
@@ -264,6 +275,9 @@ def cmd_stand(a):
     prog["stand"] = {"name": a.name, "url": a.url, "checked": today(), "deal_hits": hits,
                      "renzo_ok": bool(a.renzo_ok)}
     prog["lab_package"] = prog.get("lab_package") or "Acad%s" % prog["initials"].capitalize()
+    if not hits or a.renzo_ok:
+        claims[a.name.lower()] = prog["initials"]
+        save_json(stands_path(root), claims)
     print(put_progress(root, prog))
     print("Training stand %s recorded. Lab app 'Academy Kestrel', package name must contain %s." % (
         a.name, prog["lab_package"]))
@@ -274,8 +288,7 @@ def cmd_stand(a):
 def cmd_feedback(a):
     root = team_root(a.root)
     m = module_by_id(course(), a.module)
-    ini = (get_progress(root, a.sc, must=False) or {}).get("initials") or "unknown"
-    d = os.path.join(root, "Lessons", "feedback", ini)  # private per SC (FEEDBACK-LOOP v0.2 section 5)
+    d = os.path.join(root, "Lessons", "feedback")  # about the course, so shared (FEEDBACK-LOOP v0.2 section 5)
     os.makedirs(d, exist_ok=True)
     p = os.path.join(d, "%s-%s-academy-%s.md" % (today(), kebab(a.sc), m["id"].lower()))
     n = 2
@@ -520,7 +533,8 @@ def cmd_weekly(a):
     c = course()
     since = (datetime.date.today() - datetime.timedelta(days=a.days)).isoformat()
     mods = {m["id"]: m for m in modules(c)}
-    progs = [load_json(p) for p in glob.glob(os.path.join(root, *state_dir(), "*.json"))]
+    # Only this PC's own progress is here (results stay with each SC); team signals come from training feedback files.
+    progs = [load_json(p) for p in glob.glob(os.path.join(os.path.dirname(progress_path(root, "x")), "*.json"))]
     progs = [p for p in progs if p and p.get("sc")]
     stuck, fails, finished = [], {}, []
     for p in progs:

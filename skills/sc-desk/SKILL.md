@@ -17,7 +17,7 @@ own work, and "how close to a decision" is worked out fresh from the folder each
 Script: `python scripts/desk.py <command>` (paths relative to this skill; team root from `~/.apac-sc-motion.json`;
 `sc` initials from the same file). Ledger: `<deal>/commitments.json`. Briefs: on the SC's own PC only,
 `~/.apac-sc-motion/desk/<date>-brief.md`. Weekly (Renzo): team totals in `Lessons/desk/weekly/<yyyy-Www>.md`, the
-per-SC view in his local `SC-Coaching` folder.
+per-SC view in his local `SC-Desk` folder.
 
 **Private per SC** (Renzo, 14 Nov 2026; `../../standards/FEEDBACK-LOOP-v0.2.md` §5): the desk is the SC's own. Work
 only on the deals of the SC in `~/.apac-sc-motion.json`; the script refuses another SC's deal, brief, ledger or
@@ -101,16 +101,16 @@ decide, and anything to the customer goes through the AE. Run it before saying y
 
 Renzo only (the script refuses anyone else). `python scripts/desk.py week` writes the **team page**
 `Lessons/desk/weekly/<week>.md` (+ `.json` for next week's trend) with totals only, no SC or deal named, and the
-**per-SC view** to his local `%USERPROFILE%\SC-Coaching\desk-<week>.md` (`--private-out` to change it):
+**per-SC view** to his local `%USERPROFILE%\SC-Desk\desk-<week>.md` (`--private-out` to change it):
 
 - **Each SC's deals by health** (private view): red (our commitment overdue, demo close with no approved plan, harvest overdue),
   amber (anything else stalled), green, parked. Plus each SC's load for the coming week. The team page shows only
   the team's count per colour.
 - **Quality trend (team):** demo bar items met or planned in the latest plans, harvests within 2 working days,
-  explanations scored ok (coaching, **anonymised team total only**), deal timing medians from `deal-dates.json`.
+  approved answers added to the explanations library, deal timing medians from `deal-dates.json`. No coaching
+  scores: coaching stays on each SC's PC (`../../standards/FEEDBACK-LOOP-v0.2.md` §5).
 - **One or two tips**, from this week's most common stall.
 
-Per-SC coaching numbers go only to the private view (local, not synced), next to `coach_board.py`'s view.
 
 ## F. Outlook (Microsoft 365 connector, read-only)
 

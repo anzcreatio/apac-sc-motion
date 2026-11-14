@@ -188,7 +188,7 @@ def cmd_feedback(a):
         fh.write("\n".join(["# %s, module %s %s" % (x["name"], m["id"], m["title"]),
                             "- Participant: %s (%s, track %s) · Date: %s" % (x["name"], x["role"], x["track"], today())] + body))
     root = academy.team_root(None)
-    d = os.path.join(root, "Lessons", "feedback", p.get("sc") or "unknown")  # private per SC (FEEDBACK-LOOP v0.2 section 5)
+    d = os.path.join(root, "Lessons", "feedback")  # about the course, role only, so shared (FEEDBACK-LOOP v0.2 section 5)
     os.makedirs(d, exist_ok=True)
     team = os.path.join(d, "%s-%s-customer-%s-%s-%s.md" % (today(), p.get("sc") or "sc", kebab(p["account"]),
                                                             m["id"].lower(), kebab(x["role"])[:20]))

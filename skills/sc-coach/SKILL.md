@@ -8,7 +8,12 @@ description: Coach a Creatio APAC solution consultant to explain Creatio in plai
 > **Mac:** run every `python …` command below as `python3 …`.
 
 The goal: every SC explains Creatio so a customer can't misread it, with nothing that plants doubt, and the team gives
-**one consistent answer** to the same question. The coach gets better only through approved changes (the library and
+**one consistent answer** to the same question.
+
+**Coaching is for the SC, not about the SC** (Renzo, 14 Nov 2026; `../../standards/FEEDBACK-LOOP-v0.2.md` §5). It stays
+on the SC's own PC, and they choose what, if anything, Renzo sees. The first time an SC uses the coach, say so in two
+lines: "This is for you, not about you. It stays on your PC unless you share it." Never show one SC another SC's
+coaching, and never coach a recording someone else passed along unless the SC on it asked. The coach gets better only through approved changes (the library and
 the standards), never by changing itself.
 
 **Read first:** `../../standards/WRITING-STYLE-v0.1.md` (spoken lines, §4) · `../../knowledge/DIFFERENTIATOR-CATALOGUE-v0.1.md`
@@ -85,8 +90,9 @@ doesn't exist yet, say so in the file and carry on).
 
 ## A. Review a transcript
 
-1. **Who is coached:** the SC(s) in the meeting (ask only if the transcript doesn't make it clear). Coach each SC
-   separately.
+1. **Who is coached:** the SC running this session, on their own meeting. If the transcript has other SCs, coach
+   only the one who asked; the others aren't scored. **Renzo coaching an SC's recording** (only when that SC sent it
+   and asked): the coaching note is written for that SC to read, Renzo passes it on, and no copy is kept on his PC.
 2. **First pass:** `python scripts/coach_scan.py --transcript "<file>" --speaker "<SC full name>" [--speaker "<2nd SC>"] --json "<scratch>/scan.json"`.
    It lists every turn of 40+ words, or any answer to a question (`Q`, with the question), with hedges, jargon,
    vendor words, absolutes and length flagged, plus per-line timestamps. It is a sieve, not the score: read the
@@ -109,26 +115,27 @@ doesn't exist yet, say so in the file and carry on).
    Hold any whose wording isn't backed (see the sources table). Questions the SC couldn't answer go to the meeting
    review, not here.
 
-### Where the coaching goes: private (Renzo, 14 Nov 2026)
+### Where the coaching goes: the SC's own PC (Renzo, 14 Nov 2026)
 
-Coaching notes are **private to the SC and Renzo**: `<team root>/Lessons/coaching/<sc-initials>/<yyyy-mm-dd>-<deal>-coaching.md`.
-They never go in the deal folder (synced to every SC) or `Lessons/feedback/`. Show an SC only their own coaching
-(`../../standards/FEEDBACK-LOOP-v0.2.md` §5). The Friday digest gets only
-**anonymised patterns** (FEEDBACK-LOOP §4: patterns, not people): `sc-weekly-lessons` may count habits across
-coaching files ("3 calls this week: answers buried after the explanation") but never names the SC or quotes them.
+Write the coaching note to `~/.apac-sc-motion/coaching/<yyyy-mm-dd>-<deal>-coaching.md` on the SC's own PC (create the
+folder). **Never** on SharePoint, OneDrive, in the deal folder or in a feedback file. No scores per person go anywhere
+else: not the digest, the desk or the meeting review.
 
-**Two views of the same coaching:**
+**At the end of the run, ask once** (in the questions at the top): "Want to share anything with Renzo? Nothing / your
+top 3 habits / the full note." Default nothing; don't ask again in the same chat. On a yes, write the part they chose
+as a short message for them to send Renzo themselves (Teams or email). Claude never sends it.
 
-| View | Where | Who sees it | Built by |
-|---|---|---|---|
-| Team lessons: anonymised do / don't / drill, no SC, customer or call named | `Lessons/explaining-it/EXPLAINING-IT-LESSONS.md` | Every SC | Friday digest, a lesson needs 2+ calls, Renzo approves |
-| Per-SC view: each SC's coaching and feedback files with an index | `%USERPROFILE%\SC-Coaching\` on Renzo's PC (local, never synced) | Renzo | `python scripts/coach_board.py` (refuses an OneDrive or SharePoint folder) |
+**Team learning, with consent:** when a habit or a strong moment would help everyone, ask: "OK to add an anonymised
+version to the team lessons?" On yes, write a do / don't / drill with no SC, deal, customer or call named to
+`<team root>/Lessons/explaining-it/_proposed/<yyyy-mm-dd>-<slug>.md`; Renzo approves on Friday into
+`Lessons/explaining-it/EXPLAINING-IT-LESSONS.md`. Library proposals (below) are about the answer, not the person, and
+need no extra consent.
 
 File layout:
 
 ```
 # Coaching: <SC> · <deal> · <meeting date>
-Source: <transcript path> · Moments scored: N · Private to <SC> and Renzo
+Source: <transcript path> · Moments scored: N · Private to <SC> (shared only by their choice)
 
 ## Scorecard
 | # | mm:ss | Topic | Answered | Plain | Confident | Claims | Doubts | Length | Overall |
@@ -174,7 +181,8 @@ When the SC says "too long", "a customer wouldn't say that", "that's wrong", edi
 
 1. Fix the answer for them now.
 2. Log a feedback file **without asking** (`../../standards/FEEDBACK-LOOP-v0.2.md` §2): `Source: chat`,
-   `Skill + step: sc-coach, <mode/step>`, their words, what changed.
+   `Skill + step: sc-coach, <mode/step>`, their words about the coach, what changed. It's shared, so it's about the
+   coach only: never their score, a weak quote or the customer.
 3. If it touches a library entry, propose the fix (`add-explanation --supersedes E-00N`). If it is about how the coach
    writes (length, tone, analogies), propose the style change in the feedback file ("What they'd change") for the
    Friday digest. **Don't change this skill or the standards yourself**: the digest decides (2+ SCs or deals).
@@ -185,12 +193,11 @@ coach there, but log nothing.
 
 ## D. Short coaching section (from sc-meeting-review)
 
-Run steps A1-A4 on the meeting transcript, then:
-- Write the full coaching file (private, as above).
-- Return to the meeting review **only** a short section, without scores or quotes that name the SC's weak spots
-  (the review sits in the deal folder): `## Explaining it (sc-coach)` · the top three habits in one line each, the
-  2 best customer-ready rewrites for questions the customer asked (their question, our better answer) and the path
-  of the private coaching file. If the meeting had more than one SC, one line per SC is fine but keep it neutral.
+Only when the SC running the review is the SC who presented (never on another SC's meeting). Run steps A1-A4, then:
+- Write the full coaching note on the SC's own PC (as above) and ask the sharing question once.
+- Return to the meeting review **only** `## Better answers to their questions`: the 2 best customer-ready answers to
+  questions the customer asked (their question, our better answer), useful for the deal. **No habits, scores, weak
+  quotes or a path to the coaching note**: the review sits in the deal folder, which every SC can read.
 
 ## Talking to the SC
 

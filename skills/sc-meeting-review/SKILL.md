@@ -48,7 +48,6 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    | **Today's goal** (agenda) asked again at the close, in the same words? Answer: fits / not yet / no | | |
    | If **not yet**: which part falls short and what it would need to do, **in their exact words** | | |
    | Next step with a named person and a date? | | |
-   | **SC's own rating** of the meeting (1–5) and one line on why, next to the customer's reactions above | | |
 
 2. **Solution summary update:** copy `deck.json` to `deck-<yyyy-mm-dd>.json` (history), then update the `summary`
    parts: confirmed parts stay, corrected parts reworded in their words, new needs added, rejected parts removed,
@@ -68,15 +67,16 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    ranking into the solution summary, and propose library changes per `sc-requirements` ("How it grows").
 6. **Library:** is the L1 harvest done (`library/catalogue.json` has this deal)? If not, and the demo was more than
    2 working days ago, say so first and offer to run `sc-harvest`.
-7. **Explaining it (sc-coach):** run `../sc-coach/SKILL.md` mode D on the transcript for each SC who presented. The
-   full coaching goes to the SC's private folder (`Lessons/coaching/<sc>/`); the review gets only the short section
-   (top three habits, the 2 best rewrites for the customer's own questions, the file path). No scores or weak quotes
-   in the review: it sits in the deal folder, which every SC can read.
+7. **Better answers (sc-coach):** if the SC running this review presented the meeting, offer `../sc-coach/SKILL.md`
+   mode D. Their coaching stays on their own PC; the review gets only "Better answers to their questions" (the
+   customer's question, our better answer). Never coach another SC's part of the meeting.
 
 ## Part C: lessons
 
-Ask the SC first, in one line at the top: **"How did it feel, 1–5, and what would you change?"** Put their answer in
-the scorecard and, per `../../standards/FEEDBACK-LOOP-v0.2.md`, in a feedback file (`Source: transcript`).
+Ask the SC first, in one line at the top: **"What would you change next time?"** What they'd change about the
+deck, demo or skills goes in a feedback file (`Source: transcript`, `../../standards/FEEDBACK-LOOP-v0.2.md`). How they
+felt they did is theirs: if they give a rating, it goes only in their private coaching note, never the review or a
+feedback file.
 
 Append to `../../lessons/<yyyy-mm-dd>-<deal>.md`: what we'd keep, change or stop, each with evidence and a proposed
 change to a skill, standard, pack or template. Don't change the motion here: the weekly lessons run decides, and a

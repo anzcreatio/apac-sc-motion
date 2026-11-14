@@ -6,7 +6,7 @@ worked out fresh from the folder each run (demo done, RFP folder, ...) and never
 Ledger (one per deal):  <deal>/commitments.json
 Daily brief:            the SC's own PC only, ~/.apac-sc-motion/desk/<yyyy-mm-dd>-brief.md (never SharePoint)
 Weekly (Renzo only):    team page Lessons/desk/weekly/<yyyy-Www>.md + .json (totals, no SC named);
-                        per-SC view in his local folder (--private-out, default ~/SC-Coaching)
+                        per-SC view in his local folder (--private-out, default ~/SC-Desk)
 
 PRIVATE PER SC (FEEDBACK-LOOP v0.2 section 5): every command works only on the SC's own deals (`sc` in
 ~/.apac-sc-motion.json). Another SC's deal, brief or workload is refused, except for the lead (Renzo, rh).
@@ -1140,15 +1140,18 @@ def demo_bar(deal):
     return (ok, tot) if tot else None
 
 
-def coaching(root, sc):
-    oks = tot = 0
-    files = glob.glob(os.path.join(root, "Lessons", "coaching", sc, "*.md"))
-    for p in files:
-        for row in table_after(rtext(p), r"^##\s*Scorecard.*$"):
-            if row and row[-1].lower() in ("ok", "weak", "fail"):
-                tot += 1
-                oks += row[-1].lower() == "ok"
-    return (oks, tot, len(files)) if tot else None
+def answers_added(root, days=7):
+    """Approved answers added to the team's explanations library in the last week (about answers, not people)."""
+    j = rjson(os.path.join(root, "Lessons", "registers", "explanations.json")) or {}
+    entries = j.get("entries", j) if isinstance(j, dict) else j
+    since = TODAY - dt.timedelta(days=days)
+    n = tot = 0
+    for e in entries if isinstance(entries, list) else []:
+        if e.get("status") == "approved":
+            tot += 1
+            if pdate(e.get("approved_on")) and pdate(e["approved_on"]) >= since:
+                n += 1
+    return n, tot
 
 
 def harvest_on_time(deal):
@@ -1206,7 +1209,7 @@ def c_week(a):
     root = team_root(a.root)
     y, w, _ = TODAY.isocalendar()
     wk = "%d-W%02d" % (y, w)
-    per_sc, quality, private = {}, {}, {}
+    per_sc, quality = {}, {}
     for sc in list(TEAM) + [None]:
         rows = [scan_deal(d) for d in all_deals(root) if owner_sc(d) == sc]
         if rows:
@@ -1219,12 +1222,6 @@ def c_week(a):
     ht = [h for h in ht if h is not None]
     if ht:
         quality["harvest_on_time"] = (sum(ht), len(ht))
-    co = [coaching(root, sc) for sc in TEAM]
-    for sc, c in zip(TEAM, co):
-        if c:
-            private[sc] = c
-    if private:
-        quality["coaching_ok"] = (sum(c[0] for c in private.values()), sum(c[1] for c in private.values()))
     quality["timing"] = timing()
     prev = None
     for p in sorted(glob.glob(os.path.join(root, "Lessons", "desk", "weekly", "*.json"))):
@@ -1233,7 +1230,8 @@ def c_week(a):
     L = ["# SC desk: week %s (%s)" % (wk, TODAY.strftime("%d %b %Y")), "",
          "Our task desk, not a CRM: pipeline stage, forecast and value stay in the AEs' CRM. Team totals only: each SC "
          "sees their own deals in their daily brief.", ""]
-    P = ["# SC desk by SC, week %s (private: Renzo only, local folder, never SharePoint)" % wk, ""]
+    P = ["# SC desk by SC, week %s (private: Renzo only, local folder, never SharePoint)" % wk, "",
+         "Deals and load only. Coaching isn't here: it stays on each SC's PC and they share what they choose.", ""]
     snap = {"week": wk, "health": {}, "quality": {k: v for k, v in quality.items() if k != "timing"}}
     team_cnt = {}
     for sc, rows in per_sc.items():
@@ -1267,7 +1265,7 @@ def c_week(a):
     L += ["## Quality trend (team)", "", "| Measure | This week | Source |", "|---|---|---|",
           "| Demo bar items met or planned in the latest plans | %s%s | `*demo-plan*.md` Demo bar check |" % (pct(quality.get("demo_bar")), trend("demo_bar")),
           "| Demos harvested within %d working days | %s%s | `library/catalogue.json` vs deal dates |" % (HARVEST_WD, pct(quality.get("harvest_on_time")), trend("harvest_on_time")),
-          "| Explanations scored ok (team, anonymised) | %s%s | `Lessons/coaching/` |" % (pct(quality.get("coaching_ok")), trend("coaching_ok"))]
+          "| Approved answers added to the library this week | %d (%d in all) | `Lessons/registers/explanations.json` |" % answers_added(root)]
     for k, lab in (("call_to_sc", "First call → SC notified"), ("sc_to_demo", "SC notified → demo"), ("call_to_demo", "First call → demo")):
         v = quality["timing"].get(k)
         L.append("| %s, median days | %s | `deal-dates.json` |" % (lab, "%g (n=%d)" % v if v else "n/a"))
@@ -1280,12 +1278,8 @@ def c_week(a):
         open(out, "w", encoding="utf-8").write(md)
         wjson(out[:-3] + ".json", snap)
         print("\n-> %s" % out, file=sys.stderr)
-    if private:
-        P += ["## Coaching", "", "| SC | Calls coached | Moments ok |", "|---|---|---|"]
-        for sc, (ok, tot, n) in private.items():
-            P.append("| %s | %d | %s |" % (TEAM[sc], n, pct((ok, tot))))
     if not a.no_write:
-        pout = a.private_out or os.path.join(os.path.expanduser("~"), "SC-Coaching")
+        pout = a.private_out or os.path.join(os.path.expanduser("~"), "SC-Desk")
         os.makedirs(pout, exist_ok=True)
         pf = os.path.join(pout, "desk-%s.md" % wk)
         open(pf, "w", encoding="utf-8").write("\n".join(P) + "\n")

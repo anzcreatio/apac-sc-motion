@@ -68,8 +68,8 @@ message. If they want to skip a step, let them and note it.
 | Building | `creatio-demo-toolkit` (`creatio-demo-build`) | The configured demo, click path cards |
 | After the build | `sc-clickpath` | SC practice page + customer recap (DRAFT until the SC approves) |
 | After the build, before any RFP | `sc-requirements` | A neutral requirements checklist in their words for the AE to send, so their RFP asks for what we've shown |
-| After every meeting | `sc-meeting-review` | Deck comparison, review, updated summary, next-session ideas, lessons, a short coaching section |
-| Any time: "how do I explain X?", or coaching on a call | `sc-coach` | Customer-ready and dead-simple answers, the team's approved explanations, private coaching notes |
+| After every meeting | `sc-meeting-review` | Deck comparison, review, updated summary, next-session ideas, lessons, better answers to the customer's questions |
+| Any time: "how do I explain X?", or coaching on a call | `sc-coach` | Customer-ready and dead-simple answers, the team's approved explanations, coaching that stays on your own PC (you choose what to share) |
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
 | Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
@@ -155,8 +155,8 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 
 ## C. Log feedback
 
-Write `<team root>/Lessons/feedback/<sc initials>/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md` (private to the SC
-and Renzo: never show an SC another SC's feedback, `../../standards/FEEDBACK-LOOP-v0.2.md` §5):
+Write `<team root>/Lessons/feedback/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md` (shared: it's about the skills and
+Claude, never about how the SC performed, `../../standards/FEEDBACK-LOOP-v0.2.md` §5):
 
 ```
 # <one-line summary>
