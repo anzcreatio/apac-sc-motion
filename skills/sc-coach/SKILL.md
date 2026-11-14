@@ -108,7 +108,7 @@ doesn't exist yet, say so in the file and carry on).
    Hold any whose wording isn't backed (see the sources table). Questions the SC couldn't answer go to the meeting
    review, not here.
 
-### Where the coaching goes: private (default)
+### Where the coaching goes: private (Renzo, 14 Nov 2026)
 
 Coaching notes are **private to the SC and Renzo**: `<team root>/Lessons/coaching/<sc-initials>/<yyyy-mm-dd>-<deal>-coaching.md`.
 They never go in the deal folder (synced to every SC) or `Lessons/feedback/`. The Friday digest gets only
