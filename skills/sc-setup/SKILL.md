@@ -104,6 +104,15 @@ with their `Deals` path and `<BUILDS>` with their builds folder (Windows `C:/Pro
 out the `_what` line. Tell them it loads in the next session. Never touch the user-level settings or the permission
 mode.
 
+## 2b. Daily brief at 8 am (offer it, don't force it)
+
+Once the team folder and initials are set, show the SC their first desk brief (`sc-desk` mode A:
+`python <plugin root>/skills/sc-desk/scripts/desk.py brief --preview --no-write`), then ask: "Want this every
+weekday at 8 am on this PC?" On a yes, create the scheduled task exactly as `sc-desk` "Scheduled daily brief" says
+(task id `sc-desk-daily-brief`, cron `0 8 * * 1-5`, their initials in the prompt). It runs while the Claude app is
+open. Optional: the Microsoft 365 connector (read-only) adds their Outlook meetings and sent follow-ups; they connect
+it themselves.
+
 ## 3. Rules
 
 - Never register clio environments, type passwords, create accounts or open `CREDENTIALS.md` files.

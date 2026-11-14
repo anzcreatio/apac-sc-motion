@@ -4,6 +4,28 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.20.0 (14 Nov 2026): sc-desk, your work desk so deals never stall on our side
+- **New: `sc-desk`.** Say **"what's on today"** and you get your top 5 actions (ranked by deadline and how close the
+  deal is to the customer's decision), today's customer meetings with what's ready and what isn't, a ready-to-send
+  follow-up draft for each stalled deal (addressed to the AE; your SC check; **never sent automatically**), and your
+  open commitments.
+- **Commitments ledger per deal** (`commitments.json`: what, owner, due, source, status). `sc-meeting-review` now
+  captures its Commitments table onto it (you pick what was agreed); it also reads next-steps slides, the AE brief and
+  follow-up drafts. Say **"done: send the slides"** to close one, "add: …" to add one, "booked the next session for
+  the 20th" to record it.
+- **Stall checks:** no activity for 7 days, a commitment overdue, a demo under 3 days away with no approved build
+  plan, a harvest overdue, an approved recap not sent, no next meeting on record. `sc-guide` "what's next" puts these
+  first.
+- **Load check:** "am I overloaded?" counts the week's demos, meetings, build hours left and commitments due, and
+  suggests what to move (build work first, never a customer session in the next 2 days) or hand over.
+- **Fridays:** `sc-weekly-lessons` adds the desk view (`Lessons/desk/weekly/`): each SC's deals by health, next
+  week's load, a team quality trend (demo bar, harvest on time, coaching anonymised, deal timing) and one or two tips.
+- **Outlook (optional, read-only):** with the Microsoft 365 connector on, the brief reads your calendar and checks
+  your sent mail for follow-ups and recaps. It never sends, drafts in Outlook or books meetings.
+- **A task desk, not a CRM:** it never tracks pipeline stage, forecast or value. Ask the AE to update their CRM.
+- **Each SC: run `sc-setup` once more** (or say "set up my daily brief"): it shows your first brief and offers to
+  run it every weekday at 8 am on your PC.
+
 ## 0.19.0 (14 Nov 2026): sc-coach, explain it so they can't misread it; sc-academy, learn to build
 - **New: `sc-coach`.** Share a meeting transcript and it finds every moment you explained a feature or answered a
   question, and scores each one: did it answer the question, plain words, confidence (no "I think", "should be able to", "in theory"), approved

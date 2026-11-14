@@ -60,7 +60,10 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    first; for a bigger next demo, hand over to `sc-demo-plan`.
 4. **What landed:** for each scene, the pattern it used (pattern book ID) and the reaction. Patterns that land on 2+
    deals are candidates to build once as a demo library module.
-5. **Commitments:** everything we promised, with owner and date.
+5. **Commitments:** everything we promised, and what they promised, as a `## 5. Commitments` table (What · Owner ·
+   When), with a real date where one was said. Then put them on the SC's desk (`../sc-desk/SKILL.md` mode C):
+   `python ../sc-desk/scripts/desk.py capture --deal "<deal folder>"`, ask which were agreed, `--apply --pick …`; if
+   the next meeting has a date, `desk.py meeting --deal … --date … --what …`.
 5b. **Meeting card:** if the SC used it, which lines they picked, ranked or rejected (their words, tag C). Feed the
    ranking into the solution summary, and propose library changes per `sc-requirements` ("How it grows").
 6. **Library:** is the L1 harvest done (`library/catalogue.json` has this deal)? If not, and the demo was more than

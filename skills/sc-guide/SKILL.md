@@ -20,6 +20,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Team root = `s
 | "start", "onboard me", new to the motion, or no progress file yet | **A. Onboarding** |
 | "where was I", "continue" | A, from the saved step |
 | "what's next", "what now", names a deal | **B. Next step on a deal** |
+| "what's on today", "what's on my plate", "done: <what>", "am I overloaded?" | The SC's desk: `sc-desk` |
 | "this didn't work", "this could be better", "feedback" | **C. Log feedback** (a batch of lessons → `/sc-lessons`) |
 | "update the plugin" | If `claude --version` works in your shell: run `claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`. If not: ask them to type `/plugin`, open **Marketplaces**, pick `apac-sc` and choose **Update marketplace**. Then tell them to start a new session (or type `/reload-plugins`) |
 
@@ -74,6 +75,7 @@ message. If they want to skip a step, let them and note it.
 | Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
 | A customer wants to build on Creatio themselves (after they buy) | `sc-customer-academy` ("customer enablement") | Sessions you run for their business builders (Track 1) and IT (Track 2) with Creatio's public toolkit, in their dev or sandbox only; a customer pack (workbook + Claude coach) they keep, after your SC check |
 | Learning to build, any time | `sc-academy` ("train me") | Guided labs on a fictional deal, one module per skill area (setup → first meeting → demo plan → object model → pages → data → processes → AI → click path and harvest), on your own training stand |
+| Every morning, and "done: <what>" | `sc-desk` ("what's on today") | Top 5 actions, today's meetings and prep, follow-up drafts for stalled deals, our commitments (a task desk, not a CRM) |
 | Fridays | `sc-weekly-lessons` (Renzo) | At most 3 changes to the motion |
 
 ### The rules card
@@ -144,6 +146,9 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 
    If the folder doesn't fit the table (older deals were built with the earlier workflows), read the latest review or
    prep file, say what you think the state is, and ask the SC to confirm before suggesting a step.
+
+   Also run `python ../sc-desk/scripts/desk.py scan --deal "<deal folder>"`: an overdue commitment of ours, a demo
+   under 3 days with no approved build plan, or an approved recap not sent comes **before** the table's next step.
 
 3. Answer in at most six lines: where the deal is, the **one** next step, the skill, and what you need from them.
    Offer to start it. If their stage is shadow or paired, add who checks it.

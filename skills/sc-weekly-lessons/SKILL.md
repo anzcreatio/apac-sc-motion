@@ -14,6 +14,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 ## Steps
 
 0. **Deal timing:** `python ../sc-guide/scripts/deal_dates.py stats` → `Lessons/stats/deal-timing.md` (medians: first call → SC notified → demo). Put the three medians and the deals missing a date in the digest.
+0b. **SC desk** (`../sc-desk/SKILL.md` mode E): `python ../sc-desk/scripts/desk.py week` (on Renzo's PC add
+   `--private-out "%USERPROFILE%\SC-Coaching"`) → `Lessons/desk/weekly/<yyyy-Www>.md`: each SC's deals by health, next
+   week's load, the quality trend and one or two tips. Put the red deals and any overloaded week under "waiting on
+   Renzo", and link the page in the digest. Per-SC coaching numbers stay in the private file, never in the digest.
 1. **Collect:** `python scripts/collect_week.py` (default: last 7 days) → `Lessons/weekly/<yyyy-Www>-evidence.json`
    on SharePoint. Read it, then read the files it lists (deck reviews, meeting reviews, demo plans, new transcripts,
    lessons files, open inbox items).
