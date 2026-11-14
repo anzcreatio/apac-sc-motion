@@ -1,7 +1,14 @@
 # Practice scenario: Kestrel Facility Services (fictional)
 
-> A made-up company for the course labs, so everyone builds the same thing in modules B2-B5. Use your own use case
+> A made-up company for the labs, so everyone builds the same thing. The short sessions use the mini version;
+> the full course modules B2-B5 use the whole scenario. Use your own use case
 > for the capstone (B6). No real customer data anywhere in the labs.
+
+## Mini version (one-hour session and workshop)
+
+Clients are existing **Accounts**. Each client has **Sites**. A site gets **Inspections**: date, inspector,
+result (Pass, Pass with actions, Fail), notes. One rule in the workshop: Notes required when the result is Fail.
+That's all.
 
 ## The company
 

@@ -54,6 +54,11 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - **Customer pack:** workbook pages plus a Claude skill (`creatio-build-coach`) they keep after we leave. It stays a
   DRAFT until you've checked every page. You send it; Claude never does.
 - It keeps itself current from the toolkit's own skills and runbooks; Renzo approves every course change.
+- **Start short:** a **one-hour session** ("Your first Creatio app in an hour": ask in plain words, approve the plan,
+  build, then extend the CRM client page with it) and a **workshop of up to 3 hours** (the hour, then their own idea,
+  one "make it yours" change, and how it gets live properly). Both need a 15-minute "Before you come" checklist done
+  by their IT beforehand (no installing in the room), use exact prompts to copy, plain words with a one-page glossary,
+  and a mini practice scenario. The full course stays for customers who want depth. `prep --format 1h|3h|full`.
 
 ## 0.18.1 (14 Nov 2026): approve upfront, build non-stop, safely
 - Build rules v0.4 (`standards/BUILD-RULES-v0.4.md` section 4). With the build plan, `sc-demo-plan` sends one

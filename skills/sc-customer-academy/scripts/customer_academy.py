@@ -4,7 +4,7 @@ Everything for one customer lives in the deal folder: <deal>/enablement/ (plan, 
 The course itself (course.json, modules/) is in the plugin; upkeep (refresh, stamp) reuses the sc-academy engine:
   python ../sc-academy/scripts/academy.py --course ../sc-customer-academy/course.json refresh | stamp ...
 
-  python customer_academy.py prep    --deal <deal folder> --product "Sales Creatio" --tracks T1,T2
+  python customer_academy.py prep    --deal <deal folder> --product "Sales Creatio" --format 1h|3h|full [--tracks T1,T2]
                                      --env-name <their clio env> --env-url <url> [--scenario own|practice]
                                      [--non-prod-confirmed-by "<customer name, role>"] [--customer-name "Harbourline Credit Union"]
         enablement/plan.json. Refuses an environment that looks like production unless the customer confirmed it isn't.
@@ -48,6 +48,15 @@ def course():
 
 def modules(c):
     return academy.modules(c)
+
+
+def person_modules(c, p, track=None):
+    """The modules one participant works through: the format's list (1h, 3h) or their track in the full course."""
+    fmt = (c.get("formats") or {}).get(p.get("format") or "full", {})
+    if fmt.get("modules"):
+        ids = fmt["modules"]
+        return [m for i in ids for m in modules(c) if m["id"] == i]
+    return [m for m in modules(c) if m["path"] == (track or "").upper()] if track else         [m for m in modules(c) if m["path"] in p.get("tracks", [])]
 
 
 def edir(deal, *parts):
@@ -94,7 +103,10 @@ def cmd_prep(a):
         print("confirm it isn't production, re-run with --non-prod-confirmed-by \"<name, role>\" (recorded in the plan).")
         sys.exit(2)
     c = course()
-    tracks = [t.strip().upper() for t in a.tracks.split(",")]
+    fmt = (c.get("formats") or {}).get(a.format)
+    if not fmt:
+        sys.exit("Unknown format %s; formats: %s" % (a.format, ", ".join(c.get("formats", {}))))
+    tracks = [t.strip().upper() for t in (a.tracks or ",".join(fmt.get("tracks", ["F"]))).split(",")]
     valid = {p["id"] for p in c["paths"] if p.get("status") == "live"}
     bad = [t for t in tracks if t not in valid]
     if bad:
@@ -103,16 +115,16 @@ def cmd_prep(a):
     slug = os.path.basename(deal)
     display = a.customer_name or old.get("customer") or " ".join(
         w.capitalize() for w in re.sub(r"-(rh|wn|fa)$", "", slug).split("-"))
-    p = {"account": slug, "customer": display, "product": a.product, "tracks": tracks, "scenario": a.scenario,
+    p = {"account": slug, "customer": display, "product": a.product, "format": a.format, "tracks": tracks, "scenario": a.scenario,
          "course_version": c["version"], "sc": sc_initials(),
          "environment": {"name": a.env_name, "url": a.env_url, "looks_prod": looks_prod,
                          "non_prod_confirmed_by": a.non_prod_confirmed_by, "checked": today()},
          "people": old.get("people", []), "sessions": old.get("sessions", []), "pack": old.get("pack"),
          "created": old.get("created", today())}
     print(put_plan(deal, p))
-    mins = sum(m.get("minutes", 0) for m in modules(c) if m["path"] in tracks)
-    print("Tracks %s: %d modules, about %.1f hours of sessions." % (",".join(tracks),
-          sum(1 for m in modules(c) if m["path"] in tracks), mins / 60.0))
+    mods = person_modules(c, p)
+    print("%s: %s (%s), about %.1f hours in the room plus pre-work." % (a.format, fmt["title"], ", ".join(m["id"] for m in mods),
+          sum(m.get("minutes", 0) for m in mods if m["id"] != "F0") / 60.0))
 
 
 def cmd_person(a):
@@ -121,8 +133,12 @@ def cmd_person(a):
     if any(x["name"].lower() == a.name.lower() for x in p["people"]):
         print("%s is already in the plan." % a.name)
         return
-    first = next((m["id"] for m in modules(course()) if m["path"] == a.track.upper()), None)
-    p["people"].append({"name": a.name, "role": a.role, "track": a.track.upper(), "module": first, "step": 1,
+    track = (a.track or p.get("format") or "").upper()
+    mine = person_modules(course(), p, a.track if p.get("format") == "full" else None)
+    if not mine:
+        sys.exit("No modules for %s in this plan (format %s): pass --track T1 or T2 for the full course" % (a.name, p.get("format")))
+    first = mine[0]["id"]
+    p["people"].append({"name": a.name, "role": a.role, "track": track, "module": first, "step": 1,
                         "started": {first: today()}, "done": {}, "results": []})
     print(put_plan(deal, p))
 
@@ -146,7 +162,8 @@ def cmd_result(a):
     x["results"].append({"module": m["id"], "result": a.result, "date": today(), "note": a.note or ""})
     if a.result == "pass":
         x["done"][m["id"]] = today()
-        nxt = next((n for n in modules(c) if n["path"] == x["track"] and n["id"] not in x["done"]), None)
+        mine = person_modules(c, p, x["track"] if p.get("format") == "full" else None)
+        nxt = next((n for n in mine if n["id"] not in x["done"]), None)
         x["module"], x["step"] = (nxt["id"], 1) if nxt else (None, None)
         if nxt:
             x["started"].setdefault(nxt["id"], today())
@@ -189,12 +206,12 @@ def cmd_status(a):
     c = course()
     p = plan(deal)
     env = p["environment"]
-    print("%s · %s · tracks %s · environment %s%s" % (p["account"], p["product"], ",".join(p["tracks"]), env["name"],
+    print("%s · %s · %s · environment %s%s" % (p["account"], p["product"], p.get("format", "full"), env["name"],
           " (customer confirmed non-production: %s)" % env["non_prod_confirmed_by"] if env.get("non_prod_confirmed_by") else ""))
     stale = (load_json(os.path.join(academy.team_root(None), *academy.state_dir(), "_state", "stale.json"), {}) or {}).get("stale", {})
     for x in p["people"]:
         done = len(x["done"])
-        total = sum(1 for m in modules(c) if m["path"] == x["track"])
+        total = len(person_modules(c, p, x["track"] if p.get("format") == "full" else None))
         print("  %-24s %-22s %s  %d/%d done, now %s step %s%s" % (x["name"], x["role"][:22], x["track"], done, total,
               x["module"] or "-", x["step"] or "-", "  [module being updated]" if x["module"] in stale else ""))
     print("Customer pack: %s" % ((p.get("pack") or {}).get("status") or "not built"))
@@ -213,7 +230,7 @@ def cmd_pack(a):
     for sub in ("pages", "creatio-build-coach"):
         shutil.rmtree(os.path.join(out, sub), ignore_errors=True)
     approved = bool(a.approved_by)
-    mods = [m for m in modules(c) if m["path"] in p["tracks"]]
+    mods = person_modules(c, p)
     # 1. the skill the customer keeps
     sk = os.path.join(out, "creatio-build-coach")
     os.makedirs(os.path.join(sk, "modules"), exist_ok=True)
@@ -226,7 +243,8 @@ def cmd_pack(a):
             body = strip_facilitator(fh.read())
         with open(os.path.join(sk, m["file"]), "w", encoding="utf-8") as fh:
             fh.write(body)
-    shutil.copy(os.path.join(SKILL_DIR, "fixtures", "practice-scenario.md"), os.path.join(sk, "practice-scenario.md"))
+    for fx in ("practice-scenario.md", "glossary.md"):
+        shutil.copy(os.path.join(SKILL_DIR, "fixtures", fx), os.path.join(sk, fx))
     save_json(os.path.join(sk, "course.json"), {"title": c["title"], "version": c["version"], "customer": p.get("customer") or p["account"],
               "product": p["product"], "references": c.get("references", {}),
               "modules": [{k: m[k] for k in ("id", "title", "file", "minutes", "path")} for m in mods]})
@@ -234,8 +252,9 @@ def cmd_pack(a):
     pg = os.path.join(out, "pages")
     os.makedirs(pg, exist_ok=True)
     banner = "" if approved else "<p style='background:#fde68a;color:#111;padding:8px 12px;border-radius:6px'><strong>DRAFT</strong>: %s</p>" % SC_CHECK
-    idx = ["# %s" % c["title"], "", "For **%s** (%s)." % (p.get("customer") or p["account"], p["product"]), "", c["about"], "",
-           "| Track | Module | Minutes |", "|---|---|---|"]
+    ftitle = ((c.get("formats") or {}).get(p.get("format") or "full") or {}).get("title") or c["title"]
+    idx = ["# %s" % (ftitle if p.get("format") in ("1h", "3h") else c["title"]), "", "For **%s** (%s)." % (p.get("customer") or p["account"], p["product"]), "", c["about"], "",
+           "| Part | Module | Minutes |", "|---|---|---|"]
     head = ("<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>"
             "<title>%s</title><style>%s</style>")
     for m in mods:
@@ -245,7 +264,12 @@ def cmd_pack(a):
         with open(os.path.join(pg, name), "w", encoding="utf-8") as fh:
             fh.write(head % ("%s %s" % (m["id"], m["title"]), academy.CSS) + banner +
                      "<p><a href='index.html'>Course index</a></p>" + academy.md_to_html(body))
-        idx.append("| %s | [%s %s](%s) | %s |" % (m["path"], m["id"], m["title"], name, m.get("minutes", "")))
+        idx.append("| %s | [%s](%s) | %s |" % ({"F": "Session"}.get(m["path"], m["path"]), m["title"], name, m.get("minutes", "")))
+    with open(os.path.join(SKILL_DIR, "fixtures", "glossary.md"), encoding="utf-8") as fh:
+        gl = fh.read()
+    with open(os.path.join(pg, "glossary.html"), "w", encoding="utf-8") as fh:
+        fh.write(head % ("Words you'll hear", academy.CSS) + banner + "<p><a href='index.html'>Course index</a></p>" + academy.md_to_html(gl))
+    idx.append("| | [Words you'll hear](glossary.html) | |")
     idx += ["", "## Keep learning", "",
             "- Toolkit setup guide (Creatio Academy): %s" % c["references"]["toolkit_setup"],
             "- The toolkit on GitHub: %s" % c["references"]["toolkit_repo"],
@@ -343,11 +367,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("prep"); s.add_argument("--deal", required=True); s.add_argument("--product", required=True)
-    s.add_argument("--tracks", required=True); s.add_argument("--env-name", required=True); s.add_argument("--env-url")
+    s.add_argument("--format", choices=["1h", "3h", "full"], required=True); s.add_argument("--tracks")
+    s.add_argument("--env-name", required=True); s.add_argument("--env-url")
     s.add_argument("--scenario", choices=["own", "practice"], default="practice"); s.add_argument("--non-prod-confirmed-by")
     s.add_argument("--customer-name", help="as the customer writes it, for the pack (default: from the folder name)")
     s = sub.add_parser("person"); s.add_argument("--deal", required=True); s.add_argument("--name", required=True)
-    s.add_argument("--role", required=True); s.add_argument("--track", required=True)
+    s.add_argument("--role", required=True); s.add_argument("--track", help="T1 or T2, full course only")
     s = sub.add_parser("at"); s.add_argument("--deal", required=True); s.add_argument("--person", required=True)
     s.add_argument("--module", required=True); s.add_argument("--step", type=int, required=True)
     s = sub.add_parser("result"); s.add_argument("--deal", required=True); s.add_argument("--person", required=True)

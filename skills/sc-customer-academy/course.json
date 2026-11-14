@@ -1,16 +1,17 @@
 {
  "title": "Build on Creatio with Claude",
- "version": "0.1",
+ "version": "0.2",
  "updated": "2026-11-14",
  "state_dir": "Lessons/customer-training",
  "teaches_sources": [
   "appdev"
  ],
- "about": "A hands-on course for your team: build and extend Creatio applications, including on top of your Creatio CRM, with Claude and Creatio's AI App Development Toolkit. Track 1 is for business builders (no code). Track 2 is for developers and IT (environments, packages, deployment, migration, integration). Every lab runs in your own development or sandbox environment, never in production.",
+ "about": "Build and extend Creatio applications, including on top of your Creatio CRM, by describing what you need to Claude and Creatio's AI App Development Toolkit. Start with the one-hour session or the workshop; the full course goes deeper for business builders and for IT. Everything runs on your test site, never your live Creatio.",
  "deal": {
   "name": "Your own use case, or the practice scenario: Kestrel Facility Services (fictional)",
   "fixtures": [
-   "skills/sc-customer-academy/fixtures/practice-scenario.md"
+   "skills/sc-customer-academy/fixtures/practice-scenario.md",
+   "skills/sc-customer-academy/fixtures/glossary.md"
   ]
  },
  "watch_docs": {
@@ -26,6 +27,77 @@
   "clio_repo": "https://github.com/Advance-Technologies-Foundation/clio"
  },
  "paths": [
+  {
+   "id": "F",
+   "title": "Short formats: one hour and a workshop",
+   "status": "live",
+   "modules": [
+    {
+     "id": "F0",
+     "title": "Before you come",
+     "file": "modules/F0-before-you-come.md",
+     "minutes": 15,
+     "stand": false,
+     "skills": [
+      "appdev-doc:runbooks/01-environment-setup.md"
+     ],
+     "built_against": {
+      "appdev-doc:runbooks/01-environment-setup.md": "4d0f29b373df361b"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "F1",
+     "title": "Your first Creatio app in an hour",
+     "file": "modules/F1-one-hour.md",
+     "minutes": 60,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-app-orchestrator",
+      "appdev-doc:runbooks/02-requirements-gathering.md",
+      "appdev-doc:runbooks/03-app-implementation.md"
+     ],
+     "built_against": {
+      "appdev:creatio-app-orchestrator": "e1108fa47503682c",
+      "appdev-doc:runbooks/02-requirements-gathering.md": "9095cd7fcd635916",
+      "appdev-doc:runbooks/03-app-implementation.md": "67b1222b3dc50657"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "F2",
+     "title": "Workshop: your own idea, make it yours, getting it live",
+     "file": "modules/F2-workshop.md",
+     "minutes": 120,
+     "stand": true,
+     "skills": [
+      "appdev:creatio-app-orchestrator",
+      "appdev:creatio-mobile-page-conversion",
+      "appdev:creatio-branding-orchestrator",
+      "appdev-doc:runbooks/03-app-implementation.md"
+     ],
+     "built_against": {
+      "appdev:creatio-app-orchestrator": "e1108fa47503682c",
+      "appdev:creatio-mobile-page-conversion": "af360fc421a374f6",
+      "appdev:creatio-branding-orchestrator": "60fe43bcdee1b1ab",
+      "appdev-doc:runbooks/03-app-implementation.md": "67b1222b3dc50657"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    }
+   ]
+  },
   {
    "id": "T1",
    "title": "Track 1: build and extend apps (business builders)",
@@ -291,5 +363,31 @@
  ],
  "not_taught": {
   "appdev:_workflow-core": "Toolkit internals, not a skill"
+ },
+ "formats": {
+  "1h": {
+   "title": "One-hour session: your first Creatio app",
+   "modules": [
+    "F0",
+    "F1"
+   ],
+   "minutes": 60
+  },
+  "3h": {
+   "title": "Workshop: build on Creatio with Claude (up to 3 hours)",
+   "modules": [
+    "F0",
+    "F1",
+    "F2"
+   ],
+   "minutes": 180
+  },
+  "full": {
+   "title": "Full course (Track 1 business builders, Track 2 developers and IT)",
+   "tracks": [
+    "T1",
+    "T2"
+   ]
+  }
  }
 }
