@@ -51,7 +51,7 @@ message. If they want to skip a step, let them and note it.
 | **5. Practice: plan a demo** | In the same practice folder, run `sc-demo-plan` up to the plan (no build): they answer the three pre-build questions, see the demo bar check, the library and pattern reuse, and the build order ending in the harvest | A practice `demo-plan.md` exists |
 | **6. The rules** | Go through the rules card below. Ask them to tell you back, in their own words, the three they think matter most. Correct gently if they miss "nothing reaches the customer without the SC check" | They've said them back |
 | **7. Feedback** | Explain mode C: "Tell me whenever something doesn't work or could be better; I log it and it reaches Renzo's Friday digest." Ask them for one thing from the practice run and log it (mode C) | One feedback note logged |
-| **8. Your first real deal** | Set the stage to **shadow**. Explain the stages below. Tell them: on any deal, say "what's next on <account>" and you'll read the folder and tell them. Delete nothing in `_practice`; Renzo cleans it up | Stage set; onboarding complete. Say so in one line and suggest they tell Renzo |
+| **8. Your first real deal** | Set the stage to **shadow**. Explain the stages below. Tell them: on any deal, say "what's next on <account>" and you'll read the folder and tell them. Delete nothing in `_practice`; Renzo cleans it up. Before their first build, point them to `sc-academy` ("train me"): it teaches building with the toolkit, step by step, on a lab stand | Stage set; onboarding complete. Say so in one line and suggest they tell Renzo |
 
 ### The motion map
 
@@ -72,6 +72,7 @@ message. If they want to skip a step, let them and note it.
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
 | Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
+| Learning to build, any time | `sc-academy` ("train me") | Guided labs on a fictional deal, one module per skill area (setup → first meeting → demo plan → object model → pages → data → processes → AI → click path and harvest), on your lab stand only |
 | Fridays | `sc-weekly-lessons` (Renzo) | At most 3 changes to the motion |
 
 ### The rules card

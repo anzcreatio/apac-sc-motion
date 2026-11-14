@@ -4,7 +4,7 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.19.0 (14 Nov 2026): sc-coach, explain it so they can't misread it
+## 0.19.0 (14 Nov 2026): sc-coach, explain it so they can't misread it; sc-academy, learn to build
 - **New: `sc-coach`.** Share a meeting transcript and it finds every moment you explained a feature or answered a
   question, and scores each one: did it answer the question, plain words, confidence (no "I think", "should be able to", "in theory"), approved
   claims only (catalogue and governance "can say" lines; over-claims flagged), whether it opened new doubts, and
@@ -20,6 +20,21 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   folder) and writes the full coaching to your private folder.
 - Tell the coach when a rewrite is too long or "a customer wouldn't say that": it logs the feedback and proposes the
   fix for Friday.
+- **New: `sc-academy`.** Say "train me" and Claude teaches you to build Creatio demos with our skills, one step at a
+  time, on a fictional deal (Kestrel Facility Services). Path 1, nine modules (about 10 hours, any number of
+  sittings): setup and your lab stand, first meeting, demo plan and approval pack, stand prep and object model,
+  Freedom UI pages, demo data and a home page, business processes, a Creatio.ai skill, then readiness, click path,
+  harvest (dry run) and reset. Each module: why it matters, the skills, a guided lab, a hands-on check Claude
+  verifies, and traps from our own builds. Progress is saved (`Lessons/training/<you>.json`), so "next module" picks
+  up where you left off.
+- **Labs never touch a demo stand.** You name a lab stand; the course refuses one that appears in any real deal's
+  notes. Everything lives in your own lab app and package (`Acad<initials>`), and the last module removes it, with your yes.
+- **Three questions at the end of every module** (hardest part, did the lab work, how useful 1-5) become feedback
+  files (`Source: training`) for the Friday digest.
+- **The course keeps itself current.** On Fridays `sc-weekly-lessons` fingerprints every toolkit and plugin skill,
+  marks a module stale when a skill it teaches changes, and drafts the update with the diff. Nothing changes in the
+  course until Renzo approves it. While a module is being updated, Claude teaches from the current skill and tells you.
+- To start: when you have an hour and a stand with no customer demo on it, say "train me".
 
 ## 0.18.1 (14 Nov 2026): approve upfront, build non-stop, safely
 - Build rules v0.4 (`standards/BUILD-RULES-v0.4.md` section 4). With the build plan, `sc-demo-plan` sends one

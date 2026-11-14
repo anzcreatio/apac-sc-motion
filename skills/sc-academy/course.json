@@ -1,0 +1,293 @@
+{
+ "title": "SC Academy: build Creatio demos with Claude",
+ "version": "0.1",
+ "updated": "2026-11-14",
+ "about": "One module per skill area, on one fictional deal (Kestrel Facility Services, reactive maintenance). Claude guides you one step at a time; each module ends with a hands-on check and three feedback questions. Labs run only on your lab stand, in your own app and package, with a reset.",
+ "deal": {
+  "name": "Kestrel Facility Services (fictional)",
+  "fixtures": [
+   "skills/sc-academy/fixtures/kestrel-bdr-call.md",
+   "tests/workshop/sample-fictional/01-fm-prep.md",
+   "tests/workshop/sample-fictional/workshop/solution-model.md",
+   "tests/workshop/sample-fictional/workshop/w1-02-transcript-2026-11-10.md",
+   "skills/sc-academy/fixtures/kestrel-lab-scope.md"
+  ]
+ },
+ "paths": [
+  {
+   "id": "P1",
+   "title": "Your first demo, end to end",
+   "status": "live",
+   "modules": [
+    {
+     "id": "A0",
+     "title": "Setup and your lab stand",
+     "file": "modules/A0-setup-and-lab-stand.md",
+     "minutes": 45,
+     "stand": false,
+     "skills": [
+      "plugin:sc-setup",
+      "plugin:sc-guide"
+     ],
+     "built_against": {
+      "plugin:sc-setup": "dea520cff94b451c",
+      "plugin:sc-guide": "5d398f340d02194e"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "A1",
+     "title": "First meeting pack and deck",
+     "file": "modules/A1-first-meeting.md",
+     "minutes": 60,
+     "stand": false,
+     "skills": [
+      "plugin:sc-first-meeting",
+      "plugin:sc-deck"
+     ],
+     "built_against": {
+      "plugin:sc-first-meeting": "d543ec93df023945",
+      "plugin:sc-deck": "6d76fcdfd8d94ee2"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "A2",
+     "title": "Demo plan, build plan and approval pack",
+     "file": "modules/A2-demo-plan.md",
+     "minutes": 60,
+     "stand": false,
+     "skills": [
+      "plugin:sc-demo-plan",
+      "toolkit:creatio-demo-runbook",
+      "toolkit:creatio-demo-build"
+     ],
+     "built_against": {
+      "plugin:sc-demo-plan": "cdfab9a5f7f23841",
+      "toolkit:creatio-demo-runbook": "3e5818839eac4fda",
+      "toolkit:creatio-demo-build": "8d5957e53c16eec3"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B1",
+     "title": "Stand prep and the object model",
+     "file": "modules/B1-prep-and-object-model.md",
+     "minutes": 75,
+     "stand": true,
+     "skills": [
+      "toolkit:creatio-demo-prep",
+      "toolkit:creatio-object-model",
+      "appdev:creatio-schema-naming",
+      "toolkit:creatio-demo-spot"
+     ],
+     "built_against": {
+      "toolkit:creatio-demo-prep": "2cc3cff0f9cae31f",
+      "toolkit:creatio-object-model": "3e196fceeade081b",
+      "appdev:creatio-schema-naming": "63ed5ff635e275c4",
+      "toolkit:creatio-demo-spot": "28de111d47e4e0b7"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B2",
+     "title": "Freedom UI pages",
+     "file": "modules/B2-pages.md",
+     "minutes": 75,
+     "stand": true,
+     "skills": [
+      "toolkit:creatio-freedom-pages",
+      "toolkit:creatio-golden-pages",
+      "appdev:creatio-ui-guidelines"
+     ],
+     "built_against": {
+      "toolkit:creatio-freedom-pages": "4a836ba5b2b77161",
+      "toolkit:creatio-golden-pages": "3c20d2c4f2883282",
+      "appdev:creatio-ui-guidelines": "cbea2bf19748f34f"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "B3",
+     "title": "Demo data and a home page",
+     "file": "modules/B3-data-and-home-page.md",
+     "minutes": 60,
+     "stand": true,
+     "skills": [
+      "toolkit:creatio-demo-data-population",
+      "toolkit:creatio-dashboards-homepages"
+     ],
+     "built_against": {
+      "toolkit:creatio-demo-data-population": "1f0894a41c8af0f4",
+      "toolkit:creatio-dashboards-homepages": "1df32af6b39bcc34"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "C1",
+     "title": "Business processes",
+     "file": "modules/C1-processes.md",
+     "minutes": 75,
+     "stand": true,
+     "skills": [
+      "toolkit:creatio-business-processes"
+     ],
+     "built_against": {
+      "toolkit:creatio-business-processes": "9e9fa636e56aa7e5"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "C2",
+     "title": "A Creatio.ai skill",
+     "file": "modules/C2-ai-skill.md",
+     "minutes": 60,
+     "stand": true,
+     "skills": [
+      "toolkit:creatio-ai-skill-prompts"
+     ],
+     "built_against": {
+      "toolkit:creatio-ai-skill-prompts": "6accca9406ba67cb"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    },
+    {
+     "id": "D1",
+     "title": "Prove it, click path, harvest, reset",
+     "file": "modules/D1-prove-clickpath-harvest.md",
+     "minutes": 75,
+     "stand": true,
+     "skills": [
+      "toolkit:creatio-uc-readiness",
+      "toolkit:creatio-demo-clickpass",
+      "plugin:sc-clickpath",
+      "plugin:sc-harvest"
+     ],
+     "built_against": {
+      "toolkit:creatio-uc-readiness": "ba7218ec4a43218f",
+      "toolkit:creatio-demo-clickpass": "2093ffe321f2c6f9",
+      "plugin:sc-clickpath": "702cd1a28cd0a09c",
+      "plugin:sc-harvest": "5ea15865cc2c8756"
+     },
+     "stamped": {
+      "date": "2026-11-14",
+      "by": "authoring session, waiting for Renzo's approval",
+      "status": "pending"
+     }
+    }
+   ]
+  },
+  {
+   "id": "P2",
+   "title": "Going further (planned, not written yet)",
+   "status": "planned",
+   "modules": [
+    {
+     "id": "E1",
+     "title": "AI Studio agents",
+     "skills": [
+      "toolkit:ai-studio-platform",
+      "toolkit:creatio-ai-studio",
+      "toolkit:ai-studio-business-studio",
+      "toolkit:ai-studio-process-tools",
+      "toolkit:ai-studio-prompt-authoring",
+      "toolkit:ai-studio-tool-debugging",
+      "toolkit:ai-studio-agent-in-creatio",
+      "toolkit:ai-studio-webchat-landing",
+      "toolkit:ai-studio-custom-integration",
+      "toolkit:creatio-ai-log-explainer"
+     ]
+    },
+    {
+     "id": "E2",
+     "title": "Landing pages, surveys and campaigns",
+     "skills": [
+      "toolkit:creatio-landing-pages",
+      "toolkit:creatio-feedback-surveys",
+      "toolkit:creatio-marketing-campaigns"
+     ]
+    },
+    {
+     "id": "E3",
+     "title": "Packages: clone, copy between demos, FinServ stands",
+     "skills": [
+      "toolkit:creatio-demo-clone",
+      "toolkit:creatio-cross-demo-page-copy",
+      "toolkit:creatio-finserv-demos",
+      "toolkit:creatio-odata-traversal"
+     ]
+    },
+    {
+     "id": "E4",
+     "title": "Videos, translation and the SE review page",
+     "skills": [
+      "toolkit:creatio-demo-video-browser",
+      "toolkit:creatio-demo-video-phone",
+      "toolkit:creatio-localization",
+      "toolkit:creatio-demo-artifact"
+     ]
+    },
+    {
+     "id": "E5",
+     "title": "RFPs, workshops, requirements and meeting reviews",
+     "skills": [
+      "plugin:sc-rfp",
+      "plugin:sc-workshop",
+      "plugin:sc-requirements",
+      "plugin:sc-meeting-review",
+      "plugin:sc-bank-ai-log"
+     ]
+    },
+    {
+     "id": "E6",
+     "title": "New apps and branding with the app-development toolkit",
+     "skills": [
+      "appdev:creatio-app-orchestrator",
+      "appdev:creatio-branding-orchestrator",
+      "appdev:creatio-mobile-page-conversion"
+     ]
+    }
+   ]
+  }
+ ],
+ "not_taught": {
+  "toolkit:creatio-self-report": "Toolkit usage reports to the toolkit's own repo; not part of the motion",
+  "appdev:classic-to-freedom-migration": "Customer migrations, not demo work",
+  "appdev:classic-ui-expert": "Classic UI, not demo work",
+  "plugin:sc-inbox": "Renzo's intake of Knowledge Hub material",
+  "plugin:sc-lessons": "Covered in sc-guide onboarding step 7",
+  "plugin:sc-weekly-lessons": "Renzo's Friday digest"
+ }
+}

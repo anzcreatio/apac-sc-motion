@@ -25,6 +25,13 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    `registers.py approve-explanation --id E-00N --by "Renzo Huruiti"`, on no `retire-explanation` with his reason.
    **Coaching** (`Lessons/coaching/`, private): count habits across the week's files and report them anonymised
    ("4 calls: the answer came after the explanation"). Never name the SC or quote them in the digest.
+1c. **Training** (`../sc-academy/SKILL.md` modes U and W): `python ../sc-academy/scripts/academy.py refresh` (marks
+   course modules stale when a toolkit or plugin SKILL.md changed, drafts updates in `Lessons/training/_drafts/`),
+   fill each draft's "Proposed edits", then `python ../sc-academy/scripts/academy.py weekly`. Put its "Decisions for
+   you" (stale modules, modules not yet approved, skills no module teaches) in the digest's questions, and where
+   trainees get stuck under the watch list. Training feedback files (`Source: training`) are about the course, not a
+   deal: group them by module, and they don't count towards the 2-deal rule for motion changes. Course changes
+   don't use the 3-proposal cap: apply each only on Renzo's yes (`academy.py stamp --by "Renzo Huruiti"`).
 2. **Find patterns, not anecdotes.** For each candidate change: what happened, on which deals or with which SCs,
    and what it cost or gained. Group the same signal across deals.
 3. **Propose at most 3 changes**, ranked by impact. Each needs **evidence from 2+ deals or 2+ SCs**, or one serious

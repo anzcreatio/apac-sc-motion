@@ -21,6 +21,7 @@ library for every SC, updated in one place.
 | `sc-meeting-review` | After a meeting: presented deck vs generated deck (`deck_diff.py`), transcript scorecard, living solution summary update, next-session enhancements, lessons |
 | `sc-lessons` | A chat of its own for lessons learnt: paste notes or an R&D email; it files feedback and updates the shared registers of product limitations and discovery questions (`Lessons/registers/`) |
 | `sc-coach` | Explain Creatio so a customer can't misread it: reviews a transcript for every explanation and answer (plain words, no hedging, approved claims only, no new doubts, length) with customer-ready and dead-simple rewrites and the top 3 habits; "how do I explain X?" in one line, 30 seconds and deeper; the team's library of approved explanations (`Lessons/registers/explanations.json`). Coaching notes stay private to the SC and Renzo (`Lessons/coaching/<sc>/`) |
+| `sc-academy` | Learn to build Creatio demos with Claude: one module per skill area on a fictional deal (Kestrel), each with a guided lab, a hands-on check and three feedback questions; progress per SC in `Lessons/training/`; labs only on a lab stand in your own package, with a reset. Keeps itself current: fingerprints every toolkit and plugin SKILL.md, marks modules stale and drafts updates for Renzo to approve; Friday tips on where people get stuck |
 | `sc-inbox` | Review new Knowledge Hub / corporate decks dropped in SharePoint `_inbox`; propose library and catalogue updates |
 
 | Folder | What |
