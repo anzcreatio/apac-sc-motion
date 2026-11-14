@@ -9,7 +9,7 @@ Trainee
   python academy.py status    --sc "Willy Noviandy"               where they are, what's next
   python academy.py start     --sc "Willy Noviandy" --initials wn  create the progress file + practice folder
   python academy.py stand     --sc "..." --name <clio env> [--url <url>] [--renzo-ok]
-                                                                    record the lab stand (refuses a stand used by a deal)
+                                                                    record the training stand (refuses a deal's or another trainee's stand)
   python academy.py at        --sc "..." --module B1 --step 3      save the current step
   python academy.py result    --sc "..." --module B1 --result pass|fail [--note "..."]
                                                                     record the hands-on check (pass closes the module)
@@ -224,7 +224,7 @@ def cmd_result(a):
 # ---------------------------------------------------------------- stand guard
 
 def cmd_stand(a):
-    """Labs never touch a demo stand. Refuse a stand whose name or URL appears in any real deal's notes."""
+    """Each trainee has a training stand of their own. Refuse a stand named in a real deal's notes or another trainee's file."""
     root = team_root(a.root)
     prog = get_progress(root, a.sc)
     needles = [n for n in {a.name, (a.url or "").split("//")[-1].split("/")[0].split(".")[0]} if n and len(n) >= 4]
@@ -243,18 +243,22 @@ def cmd_stand(a):
             if any(n.lower() in text.lower() for n in needles):
                 hits.append("%s/%s" % (base, os.path.relpath(f, d).replace("\\", "/")))
                 break
+    for f in glob.glob(os.path.join(root, "Lessons", "training", "*.json")):
+        other = load_json(f) or {}
+        if other.get("sc") and other.get("sc") != prog["sc"] and (other.get("stand") or {}).get("name", "").lower() == a.name.lower():
+            hits.append("training: already %s's training stand (one stand per trainee)" % other["sc"])
     if hits and not a.renzo_ok:
-        print("REFUSED: %s is named in real deal notes, so it may hold a customer demo:" % a.name)
+        print("REFUSED: %s is named in real deal notes or used by another trainee:" % a.name)
         for h in hits[:10]:
             print("  - %s" % h)
-        print("Labs never touch a demo stand. Pick another stand, or ask Renzo; only with his yes re-run with --renzo-ok.")
+        print("Each SC trains on a stand of their own with no customer demo. Ask Renzo for yours; only with his yes re-run with --renzo-ok.")
         sys.exit(2)
     prog["stand"] = {"name": a.name, "url": a.url, "checked": today(), "deal_hits": hits,
                      "renzo_ok": bool(a.renzo_ok)}
     prog["lab_package"] = prog.get("lab_package") or "Acad%s" % prog["initials"].capitalize()
     print(put_progress(root, prog))
-    print("Lab stand %s recorded. Lab app 'Academy Kestrel (%s)', package name must contain %s." % (
-        a.name, prog["initials"].upper(), prog["lab_package"]))
+    print("Training stand %s recorded. Lab app 'Academy Kestrel', package name must contain %s." % (
+        a.name, prog["lab_package"]))
 
 
 # ---------------------------------------------------------------- feedback

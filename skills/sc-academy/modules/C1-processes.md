@@ -1,6 +1,6 @@
 # C1. Business processes
 
-**Path P1 · 75 min · lab stand · Skills:** `creatio-business-processes`
+**Path P1 · 75 min · your training stand · Skills:** `creatio-business-processes`
 
 ## Why it matters
 
@@ -12,16 +12,16 @@ expands, a signal that sees the old value, a compile that breaks the stand. The 
 ## Lab (scope: `fixtures/kestrel-lab-scope.md` → Process)
 
 1. **Preflight** with Claude (the skill's §0): is the process designer package on the stand (CrtProcessBuilder),
-   which clio version, 10.x or 8.x. Read only. If CrtProcessBuilder is missing, **stop**: installing it is a stand
-   change for the stand's owner, not a lab step.
-2. **Pick the route** together using the skill's route table: "start when a Job is added with Priority = P1 → add a
+   which clio version, 10.x or 8.x. Read only. If CrtProcessBuilder is missing, installing it is a package install
+   on your stand: Claude asks you first (it may need a restart).
+2. **Pick the route** together using the skill's route table: "start when a Case is added with Priority = P1 → add a
    task → set a flag" is **native** (one call, no compile). Say why it's not package injection.
-3. **Build** `<p>AcadXxP1Alert` in your lab package: record-added signal on Job filtered on Priority = P1; Add data
-   (Activity, title "P1 <job number>: call the client within 15 minutes", owner = your contact); Modify data (Lead
+3. **Build** `<p>AcadP1Alert` in your lab package: record-added signal on Case filtered on Priority = P1; Add data
+   (Activity, title "P1 <number>: call the client within 15 minutes", owner = your contact); Modify data (Lead
    alerted = yes). **IsTracing on.** Names a customer could read.
 4. **Read it back** (`describe-business-process`, saved to a file, it's long): signal, filter, both elements, tracing.
-5. **Prove it ran:** add a test P1 job (one insert), then check: process log shows Completed, `SysProcessElementLog`
-   has a row per element, the task exists, Lead alerted = yes. Then add a P3 job: nothing should fire.
+5. **Prove it ran:** add a test P1 case (one insert), then check: process log shows Completed, `SysProcessElementLog`
+   has a row per element, the task exists, Lead alerted = yes. Then add a P3 case: nothing should fire.
 6. **Change it as a new version:** change the task title with `modify-business-process-as-new-version`, then
    `set-active-business-process-version`. Read back which version is active.
 7. Add the process, the test jobs and the tasks to `lab-log.md`.

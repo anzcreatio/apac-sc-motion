@@ -1,11 +1,11 @@
-# A0. Setup and your lab stand
+# A0. Setup and your training stand
 
 **Path P1 · 45 min · no stand writes · Skills:** `sc-setup`, `sc-guide`
 
 ## Why it matters
 
 Every later module assumes three things work: the SharePoint folder, the toolkits (creatio-demo-toolkit and clio),
-and a stand you're allowed to break. Most lost hours on real builds were setup, not configuration: clio pointing at
+and a training stand of your own, which you're allowed to break. Most lost hours on real builds were setup, not configuration: clio pointing at
 the wrong settings file, a plugin blocking clio, a token that expired. Fix them here, once, with nothing at stake.
 
 ## Lab
@@ -14,11 +14,11 @@ the wrong settings file, a plugin blocking clio, a token that expired. Fix them 
    SharePoint folder found, Python, `creatio-demo-toolkit` installed, clio answering. PowerPoint only for A1.
 2. **Practice folder:** Claude runs `academy.py start`; check that `Deals/_practice/<first-name>-academy-kestrel/`
    now exists in File Explorer or Finder.
-3. **Pick your lab stand.** Best: a practice stand of your own. Otherwise a stand you name that holds **no customer
-   demo**. Register it in clio **yourself** (`clio reg-web-app …` in your own terminal; Claude never registers stands
+3. **Your training stand.** Each SC trains on a stand of their own, never shared and never holding a customer demo
+   (Renzo, 14 Nov 2026). Register it in clio **yourself** (`clio reg-web-app …` in your own terminal; Claude never registers stands
    or types passwords).
 4. **Claude records it:** `academy.py stand --sc "<you>" --name <env> --url <url>`. If it refuses, the stand appears in
-   a real deal's notes: pick another one, or ask Renzo.
+   a real deal's notes, so it isn't a training stand: ask Renzo for yours.
 5. **Prove clio reaches it:** ask Claude to run `list-packages` on the stand (read-only). Note the stand's Creatio
    version in the About dialog (10.x or 8.x changes some commands later).
 6. **Find the toolkit notes:** ask Claude where `sc-setup` wrote the build rules into your toolkit notes, and open

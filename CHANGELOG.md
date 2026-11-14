@@ -28,14 +28,16 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   harvest (dry run) and reset. Each module: why it matters, the skills, a guided lab, a hands-on check Claude
   verifies, and traps from our own builds. Progress is saved (`Lessons/training/<you>.json`), so "next module" picks
   up where you left off.
-- **Labs never touch a demo stand.** You name a lab stand; the course refuses one that appears in any real deal's
-  notes. Everything lives in your own lab app and package (`Acad<initials>`), and the last module removes it, with your yes.
+- **Your own training stand.** Each SC trains on a stand of their own, with no customer demo on it; the course
+  refuses a stand that appears in a real deal's notes or is already another trainee's. Labs are built the way a real
+  deal is (stand prep, stock Case reused, replacing copies of stock pages), all in the lab app and its `Acad<initials>`
+  package, and the last module resets the stand, with your yes.
 - **Three questions at the end of every module** (hardest part, did the lab work, how useful 1-5) become feedback
   files (`Source: training`) for the Friday digest.
 - **The course keeps itself current.** On Fridays `sc-weekly-lessons` fingerprints every toolkit and plugin skill,
   marks a module stale when a skill it teaches changes, and drafts the update with the diff. Nothing changes in the
   course until Renzo approves it. While a module is being updated, Claude teaches from the current skill and tells you.
-- To start: when you have an hour and a stand with no customer demo on it, say "train me".
+- To start: when you have an hour and your training stand, say "train me".
 
 ## 0.18.1 (14 Nov 2026): approve upfront, build non-stop, safely
 - Build rules v0.4 (`standards/BUILD-RULES-v0.4.md` section 4). With the build plan, `sc-demo-plan` sends one

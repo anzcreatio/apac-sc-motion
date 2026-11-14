@@ -1,6 +1,6 @@
 # B3. Demo data and a home page
 
-**Path P1 · 60 min · lab stand · Skills:** `creatio-demo-data-population`, `creatio-dashboards-homepages`
+**Path P1 · 60 min · your training stand · Skills:** `creatio-demo-data-population`, `creatio-dashboards-homepages`
 
 ## Why it matters
 
@@ -11,15 +11,15 @@ not on a menu.
 
 ## Lab (scope: `fixtures/kestrel-lab-scope.md` → Data and home page)
 
-1. **Plan the data** with Claude from the scope: 3 lab client Accounts ("Kestrel lab client XX …"), 3 sites, 8 jobs,
+1. **Plan the data** with Claude from the scope: 3 client Accounts (marked "(Kestrel lab)"), 3 sites, 8 jobs (Cases),
    hero `KJ-1042`. Dates **relative to now** (SLA due in 3 h, etc.), not fixed timestamps.
 2. **Mail guard first:** ask Claude to run the skill's mail-guard check before the insert (does anything notify on
-   insert?). On a lab stand nothing should email anyone.
+   insert?). A training stand should email no one; on a real stand this check is what keeps customers' contacts safe.
 3. **Seed** with `creatio-demo-data-population`, one record per request where a process may trigger on insert.
 4. **Hero-record check:** the skill's check on `KJ-1042`: every field the story shows is filled; the record opens.
 5. **Write the reset** into the practice folder: `lab-reset.json` (what to re-set on the hero and its twins, with
    dates relative to now). This is what D1 re-runs.
-6. **Home page** `Dispatch desk (XX)` with `creatio-dashboards-homepages`: KPIs open jobs and P1 at risk, a chart by
+6. **Home page** `Dispatch desk` with `creatio-dashboards-homepages`: KPIs open jobs and P1 at risk, a chart by
    status, a list of at-risk jobs. Run the after-save visual check; look at it yourself.
 7. Add records and the home page to `lab-log.md`.
 

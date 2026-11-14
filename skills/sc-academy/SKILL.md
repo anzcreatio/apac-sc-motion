@@ -51,21 +51,19 @@ arguments for help).
 7. **Close:** one line on what they can now do on a real deal, and the next module. At the end of D1: suggest they tell
    Renzo, and that their next real build runs at stage **paired** (`sc-guide` stages).
 
-### Lab safety (every module with "Needs a stand")
+### Lab safety (every module with "your training stand")
 
-- **Labs never touch a demo stand.** In A0 the SC names their lab stand and you run
-  `python scripts/academy.py stand --sc "<name>" --name <clio env> --url <url>`. It **refuses** a stand named in any
-  real deal's notes. Never pass `--renzo-ok` unless Renzo said yes in this chat.
-- Ideal: a practice stand of their own. If they don't have one, any stand they name that passes the check, where
-  **everything lives in their own lab app** `Academy Kestrel (<INITIALS>)` and package containing `Acad<Initials>`
-  (B1 creates it). Before every write, check the target package with `get-page` → `designPackageName` or
-  `list-packages`: anything else → stop.
-- **Never** change base objects, system settings, users or rights on a stand they didn't name as theirs; the labs
-  don't need to. No compiles or restarts in labs without the SC's OK (`../../standards/BUILD-RULES-v0.4.md` §1;
-  the labs are designed to avoid them).
-- **Reset:** each stand module ends by recording what it created in `<practice dir>/lab-log.md` (object, page,
-  process, records). D1's last step removes the lab: data first, then the lab app and package, **only after the SC's
-  explicit yes**, read back first and listed, nothing outside `Acad<Initials>`.
+- **Each SC trains on a stand of their own** (Renzo, 14 Nov 2026): never shared, never holding a customer demo. In A0
+  you run `python scripts/academy.py stand --sc "<name>" --name <clio env> --url <url>`. It **refuses** a stand
+  named in any real deal's notes or recorded by another trainee. Never pass `--renzo-ok` unless Renzo said yes in this chat.
+- Because the stand is theirs, the labs are built **the way a real deal is**: stand prep (prefix, current package),
+  stock Case reused for Kestrel's jobs, replacing copies of stock pages. Everything goes into the lab app
+  **Academy Kestrel**, package containing `Acad<Initials>` (B1). Before every write, check the target package
+  (`get-page` → `designPackageName`, or `list-packages`): anything else → stop.
+- Compiles and restarts follow BUILD-RULES §1 as on a real build: refresh first, then **ask the SC** and say why.
+- **Reset:** each stand module records what it created or changed in `<practice dir>/lab-log.md` (schemas, lookup
+  values added or made inactive, pages, processes, records). D1's last step undoes it all, **only after the SC's
+  explicit yes**, read back first and listed, so the stand is clean for the next run.
 - Work files go in their practice folder `Deals/_practice/<first-name>-academy-kestrel/` (made by `start`). Never
   into a real deal, `library/catalogue.json` or the registers. No `sc-meeting-review`, `sc-bank-ai-log`, harvest
   to the real library, or anything to a customer from training.
@@ -107,7 +105,7 @@ to read ahead. The guided run is the course; the pages are a bonus.
 - One step per message. The SC does the clicking and the prompting; you explain and check.
 - Read each skill's SKILL.md before teaching it. Where the module and the skill disagree, the skill wins and you
   tell the SC (and it shows up in Friday's `refresh`).
-- Labs only on the recorded lab stand, only in the lab package. Stop on anything else.
+- Labs only on the trainee's recorded training stand, only in the lab package. Stop on anything else.
 - Course changes only with Renzo's yes.
 - Log corrections the SC makes to the course as feedback without asking (`feedback`, their words), like any skill.
 

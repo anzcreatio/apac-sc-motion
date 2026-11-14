@@ -2,7 +2,7 @@
  "title": "SC Academy: build Creatio demos with Claude",
  "version": "0.1",
  "updated": "2026-11-14",
- "about": "One module per skill area, on one fictional deal (Kestrel Facility Services, reactive maintenance). Claude guides you one step at a time; each module ends with a hands-on check and three feedback questions. Labs run only on your lab stand, in your own app and package, with a reset.",
+ "about": "One module per skill area, on one fictional deal (Kestrel Facility Services, reactive maintenance). Claude guides you one step at a time; each module ends with a hands-on check and three feedback questions. Labs run only on your own training stand, in the lab app and package, with a reset at the end.",
  "deal": {
   "name": "Kestrel Facility Services (fictional)",
   "fixtures": [
@@ -21,7 +21,7 @@
    "modules": [
     {
      "id": "A0",
-     "title": "Setup and your lab stand",
+     "title": "Setup and your training stand",
      "file": "modules/A0-setup-and-lab-stand.md",
      "minutes": 45,
      "stand": false,
@@ -31,7 +31,7 @@
      ],
      "built_against": {
       "plugin:sc-setup": "dea520cff94b451c",
-      "plugin:sc-guide": "5d398f340d02194e"
+      "plugin:sc-guide": "e0d70954740fecd6"
      },
      "stamped": {
       "date": "2026-11-14",

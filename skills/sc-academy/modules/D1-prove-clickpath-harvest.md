@@ -1,13 +1,13 @@
 # D1. Prove it, click path, harvest, reset
 
-**Path P1 · 75 min · lab stand · Skills:** `creatio-uc-readiness`, `creatio-demo-clickpass`, `sc-clickpath`, `sc-harvest`
+**Path P1 · 75 min · your training stand · Skills:** `creatio-uc-readiness`, `creatio-demo-clickpass`, `sc-clickpath`, `sc-harvest`
 
 ## Why it matters
 
 "It worked when I built it" isn't a demo. A use case is ready when it's been rehearsed end to end on a **twin**
 record, checked from the database and on screen, and reset. Then the click path teaches the presenter (often not
 the builder) exactly what to click and say, and the harvest makes the next SC's build faster. Last, you leave the
-lab stand as you found it.
+training stand clean for the next run.
 
 ## Lab
 
@@ -21,10 +21,11 @@ lab stand as you found it.
 4. **Harvest, dry run** (`sc-harvest`): read the skill with Claude and write the L1 entry (build log, customer-specific
    list, install steps) into `<practice dir>/harvest/`. **Never** into `library/catalogue.json` or SharePoint
    `Library/`: it's a lab.
-5. **Reset the stand.** Claude reads `lab-log.md`, then lists what it would remove: your lab records (jobs, sites,
-   lab client accounts, tasks, the AI skill's agent registration and quick link), then the lab app and its package.
-   Everything must contain your initials / `Acad<Initials>`. **You say yes**, Claude deletes, then reads back that
-   nothing of yours is left and nothing else changed.
+5. **Reset the stand** so it's clean for the next course run. Claude reads `lab-log.md`, then lists what it would
+   undo: lab records (cases, sites, "(Kestrel lab)" accounts, tasks), the lookup values you added (and re-activates
+   the stock ones you made inactive), the AI skill's agent registration and quick link, then the Academy Kestrel app
+   and its `Acad<Initials>` package. **You say yes**, Claude does it, then reads back that nothing from the lab is
+   left and nothing outside the list changed.
 6. **Close:** `academy.py result … --result pass`, the three feedback questions, and tell Renzo you've finished path 1.
 
 ## Check (pass criteria)
@@ -33,7 +34,8 @@ lab stand as you found it.
 - [ ] Click path cards and both `sc-clickpath` pages exist in the practice folder; the recap says DRAFT.
 - [ ] An L1 harvest entry exists in the practice folder; the team library (`library/catalogue.json`,
       SharePoint `Library/`) is unchanged.
-- [ ] After reset, `list-packages` shows no `Acad<Initials>` package and an OData read finds no lab records.
+- [ ] After reset, `list-packages` shows no `Acad<Initials>` package, an OData read finds no lab records, and the
+      stock CaseStatus and CasePriority values are as they were before B1.
 
 ## Traps
 

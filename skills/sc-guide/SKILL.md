@@ -72,7 +72,7 @@ message. If they want to skip a step, let them and note it.
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
 | Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
-| Learning to build, any time | `sc-academy` ("train me") | Guided labs on a fictional deal, one module per skill area (setup → first meeting → demo plan → object model → pages → data → processes → AI → click path and harvest), on your lab stand only |
+| Learning to build, any time | `sc-academy` ("train me") | Guided labs on a fictional deal, one module per skill area (setup → first meeting → demo plan → object model → pages → data → processes → AI → click path and harvest), on your own training stand |
 | Fridays | `sc-weekly-lessons` (Renzo) | At most 3 changes to the motion |
 
 ### The rules card

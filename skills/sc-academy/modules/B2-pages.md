@@ -1,6 +1,6 @@
 # B2. Freedom UI pages
 
-**Path P1 · 75 min · lab stand · Skills:** `creatio-freedom-pages`, `creatio-golden-pages`, `creatio-ui-guidelines` (app-dev toolkit)
+**Path P1 · 75 min · your training stand · Skills:** `creatio-freedom-pages`, `creatio-golden-pages`, `creatio-ui-guidelines` (app-dev toolkit)
 
 ## Why it matters
 
@@ -10,23 +10,23 @@ every save. Here you learn the clone-then-adapt flow, the audits that gate "done
 
 ## Lab (scope: `fixtures/kestrel-lab-scope.md` → Pages)
 
-1. **Find the active pages** for Job and Site (`list-pages`), and their package. Anything not in your lab package is
-   off limits; on a real deal you'd make a replacing copy in your own package.
-2. **Pick the donor:** Claude runs `creatio-golden-pages`' `pick_donor.py` for a **request** form on Job. Read the
-   replace map with Claude: which donor elements stay, which fields map to Job's.
-3. **Clone the Job form page** with Claude: header with Status, Description, SLA due, Client update; labels above fields,
+1. **Find the active pages** for Case and Site (`list-pages`), and their package. The Case form lives in a stock
+   package: make a **replacing copy in your lab package** first (`creatio-freedom-pages` rule 1), never edit it in place.
+2. **Pick the donor:** Claude runs `creatio-golden-pages`' `pick_donor.py` for a **request** form on Case. Read the
+   replace map with Claude: which donor elements stay, which fields map to the Case columns from B1.
+3. **Build the Case form** (your replacing copy) from the donor with Claude: header with Status, Description, SLA due, Client update; labels above fields,
    placeholders on every input. Save.
 4. **Run the gates** the skill names after every save (golden standard audit, page-fields audit, the visual check).
    Fix until they exit 0. Then open the page in the browser yourself (you sign in).
-5. **Site → mini page** (≤ 6 user fields → mini page by default). Job list page: quick filter on Status.
+5. **Site → mini page** (≤ 6 user fields → mini page by default). Case list page: quick filter on Status.
 6. **Review against `creatio-ui-guidelines`:** gaps, empty areas, label wording, contrast. Change one thing the review
    finds.
 7. Add the pages to `lab-log.md`.
 
 ## Check (pass criteria)
 
-- [ ] Job form, Job list and Site mini page exist, all with `designPackageName` = your lab package.
-- [ ] The golden-standard and page-field audits exit 0 on the Job form (or each waiver has a written reason).
+- [ ] The Case form (replacing copy), Case list and Site mini page exist, all with `designPackageName` = your lab package.
+- [ ] The golden-standard and page-field audits exit 0 on the Case form (or each waiver has a written reason).
 - [ ] In the browser: labels above fields, no empty tab or blank area, the Status quick filter works.
 - [ ] The SC can explain why we clone donors and never edit a page in another package.
 
