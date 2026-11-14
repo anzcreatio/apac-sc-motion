@@ -76,6 +76,13 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
 
 ## Steps
 
+**First, learn from past deals** (`../sc-lessons/SKILL.md` "Learn from past deals"): run
+`python ../sc-lessons/scripts/learn_from_deals.py brief --stage first-meeting --deal "<deal folder>" --pains "<their top pains>"`.
+Use what fits (questions to ask, what landed on similar deals, deck lessons, references we
+don't have, limits to avoid promising) in the prep, the deck and the meeting plan, and list it in an **Applied from past deals** section (one line each: what we're doing
+differently and the lesson id or deal it came from). Then log it: `learn_from_deals.py applied --deal ... --stage first-meeting
+--item "<id>: <what we did>"`.
+
 0. **Deal dates** (every deal): record when the first call happened, when you (the SC) got the transcript, and when
    the meeting or demo is, with `python ../sc-guide/scripts/deal_dates.py set` (see `sc-guide` "Deal dates"). Take them from the handoff and the
    transcript; ask at the top only for the ones you can't find.

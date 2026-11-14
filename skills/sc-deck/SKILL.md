@@ -13,6 +13,15 @@ rebuild; don't hand-edit the built deck unless the SC asks (hand edits are lost 
 
 Standard: `../../standards/DECK-STANDARD-v0.4.md` (slide order, word rules, every field). Read it before writing JSON.
 
+## Before a new or reworked deck
+
+**Learn from past deals** (`../sc-lessons/SKILL.md` "Learn from past deals"): run
+`python ../sc-lessons/scripts/learn_from_deals.py brief --stage deck --deal "<deal folder>" --pains "<their top pains>"`.
+Use what fits (what SCs edited or dropped before presenting on similar decks, slides that landed,
+approved answers for the speaker notes), and list it in an **Applied from past deals** section (one line each: what we're doing
+differently and the lesson id or deal it came from). Then log it: `learn_from_deals.py applied --deal ... --stage deck
+--item "<id>: <what we did>"`.
+
 ## Commands
 
 | Task | Command (from this skill's folder) |

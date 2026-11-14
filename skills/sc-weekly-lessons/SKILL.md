@@ -61,6 +61,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    | Customer recaps waiting for SC approval | click path overlays |
    | Inbox and pattern items waiting | `_inbox`, `Patterns/_inbox` |
    | Proposals approved / applied last week | last digest |
+   | Lessons from past deals applied at deal start (runs, items, by source) | `python ../sc-lessons/scripts/learn_from_deals.py stats` |
 
 6. **Write `Lessons/weekly/<yyyy-Www>.md`** (SharePoint, the team reads it). Questions first: the proposals to
    approve (numbered), then anything else waiting on Renzo. Then measures, proposals in detail, watch list, and

@@ -38,6 +38,12 @@ folder if it exists with any suffix).
 
 ### 1. Before the workshop (a week out)
 
+0. **Learn from past deals** (`../sc-lessons/SKILL.md` "Learn from past deals"): run
+   `python ../sc-lessons/scripts/learn_from_deals.py brief --stage workshop --deal "<deal folder>" --pains "<their top pains>"`.
+   Use what fits (questions we should ask, what landed in past sessions, after-meeting lessons)
+   in the draft journey, the agenda and the pre-work email, and list it in an **Applied from past deals** section (one line each: what we're doing
+   differently and the lesson id or deal it came from). Then log it: `learn_from_deals.py applied --deal ... --stage workshop
+   --item "<id>: <what we did>"`.
 1. **Pick the journey and persona** with the SC, from the deal's prep, meeting reviews and `deck.json`. One journey.
 2. **Pre-work email** from `PREWORK-EMAIL.md`: what to send (the spreadsheets, forms and reports they use for this
    journey today; a system list; who does what; monthly volumes) and who must be in the room (the person who does the

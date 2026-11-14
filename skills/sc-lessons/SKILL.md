@@ -40,6 +40,31 @@ A chat of its own for what we learn (Renzo, 13 Nov 2026). The SC pastes; you sor
 6. **Report** in five lines or fewer: what you filed, what's live now, what waits for Friday, and any item that
    needs Renzo sooner (a blocker on a live deal: suggest they message him too).
 
+## Learn from past deals (used at the start of every deal step, Renzo 14 Nov 2026)
+
+Every new deal should start from what the whole team has learnt, whoever ran the earlier deals. The skills that
+start a deal step (`sc-first-meeting`, `sc-demo-plan`, `sc-deck`, `sc-rfp`, `sc-workshop`) run, as their first step:
+
+```
+python scripts/learn_from_deals.py brief --stage first-meeting|demo-plan|deck|rfp|workshop --deal "<deal folder>" --pains "<their top pains>" [--industry bfsi]
+```
+
+It returns: the team lessons for that stage (`TEAM-LESSONS.md`, ids like `TL-2.2`), questions to ask, product
+limits and approved answers from the registers (`Q-`, `L-`, `E-`), and the **similar deals** (any SC; same industry,
+shared pain words) with their learnings only: keep / change / stop from `lessons/`, what landed in meeting reviews,
+what SCs edited or dropped in the deck before presenting, and library modules harvested from them.
+
+- **Use what fits, not all of it.** One line each in the output's **Applied from past deals** section: what we're
+  doing differently, and where it came from. The SC can drop any line.
+- **Learnings, not people.** Write each lesson generalised: no SC named, no quotes of our own people, no customer
+  data from the other deal beyond what the catalogue publishes. Coaching and ratings are never in these sources.
+- **Two speeds.** Questions, limits and gotchas apply straight away (they only make us more careful). A change to
+  the standard deck, a standard or a skill waits for the Friday digest and Renzo's yes, as always.
+- **Log what was used:** `python scripts/learn_from_deals.py applied --deal "<deal folder>" --stage <stage> --item
+  "TL-2.2: platform section cut to 5 minutes" --item "east-west-bank: closing ask agreed with the AE"`. Fridays,
+  `learn_from_deals.py stats` counts it. Never in practice folders.
+- If the registers say "not started yet", carry on: they fill up as `/sc-lessons` runs.
+
 ## Rules
 
 - Keep the SC's words. Don't polish them into marketing.

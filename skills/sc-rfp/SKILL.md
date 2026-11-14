@@ -24,6 +24,12 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
 
 ## Steps
 
+0. **Learn from past deals** (`../sc-lessons/SKILL.md` "Learn from past deals"): run
+   `python ../sc-lessons/scripts/learn_from_deals.py brief --stage rfp --deal "<deal folder>" --pains "<their top pains>"`.
+   Use what fits (product limits and gaps we already know, what we learnt on similar bids,
+   approved answers) in the fit-gap and the answers, and list it in an **Applied from past deals** section (one line each: what we're doing
+   differently and the lesson id or deal it came from). Then log it: `learn_from_deals.py applied --deal ... --stage rfp
+   --item "<id>: <what we did>"`.
 1. **Ask first (at the top):** the three pre-build questions (competition, anything else from the customer, anything
    else to know), the submission deadline, and what the customer's own compliance codes mean if the sheet uses codes
    (e.g. `FS/MM/LM/NV/NS`). Don't guess a code's meaning.

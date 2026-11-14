@@ -29,6 +29,13 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 
 ## Steps
 
+**First, learn from past deals** (`../sc-lessons/SKILL.md` "Learn from past deals"): run
+`python ../sc-lessons/scripts/learn_from_deals.py brief --stage demo-plan --deal "<deal folder>" --pains "<their top pains>"`.
+Use what fits (scenes and patterns that landed or fell flat, library modules to reuse,
+build and rehearsal lessons, product limits) in the plan and the build plan, and list it in an **Applied from past deals** section (one line each: what we're doing
+differently and the lesson id or deal it came from). Then log it: `learn_from_deals.py applied --deal ... --stage demo-plan
+--item "<id>: <what we did>"`.
+
 0. **Deal dates:** make sure the demo date is recorded (`python ../sc-guide/scripts/deal_dates.py set --field demo --status planned`); ask for it at the top if nobody has said. Same for the first-call and SC-notified dates if they're missing.
 0. **Before we build: ask these three questions, every time** (Renzo, 11 Nov 2026). Ask them at the top of your
    message, in these words, before any configuration starts, even if you think you know the answers:

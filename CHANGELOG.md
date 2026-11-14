@@ -34,6 +34,14 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - **Meeting reviews** no longer hold your own rating or habits: the review keeps "Better answers to their
   questions" for the deal. If you rate how you did, it stays in your private coaching note.
 - **Training results** (`sc-academy`) stay on your PC too; only which training stand is yours is shared.
+- **Every deal starts from what the team has learnt.** `sc-first-meeting`, `sc-demo-plan`, `sc-deck`, `sc-rfp` and
+  `sc-workshop` now begin by reading the team lessons for that step, the questions to ask and product limits, and the
+  learnings from similar deals by any SC (same industry or pains): what landed, what SCs changed in the deck before
+  presenting, keep / change / stop lessons and reusable library modules. Each output gets an **Applied from past
+  deals** section saying what we're doing differently and where it came from; drop any line that doesn't fit.
+  Learnings only, never people: no coaching, ratings or quotes of our own people.
+- Questions, limits and gotchas apply from the next deal; changes to the standard deck or a skill still wait for
+  Friday. The Friday digest counts how many lessons each deal start used.
 - **Feedback about the skills and Claude is for everyone**: still in `Lessons/feedback/`, with your name so Renzo
   can follow up. It's about the tool only, never your performance.
 - **Each SC: run `sc-setup` once more** (or say "set up my daily brief"): it shows your first brief and offers to
