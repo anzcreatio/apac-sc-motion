@@ -55,7 +55,7 @@ published or shared with other customers, and never their real customer data.
 Propose one when it clearly lifts the experience past what native Freedom UI does well (a whole job on one screen,
 a map, a board) and say why in one line. Always mark it **custom** in the plan and the partner pack: partners have to
 maintain it. Prefer a component that's generic enough to go into the demo library. Check `labUiKit` first, and build
-any new component to `UI-KIT-STANDARD-v0.3.md` (no-code settings, upgrade-safe, one shared package).
+any new component and the page around it to `UI-KIT-STANDARD-v0.4.md` (no-code settings, upgrade-safe, one shared package; no text on the grey page background).
 
 ## 6b. Build for reuse (applies while configuring)
 

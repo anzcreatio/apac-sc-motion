@@ -4,6 +4,16 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## Unreleased: UI kit standard v0.4 (pages that look finished)
+- **`standards/UI-KIT-STANDARD-v0.4.md`** (was v0.3). New section 2b, the look of every demo page around our components:
+  **no text directly on the grey page background** (titles, subtitles and section headings on white cards), one
+  header card per page, headline numbers first, lists without row numbers, one accent colour, chart colours by meaning,
+  slots that fit their cards, and a top-to-bottom check at 1440 x 900 before calling a page done.
+- Section 1 now lists all eight live `labUiKit` 0.5.0 components (Stage funnel, Request checklist, Group overlap, Rate
+  against target, Cycle time added); new build rules: every setting picked, not typed; exclusions apply to the person.
+- `DEMO-BAR-v0.2.md` section 6 points to v0.4.
+- **Each SC: before showing a home page or dashboard, check it against section 2b.**
+
 ## 0.20.1 (15 Nov 2026): how to run a deal, on one page
 - **New: `HOW-TO-RUN-A-DEAL.md`** in SharePoint `Plugin/` (next to START-HERE). One page: each step of a deal with
   the exact line to start its chat, when to start a **new chat** (every new step, another deal, a long chat, after an
