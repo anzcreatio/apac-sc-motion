@@ -21,6 +21,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    register entry the collector lists. **Group them by skill and step** (and by Source: asked / chat / transcript /
    lessons). New product limitations and discovery questions are already live: list them under "New this week" so
    Renzo sees them, and flag any that should become a rule. Practice folders never count.
+   **Explanations library** (`explanations.json`): list every `proposed` entry for Renzo's yes or no; on yes run
+   `registers.py approve-explanation --id E-00N --by "Renzo Huruiti"`, on no `retire-explanation` with his reason.
+   **Coaching** (`Lessons/coaching/`, private): count habits across the week's files and report them anonymised
+   ("4 calls: the answer came after the explanation"). Never name the SC or quote them in the digest.
 2. **Find patterns, not anecdotes.** For each candidate change: what happened, on which deals or with which SCs,
    and what it cost or gained. Group the same signal across deals.
 3. **Propose at most 3 changes**, ranked by impact. Each needs **evidence from 2+ deals or 2+ SCs**, or one serious

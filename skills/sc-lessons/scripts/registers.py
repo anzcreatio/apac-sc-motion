@@ -1,4 +1,4 @@
-"""Shared lessons registers on SharePoint (Lessons/registers/): product limits and discovery questions.
+"""Shared lessons registers on SharePoint (Lessons/registers/): product limits, discovery questions, explanations.
 
 The only way to change them, so the JSON stays valid and IDs stay unique. Nothing is ever deleted.
 
@@ -9,6 +9,16 @@ The only way to change them, so the JSON stays valid and IDs stay unique. Nothin
   python registers.py add-question --topic sizing --question "..." --signal "..." --lesson "..." --by "..."
                                    [--source-ref "..."] [--supersedes Q-002]
   python registers.py close-limit  --id L-004 --fixed-in 8.3.2 --by "..." [--note "release notes 8.3.2"]
+  python registers.py add-explanation --topic "no-code" --question "What does no-code mean for us?"
+                                   --one-liner "..." --thirty "..." [--deeper "..."] [--analogy "..."]
+                                   [--dont-say "..."] [--follow-up "..."] [--follow-up-answer "..."]
+                                   [--claims D1,D4] [--audience business|it|exec] [--source-ref "EWB 12 Nov 20:59"]
+                                   --by "..." [--supersedes E-002]
+  python registers.py approve-explanation --id E-004 --by "Renzo Huruiti" [--note "..."]
+  python registers.py retire-explanation  --id E-004 --by "..." --note "why"
+
+Explanations expand what the team says, so (FEEDBACK-LOOP 3, the asymmetric rule) a new one is always `proposed`
+and only `approved` ones are used as the team answer. Only Renzo approves, at the Friday digest.
 
 Team root comes from ~/.apac-sc-motion.json ("sharepoint_root"), or --root.
 """
@@ -18,8 +28,8 @@ import json
 import os
 import sys
 
-FILES = {"limits": "product-limits.json", "questions": "discovery-questions.json"}
-PREFIX = {"limits": "L", "questions": "Q"}
+FILES = {"limits": "product-limits.json", "questions": "discovery-questions.json", "explanations": "explanations.json"}
+PREFIX = {"limits": "L", "questions": "Q", "explanations": "E"}
 
 
 def team_root(arg):
@@ -92,6 +102,16 @@ def main():
     for k in ("--id", "--fixed-in", "--by"):
         c.add_argument(k, required=True)
     c.add_argument("--note")
+    e = sub.add_parser("add-explanation")
+    for k in ("--topic", "--question", "--one-liner", "--thirty", "--by"):
+        e.add_argument(k, required=True)
+    for k in ("--deeper", "--analogy", "--dont-say", "--follow-up", "--follow-up-answer", "--claims", "--audience",
+              "--source-ref", "--supersedes", "--deal"):
+        e.add_argument(k)
+    for name in ("approve-explanation", "retire-explanation"):
+        r = sub.add_parser(name)
+        r.add_argument("--id", required=True); r.add_argument("--by", required=True)
+        r.add_argument("--note", required=(name == "retire-explanation"))
     x = ap.parse_args()
     root = team_root(x.root)
     today = datetime.date.today().isoformat()
@@ -103,7 +123,7 @@ def main():
             for e in data["entries"]:
                 if x.status and e.get("status") != x.status:
                     continue
-                text = e.get("limit") or e.get("question")
+                text = e.get("limit") or e.get("one_liner") or e.get("question")
                 print("%s [%s] %s: %s" % (e["id"], e.get("status"), e.get("area") or e.get("topic"), text))
         return
 
@@ -127,6 +147,38 @@ def main():
             "source_ref": x.source_ref, "deal": x.deal, "date": today, "reported_by": x.by, "status": "open",
             "supersedes": x.supersedes})
         print("added", eid, "->", save(root, "questions", data))
+    elif x.cmd == "add-explanation":
+        data = load(root, "explanations")
+        eid = next_id(data, "explanations")
+        claims = [c.strip().upper() for c in (x.claims or "").split(",") if c.strip()]
+        bad = [c for c in claims if not (c.startswith("D") and c[1:].isdigit())]
+        if bad:
+            sys.exit("--claims takes catalogue IDs only (D1-D7), got: %s" % ", ".join(bad))
+        data["entries"].append({
+            "id": eid, "topic": x.topic, "question": x.question, "one_liner": x.one_liner, "thirty_seconds": x.thirty,
+            "deeper": x.deeper, "analogy": x.analogy, "dont_say": x.dont_say, "follow_up": x.follow_up,
+            "follow_up_answer": x.follow_up_answer, "claims": claims, "audience": x.audience,
+            "source_ref": x.source_ref, "deal": x.deal, "date": today, "reported_by": x.by, "status": "proposed",
+            "approved_by": None, "approved_on": None, "supersedes": x.supersedes})
+        print("proposed", eid, "(waits for Renzo's Friday approval) ->", save(root, "explanations", data))
+    elif x.cmd in ("approve-explanation", "retire-explanation"):
+        data = load(root, "explanations")
+        for e in data["entries"]:
+            if e["id"] == x.id:
+                if x.cmd == "approve-explanation":
+                    if e.get("status") != "proposed":
+                        sys.exit("%s is %s, not proposed" % (x.id, e.get("status")))
+                    e["status"] = "approved"; e["approved_by"] = x.by; e["approved_on"] = today
+                    # the older answer it replaces stops being the team answer only once this one is approved
+                    if e.get("supersedes"):
+                        mark_superseded(data, e["supersedes"], x.id)
+                else:
+                    e["status"] = "retired"; e["retired_by"] = x.by; e["retired_on"] = today
+                if x.note:
+                    e["status_note"] = x.note
+                print(e["status"], x.id, "->", save(root, "explanations", data))
+                return
+        sys.exit("No entry %s" % x.id)
     elif x.cmd == "close-limit":
         data = load(root, "limits")
         for e in data["entries"]:

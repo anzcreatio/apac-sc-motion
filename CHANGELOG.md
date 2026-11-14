@@ -4,6 +4,23 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.19.0 (14 Nov 2026): sc-coach, explain it so they can't misread it
+- **New: `sc-coach`.** Share a meeting transcript and it finds every moment you explained a feature or answered a
+  question, and scores each one: did it answer the question, plain words, confidence (no "I think", "should be able to", "in theory"), approved
+  claims only (catalogue and governance "can say" lines; over-claims flagged), whether it opened new doubts, and
+  length. Each weak one comes back with the quote and minute, why, a customer-ready rewrite and a dead-simple version
+  with an everyday analogy, plus your top three habits to work on. Or ask "how do I explain X?" for a one-liner,
+  30-second and deeper answer, what not to say, and the likely follow-up.
+- **Explanations library** (`Lessons/registers/explanations.json`, through `registers.py add-explanation`): the
+  team's approved answers, used first and word for word so we all say the same thing. New answers are proposed,
+  never added silently; Renzo approves them on Friday.
+- **Coaching is private** to you and Renzo (`Lessons/coaching/<initials>/`). The Friday digest only counts patterns,
+  never names or quotes anyone.
+- `sc-meeting-review` now adds a short "Explaining it" section (no scores, no weak quotes: the review is in the deal
+  folder) and writes the full coaching to your private folder.
+- Tell the coach when a rewrite is too long or "a customer wouldn't say that": it logs the feedback and proposes the
+  fix for Friday.
+
 ## 0.18.1 (14 Nov 2026): approve upfront, build non-stop, safely
 - Build rules v0.4 (`standards/BUILD-RULES-v0.4.md` section 4). With the build plan, `sc-demo-plan` sends one
   approval pack to confirm (`scripts/approval_pack.py new`): the plan's items, the stand, compiles, restarts (our own

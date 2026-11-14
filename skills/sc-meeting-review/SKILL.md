@@ -65,6 +65,10 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    ranking into the solution summary, and propose library changes per `sc-requirements` ("How it grows").
 6. **Library:** is the L1 harvest done (`library/catalogue.json` has this deal)? If not, and the demo was more than
    2 working days ago, say so first and offer to run `sc-harvest`.
+7. **Explaining it (sc-coach):** run `../sc-coach/SKILL.md` mode D on the transcript for each SC who presented. The
+   full coaching goes to the SC's private folder (`Lessons/coaching/<sc>/`); the review gets only the short section
+   (top three habits, the 2 best rewrites for the customer's own questions, the file path). No scores or weak quotes
+   in the review: it sits in the deal folder, which every SC can read.
 
 ## Part C: lessons
 

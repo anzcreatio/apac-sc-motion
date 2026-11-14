@@ -20,6 +20,7 @@ library for every SC, updated in one place.
 | `sc-weekly-lessons` | Friday digest: collects the week's evidence, measures, and proposes at most 3 changes (2+ deals each) for Renzo to approve; applies and publishes approved ones |
 | `sc-meeting-review` | After a meeting: presented deck vs generated deck (`deck_diff.py`), transcript scorecard, living solution summary update, next-session enhancements, lessons |
 | `sc-lessons` | A chat of its own for lessons learnt: paste notes or an R&D email; it files feedback and updates the shared registers of product limitations and discovery questions (`Lessons/registers/`) |
+| `sc-coach` | Explain Creatio so a customer can't misread it: reviews a transcript for every explanation and answer (plain words, no hedging, approved claims only, no new doubts, length) with customer-ready and dead-simple rewrites and the top 3 habits; "how do I explain X?" in one line, 30 seconds and deeper; the team's library of approved explanations (`Lessons/registers/explanations.json`). Coaching notes stay private to the SC and Renzo (`Lessons/coaching/<sc>/`) |
 | `sc-inbox` | Review new Knowledge Hub / corporate decks dropped in SharePoint `_inbox`; propose library and catalogue updates |
 
 | Folder | What |
