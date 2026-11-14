@@ -26,7 +26,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    **Coaching** (`Lessons/coaching/`, private): count habits across the week's files and report them anonymised
    ("4 calls: the answer came after the explanation"). Never name the SC or quote them in the digest. A habit seen on
    2+ calls becomes a proposed lesson for `Lessons/explaining-it/EXPLAINING-IT-LESSONS.md` (do, don't, drill; no SC,
-   customer or call named; Renzo approves). On Renzo's PC, refresh his per-SC view: `python ../sc-coach/scripts/coach_board.py`.
+   customer or call named; Renzo approves).
+   **Team lessons** (`Lessons/TEAM-LESSONS.md`): every approved change and every watch-list signal that reaches 2+
+   deals or SCs becomes or updates a lesson there, generalised: no SC, deal or customer named, no quotes. Bump its
+   version and add a Changes row. On Renzo's PC, refresh his per-SC view: `python ../sc-coach/scripts/coach_board.py`.
 1c. **Training** (`../sc-academy/SKILL.md` modes U and W): `python ../sc-academy/scripts/academy.py refresh` (marks
    course modules stale when a toolkit or plugin SKILL.md changed, drafts updates in `Lessons/training/_drafts/`),
    fill each draft's "Proposed edits", then `python ../sc-academy/scripts/academy.py weekly`. Put its "Decisions for
