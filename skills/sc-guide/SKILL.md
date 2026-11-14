@@ -21,6 +21,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Team root = `s
 | "where was I", "continue" | A, from the saved step |
 | "what's next", "what now", names a deal | **B. Next step on a deal** |
 | "what's on today", "what's on my plate", "done: <what>", "am I overloaded?" | The SC's desk: `sc-desk` |
+| "how do I run a deal?", "do I need a new chat?" | Show `../../rollout/HOW-TO-RUN-A-DEAL.md` (also in SharePoint `Plugin/`): the steps with the line to start each chat, new chat or same chat, the ten habits. Then offer "what's next on <account>" |
 | "this didn't work", "this could be better", "feedback" | **C. Log feedback** (a batch of lessons → `/sc-lessons`) |
 | "update the plugin" | If `claude --version` works in your shell: run `claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`. If not: ask them to type `/plugin`, open **Marketplaces**, pick `apac-sc` and choose **Update marketplace**. Then tell them to start a new session (or type `/reload-plugins`) |
 

@@ -4,6 +4,15 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.20.1 (15 Nov 2026): how to run a deal, on one page
+- **New: `HOW-TO-RUN-A-DEAL.md`** in SharePoint `Plugin/` (next to START-HERE). One page: each step of a deal with
+  the exact line to start its chat, when to start a **new chat** (every new step, another deal, a long chat, after an
+  update) and when to stay in the same one, plus the ten habits that win deals. Ask Claude "how do I run a deal?"
+  any time and it shows you the page.
+- The rule of thumb: **start each step in a new chat with "what's next on <account>"**. Everything is saved in the
+  deal folder, so a new chat loses nothing.
+- **Each SC: read `Plugin/HOW-TO-RUN-A-DEAL.md` (5 minutes).**
+
 ## 0.20.0 (15 Nov 2026): sc-desk so deals never stall on our side; coaching for you, not about you; every deal learns from the last
 - **New: `sc-desk`.** Say **"what's on today"** and you get your top 5 actions (ranked by deadline and how close the
   deal is to the customer's decision), today's customer meetings with what's ready and what isn't, a ready-to-send

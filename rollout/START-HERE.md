@@ -49,8 +49,11 @@ demo plan, the rules, how feedback works, and your first real deal.
 
 ## After onboarding
 
+**How to run every deal, and when to start a new chat:** `HOW-TO-RUN-A-DEAL.md` in this folder (one page).
+
 | You want to… | Say to Claude |
 |---|---|
+| See your day | "what's on today" |
 | Know what to do next on a deal | "what's next on <account>" |
 | Continue onboarding | "where was I" |
 | Report something that didn't work, or an idea | "feedback: <what happened>" |

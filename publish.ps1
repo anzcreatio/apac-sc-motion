@@ -42,6 +42,7 @@ if ($LASTEXITCODE -ge 8) { throw "robocopy failed with exit code $LASTEXITCODE" 
 # The self-serve entry points sit one level up, in Plugin/, where SCs look first.
 $pluginDir = Split-Path $Target -Parent
 Copy-Item (Join-Path $repo 'rollout\START-HERE.md') (Join-Path $pluginDir 'START-HERE.md') -Force
+Copy-Item (Join-Path $repo 'rollout\HOW-TO-RUN-A-DEAL.md') (Join-Path $pluginDir 'HOW-TO-RUN-A-DEAL.md') -Force
 $deck = Join-Path $repo 'rollout\overview\APAC-SC-Motion-Overview.pptx'
 if (Test-Path $deck) {
   try { Copy-Item $deck (Join-Path $pluginDir 'APAC-SC-Motion-Overview.pptx') -Force -ErrorAction Stop }
