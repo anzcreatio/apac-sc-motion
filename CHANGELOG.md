@@ -4,16 +4,20 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.18.1 (14 Nov 2026): approve upfront, build non-stop
-- Build rules v0.3 (`standards/BUILD-RULES-v0.3.md` section 4): with the build plan, `sc-demo-plan` asks for one
-  approval pack (scope, stand, compiles, restarts on our own clean stand, custom code once its rollback is written,
-  auto-rollback, demo data, small decisions logged with defaults) and writes `build/approval-pack.json`. The build then
-  runs without stopping to ask, except for six hard stops; it keeps the laptop awake, notifies you at the end and
-  finishes with a build report.
-- `sc-setup` offers a permission allowlist (`standards/build-permissions.json`) so Claude Code doesn't prompt for every
-  build command. Destructive clio calls and recursive deletes still ask; `git push` and credentials files are blocked.
-- **Each SC:** after updating, say "run sc-setup" once to refresh the build rules in your toolkit notes and add the
-  allowlist; start build sessions in a new chat so it loads.
+## 0.18.1 (14 Nov 2026): approve upfront, build non-stop, safely
+- Build rules v0.4 (`standards/BUILD-RULES-v0.4.md` section 4). With the build plan, `sc-demo-plan` sends one
+  approval pack to confirm (`scripts/approval_pack.py new`): the plan's items, the stand, compiles, restarts (our own
+  clean stand only), custom components once each rollback is written, two tries per item, demo data, and reversible
+  decisions on defaults. Then: a 5-minute pre-flight while you're still there, a restore point of the deal's packages,
+  and a build that doesn't stop to ask. Each item is checked as it's built; one that fails twice is rolled back and
+  skipped while the rest carry on. Hard stops: out of scope, a restart not approved, a sign-in only you can do,
+  deleting non-demo data, a choice that can't be undone, the plan changing, the time budget running out, anything to
+  a customer. You get a notification and `build/build-report.md` at the end.
+- `sc-setup` offers the permission setup (`standards/build-permissions.json`): an allowlist plus auto-mode rules that
+  block passwords and credentials files, `git push`, unapproved restarts, deleting outside our demo packages and
+  sending anything to a customer. Builds only edit the deal and builds folders.
+- **Each SC:** after updating, say "run sc-setup" once (build rules into your toolkit notes, permission setup), and
+  start each build in a new chat in auto mode.
 
 ## 0.18.0 (13 Nov 2026): today's goal, feedback loop, /sc-lessons, meeting card
 - **Today's goal opens every demo deck** (DECK-STANDARD v0.4, FM v0.6). The agenda slide shows "Today's goal": the

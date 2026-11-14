@@ -1,4 +1,4 @@
-<!-- apac-sc-motion build rules v0.3 (14 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.3.md -->
+<!-- apac-sc-motion build rules v0.4 (14 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.4.md -->
 ## APAC SC team build rules (apac-sc-motion)
 
 1. **Compile and restart only when really needed, and only with the SC's OK (or the approval pack's).** Pages, captions, layouts, business
@@ -13,10 +13,11 @@
    changing a standard object or a shared setting: back up (package export, page body, setting values) into the deal's
    build folder, then write in the build log how to undo it step by step, how to check it worked, and the demo's plan B
    (native screen or backup clip). Keep custom work in its own package so rollback = remove one package.
-4. **Approve upfront, build non-stop.** Read `<deal>/build/approval-pack.json` before building. Within it, don't ask
-   in chat: compiles for listed items, restarts on our own clean stand (max in the pack), custom code once its
-   rollback is written, auto-rollback, demo data. Small choices: take the default, log it in `build/decisions.md`.
-   Stop only for: out of scope (or Custom / another deal's packages), a restart on a shared stand, a sign-in the SC
-   must do, deleting non-demo data, the same failure twice after a rollback, anything reaching a customer. Keep the
-   laptop awake, notify at the end or a stop, and finish with a build report.
+4. **Approve upfront, build non-stop** (`skills/sc-demo-plan/scripts/approval_pack.py`). Read `<deal>/build/approval-pack.json`
+   first. Pre-flight with the SC before they leave (stand, token, session timeout, clio, browser sign-in, no lock),
+   then a restore point (export the deal's packages), then `log` every step: attempt, done, rollback, compile, restart,
+   decision. Exit 3 = hard stop (notify the SC, stop that line of work); exit 4 = give up that item after two tries
+   (leave it rolled back, carry on with what doesn't depend on it). Check each item before `done`; `check` between
+   items. Reversible choices: default + log; irreversible ones stop. Don't ask in chat otherwise. Keep the laptop
+   awake, notify at the end, run `report`.
 <!-- end apac-sc-motion build rules -->
