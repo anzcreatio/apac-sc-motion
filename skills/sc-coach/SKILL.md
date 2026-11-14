@@ -13,7 +13,8 @@ the standards), never by changing itself.
 
 **Read first:** `../../standards/WRITING-STYLE-v0.1.md` (spoken lines, §4) · `../../knowledge/DIFFERENTIATOR-CATALOGUE-v0.1.md`
 (the only source of claims) · `../../knowledge/AI-GOVERNANCE-PACK-LITE-v0.1.md` (AI, data, hosting and security: **only**
-its "can say" lines) · the explanations library (below).
+its "can say" lines) · the explanations library (below) · the team lessons page
+`<team root>/Lessons/explaining-it/EXPLAINING-IT-LESSONS.md` (use its lesson numbers in the habits when one fits).
 
 ## Modes
 
@@ -114,6 +115,13 @@ Coaching notes are **private to the SC and Renzo**: `<team root>/Lessons/coachin
 They never go in the deal folder (synced to every SC) or `Lessons/feedback/`. The Friday digest gets only
 **anonymised patterns** (FEEDBACK-LOOP §4: patterns, not people): `sc-weekly-lessons` may count habits across
 coaching files ("3 calls this week: answers buried after the explanation") but never names the SC or quotes them.
+
+**Two views of the same coaching:**
+
+| View | Where | Who sees it | Built by |
+|---|---|---|---|
+| Team lessons: anonymised do / don't / drill, no SC, customer or call named | `Lessons/explaining-it/EXPLAINING-IT-LESSONS.md` | Every SC | Friday digest, a lesson needs 2+ calls, Renzo approves |
+| Per-SC view: each SC's coaching and feedback files with an index | `%USERPROFILE%\SC-Coaching\` on Renzo's PC (local, never synced) | Renzo | `python scripts/coach_board.py` (refuses an OneDrive or SharePoint folder) |
 
 File layout:
 

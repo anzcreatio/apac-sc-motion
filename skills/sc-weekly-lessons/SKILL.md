@@ -24,7 +24,9 @@ Paths are relative to this skill's folder; plugin root = `../..`.
    **Explanations library** (`explanations.json`): list every `proposed` entry for Renzo's yes or no; on yes run
    `registers.py approve-explanation --id E-00N --by "Renzo Huruiti"`, on no `retire-explanation` with his reason.
    **Coaching** (`Lessons/coaching/`, private): count habits across the week's files and report them anonymised
-   ("4 calls: the answer came after the explanation"). Never name the SC or quote them in the digest.
+   ("4 calls: the answer came after the explanation"). Never name the SC or quote them in the digest. A habit seen on
+   2+ calls becomes a proposed lesson for `Lessons/explaining-it/EXPLAINING-IT-LESSONS.md` (do, don't, drill; no SC,
+   customer or call named; Renzo approves). On Renzo's PC, refresh his per-SC view: `python ../sc-coach/scripts/coach_board.py`.
 1c. **Training** (`../sc-academy/SKILL.md` modes U and W): `python ../sc-academy/scripts/academy.py refresh` (marks
    course modules stale when a toolkit or plugin SKILL.md changed, drafts updates in `Lessons/training/_drafts/`),
    fill each draft's "Proposed edits", then `python ../sc-academy/scripts/academy.py weekly`. Put its "Decisions for

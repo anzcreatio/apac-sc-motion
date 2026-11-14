@@ -15,7 +15,8 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   team's approved answers, used first and word for word so we all say the same thing. New answers are proposed,
   never added silently; Renzo approves them on Friday.
 - **Coaching is private** to you and Renzo (`Lessons/coaching/<initials>/`). The Friday digest only counts patterns,
-  never names or quotes anyone.
+  never names or quotes anyone. What we all learn from it goes on a team page, **`Lessons/explaining-it/EXPLAINING-IT-LESSONS.md`**:
+  10 lessons so far, each with a do, a don't and a drill, anonymised. Read it before your next call.
 - `sc-meeting-review` now adds a short "Explaining it" section (no scores, no weak quotes: the review is in the deal
   folder) and writes the full coaching to your private folder.
 - Tell the coach when a rewrite is too long or "a customer wouldn't say that": it logs the feedback and proposes the
