@@ -4,7 +4,8 @@
       Write build/approval-pack.json from the build plan (items B1.., stand, hours budget = plan hours x 1.5, plan hash)
       and print the one-message checklist the SC confirms.
   python approval_pack.py check  --deal <deal>
-      Before the build and between items: the plan hasn't changed, the time budget isn't spent. Exit 3 = hard stop.
+      Before the build and between items: the plan hasn't changed, the time budget isn't spent, and a master stand
+      (plan "master") is in library/stands.json, not off limits and not held by another deal. Exit 3 = hard stop.
   python approval_pack.py log    --deal <deal> --kind <kind> [--item B3] [--note "..."] [--reversible yes|no]
       kinds: preflight-ok, restore-point, start, attempt, done, failed, rollback, compile, restart, decision, hardstop, end
       Enforces the caps. Exit 0 = carry on · 3 = HARD STOP (tell the SC) · 4 = give up this item (roll it back, skip it,
@@ -62,7 +63,7 @@ def new(a):
     hours = sum(float(i["hours"] or 0) for i in items) or float(plan.get("budget_hours") or 0)
     pack = {"approved_by": a.approved_by, "date": now(), "deal": plan.get("deal"), "plan": os.path.basename(a.plan),
             "plan_sha": sha(a.plan), "plan_path": os.path.abspath(a.plan), "stand": plan.get("stand"),
-            "stand_shared": a.shared, "items": items, "budget_hours": round(hours * 1.5, 1),
+            "stand_shared": a.shared, "master": plan.get("master"), "extends": plan.get("extends") or [], "items": items, "budget_hours": round(hours * 1.5, 1),
             "compiles": "listed schema and code items only, after a refresh didn't do it",
             "max_restarts": 0 if a.shared else a.max_restarts, "max_attempts": a.max_attempts,
             "custom_code": "allowed once its rollback plan is written in the build log",
@@ -77,6 +78,8 @@ def new(a):
     print("Please confirm in one reply, and the build runs without stopping to ask:")
     print("1. Scope: the %d items in %s (about %.1f h; budget %.1f h). Nothing else." % (len(items), pack["plan"], hours, pack["budget_hours"]))
     print("2. Stand: %s, %s." % (pack["stand"], "SHARED, so no restarts" if a.shared else "ours alone"))
+    if pack["master"]:
+        print("2b. Master stand %s: we build on top (demo bar 6c). Widened library packages: %s (in the restore point). Our customer layer comes off after the demo." % (pack["master"], ", ".join(pack["extends"]) or "none"))
     print("3. Compiles for the listed schema and code items, only when a refresh doesn't do it.")
     print("4. Restarts: %s." % ("none (shared stand)" if a.shared else "up to %d, on this stand only" % a.max_restarts))
     print("5. Custom components and code%s, each once its rollback plan is written." % (" (%s)" % ", ".join(custom) if custom else ""))
@@ -99,6 +102,17 @@ def check(a):
             problems.append("time budget spent (%.1f h of %.1f h)" % (used, p["budget_hours"]))
     if p.get("restore_point_required") and starts and not [x for x in e if x["kind"] == "restore-point"]:
         problems.append("no restore point was taken before the build started")
+    if p.get("master"):
+        reg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "library", "stands.json")
+        if os.path.exists(reg):
+            r = json.load(open(reg, encoding="utf-8"))
+            if p["master"] in [x.get("env") for x in r.get("off_limits", [])]:
+                problems.append("stand %s is off limits (library/stands.json)" % p["master"])
+            m = next((x for x in r.get("masters", []) if x.get("env") == p["master"]), None)
+            if m is None:
+                problems.append("%s is not a master stand in library/stands.json" % p["master"])
+            elif m.get("in_use_by") not in (None, p.get("deal")):
+                problems.append("master %s is held by %s (in_use_by): wait, or use a clean stand" % (p["master"], m["in_use_by"]))
     if problems:
         print("HARD STOP: " + "; ".join(problems))
         sys.exit(HARD)

@@ -1,4 +1,4 @@
-<!-- apac-sc-motion build rules v0.4 (14 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.4.md -->
+<!-- apac-sc-motion build rules v0.5 (16 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.5.md -->
 ## APAC SC team build rules (apac-sc-motion)
 
 1. **Compile and restart only when really needed, and only with the SC's OK (or the approval pack's).** Pages, captions, layouts, business
@@ -18,6 +18,7 @@
    then a restore point (export the deal's packages), then `log` every step: attempt, done, rollback, compile, restart,
    decision. Exit 3 = hard stop (notify the SC, stop that line of work); exit 4 = give up that item after two tries
    (leave it rolled back, carry on with what doesn't depend on it). Check each item before `done`; `check` between
-   items. Reversible choices: default + log; irreversible ones stop. Don't ask in chat otherwise. Keep the laptop
+   items. On a master stand (pack `master`, demo bar §6c), the library modules in `extends` are in scope and go in the
+   restore point; a master another deal holds (`in_use_by` in library/stands.json) is a hard stop. Reversible choices: default + log; irreversible ones stop. Don't ask in chat otherwise. Keep the laptop
    awake, notify at the end, run `report`.
 <!-- end apac-sc-motion build rules -->

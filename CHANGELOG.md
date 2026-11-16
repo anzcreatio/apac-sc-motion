@@ -4,6 +4,21 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.23.0 (16 Nov 2026): build on top of master stands
+
+- **`standards/DEMO-BAR-v0.3.md`** (was v0.2), new §6c: when a new deal's use cases are complementary to a master
+  stand (same industry or cross-industry, extends its core objects and personas, no clash), build on top of it as a
+  new `lab<Module>` package instead of starting clean. One customer layer at a time; it comes off after the demo, so
+  masters grow into one coherent solution with many journeys. Items 7 and 9 updated.
+- **New `library/stands.json`**: the stand register (masters, status, journeys, personas, who holds it, off limits).
+  First master `11011710-demo` (H&G's customer layer comes off first). `11013904-demo` is off limits.
+- **`standards/BUILD-RULES-v0.5.md`** (was v0.4): on a master, the library packages in `extends` are in scope and go
+  in the restore point; a master held by another deal is a hard stop. `approval_pack.py check` enforces it.
+- `sc-demo-plan`: step 4 checks the master stands, plan has a stand plan, `build-plan.json` takes `master` and
+  `extends`. `sc-harvest` step 6b updates the register and asks for the clean-up back to neutral.
+- **Each SC: re-run `sc-setup`** to refresh the build-rules block in the toolkit notes (v0.5). Before a build, check
+  `library/stands.json` for a master that fits.
+
 ## 0.22.0 (16 Nov 2026): Delivery Assurance knowledge (internal)
 
 - **New `knowledge/DELIVERY-ASSURANCE-v0.1.md`** (internal only), from the Jan 2026 Delivery Assurance deck: the

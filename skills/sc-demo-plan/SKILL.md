@@ -20,11 +20,12 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 | Workshop outputs (Australia: no RFP) | `workshop/solution-model.md` + `register.json` from `sc-workshop`; after rating, `workshop/poc-brief.md` | Run `sc-workshop` step 3 first if a workshop happened and nothing's captured |
 | Level | Light (first meeting, ≤ half a day), Full (value demo) or Proof (days or weeks, ending in a readout) | Ask |
 | RFP POC brief (Proof after an RFP or TOR) | `rfp/05-poc-brief.md` + `.json` from `sc-rfp` | Run `sc-rfp` first if there's an RFP and no fit-gap |
-| Time available to build, demo length, stand to use | The SC | Ask; default Full = 2–3 days, 45–60 min demo. **Full and Proof: a clean stand of its own or the library master stand**, never one holding another customer's demo (demo bar item 7) |
+| Time available to build, demo length, stand to use | The SC | Ask; default Full = 2–3 days, 45–60 min demo. **Full and Proof: a clean stand of its own or a master stand** (`../../library/stands.json`, status `ready`), never one holding another customer's demo (demo bar items 7 and §6c) |
 | Presenting device, network and login | The SC | Ask: laptop, phone or tablet app, VPN, SSO. Rehearse on exactly that |
-| Demo bar | `../../standards/DEMO-BAR-v0.2.md` | — |
+| Demo bar | `../../standards/DEMO-BAR-v0.3.md` | — |
 | Pattern book | `../../patterns/catalogue.json` (+ screenshots in SharePoint `Patterns/`) | — |
 | Demo library | `../../library/catalogue.json` | Skip reuse; note harvest candidates |
+| Stand register | `../../library/stands.json` | Assume a clean stand; say so in the plan |
 | Knowledge | `../../knowledge/` (packs, differentiator catalogue, governance "can say", M6 live-change kit) | — |
 
 ## Steps
@@ -48,8 +49,8 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
    that too. Then: a named competitor → check the differentiator catalogue for what we beat them on and the pattern book
    for their UX patterns; an RFP or document → read it fully and add its requirements to the pains and asks (tag C,
    source = the document), marking hard requirements **Asked (must)**; anything else → fold it into the plan.
-   Also confirm two practical things in the same message: **which stand** (clean, or library master; a shared stand
-   only for a Light config) and **which device, network and login** the demo will be shown on.
+   Also confirm two practical things in the same message: **which stand** (a master stand to build on top of, a clean one, or a shared stand
+   only for a Light config; propose the master when step 4 finds one) and **which device, network and login** the demo will be shown on.
 1. **Pains and asks.** List every pain with its evidence tag: **C** the customer said it · **P** a partner said it ·
    **I** we inferred it (call context or research, with source and date) · **A** we assumed it. Plus everything they
    **asked** to see, and any **must** (a stated requirement or constraint). Scenes follow demo bar item 3: C builds;
@@ -62,6 +63,14 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
    drives the scene design** (the story is what the agent does); the build order below stays the same because the
    agent needs the data model first. Pain scenes first; nothing is cut for lacking a pain, but extras come after and say why in one line.
 4. **Reuse first.** For each scene, check the demo library, then the pattern book. Prefer what's proven.
+   **Then check the master stands** (`../../library/stands.json`, demo bar §6c, Renzo 16 Nov 2026): for each master
+   that isn't `off_limits`, run the complementary test: (a) same industry or cross-industry, (b) the hero journey
+   uses or extends its core objects and personas, (c) no clash with its stages, rules or home page. All three
+   = **build on top**: the plan says which master, what we reuse as is (objects, journeys, personas, home
+   page, data), what we add (a new `lab<Module>` package) and what we widen (with a backup). A clash, or a master
+   that's `in_use` by another deal, = a clean stand; say why in one line. A master marked `neutralise_first` can be
+   used only after its customer layer is off: add that as the first build item, with hours. Aim for the demo to feel
+   like one solution: the new journey links from the master's home page and shares its people and data.
 5. **Part 1, Business Studio (build first).** The configuration table below. Native Freedom UI first. Propose a
    **custom component** only where it clearly lifts the experience (demo bar §4), and say why.
 6. **Part 2, AI (after Part 1 works).** The AI table below. Types: **AI Twin** (each user's own Creatio.ai assistant,
@@ -112,7 +121,7 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
     plan" below), give it to the SC (a private artifact link if this session can publish, else the file), and stop.
     Nothing is built and no stand is touched until the SC approves it in chat; record the approval in the demo plan.
     A change after approval is shown and approved again.
-    **With the build plan, ask for the approval pack** (`../../standards/BUILD-RULES-v0.4.md` section 4) in the same
+    **With the build plan, ask for the approval pack** (`../../standards/BUILD-RULES-v0.5.md` section 4) in the same
     message, as one list the SC confirms in one reply: scope = this plan; the stand and whether it's ours alone;
     compiles for the listed schema/code items; restarts (our own clean stand only, max 3); custom components and code
     (rollback plan first); auto-rollback; demo data and reset; small decisions logged with the default taken. Write
@@ -123,7 +132,7 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
     BUILD-RULES section 4 (pre-flight with the SC, restore point, `log` each step, `check` between items, `report` at the end).
 12. **Hand-off** (only after 12a is approved). Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
-    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.4.md`**: read `build/approval-pack.json` first and build
+    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.5.md`**: read `build/approval-pack.json` first and build
     non-stop within it (hard stops only); refresh before any compile or restart, ask the SC before one the pack doesn't cover, check the OData token first when calls suddenly fail, and **write a
     rollback plan before any custom component or code** (backup, how to undo, how to check, the demo's plan B). The
     plan lists the rollback for every element marked custom.
@@ -178,6 +187,7 @@ Fix every `Not built` error and read every warning. Worked example: `Deals/metri
 | Field | What goes in it |
 |---|---|
 | `deal`, `title`, `date`, `stand`, `sc`, `level`, `budget_hours`, `demo_minutes` | Header, hours budget (Light 4) and the agenda's demo slot |
+| `master`?, `extends`? | Building on top of a master stand (demo bar §6c): `master` = its env name, `extends` = the existing library packages this build widens. Both go into the approval pack |
 | `one_line`, `decision` | The demo in one sentence; the agenda's decision question |
 | `sources` | The deal's transcript and customer documents (paths relative to the JSON). **Every C or P quote is checked word for word against them; a quote that isn't there stops the build** |
 | `steps[]` | `title`, `minutes`, `chips` (built / simulated / existing), `screen`, `click`, `say`, `differentiator`, `reuse`?, `build_note`?, and **either** `triggers` **or** `our_idea` |
@@ -217,6 +227,8 @@ the SC must make.
 
 | Element | What to configure | Their term | Native or custom (why) | Reuse | UX touches (KPI strip, helper text, data) | Hours |
 |---|---|---|---|---|---|---|
+
+**Stand plan (demo bar §6c):** the stand, and if it's a master: reused as is, added, widened (with backup), the customer layer to put on and take off after the demo, and `in_use_by` set for this deal.
 
 **Package plan (build for reuse, demo bar §6b):** module package name and customer package name, neutral schema names
 for the main objects, where seed data and rules live, what can't be exported (manual steps), custom component

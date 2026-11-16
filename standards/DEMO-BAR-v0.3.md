@@ -1,4 +1,4 @@
-# Demo bar v0.2: the minimum for every demo configuration
+# Demo bar v0.3: the minimum for every demo configuration
 
 **What it is:** the floor every Creatio demo meets before a customer sees it. It says **what must be true**, never
 **how to build it**. Everything above the floor is the SC's call: their creativity, the pattern book, what the
@@ -23,9 +23,9 @@ customer wants to click through.
 | 4 | **Differentiators.** One rehearsed live change (D1). AI that acts while a person confirms (D3). Plus the track core: **D2 (one platform) for Platform deals, D5 (fits your landscape) for AI Studio deals, both for combined deals; D5 always in manufacturing** (differentiator catalogue) | The plan's differentiator column | Agreed motion rule |
 | 5 | **AI-first floor.** At least one AI moment on a record (AI Twin or a Creatio.ai skill) and one AI step that runs in the background without a click (in a process), where it makes sense for their work. Each has a fallback if it fails live | The plan's Part 2 | Goal (e): AI first, not AI added on |
 | 6 | **UX floor.** Native Freedom UI first; no empty views; a summary or KPI strip on the key pages; short helper text where a screen isn't obvious; no leftover sample-data noise in lists or menus; readable at the meeting's screen size | `creatio-ui-guidelines` review + browser check | The quality the customer judges us on |
-| 7 | **It works every time, where it will be shown.** Every use case passes in the browser (`creatio-uc-readiness`), there's a reset, and there are backup screenshots. **Rehearse the full click path on the device, network and login you'll present with** (phone or tablet app, VPN, SSO), with the fallback ready (web view or recorded clip). **Full and Proof demos run on their own clean stand or the library master stand**, never on a stand that holds another customer's demo; a Light config may use a shared stand, in its own packages, and its screenshots are reviewed before anything reaches the customer | Readiness verdicts, rehearsal on the device, stand named in the plan | No live surprises; no other customer's name on screen |
+| 7 | **It works every time, where it will be shown.** Every use case passes in the browser (`creatio-uc-readiness`), there's a reset, and there are backup screenshots. **Rehearse the full click path on the device, network and login you'll present with** (phone or tablet app, VPN, SSO), with the fallback ready (web view or recorded clip). **Full and Proof demos run on their own clean stand or a master stand** (§6c: neutral, grows deal by deal), never on a stand that holds another customer's demo or customer layer; a Light config may use a shared stand, in its own packages, and its screenshots are reviewed before anything reaches the customer | Readiness verdicts, rehearsal on the device, stand named in the plan | No live surprises; no other customer's name on screen |
 | 8 | **It leaves a trail.** Click path with screenshots (`creatio-demo-clickpass` → deck `screen` slides), turned into **two pages by `sc-clickpath`: the SC practice guide and a customer-safe recap** (approved by the SC before it's sent), and an **L1 harvest into the demo library within 2 working days of the demo** (`sc-harvest`) | Library catalogue entry for the deal | Feeds the deck (goal c) and the library (goal d) |
-| 9 | **Built for reuse.** The build follows §6b: its own packages (never `Custom`), module and customer layers apart, neutral schema names, seed data and rules in the package, the things that can't be exported written down | The package plan in the demo plan; `sc-harvest` checks it | An export nobody can reuse isn't a library |
+| 9 | **Built for reuse.** The build follows §6b: its own packages (never `Custom`), module and customer layers apart, neutral schema names, seed data and rules in the package, the things that can't be exported written down; **complementary work goes on top of a master stand** (§6c) | The package plan in the demo plan; `sc-harvest` checks it | An export nobody can reuse isn't a library |
 
 ## 3. Every element carries a label, nothing is banned
 
@@ -72,10 +72,25 @@ for export from the first click:
 | Custom components apart | JS-only (no compile), own package, source in `C:\Projects\builds\<deal>\` (Mac: `~/Projects/builds/<deal>/`) and copied to the library | Partners and the next SC can rebuild them |
 | Keep scripts and prompts | clio commands, builder scripts, AI skill and agent prompts as files in the deal folder | Half of what makes a build repeatable |
 
-While building, follow `BUILD-RULES-v0.4.md` (approval pack upfront then a non-stop build with hard stops; token check first; a rollback plan before custom components or code).
+While building, follow `BUILD-RULES-v0.5.md` (approval pack upfront then a non-stop build with hard stops; token check first; a rollback plan before custom components or code).
 
 If a deal needs a shortcut that breaks a rule (time pressure, a standard object change), note it in the build log.
 That's allowed; hiding it isn't.
+
+## 6c. Build on top: master stands that grow (Renzo, 16 Nov 2026)
+
+Over time we want a few strong stands, each holding many processes and journeys that work as **one coherent
+solution**, not one stand per deal. So when a new deal's use cases are **complementary** to what a master stand
+already has, we build on top of it instead of starting clean.
+
+| Rule | How | Why |
+|---|---|---|
+| Only on a master stand | A stand listed in `../library/stands.json` with `status: ready`. Never a deal stand, a shared stand or one marked `off_limits` | No other customer's name on screen (item 7) |
+| Complementary test (in `sc-demo-plan` step 4) | All three: same industry or cross-industry; the journey uses or extends the master's core objects and personas; no clash with its stages, rules or home page. Then build on top. A clash = a clean stand (and maybe a new master) | Coherence beats volume |
+| Extend, don't duplicate | Reuse the master's objects, personas, home page and data set; add the new journey as its own `lab<Module>` package that depends on what's there; widen a shared object only with a backup and a rollback (build rules §3) | One solution, not a pile of demos |
+| Customer layer comes off | The deal's brand, captions, names and seed data live in the customer package. After the demo (`sc-harvest`) it's removed or swapped back to the neutral layer, and the stand returns to `ready` | The next deal starts neutral |
+| One deal at a time | The stand's `in_use_by` names the deal while it carries a customer layer; another deal waits or uses a clean stand | Two customer layers on one stand is the Suntory problem again |
+| Keep the register | `sc-harvest` adds the new journey, modules, personas and data to the stand's entry, and the restore point taken before the build | Anyone can see what a master already shows |
 
 ## 7. Best practice from outside
 
@@ -87,6 +102,7 @@ book carries its source and date.
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| v0.3 | 16 Nov 2026 | §6c build on top of master stands when the new use cases are complementary; item 7 allows a master stand (neutral, one customer layer at a time); item 9 points at §6c; register `library/stands.json` | Renzo: grow robust sandboxes with many coherent journeys. 11013904 (shared with Ord Minnett) off limits |
 | v0.2 | 13 Nov 2026 | §6 points at `UI-KIT-STANDARD-v0.2.md` and `labUiKit` (pointer only, no rule change) | Kit used on two deals (EWB, Navalo) |
 | v0.2 | 11 Nov 2026 | Item 7: clean stand for Full and Proof demos; rehearse on the presenting device, network and login | Weekly digest W46, approved by Renzo: Suntory (Ord Minnett names in screenshots, mobile AI sign-in failed live), H&G (shared stand, `Custom` default) |
 | v0.1 | 11 Nov 2026 | First bar | Renzo's brief; H&G, Suntory, SAHE builds |

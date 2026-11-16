@@ -15,8 +15,11 @@ working days of the demo** (demo bar item 8), done with the `sc-harvest` skill. 
 | `catalogue.json` (this repo) | Every module: level, what it does, pains, patterns, packages, manual steps, customer-specific list |
 | SharePoint `Library/<module-id>/` | Package exports, README with install steps, screenshots |
 
-**Master stand:** a clean, library-only instance once Renzo gets one; `11011710-demo` until then. **Owner:** Renzo,
-moving to the SE pool later.
+**Master stands** (`stands.json`, demo bar §6c): neutral stands that grow deal by deal. When a new deal's use cases
+are complementary we build on top (a new `lab<Module>` package, one customer layer at a time, taken off after the
+demo), so each master becomes one coherent solution with many journeys. First master: `11011710-demo`
+(cross-industry; H&G's customer layer comes off first). Off limits: `11013904-demo`. **Owner:** Renzo, moving to the
+SE pool later.
 
 Builds are shaped for reuse from the first click: demo bar §6b (own packages, module and customer layers, neutral
 schema names, seed data in the package, manual steps written down).

@@ -1,4 +1,4 @@
-# Build rules v0.4: while configuring a demo stand
+# Build rules v0.5: while configuring a demo stand
 
 **What it is:** how every demo build runs, whichever tool does it, whichever tool runs it (the demo toolkit, clio, or Claude by hand).
 **Agreed:** Renzo, 13 Nov 2026. `sc-setup` copies the short version into the demo toolkit's local notes for
@@ -67,7 +67,8 @@ and reset, reversible decisions on defaults. It stores the plan's fingerprint an
 or SC holds the stand (toolkit lock); the permission setup is loaded (a **new** session in auto mode). Then
 `log --kind preflight-ok` and tell the SC "safe to leave". A sign-in found later is a hard stop, so find it now.
 
-**3. Restore point before the first change.** Export every package of the deal (and note the stand's state) into
+**3. Restore point before the first change.** Export every package of the deal (on a master stand, also every
+module in `extends`, and note the stand's state) into
 `build/pkg-backup/<date>/`, then `log --kind restore-point`. `start` refuses without a pre-flight and a restore point.
 This lets the SC undo the whole build in one step, on top of each change's own rollback (section 3).
 
@@ -82,9 +83,9 @@ If it can't be undone (renaming or deleting an object or column, a standard-obje
 anything on a shared stand), it's a **hard stop**.
 
 **Hard stops** (the script returns 3, or Claude sees one): out of scope or touching `Custom` / another deal's
-packages · a restart not pre-approved (shared stand, or over the limit) · a sign-in, password or MFA the SC must do ·
+packages (on a master stand, a library module named in the pack's `extends` is in scope, backed up in the restore point) · a restart not pre-approved (shared stand, or over the limit) · a sign-in, password or MFA the SC must do ·
 deleting anything that isn't our demo data · an irreversible decision · the plan changed after approval · time budget
-spent · anything reaching a customer. On a hard stop: stop that line of work, finish anything independent that's safe,
+spent · a master stand another deal holds (`in_use_by`) · anything reaching a customer. On a hard stop: stop that line of work, finish anything independent that's safe,
 notify the SC, and write the report.
 
 **6. Finish.** `log --kind end`, then `report` writes `build/build-report.md`: every item's status, compiles,
@@ -104,6 +105,7 @@ next session.
 
 | Version | Date | Change |
 |---|---|---|
+| v0.5 | 16 Nov 2026 | Building on top of a master stand (demo bar §6c): library modules named in the pack's `extends` are in scope and go into the restore point; a master that another deal holds (`in_use_by`) is a hard stop (Renzo) |
 | v0.4 | 14 Nov 2026 | Section 4 rewritten: pre-flight before leaving, restore point, check each item and fail soft (two tries, then skip and carry on), irreversible decisions = hard stop, time budget and plan fingerprint, scope check in the report; caps enforced by `approval_pack.py`; auto-mode rules for the hard stops; edits only in deal and builds folders (Renzo) |
 | v0.3 | 14 Nov 2026 | Section 4: one approval pack upfront (scope, stand, compiles, restarts on our own stand, custom code, auto-rollback, data, decisions log), then a non-stop build with six hard stops; keep-awake, notifications and a build report; permission allowlist via `sc-setup` (Renzo) |
 | v0.2 | 13 Nov 2026 | Section 3: a rollback plan before custom components, code, standard-object or shared-setting changes (Renzo) |

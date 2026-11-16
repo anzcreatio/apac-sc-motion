@@ -1,7 +1,7 @@
 # Pattern book
 
 Good ideas for demo configuration that any SC can use and add to. **Ideas, not rules:** `sc-demo-plan` suggests
-them; the SC decides. The floor every demo meets is the demo bar (`../standards/DEMO-BAR-v0.2.md`), not this.
+them; the SC decides. The floor every demo meets is the demo bar (`../standards/DEMO-BAR-v0.3.md`), not this.
 
 | Where | What |
 |---|---|

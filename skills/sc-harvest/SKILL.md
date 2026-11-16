@@ -21,7 +21,7 @@ Paths are relative to this skill's folder; plugin root = `../..`.
 | **L2 Package** | L1 + installs cleanly on a fresh stand with its seed data and a reset; customer layer split out | Used on 2+ deals → L3 |
 | **L3 Module** | Generic (`lab` prefix, neutral names and example data), passes `creatio-uc-readiness` on the master stand, own click path | — |
 
-Master stand: a clean library-only instance once Renzo gets one; `11011710-demo` until then. Owner: Renzo.
+Master stands: listed in `../../library/stands.json` (demo bar §6c); the first is `11011710-demo`. Owner: Renzo.
 
 ## L1 harvest (after every demo)
 
@@ -47,7 +47,7 @@ Master stand: a clean library-only instance once Renzo gets one; `11011710-demo`
 
    If an agent's instructions only exist in AI Studio and you can't read them, mark the file **"instructions
    missing"** and ask the SC to paste them in. Never save credentials, tokens or real customer data.
-4. **Check the build-for-reuse rules** (`../../standards/DEMO-BAR-v0.2.md` §6b): own packages, two layers, neutral
+4. **Check the build-for-reuse rules** (`../../standards/DEMO-BAR-v0.3.md` §6b): own packages, two layers, neutral
    names, seed data in the package, manual steps written down. Note every break; don't fix the stand.
 5. **Write `Library/<module-id>/README.md`** (SharePoint):
    - What it does, in one paragraph, and the pains it served (their words, the deal).
@@ -58,6 +58,11 @@ Master stand: a clean library-only instance once Renzo gets one; `11011710-demo`
    - Gotchas from the build log.
 6. **Register it** in `../../library/catalogue.json` → `modules` (format below), level L1, and link the patterns it
    covers (update those patterns' `proven` field).
+6b. **Built on a master stand?** (the plan's `master`). Update its entry in `../../library/stands.json`: add the
+   journey (module, packages, deal, date), new personas, the home page link and data set, and the restore point path.
+   Then list what takes the stand back to neutral (the customer package to remove, captions and seed data to swap)
+   and ask the SC to approve that clean-up (it writes to the stand, so it's the toolkit's job with their yes). Set
+   `in_use_by` back to null and `status` to `ready` only once it's done; until then `in_use`.
 7. **Report** in ≤ 8 lines: module id, packages exported, rule breaks, what reuse would cost (hours to rebrand).
 
 ## Promotion
