@@ -4,12 +4,14 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## Unreleased: one sidebar section per customer
+## 0.21.0 (16 Nov 2026): one sidebar section per customer, UI kit standard v0.4
+
+### One sidebar section per customer
 - **New chat section rule** (`sc-setup`, used by `sc-guide` and `sc-first-meeting`): in the Claude desktop app, Claude files every chat about a customer under that customer's own sidebar section (creating it the first time, e.g. `Bussan Auto Finance (BAF)`), so all of a deal's chats sit together. Skipped where there's no sidebar (claude.ai, CLI) and for practice, scheduled and plugin chats.
 - `HOW-TO-RUN-A-DEAL.md` mentions it.
 - **Each SC: nothing to do.** Old chats stay where they are; file them by dragging them onto a section if you want.
 
-## Unreleased: UI kit standard v0.4 (pages that look finished)
+### UI kit standard v0.4 (pages that look finished)
 - **`standards/UI-KIT-STANDARD-v0.4.md`** (was v0.3). New section 2b, the look of every demo page around our components:
   **no text directly on the grey page background** (titles, subtitles and section headings on white cards), one
   header card per page, headline numbers first, lists with row numbers always on and an add-column (+) button, one
