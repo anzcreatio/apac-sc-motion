@@ -1,6 +1,6 @@
 ---
 name: sc-setup
-description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin, on Windows or a Mac - finds the synced APAC Solution Consulting SharePoint folder, records it and the SC's initials (rh, wn, fa: the suffix on new deal folders) in ~/.apac-sc-motion.json, holds the deal folder naming rule, and checks Python, python-pptx, Pillow, openpyxl, python-docx, PyMuPDF (Mac), PowerPoint, the deck builder, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
+description: One-time setup and health check for a Creatio APAC solution consultant using the apac-sc-motion plugin, on Windows or a Mac - finds the synced APAC Solution Consulting SharePoint folder, records it and the SC's initials (rh, wn, fa: the suffix on new deal folders) in ~/.apac-sc-motion.json, holds the deal folder naming rule and the chat section rule (each customer's chats filed under their own sidebar section), and checks Python, python-pptx, Pillow, openpyxl, python-docx, PyMuPDF (Mac), PowerPoint, the deck builder, the demo toolkit and clio. Use on a new machine, when a deck build can't find the Slide-library or Deals folder, or when the SC asks whether their setup is ready.
 ---
 
 # sc-setup
@@ -73,6 +73,26 @@ them here. Keep any other keys already in the file.
 3. No `sc` in the config → run step 1b first. Never guess the initials.
 4. The suffix records who **created** the folder. Never rename it, even when the deal moves to another SC (renaming
    breaks saved paths). Folders made before 12 Nov 2026 have no suffix and stay as they are.
+
+## Chat section rule (every skill that works on a deal follows it, Renzo 16 Nov 2026)
+
+In the Claude desktop app, file every chat about a customer under that customer's own sidebar section, so all of a
+deal's chats sit together. Do it as soon as the chat is clearly about one account (the SC names it, or a deal skill
+starts on it), once per chat, without asking.
+
+1. Load the sidebar tools if they're deferred (`ToolSearch` "select:mcp__ccd_sidebar__list_sections,
+   mcp__ccd_sidebar__create_section,mcp__ccd_sidebar__move_sessions"). **No sidebar tools** (claude.ai, the CLI,
+   another app) → skip this rule silently.
+2. `list_sections`. If a section for the account exists (match loosely: `Bussan Auto Finance (BAF)` = BAF), use it.
+   Never make a near-duplicate.
+3. None → `create_section` with the customer's name as people say it, plus the short name in brackets only when one
+   is in use: `Bussan Auto Finance (BAF)`, `Navalo`, `Telkomsel`.
+4. `move_sessions` with `self` into that section. Say it in one line ("Filed this chat under **Telkomsel**").
+5. Not for practice folders (`_practice`), scheduled tasks, digests, desk briefs, or plugin/motion work: those stay
+   ungrouped.
+
+The sidebar is per machine and per seat, so each SC's sections are their own. (Numbered chat titles are on trial with
+Renzo and will be added here later.)
 
 ## 2. Check the tools
 

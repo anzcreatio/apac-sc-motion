@@ -35,7 +35,8 @@ Any time:
 | The chat is long, Claude slows down, or says it summarised the conversation | You're closing a commitment or asking what's next right after the step |
 | You've just updated the plugin | |
 
-Everything that matters is saved in the deal folder, so a new chat loses nothing. Start chats in any folder; for
+Everything that matters is saved in the deal folder, so a new chat loses nothing. In the desktop app, Claude files
+each deal chat under that customer's own section in the sidebar, so all of a deal's chats sit together. Start chats in any folder; for
 builds, use the folder where your build permissions are set (`sc-setup` sets this up).
 
 ## 3. Ten habits that win deals

@@ -120,7 +120,8 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 
 1. Find the deal folder (`<team root>/Deals/<account>/` or `<account>-<initials>/`; ask which if unclear). For a new
    deal, offer to create `<kebab-case-account>-<sc>/` by the deal folder rule in `sc-setup` (one folder per account;
-   `sc` initials from `~/.apac-sc-motion.json`).
+   `sc` initials from `~/.apac-sc-motion.json`). Then file this chat under the customer's sidebar section (chat
+   section rule in `sc-setup`).
 2. **Ask first, at the top:** "When was your last meeting with them, and what's the next one?" Run `deal_dates.py show` and add a question for any missing deal date (see Deal dates). File names can't tell
    whether a meeting happened. Then read the folder, matching loosely (numbers and names vary between older and newer
    deals): prep = `*fm-prep*` or `*W1*pack*`; transcript = `*transcript*`; click path = any `click*/` folder; review =
