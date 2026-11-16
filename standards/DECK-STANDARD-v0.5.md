@@ -11,7 +11,7 @@ Creatio logo top right, 40 pt title with a small orange caps label above it, ora
 | # | Slide type | Required? | What it does | Field source |
 |---|---|---|---|---|
 | 1 | `cover` | Yes (not in a partner-led slot) | Customer + the outcome in their words. A photo (`image`) with the title on orange blocks, or plain orange | H&G 1, Suntory 1 |
-| 1b | `agenda` | **Yes for every demo meeting** (Renzo, 12-13 Nov 2026) | The AE opens with it: minutes, what, who on the left; on the right **"Today's goal"**: the decision question, then what happens if it fits and what "not yet" pins down. **The goal is the closing question, word for word**: the SC asks it at the end on the next-steps slide. No open "what would make this a success?" slot: get success criteria before the meeting. Wording by meeting type in §1b | Examples: `Deals/_examples/agenda-and-ae-brief/` |
+| 1b | `agenda` | **Yes for every demo meeting** (Renzo, 12-13 Nov 2026) | The AE opens with it: numbered cards with what we'll do on the left (**no minutes or names on the slide**: they go to the notes as a run sheet, v0.5); on the right **"Today's goal"**: the decision question, then what happens if it fits and what "not yet" pins down. **The goal is the closing question, word for word**: the SC asks it at the end on the next-steps slide. No open "what would make this a success?" slot: get success criteria before the meeting. Wording by meeting type in §1b | Examples: `Deals/_examples/agenda-and-ae-brief/` |
 | 2 | `understanding` | **Yes** | What we currently understand about their pains: **Today → where they want to be**, plus timing. Or cards when we only have what we heard | H&G 2, Suntory 2–3, Telkomsel 1 |
 | 3 | `platform` | **Yes, always the whole set** (Renzo, 11 Nov 2026) | The platform story from the Slide-library's standard set: AI Platform + AI CRM, the three studios, **01 AI Studio, 02 AI Twin, 03 Business Studio, 04 AI Coding Agent**, with speaker notes. Extras (AI Studio callouts, AI Twin concept) with `add`. Other corporate slides (analysts, customers, telecom) with `library` | H&G 3–11, Suntory 4–11 |
 | 4 | `why` | Optional | Why Creatio fits *them*: 3–4 reasons = our differentiators in their terms | H&G 12, Suntory 9 |
@@ -21,7 +21,7 @@ Creatio logo top right, 40 pt title with a small orange caps label above it, ora
 | 7 | `screen` | **Replaces `component` once the demo is built: 1–2 per part** | Screenshot(s) with numbered highlights, a quote in their words, one point. Backup for the live demo | H&G 14–20, Suntory 4–7 |
 | 8 | `summary` | **Yes** | **Your solution at a glance**: numbered parts, "In today's demo" vs "Still to show you". No question on the slide. It changes every meeting (see §4) | H&G 21, Telkomsel 3 |
 | 9 | `roadmap` | Optional | Suggested order of phases, with *when* in their terms. No effort or price | H&G 22, Suntory 8 |
-| 10 | `next_steps` | **Yes** | Questions for them + actions with **who and when**. A next step without a named person and a date doesn't count | H&G 23, Suntory 10 |
+| 10 | `next_steps` | **Yes** | Questions for them + actions with **when** on the slide; **who goes in the notes, not on the slide** (v0.5, Suntory + Navalo). A next step still needs a named person and a date: say the names, and the review records them | H&G 23, Suntory 10 |
 
 `section` (a divider such as "Let's see it in Creatio") can go anywhere. A required slide can be left out only by
 listing it in `meta.waive` with the reason (e.g. Telkomsel: partner-led, Deloitte owns next steps).
@@ -81,7 +81,7 @@ titles, titles over 12 words, semicolons and em dashes.
 
 | Type | Fields |
 |---|---|
-| every slide | `title`, `subtitle` (shown as the small caps label above the title in the designed look), `notes` |
+| every slide | `title`, `subtitle` (the small caps label above the title: **off by default since v0.5**, it reads as AI-made; `"kicker": true` on a slide or `meta.kickers: true` brings it back), `notes` |
 | `cover` | `title`, `subtitle`?, `date`?, `image`? (full-bleed photo), `fill`? (hex), `screenshot`? |
 | `understanding` | `rows`: `{topic, today, want, tag}` → today/want layout, `want_label`, `timing`: `[{when, what}]`. Or `rows`: `{topic, text, note?, tag?}` → cards (`icon`? per row: up to 5 cards in a row), `footer`? · `caption`? |
 | `facts` | `statement`, `sub`?, `facts`: `[{figure, text, accent?}]` |
@@ -91,12 +91,12 @@ titles, titles over 12 words, semicolons and em dashes.
 | `screen` | `screens`: `[{file, region?, crop?, width?, alt, highlights?: [{box, text?, corner?}]}]` (1 or 2) · `layout`: `picture_left` / `picture_right` / `row` (two screens side by side with a heading and point under each, e.g. before and after a live change) · `width`? · `blocks`: `"keys"`, `{quote}`, `{point}`, `{heading, icon?}`, `{figure: {value, label}}`, `{steps: []}`, `{table: {title, columns, rows}}`, `{takeaway}` · `caption`? |
 | `summary` | `outcome`?, `parts`: `[{title, text, shown}]`, `labels`?, `numbered`? (default true), `caption`? |
 | `roadmap` | `steps`: `[{title, what, when}]`, `timing`?, `caption`? |
-| `next_steps` | `questions`?, `actions`: `[{when, what, who?, icon?}]`; `layout`: `timeline` (default in the designed look, ≤ 5 steps, one question in a box) or `table` |
+| `next_steps` | `questions`?, `actions`: `[{when, what, who?, icon?}]` (`who` → notes; `show_owners: true` puts it back on the slide); `layout`: `timeline` (default in the designed look, ≤ 5 steps, one question in a box) or `table` |
 | `build` | `lead`?, `platform`: `[{name, what, icon?, see?}]`, `ai`: same, `caption`? (`see` = the demo step, e.g. "Step 2" or "Next time") |
 | `section` | `text`, `sub`? |
 | `flow` | `steps`: `[{title, skills?: [..], who?, highlight?}]` (up to 8, one row), `loop`?, `title_size`?, `skill_size`? · internal and training decks |
 | `outputs` | `rows`: `[{step, customer, internal}]`, `labels`?, `size`? · what each step produces |
-| `agenda` | `items`: `[{min, what, who}]`, `length`? (warns if the minutes don't add up), `decision` (today's goal = the closing question), `outcomes`: `[{if, then}]` (fits, then not yet), `goal_label`? (default "Today's goal") |
+| `agenda` | `items`: `[{min, what, who}]` (min + who → notes as a run sheet; `show_owners: true` brings back the old minutes/what/who table and pale goal box), `length`? (warns if the minutes don't add up), `decision` (today's goal = the closing question), `outcomes`: `[{if, then}]` (fits, then not yet), `goal_label`? (default "Today's goal") |
 | `platform` | nothing required. `add`: extra slide numbers from the set's `optional` list · `drop`: only with a reason in the notes (the builder warns) · `slide_notes`: override a slide's speaker note. The set itself lives in `Slide-library/catalogue.json` → `standard_sets.platform` |
 | `library` | `file`: `library:<name>.pptx` (SharePoint `Slide-library`, listed in its `catalogue.json`), `slides`: `[1, 2, …]`. Copied with pictures and video; best on the designed template, which holds the corporate layouts |
 
@@ -145,4 +145,5 @@ outcome that pins down the next step. **Always render
 | v0.3 | 11 Nov 2026 | `platform` slide type: every deck has the whole platform set, 01–04, with speaker notes. 03 Business Studio says "10x": the note tells the SC not to say it and gives the Nucleus figure | Renzo: always include 03 Business Studio and 04 coding agent |
 | v0.3 | 11 Nov 2026 | Writing style guide + builder check; `build` slide; screens replace components once the demo is built; `row` screen layout; titles shrink to fit two lines | Renzo: language too AI-sounding; wants screenshots and summaries of the configuration. Blind test 11 Nov |
 | v0.4 | 13 Nov 2026 | Agenda shows "Today's goal" = the closing question, word for word; required for every demo meeting; "not yet" outcome pins down what to do next; wording by meeting type (§1b); builder checks all three | Renzo: open the deck with the meeting's key goal, asked so either answer moves the deal |
+| v0.5 | 16 Nov 2026 | No caps label (kicker) above titles by default; agenda as numbered cards with no minutes or names, solid accent goal panel; no owners on agenda or next-steps slides (both in the notes); summary with nothing shown yet uses two columns | Navalo as presented: Renzo removed owners (2nd deal after Suntory) and minutes, and had the look restyled "so it doesn't look like Claude made it" |
 | v0.2 | 11 Nov 2026 | Next steps may show the month only and no owner on the slide (owners in the notes) | Suntory field edit (1 deal). Builder still warns without dates |

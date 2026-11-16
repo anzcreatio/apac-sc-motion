@@ -4,7 +4,15 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.21.0 (16 Nov 2026): one sidebar section per customer, UI kit standard v0.4
+## 0.21.0 (16 Nov 2026): one sidebar section per customer, UI kit standard v0.4, deck standard v0.5
+
+### Deck standard v0.5 (decks that don't look AI-made)
+- **`standards/DECK-STANDARD-v0.5.md`** (was v0.4), from the Navalo deck as presented on 16 Nov.
+- No small caps label above slide titles any more (it read as AI-made). Bring it back with `"kicker": true` on a slide.
+- Agenda: numbered cards, no minutes or names, solid orange "Today's goal" panel. Minutes and owners go to the speaker notes as a run sheet.
+- Next steps: no owner names on the slide; they're in the notes, so say them out loud.
+- `"show_owners": true` on an agenda or next-steps slide gives you the old layout.
+- **Each SC: nothing to do.** Rebuild a deck to get the new look.
 
 ### One sidebar section per customer
 - **New chat section rule** (`sc-setup`, used by `sc-guide` and `sc-first-meeting`): in the Claude desktop app, Claude files every chat about a customer under that customer's own sidebar section (creating it the first time, e.g. `Bussan Auto Finance (BAF)`), so all of a deal's chats sit together. Skipped where there's no sidebar (claude.ai, CLI) and for practice, scheduled and plugin chats.

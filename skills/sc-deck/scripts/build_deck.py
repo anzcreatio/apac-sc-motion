@@ -836,6 +836,10 @@ def s_summary(deck, slide, d, n):
     labels = d.get("labels", ["In today's demo", "Still to show you"])
     groups = [(labels[0], [p for p in parts if p.get("shown")]), (labels[1], [p for p in parts if not p.get("shown")])]
     groups = [g for g in groups if g[1]]
+    if len(groups) == 1 and len(groups[0][1]) > 3:  # nothing shown yet (or all shown): two columns, not one long stack
+        rows = groups[0][1]
+        half = (len(rows) + 1) // 2
+        groups = [(groups[0][0], rows[:half]), ("", rows[half:])]
     gap = 0.4
     w = (T.W - gap * (len(groups) - 1)) / len(groups)
     if d.get("outcome"):
@@ -902,7 +906,7 @@ def _next_timeline(deck, slide, d, n):
         run(textbox(slide, "When %d" % (i + 1), x, y, w, 0.4), a.get("when", ""), 16, T.ACC, bold=True)
         h = est_h(a["what"], 14, w)
         run(textbox(slide, "What %d" % (i + 1), x, y + 0.5, w, h + 0.1), a["what"], 14, T.INK)
-        if a.get("who"):
+        if a.get("who") and d.get("show_owners"):
             run(textbox(slide, "Who %d" % (i + 1), x, y + 0.6 + h + 0.15, w, 0.35), a["who"], 12, T.GREY)
     qs = d.get("questions") or []
     if qs:
@@ -937,11 +941,12 @@ def s_next_steps(deck, slide, d, n):
     w = T.R - x
     has_when = any(a.get("when") for a in actions)
     when_w = 1.5 if has_when else 0
-    who_w = 1.9
+    who_w = 1.9 if d.get("show_owners") else 0
     what_w = w - who_w - when_w
     if has_when:
         run(textbox(slide, "When label", x, T.T, when_w, 0.4), "When", 15, T.INK, bold=True)
-    run(textbox(slide, "Who label", x + when_w, T.T, who_w, 0.4), "Who", 15, T.INK, bold=True)
+    if who_w:
+        run(textbox(slide, "Who label", x + when_w, T.T, who_w, 0.4), "Who", 15, T.INK, bold=True)
     run(textbox(slide, "What label", x + when_w + who_w, T.T, what_w, 0.4), d.get("actions_label", "Next step"), 15, T.INK, bold=True)
     y = T.T + 0.5
     pitch = min(1.08, (T.B - y - 0.1) / max(1, len(actions)))
@@ -949,7 +954,8 @@ def s_next_steps(deck, slide, d, n):
         rule(slide, "Step rule %d" % i, x, y, w)
         if has_when:
             run(textbox(slide, "When %d" % (i + 1), x, y + 0.14, when_w - 0.1, 0.9), a.get("when", ""), 14, T.ACC, bold=True)
-        run(textbox(slide, "Who %d" % (i + 1), x + when_w, y + 0.14, who_w - 0.1, 0.9), a["who"], 14, T.INK, bold=True)
+        if who_w:
+            run(textbox(slide, "Who %d" % (i + 1), x + when_w, y + 0.14, who_w - 0.1, 0.9), a.get("who", ""), 14, T.INK, bold=True)
         run(textbox(slide, "What %d" % (i + 1), x + when_w + who_w, y + 0.14, what_w, 0.9), a["what"], 15, T.BODY)
         y += pitch
     rule(slide, "Step rule end", x, y, w)
@@ -958,27 +964,50 @@ def s_next_steps(deck, slide, d, n):
 
 
 def s_agenda(deck, slide, d, n):
-    """The AE's opening: today's run of the meeting (left) and the decision we'll ask for at the end (right)."""
+    """The AE's opening: today's run of the meeting (left) and the decision we'll ask for at the end (right).
+    v0.5: numbered cards, no minutes or names on the slide (they go to the notes); `show_owners: true` brings both back."""
     items = d["items"]
     right_w = 4.3
     gap = 0.5
     left_w = T.W - right_w - gap
-    min_w, who_w = 0.9, 1.7
-    what_w = left_w - min_w - who_w
     y = T.T + 0.15
-    for lbl, x, w in (("Minutes", T.L, min_w), ("What we'll do", T.L + min_w, what_w), ("Who", T.L + min_w + what_w, who_w)):
-        run(textbox(slide, "Agenda %s label" % lbl, x, y, w, 0.35), lbl, 13, T.GREY, bold=True)
-    y += 0.45
-    pitch = min(0.82, (T.B - y - 0.1) / max(1, len(items)))
-    for i, it in enumerate(items):
-        rule(slide, "Agenda rule %d" % i, T.L, y, left_w)
-        run(textbox(slide, "Agenda min %d" % (i + 1), T.L, y + 0.12, min_w - 0.1, pitch - 0.1), str(it.get("min", "")), 18, T.ACC, bold=True)
-        run(textbox(slide, "Agenda what %d" % (i + 1), T.L + min_w, y + 0.12, what_w - 0.15, pitch - 0.1), it["what"], 15, T.INK)
-        run(textbox(slide, "Agenda who %d" % (i + 1), T.L + min_w + what_w, y + 0.14, who_w, pitch - 0.1), it.get("who", ""), 14, T.GREY)
-        if est_h(it["what"], 15, what_w - 0.15) > pitch - 0.15:
-            warn(n, "agenda item %d may not fit" % (i + 1))
-        y += pitch
-    rule(slide, "Agenda rule end", T.L, y, left_w)
+    if d.get("show_owners"):
+        min_w, who_w = 0.9, 1.7
+        what_w = left_w - min_w - who_w
+        for lbl, x, w in (("Minutes", T.L, min_w), ("What we'll do", T.L + min_w, what_w), ("Who", T.L + min_w + what_w, who_w)):
+            run(textbox(slide, "Agenda %s label" % lbl, x, y, w, 0.35), lbl, 13, T.GREY, bold=True)
+        y += 0.45
+        pitch = min(0.82, (T.B - y - 0.1) / max(1, len(items)))
+        for i, it in enumerate(items):
+            rule(slide, "Agenda rule %d" % i, T.L, y, left_w)
+            run(textbox(slide, "Agenda min %d" % (i + 1), T.L, y + 0.12, min_w - 0.1, pitch - 0.1), str(it.get("min", "")), 18, T.ACC, bold=True)
+            run(textbox(slide, "Agenda what %d" % (i + 1), T.L + min_w, y + 0.12, what_w - 0.15, pitch - 0.1), it["what"], 15, T.INK)
+            run(textbox(slide, "Agenda who %d" % (i + 1), T.L + min_w + what_w, y + 0.14, who_w, pitch - 0.1), it.get("who", ""), 14, T.GREY)
+            if est_h(it["what"], 15, what_w - 0.15) > pitch - 0.15:
+                warn(n, "agenda item %d may not fit" % (i + 1))
+            y += pitch
+        rule(slide, "Agenda rule end", T.L, y, left_w)
+    else:
+        run(textbox(slide, "Agenda label", T.L, y, left_w, 0.35), d.get("items_label", "What we'll do"), 13, T.GREY, bold=True)
+        y += 0.5
+        card_gap = 0.12
+        pitch = min(0.95, (T.B - y - 0.1) / max(1, len(items)))
+        card_h = pitch - card_gap
+        dot = min(0.48, card_h - 0.2)
+        for i, it in enumerate(items):
+            card = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, "Agenda card %d" % (i + 1), T.L, y, left_w, card_h, fill=T.SOFT)
+            card.adjustments[0] = 0.12
+            c = shape(slide, MSO_SHAPE.OVAL, "Agenda number %d" % (i + 1), T.L + 0.22, y + (card_h - dot) / 2, dot, dot, fill=T.ACC)
+            tf = c.text_frame
+            tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
+            tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+            run(tf, str(i + 1), 14, T.WHITE, bold=True, align=PP_ALIGN.CENTER)
+            tx = T.L + 0.22 + dot + 0.3
+            tw = left_w - (tx - T.L) - 0.25
+            run(textbox(slide, "Agenda what %d" % (i + 1), tx, y, tw, card_h, anchor=MSO_ANCHOR.MIDDLE), it["what"], 15, T.INK)
+            if est_h(it["what"], 15, tw) > card_h - 0.1:
+                warn(n, "agenda item %d may not fit" % (i + 1))
+            y += pitch
     total = sum(float(it.get("min") or 0) for it in items)
     if d.get("length") and total and abs(total - float(d["length"])) > 0.5:
         warn(n, "agenda adds up to %g min, the meeting is %s" % (total, d["length"]))
@@ -986,17 +1015,20 @@ def s_agenda(deck, slide, d, n):
     x = T.L + left_w + gap
     top = T.T + 0.15
     h = T.B - top - 0.1
-    shape(slide, MSO_SHAPE.RECTANGLE, "Decision box", x, top, right_w, h, fill=T.TINT)
+    solid = not d.get("show_owners")  # v0.5 look: solid accent panel, white text
+    fg, fg_body = (T.WHITE, T.WHITE) if solid else (T.INK, T.BODY)
+    shape(slide, MSO_SHAPE.RECTANGLE, "Decision box", x, top, right_w, h, fill=T.ACC if solid else T.TINT)
     pad = 0.3
     # The meeting's goal is the decision itself: the AE reads it at minute 1, the SC asks it in the same words at the end
-    run(textbox(slide, "Goal label", x + pad, top + pad, right_w - 2 * pad, 0.35), d.get("goal_label", "Today's goal").upper(), 12, T.ACC, bold=True)
+    run(textbox(slide, "Goal label", x + pad, top + pad, right_w - 2 * pad, 0.35), d.get("goal_label", "Today's goal").upper(), 12, T.WHITE if solid else T.ACC, bold=True)
     tf = textbox(slide, "Decision", x + pad, top + pad + 0.45, right_w - 2 * pad, 1.6)
-    run(tf, d["decision"], 20, T.INK, bold=True)
+    run(tf, d["decision"], 20, fg, bold=True)
     yy = top + pad + 0.55 + est_h(d["decision"], 20, right_w - 2 * pad) + 0.25
     for i, o in enumerate(d.get("outcomes", [])):
-        rule(slide, "Outcome rule %d" % i, x + pad, yy, right_w - 2 * pad)
-        run(textbox(slide, "Outcome if %d" % (i + 1), x + pad, yy + 0.1, right_w - 2 * pad, 0.35), o["if"], 15, T.INK, bold=True)
-        run(textbox(slide, "Outcome then %d" % (i + 1), x + pad, yy + 0.45, right_w - 2 * pad, 0.9), o["then"], 14, T.BODY)
+        if not solid:
+            rule(slide, "Outcome rule %d" % i, x + pad, yy, right_w - 2 * pad)
+        run(textbox(slide, "Outcome if %d" % (i + 1), x + pad, yy + 0.1, right_w - 2 * pad, 0.35), o["if"], 15, fg, bold=True)
+        run(textbox(slide, "Outcome then %d" % (i + 1), x + pad, yy + 0.45, right_w - 2 * pad, 0.9), o["then"], 14, fg_body)
         yy += 0.45 + est_h(o["then"], 14, right_w - 2 * pad) + 0.2
     if yy > top + h:
         warn(n, "decision box runs past the bottom: shorten the outcomes")
@@ -1249,10 +1281,22 @@ def build(spec_path, out=None, render=False):
             continue
         CURRENT["slide"] = i
         style_check(d, i)
-        slide = deck.new(None if kind in NO_TITLE else d.get("title", ""), d.get("subtitle"), kind)
+        # v0.5: no small all-caps kicker above titles (reads as AI-made; Renzo, 16 Nov 2026).
+        # meta.kickers: true (whole deck) or "kicker": true (one slide) brings it back.
+        kicker = d.get("subtitle") if (spec.get("meta", {}).get("kickers") or d.get("kicker")) else None
+        slide = deck.new(None if kind in NO_TITLE else d.get("title", ""), kicker, kind)
         TYPES[kind](deck, slide, d, i)
-        if d.get("notes"):
-            notes_frame(slide).text = d["notes"]
+        notes = d.get("notes", "")
+        if not d.get("show_owners"):  # v0.5: minutes and owners live in the notes, not on the slide
+            if kind == "agenda":
+                notes += "\n\nRun sheet (not on the slide): " + "; ".join(
+                    "%s min %s%s" % (it.get("min", "?"), it["what"], " (%s)" % it["who"] if it.get("who") else "")
+                    for it in d["items"])
+            elif kind == "next_steps" and any(a.get("who") for a in d["actions"]):
+                notes += "\n\nOwners (say them, not on the slide): " + "; ".join(
+                    "%s: %s (%s)" % (a.get("when", ""), a["what"], a.get("who", "?")) for a in d["actions"])
+        if notes.strip():
+            notes_frame(slide).text = notes.strip()
         deck.slides.append((slide, kind))
     kinds = {d["type"] for d in spec["slides"] if not d.get("skip")}
     goal_check(spec)

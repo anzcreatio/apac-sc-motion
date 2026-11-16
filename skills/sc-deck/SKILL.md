@@ -11,7 +11,7 @@ The deck is data: `deck.json` in the deal folder is the source, the `.pptx` is b
 rebuild; don't hand-edit the built deck unless the SC asks (hand edits are lost on the next build, and the
 `sc-meeting-review` skill learns from what the SC changed in the presented deck).
 
-Standard: `../../standards/DECK-STANDARD-v0.4.md` (slide order, word rules, every field). Read it before writing JSON.
+Standard: `../../standards/DECK-STANDARD-v0.5.md` (slide order, word rules, every field). Read it before writing JSON.
 
 ## Before a new or reworked deck
 
