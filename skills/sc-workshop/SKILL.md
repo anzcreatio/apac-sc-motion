@@ -177,6 +177,9 @@ the next workshop.
 - Claims only from the differentiator catalogue; AI, data, hosting and security answers only from the governance
   pack's "can say" lines.
 - Never touch a Creatio stand from this skill.
+- **Delivery support:** if the room worries about implementation, the partner or cost blowouts, the "how we'd start"
+  close and the roadmap can say Creatio reviews requirements and design before the build and stays involved through
+  delivery (`../../knowledge/DELIVERY-ASSURANCE-v0.2.md` §6 "can say"). No prices, hours or package names.
 - Every customer-facing output (pre-work email, follow-up email, playback) ends with "SC check required before this
   is used with the customer."
 

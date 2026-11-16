@@ -73,6 +73,11 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    configuration (slides and an existing stand only), and the brief becomes the plan for the next session.
 10. Plain English, Australian spelling unless the meeting language says otherwise. If the meeting is in Bahasa
    Indonesia (or another language), also give the slide text in that language.
+11. **Delivery support** (Renzo, 16 Nov 2026): if the transcript shows partner delivery risk (new or no partner, a
+   past project gone wrong, heavy integrations, "can this be delivered?", fear of cost blowouts), add a one-line talk
+   track to the meeting plan: Creatio stays involved through delivery (Delivery Assurance). Words only from
+   `../../knowledge/DELIVERY-ASSURANCE-v0.2.md` §6; a slide line only if the customer raised it. Never a price,
+   hour count or package name in any output; tell the SC which package fits in chat (§0 rules).
 
 ## Steps
 

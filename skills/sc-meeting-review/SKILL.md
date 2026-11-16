@@ -44,6 +44,7 @@ Save it as `NN-meeting-transcript-<yyyy-mm-dd>.md`. Then write `NN-meeting-revie
    | Each demo scene: landed / neutral / fell flat | | |
    | Live change done, and their reaction | | |
    | Questions we couldn't answer (and who owes the answer) | | |
+   | Delivery worries (partner, implementation risk, cost blowouts)? If yes, propose the Delivery Assurance line for next time (`../../knowledge/DELIVERY-ASSURANCE-v0.2.md` §5) | | |
    | Differentiators shown (D-IDs) and any we missed | | |
    | **Today's goal** (agenda) asked again at the close, in the same words? Answer: fits / not yet / no | | |
    | If **not yet**: which part falls short and what it would need to do, **in their exact words** | | |

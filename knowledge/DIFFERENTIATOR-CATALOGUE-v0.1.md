@@ -110,6 +110,7 @@ feature tour. **Gate A checks the core set**, and the rest are optional.
 | Demo | Core set + track core, each scene ends with value + metric | D1, D3 + D2/D5 |
 | Proposal | "Why Creatio for you": 3 differentiators chosen by their pains, each with proof | Any, plus D6 and D7 |
 | Partner pack | Which differentiators were promised, so delivery keeps them true | — |
+| Any touchpoint where delivery risk comes up | "Creatio stays involved through delivery": words only from `DELIVERY-ASSURANCE-v0.2.md` §6 (a service, not a differentiator; no prices) | — |
 
 ## 4. Proof gaps to close
 

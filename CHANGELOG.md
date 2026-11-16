@@ -21,13 +21,17 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 
 ## 0.22.0 (16 Nov 2026): Delivery Assurance knowledge (internal)
 
-- **New `knowledge/DELIVERY-ASSURANCE-v0.1.md`** (internal only), from the Jan 2026 Delivery Assurance deck: the
-  Start / Build / Grow framework, the three packages plus Freedom with prices and limits, which partner-risk signals
-  call for which package, and what you can and can't say to a customer.
-- `sc-rfp`: on **Bid with conditions** (or must-haves rated custom, partner or integration) the recommendation now
-  suggests Delivery Assurance to cut partner delivery risk. No prices in customer outputs; the AE owns package and price.
-- **Each SC: nothing to do.** Read the file once; raise it with your AE when a deal has a new partner, heavy
-  integrations or a customer burned by a past CRM project.
+- **New `knowledge/DELIVERY-ASSURANCE-v0.2.md`** (internal only), from the Jan 2026 Delivery Assurance deck: the
+  Start / Build / Grow framework, the three packages plus Freedom and what each includes, which partner-risk signals
+  call for which package, and what you can and can't say to a customer. APAC owner: **Alex Klochkov**.
+- Customers can hear that **Creatio stays involved and supports them through delivery**. Claude now raises it when a
+  deal shows partner delivery risk: a talk track in the `sc-first-meeting` meeting plan, a line on the roadmap or
+  next-steps slide (`sc-deck`), the workshop close (`sc-workshop`), a scorecard row in `sc-meeting-review`, and the
+  bid recommendation and delivery answers in `sc-rfp`.
+- **No prices, hours or package names in anything Claude produces.** Ask Claude in chat and it gives indicative
+  prices with a warning that they may be out of date; check the latest with Alex before using them.
+- **Each SC: nothing to do.** Raise it with your AE when a deal has a new partner, heavy integrations or a customer
+  burned by a past CRM project.
 
 ## 0.21.0 (16 Nov 2026): one sidebar section per customer, UI kit standard v0.4, deck standard v0.5
 

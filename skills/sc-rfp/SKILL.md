@@ -63,8 +63,9 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
      must-have we can't do · **Bid with conditions** = 75–90%, or a must-have needing custom or partner work ·
      **No-bid** = under 75%, or a must-have we can't do with no workaround. The SC and AE decide; we recommend.
      For **Bid with conditions**, or any must-have rated custom, partner or integration, add one line suggesting
-     Creatio Delivery Assurance to cut partner delivery risk (`../../knowledge/DELIVERY-ASSURANCE-v0.1.md` §4; internal,
-     no prices in customer outputs).
+     Creatio Delivery Assurance to cut partner delivery risk (`../../knowledge/DELIVERY-ASSURANCE-v0.2.md` §4–6). In
+     compliance answers on delivery, governance or support, use its "can say" lines. Never a price, hour count or
+     package name in any output.
 8. **Win themes and POC brief:** propose 3 win themes (their pains + where the named competitors are weak + our
    differentiators). Then `python scripts/rfp.py poc --register rfp/register.json --verdicts rfp/verdicts.json --out rfp/05-poc-brief.md --deal "<Customer>"`
    (Build lines grouped with draft tests, must-have gaps to handle, Show evidence, questions, low-confidence lines) and
