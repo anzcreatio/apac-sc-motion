@@ -98,7 +98,8 @@ try:
     ok("SQ04" in qs, "a TBC storage line asks for record volumes")
 
     bom.save_json(p, b)
-    r = subprocess.run([sys.executable, "-I", SCRIPT, "build", p, "--nn", "09"], capture_output=True, text=True)
+    # no -I: run it as the skill does; -I hides `pip --user` packages (openpyxl on the Mac)
+    r = subprocess.run([sys.executable, SCRIPT, "build", p, "--nn", "09"], capture_output=True, text=True)
     ok(r.returncode == 0, "build runs: %s" % r.stderr[-300:])
     md = open(os.path.join(deal, "09-bom.md"), encoding="utf-8").read()
     ok("INTERNAL ONLY" in md and "Tier 2" in md, "md has the internal banner and tier 2 (900 employees)")
