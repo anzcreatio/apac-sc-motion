@@ -21,7 +21,7 @@ A chat of its own for what we learn (Renzo, 13 Nov 2026). The SC pastes; you sor
 
    | Kind | Example | Goes to |
    |---|---|---|
-   | **Commercial** | "We should have asked about database size: they have 200 million customers" | `add-question` (topic sizing / commercial) + feedback file. In 0.19.0 also the BOM gotcha register |
+   | **Commercial** | "We should have asked about database size: they have 200 million customers" | `add-question` (topic sizing / commercial) + feedback file. If it's about licences, products or what wasn't quoted, also `add-gotcha` (the BOM gotcha register `sc-bom` reads) |
    | **Functional** | "Field sales can't do X; R&D confirmed" | `add-limit` (source R&D / Support / docs = confirmed; field = reported) + feedback file |
    | **Process** | "The agenda slide confused them" | Feedback file only → Friday digest |
    | **Deal** | Something about one account only | The deal folder (`<deal>/NN-notes-<date>.md`); no register |
@@ -36,6 +36,7 @@ A chat of its own for what we learn (Renzo, 13 Nov 2026). The SC pastes; you sor
    - Register entries:
      `python scripts/registers.py add-limit --area "<product or module>" --limit "<what it can't do>" --workaround "<if any>" --source "R&D" --source-ref "<who, when>" --version "<Creatio version if known>" --by "<SC name>" [--deal <account>]`
      `python scripts/registers.py add-question --topic sizing --question "<the question>" --signal "<when to ask it>" --lesson "<what happened>" --by "<SC name>" [--deal <account>]`
+     `python scripts/registers.py add-gotcha --area "<Tier, AI, Storage, Infra, Marketplace, Support, Term…>" --gotcha "<what bites>" --applies-when "<when>" --question "<what to ask>" --source-ref "<who, when>" --by "<SC name>" [--deal <account>]` (BOM gotchas: live at once, `sc-bom` reads them)
    - A limitation that a newer version fixes: `python scripts/registers.py close-limit --id L-004 --fixed-in 8.3.2 --by "<name>"`.
 6. **Report** in five lines or fewer: what you filed, what's live now, what waits for Friday, and any item that
    needs Renzo sooner (a blocker on a live deal: suggest they message him too).

@@ -1,0 +1,959 @@
+{
+ "catalogue": "BOM-CATALOGUE",
+ "version": "0.1",
+ "updated": "2026-11-16",
+ "confidential": "INTERNAL ONLY. Never send to a customer or partner. No prices in any output; no users per module.",
+ "rules": [
+  "The SC lists WHICH products are needed and the gotchas. The AE and Deal Desk own price and user counts (log item 74, 13 Nov 2026).",
+  "Unlimited is the default since 1 May 2026. Per seat only when the customer can't accept Unlimited: record why.",
+  "The tier is a candidate only. Deal Desk validates it; the CEO approves every Unlimited quote before any number is shared.",
+  "Every Yes or TBC line has a reason (a requirement, pain or demo scene) and an evidence tag C/P/I/A.",
+  "Qty only for non-user items (blocks, GB, environments). Never a dollar amount.",
+  "OPEN items are Deal Desk questions: show them as OPEN, never pick an answer."
+ ],
+ "sources": [
+  {
+   "name": "FY27 Unlimited Pricing Model deck (internal)",
+   "read": "2026-11-13",
+   "wins": "Unlimited model, tiers, inclusions, approvals"
+  },
+  {
+   "name": "10x AI Pricing Update deck (internal)",
+   "read": "2026-11-13",
+   "wins": "AI packages and credits"
+  },
+  {
+   "name": "Studio Creatio Platform Plans PDF v5 (creatio.com)",
+   "read": "2026-11-13",
+   "wins": "Per seat plan limits"
+  },
+  {
+   "name": "creatio.com/products/pricing, compare-ai-packages, services/support/options",
+   "read": "2026-11-13",
+   "wins": "Public AI packages and support"
+  },
+  {
+   "name": "Creatio Pricing Deep Dive (new-hire guide)",
+   "read": "2026-11-13",
+   "wins": "Talk tracks only (older tier model)"
+  }
+ ],
+ "open_items": [
+  {
+   "id": "OPEN-1",
+   "text": "Unlimited AI allowance: 500 AI actions one-time (FY27 deck) vs 10,000 AI credits per organisation (10x deck, public sheet).",
+   "gotcha": "G09",
+   "owner": "Deal Desk"
+  },
+  {
+   "id": "OPEN-2",
+   "text": "Unlimited storage: 2 GB x tier max employees (FY27 deck) vs 'unlimited / extended storage included' (public sheet). Use the internal figure until confirmed.",
+   "gotcha": "G11",
+   "owner": "Deal Desk"
+  },
+  {
+   "id": "OPEN-3",
+   "text": "SKU names for the VPN tunnel and the hosting region; CRM app editions (public configurator unreadable).",
+   "skus": [
+    "I7",
+    "I9",
+    "C1",
+    "C2",
+    "C4"
+   ],
+   "owner": "Deal Desk"
+  },
+  {
+   "id": "OPEN-4",
+   "text": "AI credit block price for Scale differs between the 10x deck and the website. Not used in the BOM.",
+   "owner": "Deal Desk"
+  }
+ ],
+ "requires": [
+  {
+   "if": "P2",
+   "then": [
+    "P3"
+   ],
+   "why": "AI Platform is mandatory with Studio (G05)"
+  },
+  {
+   "if": "P2",
+   "then_any": [
+    "S1",
+    "S2"
+   ],
+   "why": "Support is mandatory for the whole term (G17)"
+  },
+  {
+   "if": "P1",
+   "then": [
+    "A1"
+   ],
+   "why": "Unlimited must attach an AI Package (P1 note)"
+  },
+  {
+   "if": "A2",
+   "then": [
+    "A1"
+   ],
+   "why": "Credit blocks sit on top of a package"
+  },
+  {
+   "if": "A3",
+   "then": [
+    "A1"
+   ],
+   "why": "Freedom is an AI Package"
+  },
+  {
+   "if": "C3",
+   "then": [
+    "C2"
+   ],
+   "why": "Marketing Contacts go with Marketing"
+  },
+  {
+   "if": "P1",
+   "then_not": [
+    "P2",
+    "P3"
+   ],
+   "why": "Unlimited and per seat are alternatives"
+  }
+ ],
+ "tiers": [
+  {
+   "tier": 1,
+   "revenue": "Up to $100M",
+   "revenue_upper_musd": 100,
+   "aum": "Up to $500M",
+   "aum_upper_musd": 500,
+   "max_employees": 500,
+   "dedicated_blocks": "x1"
+  },
+  {
+   "tier": 2,
+   "revenue": "$100M - $250M",
+   "revenue_upper_musd": 250,
+   "aum": "$500M - $1.5B",
+   "aum_upper_musd": 1500,
+   "max_employees": 1500,
+   "dedicated_blocks": "x2"
+  },
+  {
+   "tier": 3,
+   "revenue": "$250M - $750M",
+   "revenue_upper_musd": 750,
+   "aum": "$1.5B - $3B",
+   "aum_upper_musd": 3000,
+   "max_employees": 2500,
+   "dedicated_blocks": "x2"
+  },
+  {
+   "tier": 4,
+   "revenue": "$750M - $1.5B",
+   "revenue_upper_musd": 1500,
+   "aum": "$3B - $7.5B",
+   "aum_upper_musd": 7500,
+   "max_employees": 4000,
+   "dedicated_blocks": "x4"
+  },
+  {
+   "tier": 5,
+   "revenue": "$1.5B - $5B",
+   "revenue_upper_musd": 5000,
+   "aum": "$7.5B - $20B",
+   "aum_upper_musd": 20000,
+   "max_employees": 8000,
+   "dedicated_blocks": "x4"
+  },
+  {
+   "tier": 6,
+   "revenue": "$5B - $10B",
+   "revenue_upper_musd": 10000,
+   "aum": "$20B - $50B",
+   "aum_upper_musd": 50000,
+   "max_employees": 15000,
+   "dedicated_blocks": "2 x (x4)"
+  },
+  {
+   "tier": 7,
+   "revenue": "$10B+",
+   "revenue_upper_musd": null,
+   "aum": "$50B+",
+   "aum_upper_musd": null,
+   "max_employees": "Custom",
+   "dedicated_blocks": "Custom"
+  }
+ ],
+ "tiers_notes": [
+  "Source: FY27 Unlimited Pricing Model deck, slides 6-7. Tier = highest of revenue (or AUM) and employees. Upper bounds in USD millions.",
+  "Storage: 2 GB database + 2 GB attachment storage x the tier's maximum employees (FY27 deck s6). OPEN: the public plan sheet says 'extended storage included'. Deal Desk to confirm."
+ ],
+ "storage_rule": "Unlimited: 2 GB database + 2 GB file storage x the tier's max employees (OPEN-2).",
+ "skus": [
+  {
+   "id": "P1",
+   "category": "Platform",
+   "name": "Creatio Unlimited Platform",
+   "model": "Unlimited",
+   "in_unlimited": "-",
+   "edition": "Tier 1-7 (Deal sheet)",
+   "qty_unit": null,
+   "note": "Default model since 1 May 2026. Must attach an AI Package. Minimum term 3 years. Tier validated by Deal Desk; every quote CEO-approved.",
+   "source": "FY27 Unlimited deck s5-s11",
+   "consider_when": "Every new deal by default (Unlimited since 1 May 2026)."
+  },
+  {
+   "id": "P2",
+   "category": "Platform",
+   "name": "Creatio Studio (Platform)",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": "Growth / Enterprise",
+   "qty_unit": null,
+   "note": "Per seat only when Unlimited can't be accepted. Growth: cloud only, 2 environments, 50 roles, no SSO / LDAP / audit log / custom branding. Users start at 5.",
+   "source": "Platform plans PDF; FY27 deck s9",
+   "consider_when": "Only when the customer can't accept Unlimited; record why on the deal."
+  },
+  {
+   "id": "P3",
+   "category": "Platform",
+   "name": "Creatio AI Platform",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": "Growth / Enterprise (same as Studio)",
+   "qty_unit": null,
+   "note": "MANDATORY with Studio: same quantity, same edition. Upgrading Studio upgrades it. Separate line on the Order Form.",
+   "source": "FY27 deck s21-s27",
+   "consider_when": "Always with P2: same quantity, same edition."
+  },
+  {
+   "id": "C1",
+   "category": "CRM app",
+   "name": "Creatio Sales",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": "Confirm in configurator",
+   "qty_unit": null,
+   "note": null,
+   "source": "FY27 deck s6",
+   "consider_when": "Leads, opportunities, pipeline, quotes, account or intermediary management, field sales."
+  },
+  {
+   "id": "C2",
+   "category": "CRM app",
+   "name": "Creatio Marketing",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": "Confirm in configurator",
+   "qty_unit": null,
+   "note": "Check contact volumes: see Marketing Contacts.",
+   "source": "FY27 deck s6",
+   "consider_when": "Campaigns, email or SMS journeys, events, segmentation, lead nurture."
+  },
+  {
+   "id": "C3",
+   "category": "CRM app",
+   "name": "Creatio Marketing Contacts",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Contact volume for marketing. Ask the size of the marketable database.",
+   "source": "FY27 deck s6",
+   "consider_when": "With C2: the size of the marketable database (emails, SMS)."
+  },
+  {
+   "id": "C4",
+   "category": "CRM app",
+   "name": "Creatio Service",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": "Confirm in configurator",
+   "qty_unit": null,
+   "note": null,
+   "source": "FY27 deck s6",
+   "consider_when": "Cases, complaints, hardship, service requests, SLAs, knowledge base, contact centre."
+  },
+  {
+   "id": "C5",
+   "category": "Vertical app",
+   "name": "Creatio Financial Services CRM",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Banks, lenders, multi-finance, insurers.",
+   "source": "FY27 deck s6",
+   "consider_when": "Banks, lenders, multi-finance, pawn, securities, insurers: customer 360, applications, loans, onboarding."
+  },
+  {
+   "id": "U1",
+   "category": "User type",
+   "name": "Creatio External B2C Portal",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Their customers log in.",
+   "source": "FY27 deck s6",
+   "consider_when": "Their retail customers log in (apply, upload documents, track status)."
+  },
+  {
+   "id": "U2",
+   "category": "User type",
+   "name": "Creatio External B2B Portal",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Partners, brokers, dealers log in.",
+   "source": "FY27 deck s6",
+   "consider_when": "Brokers, dealers, merchants, distributors or partners log in."
+  },
+  {
+   "id": "U3",
+   "category": "User type",
+   "name": "Creatio Self-Service Portal",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": null,
+   "source": "FY27 deck s6",
+   "consider_when": "Customers raise and track their own requests."
+  },
+  {
+   "id": "U4",
+   "category": "User type",
+   "name": "Creatio Mobile-only",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Field users on mobile only.",
+   "source": "FY27 deck s6",
+   "consider_when": "Field staff who only use the mobile app."
+  },
+  {
+   "id": "U5",
+   "category": "User type",
+   "name": "Creatio Limited Internal",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Internal users who view or approve.",
+   "source": "FY27 deck s6",
+   "consider_when": "Internal staff who only view, approve or do light updates."
+  },
+  {
+   "id": "A1",
+   "category": "AI",
+   "name": "Creatio AI Package",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": "Start / Grow / Accelerate / Scale / Freedom",
+   "qty_unit": null,
+   "note": "MANDATORY for any ongoing AI use, also on Unlimited. Not discountable. Credits and advisory hours expire at end of term. Can upgrade, not downgrade, within the term.",
+   "source": "10x AI deck s5, s9, s14",
+   "consider_when": "Any AI scene shown or asked for that goes live (agents, copilots, document reading, summaries, voice)."
+  },
+  {
+   "id": "A2",
+   "category": "AI",
+   "name": "Additional AI credit block (500,000 credits)",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": "At the package's price point",
+   "qty_unit": "blocks",
+   "note": "Buy more without upgrading the package. Not discountable.",
+   "source": "10x AI deck s7, s14",
+   "consider_when": "High AI volumes beyond the package's credits."
+  },
+  {
+   "id": "A3",
+   "category": "AI",
+   "name": "Freedom package (bring your own LLM, on-prem AI)",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": "Freedom",
+   "qty_unit": null,
+   "note": "Only Freedom allows BYO model or on-prem AI. Custom price.",
+   "source": "10x AI deck s5, s17",
+   "consider_when": "They need their own LLM, or AI running on their own servers."
+  },
+  {
+   "id": "G1",
+   "category": "Governance",
+   "name": "Governance Application",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Paid add-on on Growth and Enterprise.",
+   "source": "Platform plans PDF p2",
+   "consider_when": "Per seat (Growth/Enterprise) and they need governance of changes and environments."
+  },
+  {
+   "id": "I1",
+   "category": "Cloud / infra",
+   "name": "Dedicated cloud instance",
+   "model": "Per seat",
+   "in_unlimited": "By tier (dedicated blocks)",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Enterprise: paid. Growth: not available. Unlimited: blocks by tier (Deal sheet).",
+   "source": "Platform plans PDF p2; FY27 deck s6",
+   "consider_when": "Per seat Enterprise and they need a dedicated instance; on Unlimited it comes by tier."
+  },
+  {
+   "id": "I2",
+   "category": "Cloud / infra",
+   "name": "Additional dedicated blocks",
+   "model": "Unlimited",
+   "in_unlimited": "Beyond tier = extra",
+   "edition": null,
+   "qty_unit": "blocks",
+   "note": "Large volumes, heavy integrations or performance needs beyond the tier's blocks.",
+   "source": "FY27 deck s6",
+   "consider_when": "Very large volumes, heavy integrations or batch loads beyond the tier's blocks."
+  },
+  {
+   "id": "I3",
+   "category": "Cloud / infra",
+   "name": "Additional database storage",
+   "model": "Both",
+   "in_unlimited": "Beyond allowance = extra",
+   "edition": null,
+   "qty_unit": "GB",
+   "note": "SEPARATE from file storage. Growth 1 GB/user, Enterprise 2 GB/user, Unlimited 2 GB x tier max employees.",
+   "source": "Platform plans PDF p1; FY27 deck s6",
+   "consider_when": "Large customer, loan or contact books, or a merge of several books."
+  },
+  {
+   "id": "I4",
+   "category": "Cloud / infra",
+   "name": "Additional attachment (file) storage",
+   "model": "Both",
+   "in_unlimited": "Beyond allowance = extra",
+   "edition": null,
+   "qty_unit": "GB",
+   "note": "SEPARATE from database storage. Same allowances as database.",
+   "source": "Platform plans PDF p1; FY27 deck s6",
+   "consider_when": "Many documents (applications, claims, contracts), large files or long retention."
+  },
+  {
+   "id": "I5",
+   "category": "Cloud / infra",
+   "name": "Additional environments",
+   "model": "Per seat",
+   "in_unlimited": "Unlimited environments",
+   "edition": null,
+   "qty_unit": "environments",
+   "note": "Growth 2, Enterprise 3 (prod plus test/dev). Ask how many they need.",
+   "source": "Platform plans PDF p2",
+   "consider_when": "Per seat and more environments than the edition includes (training, UAT, several dev)."
+  },
+  {
+   "id": "I6",
+   "category": "Cloud / infra",
+   "name": "Custom domain name",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Enterprise: paid.",
+   "source": "Platform plans PDF p2",
+   "consider_when": "Per seat Enterprise and they want their own domain."
+  },
+  {
+   "id": "I7",
+   "category": "Cloud / infra",
+   "name": "VPN tunnel (site-to-site)",
+   "model": "Both",
+   "in_unlimited": "TO CONFIRM",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Needed when Creatio cloud must reach on-premises systems. SKU name: confirm with Deal Desk.",
+   "source": "Renzo, 13 Nov 2026",
+   "consider_when": "Creatio cloud must reach on-premises systems directly (core, lending platform, middleware)."
+  },
+  {
+   "id": "I8",
+   "category": "Cloud / infra",
+   "name": "On-premise deployment",
+   "model": "Both",
+   "in_unlimited": "Allowed",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Enterprise and Unlimited only. Growth is cloud only. Ask who hosts and supports it.",
+   "source": "Platform plans PDF p2",
+   "consider_when": "They require on-premises hosting."
+  },
+  {
+   "id": "I9",
+   "category": "Cloud / infra",
+   "name": "Hosting region / data residency",
+   "model": "Both",
+   "in_unlimited": "TO CONFIRM",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Confirm the region against the governance pack's 'can say' lines.",
+   "source": "AI governance pack",
+   "consider_when": "Data residency rules or a required hosting region."
+  },
+  {
+   "id": "S1",
+   "category": "Support",
+   "name": "Business support",
+   "model": "Per seat",
+   "in_unlimited": "Premium included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Support is mandatory for the whole term and covers all products.",
+   "source": "creatio.com support options",
+   "consider_when": "Per seat: the base support plan (mandatory, covers all products)."
+  },
+  {
+   "id": "S2",
+   "category": "Support",
+   "name": "Premium support",
+   "model": "Per seat",
+   "in_unlimited": "Included",
+   "edition": null,
+   "qty_unit": null,
+   "note": null,
+   "source": "creatio.com support options; FY27 deck s6",
+   "consider_when": "Extended hours or faster response needed; included on Unlimited."
+  },
+  {
+   "id": "V1",
+   "category": "Services",
+   "name": "Creatio Delivery Assurance OR No-Code Magic",
+   "model": "Unlimited",
+   "in_unlimited": "Included (up to 10% of ARR)",
+   "edition": "One of the two",
+   "qty_unit": null,
+   "note": "Unlimited only. Public sheet: No-Code Magic covers implementation of the first project by a certified partner.",
+   "source": "FY27 deck s6; Platform plans PDF p1",
+   "consider_when": "Unlimited: choose Delivery Assurance (partner delivery risk, see knowledge/DELIVERY-ASSURANCE-v0.2.md) or No-Code Magic."
+  },
+  {
+   "id": "V2",
+   "category": "Services",
+   "name": "Online training and certification (Academy)",
+   "model": "Per seat",
+   "in_unlimited": "Included (Unlimited Academy)",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Paid on Growth and Enterprise.",
+   "source": "Platform plans PDF p3",
+   "consider_when": "Training and certification for their team; included on Unlimited."
+  },
+  {
+   "id": "M1",
+   "category": "Marketplace",
+   "name": "Marketplace app / connector (name it)",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": "Fixed price or price on demand",
+   "qty_unit": null,
+   "note": "Each one is a separate line. Price on demand = partner quote. Own support terms.",
+   "source": "FY27 deck s6, s13; Deep Dive FAQ",
+   "consider_when": "Each Marketplace app or connector the solution needs (telephony, WhatsApp, e-signature, core banking, ERP). Name it."
+  },
+  {
+   "id": "M2",
+   "category": "Marketplace",
+   "name": "Marketplace app / connector (name it)",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": null,
+   "qty_unit": null,
+   "note": null,
+   "source": null,
+   "consider_when": "As M1."
+  },
+  {
+   "id": "M3",
+   "category": "Marketplace",
+   "name": "Marketplace app / connector (name it)",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": null,
+   "qty_unit": null,
+   "note": null,
+   "source": null,
+   "consider_when": "As M1."
+  },
+  {
+   "id": "R1",
+   "category": "Other",
+   "name": "Reselling or other cloud products",
+   "model": "Both",
+   "in_unlimited": "NOT included",
+   "edition": null,
+   "qty_unit": null,
+   "note": "Custom price calculation only.",
+   "source": "FY27 deck s6, s13",
+   "consider_when": "Reselling or other cloud products (custom price)."
+  }
+ ],
+ "gotchas": [
+  {
+   "id": "G01",
+   "area": "Tier",
+   "text": "Tier = the HIGHEST of revenue (or AUM for BFSI) and employees.",
+   "applies_when": "Unlimited",
+   "question": "What are your annual revenue (or AUM) and total employees?",
+   "source": "FY27 deck s9",
+   "applies": [
+    "unlimited"
+   ],
+   "open": false
+  },
+  {
+   "id": "G02",
+   "area": "Tier",
+   "text": "Holding structure: say which legal entity will use the platform; Deal Desk validates it.",
+   "applies_when": "Group companies",
+   "question": "Which entity signs, and which entities use it?",
+   "source": "FY27 deck s11",
+   "applies": [
+    "group"
+   ],
+   "open": false
+  },
+  {
+   "id": "G03",
+   "area": "Tier",
+   "text": "Existing customer moving to Unlimited: upgrade price = target Unlimited ARR minus current ARR.",
+   "applies_when": "Existing customers",
+   "question": "What do they have today, and when does it renew?",
+   "source": "FY27 deck s9, s13",
+   "applies": [
+    "existing"
+   ],
+   "open": false
+  },
+  {
+   "id": "G04",
+   "area": "Term",
+   "text": "Unlimited: 3-year minimum; 5% uplift each year from year 2. Standard term is 3 years.",
+   "applies_when": "All",
+   "question": "Is a 3-year term acceptable?",
+   "source": "FY27 deck s9-s10; Platform plans PDF p3",
+   "applies": [
+    "all"
+   ],
+   "open": false
+  },
+  {
+   "id": "G05",
+   "area": "AI",
+   "text": "AI Platform is mandatory with Studio (same quantity, same edition).",
+   "applies_when": "Per seat",
+   "question": "-",
+   "source": "FY27 deck s23",
+   "applies": [
+    "per_seat"
+   ],
+   "open": false
+  },
+  {
+   "id": "G06",
+   "area": "AI",
+   "text": "An AI Package is mandatory for ongoing AI use, also on Unlimited.",
+   "applies_when": "Any AI scene",
+   "question": "Which AI use cases go live first, and at what volume?",
+   "source": "10x AI deck s9",
+   "applies": [
+    "ai"
+   ],
+   "open": false
+  },
+  {
+   "id": "G07",
+   "area": "AI",
+   "text": "AI Packages and credit blocks cannot be discounted. Credits expire at end of the contract term.",
+   "applies_when": "Any AI",
+   "question": "-",
+   "source": "10x AI deck s9, s16",
+   "applies": [
+    "ai"
+   ],
+   "open": false
+  },
+  {
+   "id": "G08",
+   "area": "AI",
+   "text": "Bring your own LLM, or AI on-premises = Freedom package only.",
+   "applies_when": "BYO model, on-prem",
+   "question": "Do they need their own model, or AI on their own servers?",
+   "source": "10x AI deck s5, s17",
+   "applies": [
+    "byo_ai"
+   ],
+   "open": false
+  },
+  {
+   "id": "G09",
+   "area": "AI",
+   "text": "OPEN: Unlimited AI allowance. FY27 deck: 500 AI actions one-time. 10x deck and public sheet: 10,000 AI credits per organisation.",
+   "applies_when": "Unlimited",
+   "question": "Deal Desk to confirm",
+   "source": "FY27 s6 vs 10x s15, Platform plans PDF p1",
+   "applies": [
+    "unlimited",
+    "ai"
+   ],
+   "open": true
+  },
+  {
+   "id": "G10",
+   "area": "Storage",
+   "text": "Database and file (attachment) storage are SEPARATE allowances. Large customer bases or document volumes need extra.",
+   "applies_when": "Large volumes",
+   "question": "How many customers / records? How many documents, what size, kept how long?",
+   "source": "Platform plans PDF p1; FY27 deck s6; Renzo",
+   "applies": [
+    "large_volume"
+   ],
+   "open": false
+  },
+  {
+   "id": "G11",
+   "area": "Storage",
+   "text": "OPEN: public sheet says Unlimited storage is 'unlimited / extended included'; internal FY27 deck says 2 GB DB + 2 GB files x tier max employees. Use the internal figure; Deal Desk to confirm.",
+   "applies_when": "Unlimited",
+   "question": "Deal Desk to confirm",
+   "source": "Platform plans PDF p1 vs FY27 deck s6",
+   "applies": [
+    "unlimited"
+   ],
+   "open": true
+  },
+  {
+   "id": "G12",
+   "area": "Infra",
+   "text": "Dedicated blocks: included by tier on Unlimited (T1 x1, T2-3 x2, T4-5 x4, T6 2 x (x4), T7 custom). Beyond that is extra.",
+   "applies_when": "Unlimited",
+   "question": "Peak users, integration load, batch jobs?",
+   "source": "FY27 deck s6",
+   "applies": [
+    "unlimited"
+   ],
+   "open": false
+  },
+  {
+   "id": "G13",
+   "area": "Infra",
+   "text": "VPN tunnel needed when Creatio cloud must reach on-premises systems.",
+   "applies_when": "On-prem systems",
+   "question": "Which systems are on-premises, and must Creatio reach them directly?",
+   "source": "Renzo, 13 Nov 2026",
+   "applies": [
+    "onprem_systems"
+   ],
+   "open": false
+  },
+  {
+   "id": "G14",
+   "area": "Infra",
+   "text": "Growth: cloud only, 2 environments, 50 roles, 50K executed process elements a month, 10K API calls per user per day, change log 90 days.",
+   "applies_when": "Growth",
+   "question": "How many environments, roles and integrations?",
+   "source": "Platform plans PDF p1-p2",
+   "applies": [
+    "growth"
+   ],
+   "open": false
+  },
+  {
+   "id": "G15",
+   "area": "Infra",
+   "text": "Growth has no SSO, LDAP sync, audit log, custom branding, HIPAA or offline mobile.",
+   "applies_when": "Growth",
+   "question": "Do they need SSO, audit log or offline mobile?",
+   "source": "Platform plans PDF p1-p2",
+   "applies": [
+    "growth"
+   ],
+   "open": false
+  },
+  {
+   "id": "G16",
+   "area": "Marketplace",
+   "text": "Marketplace apps and connectors are never in Unlimited; price on demand needs a partner quote and has its own support terms.",
+   "applies_when": "Any connector",
+   "question": "Which systems must we connect to (telephony, WhatsApp, e-signature, core banking)?",
+   "source": "FY27 deck s13; support options page",
+   "applies": [
+    "connector"
+   ],
+   "open": false
+  },
+  {
+   "id": "G17",
+   "area": "Support",
+   "text": "Support is mandatory for the whole term and must cover all products (not part of them).",
+   "applies_when": "Per seat",
+   "question": "-",
+   "source": "creatio.com support options",
+   "applies": [
+    "per_seat"
+   ],
+   "open": false
+  },
+  {
+   "id": "G18",
+   "area": "Approval",
+   "text": "Unlimited quote flow: Deal Desk tier validation, then Sales Director / CSO, COO (borderline cases), CEO (mandatory). Never share a number before approval.",
+   "applies_when": "Unlimited",
+   "question": "-",
+   "source": "FY27 deck s7, s11",
+   "applies": [
+    "unlimited"
+   ],
+   "open": false
+  }
+ ],
+ "sizing_questions": [
+  {
+   "id": "SQ01",
+   "question": "Annual revenue, or AUM for BFSI (USD)",
+   "why": "Sets the Unlimited tier",
+   "feeds": "Deal sheet",
+   "skus": [],
+   "ae_wording": "What's your annual revenue (or assets under management)?"
+  },
+  {
+   "id": "SQ02",
+   "question": "Total employees (group, if a holding)",
+   "why": "Sets the tier; storage allowance follows the tier",
+   "feeds": "Deal sheet",
+   "skus": [],
+   "ae_wording": "Roughly how many employees across the group?"
+  },
+  {
+   "id": "SQ03",
+   "question": "Which legal entity signs and which use it",
+   "why": "Deal Desk validates the tier on the right entity",
+   "feeds": "Gotchas: Tier",
+   "skus": [],
+   "ae_wording": "Which company in the group would sign, and which would use it?"
+  },
+  {
+   "id": "SQ04",
+   "question": "Number of customer / contact records, and growth over 3 years",
+   "why": "Database storage; dedicated blocks",
+   "feeds": "Gotchas: Storage",
+   "skus": [
+    "I3",
+    "I2"
+   ],
+   "ae_wording": "How many customer records do you hold today, and how fast is that growing?"
+  },
+  {
+   "id": "SQ05",
+   "question": "Documents: how many, typical size, retention period",
+   "why": "File storage is separate from database storage",
+   "feeds": "Gotchas: Storage",
+   "skus": [
+    "I4"
+   ],
+   "ae_wording": "How many documents do you keep per customer, and for how long?"
+  },
+  {
+   "id": "SQ06",
+   "question": "Marketable contacts (emails, SMS)",
+   "why": "Marketing Contacts SKU",
+   "feeds": "SKUs C3",
+   "skus": [
+    "C3"
+   ],
+   "ae_wording": "How many people do you market to by email or SMS?"
+  },
+  {
+   "id": "SQ07",
+   "question": "Systems Creatio must connect to, and where each is hosted",
+   "why": "Marketplace connectors; VPN tunnel",
+   "feeds": "Gotchas: Marketplace, Infra",
+   "skus": [
+    "M1",
+    "M2",
+    "M3",
+    "I7"
+   ],
+   "ae_wording": "Which systems would this need to connect to, and where do they run?"
+  },
+  {
+   "id": "SQ08",
+   "question": "Hosting region and data residency rules",
+   "why": "Region; governance 'can say' lines",
+   "feeds": "SKUs I9",
+   "skus": [
+    "I9"
+   ],
+   "ae_wording": "Does your data have to stay in a particular country?"
+  },
+  {
+   "id": "SQ09",
+   "question": "Cloud or on-premises",
+   "why": "On-prem only on Enterprise / Unlimited; on-prem AI only on Freedom",
+   "feeds": "SKUs I8, A3",
+   "skus": [
+    "I8",
+    "A3"
+   ],
+   "ae_wording": "Cloud, or does it have to run on your own servers?"
+  },
+  {
+   "id": "SQ10",
+   "question": "Environments needed (prod, test, dev, training)",
+   "why": "Growth 2, Enterprise 3",
+   "feeds": "SKUs I5",
+   "skus": [
+    "I5"
+   ],
+   "ae_wording": "How many environments do you usually run (production, test, training)?"
+  },
+  {
+   "id": "SQ11",
+   "question": "AI use cases going live first, and expected volume",
+   "why": "AI Package size; credit blocks",
+   "feeds": "SKUs A1, A2",
+   "skus": [
+    "A1",
+    "A2"
+   ],
+   "ae_wording": "Which AI use cases would you switch on first, and at what volume?"
+  },
+  {
+   "id": "SQ12",
+   "question": "Who logs in from outside (customers, brokers, dealers)",
+   "why": "Portal SKUs",
+   "feeds": "SKUs U1-U3",
+   "skus": [
+    "U1",
+    "U2",
+    "U3"
+   ],
+   "ae_wording": "Who outside your team would log in: customers, brokers, dealers?"
+  },
+  {
+   "id": "SQ13",
+   "question": "Support hours and response needed",
+   "why": "Business vs Premium",
+   "feeds": "SKUs S1-S2",
+   "skus": [
+    "S1",
+    "S2"
+   ],
+   "ae_wording": "What support hours and response times do you need?"
+  }
+ ]
+}

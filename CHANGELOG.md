@@ -4,6 +4,26 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.25.0 (16 Nov 2026): which licences a deal needs (sc-bom)
+
+- **New skill `sc-bom`**: the bill of materials. From what we know about the customer (solution summary, demo plan,
+  RFP or workshop register, meeting reviews, the AE's licence answers) it marks every Creatio product Yes / No / TBC with
+  a reason and an evidence tag, works out the candidate Unlimited tier, lists what's **extra to quote** (AI Package,
+  credit blocks, storage, dedicated blocks, VPN tunnel, region, Marketplace connectors), checks every gotcha that
+  applies, and ranks the sizing questions for the next meeting. Writes `NN-bom.md` and `NN-bom.xlsx` (the AE's
+  one-page summary first) for Deal Desk. **Internal only: no prices, no users per module** (the AE and Deal Desk own
+  the quote). `bom.py check` refuses prices and user counts and enforces the rules (Unlimited needs an AI Package,
+  Studio needs AI Platform and support, per seat needs a reason).
+- **New `knowledge/BOM-CATALOGUE-v0.1.json`** (internal): 34 SKUs, the 7 Unlimited tiers, 18 gotchas, 13 sizing
+  questions, from the FY27 Unlimited and 10x AI pricing decks (13 Nov 2026). Four items stay **OPEN** for Deal Desk
+  (Unlimited AI allowance, Unlimited storage, VPN and region SKU names, CRM app editions).
+- `sc-demo-plan`: the AE brief's licence questions now come from the BOM (`bom.py questions`), plus user numbers by role
+  for Deal Desk. `sc-meeting-review` step 5a updates the BOM when a meeting gives sizing facts. `sc-guide` suggests
+  `sc-bom` after a demo plan, a demo or the AE's licence answers.
+- `sc-lessons`: new `registers.py add-gotcha` (SharePoint `Lessons/registers/bom-gotchas.json`); new gotchas apply to
+  the next BOM straight away.
+- Test: `python tests/bom/test_bom.py` (fictional deal).
+
 ## 0.24.0 (16 Nov 2026): existing customers, confidential terms, who owns what
 
 ### Confidential customer terms (new standard)

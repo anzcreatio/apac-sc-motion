@@ -14,6 +14,7 @@ library for every SC, updated in one place.
 | `sc-rfp` | RFP / TOR in any layout → requirements register, honest fit-gap (standard to no, confidence, evidence, POC tier, effort), bid / no-bid recommendation, and a consistency check of the bid team's answers. The bid team writes the response |
 | `sc-workshop` | Australia (no RFP): 2-hour requirements workshops, one journey each. Pre-work email, draft journey, agenda and capture sheet; then from the transcript a requirements register (rated with the `sc-rfp` engine: gaps and effort, no bid decision), a solution model in Creatio terms for `sc-demo-plan`, a follow-up email from the gaps, and a playback for the customer to sign off |
 | `sc-requirements` | After the demo build, before any RFP: a neutral business requirements checklist in the customer's words (with how to verify and a suggested scoring tab) for the AE to send, plus an internal file tracing every line to the source, demo scene, fit and differentiator |
+| `sc-bom` | Which licences and products a deal needs: every SKU Yes / No / TBC with the reason, candidate Unlimited tier, extras to quote, gotchas, sizing questions for the next meeting. `NN-bom.md` + `.xlsx` for Deal Desk. Internal only, no prices, no users per module |
 | `sc-demo-plan` | Plan a demo build: demo bar (the floor), Business Studio first then AI, library and pattern book reuse, custom components where they earn it, open space for the SC, demo script for the toolkit |
 | `sc-clickpath` | Two HTML pages from the demo click path: SC practice guide (clicks, talk track, watch-outs, practice mode) and a customer-safe recap (DRAFT until the SC approves; text and screenshot checks) |
 | `sc-harvest` | After every demo: L1 into the demo library within 2 working days (read-only package export, build log, customer-specific list, manual steps) |
@@ -29,7 +30,7 @@ library for every SC, updated in one place.
 | Folder | What |
 |---|---|
 | `standards/` | `DECK-STANDARD-v0.5.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.3.md` (the minimum for every demo) |
-| `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet |
+| `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet, Delivery Assurance and the BOM catalogue (both internal) |
 | `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
 | `patterns/` | Pattern book: demo ideas from our deals, competitors and the Knowledge Hub (screenshots in SharePoint `Patterns/`) |
 | `library/` | Reusable demo modules catalogue (Phase 2) |

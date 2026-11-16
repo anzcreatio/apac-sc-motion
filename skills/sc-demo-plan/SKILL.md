@@ -161,6 +161,11 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
 Rules: no opening line and no durations (the agenda slide does the opening); no "what would make this a success?"
 question in the meeting (ask before it); the recap points are C only; the question matches the agenda slide's
 `decision`; "Don't" always has price, competitors and promises, plus anything a past meeting review flagged.
+**`licence` comes from the BOM** (0.24.0): if the deal has `bom.json`, run
+`python ../sc-bom/scripts/bom.py questions <deal>/bom.json --max 6` and paste its output; if it doesn't, run
+`sc-bom` steps 1–3 first (a first pass is mostly TBC and takes a few minutes). Add "How many people would use it,
+by role?" for the AE: user numbers go to Deal Desk, never into the BOM. When the AE sends the answers back, update
+`bom.json` (`sc-bom` step 8).
 
 ## Build plan (`NN-build-plan.html`): what the SC reviews before we build
 

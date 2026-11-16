@@ -14,6 +14,8 @@ The only way to change them, so the JSON stays valid and IDs stay unique. Nothin
                                    [--dont-say "..."] [--follow-up "..."] [--follow-up-answer "..."]
                                    [--claims D1,D4] [--audience business|it|exec] [--source-ref "EWB 12 Nov 20:59"]
                                    --by "..." [--supersedes E-002]
+  python registers.py add-gotcha   --area "Storage" --gotcha "..." --applies-when "..." --question "..." --by "..."
+                                   [--source-ref "Deal Desk, 18 Nov"] [--deal <account>] [--supersedes BG-002]
   python registers.py approve-explanation --id E-004 --by "Renzo Huruiti" [--note "..."]
   python registers.py retire-explanation  --id E-004 --by "..." --note "why"
 
@@ -28,8 +30,9 @@ import json
 import os
 import sys
 
-FILES = {"limits": "product-limits.json", "questions": "discovery-questions.json", "explanations": "explanations.json"}
-PREFIX = {"limits": "L", "questions": "Q", "explanations": "E"}
+FILES = {"limits": "product-limits.json", "questions": "discovery-questions.json", "explanations": "explanations.json",
+         "gotchas": "bom-gotchas.json"}
+PREFIX = {"limits": "L", "questions": "Q", "explanations": "E", "gotchas": "BG"}
 
 
 def team_root(arg):
@@ -108,6 +111,11 @@ def main():
     for k in ("--deeper", "--analogy", "--dont-say", "--follow-up", "--follow-up-answer", "--claims", "--audience",
               "--source-ref", "--supersedes", "--deal"):
         e.add_argument(k)
+    g = sub.add_parser("add-gotcha")
+    for k in ("--area", "--gotcha", "--applies-when", "--question", "--by"):
+        g.add_argument(k, required=True)
+    for k in ("--source-ref", "--supersedes", "--deal"):
+        g.add_argument(k)
     for name in ("approve-explanation", "retire-explanation"):
         r = sub.add_parser(name)
         r.add_argument("--id", required=True); r.add_argument("--by", required=True)
@@ -123,7 +131,7 @@ def main():
             for e in data["entries"]:
                 if x.status and e.get("status") != x.status:
                     continue
-                text = e.get("limit") or e.get("one_liner") or e.get("question")
+                text = e.get("limit") or e.get("one_liner") or e.get("gotcha") or e.get("question")
                 print("%s [%s] %s: %s" % (e["id"], e.get("status"), e.get("area") or e.get("topic"), text))
         return
 
@@ -147,6 +155,16 @@ def main():
             "source_ref": x.source_ref, "deal": x.deal, "date": today, "reported_by": x.by, "status": "open",
             "supersedes": x.supersedes})
         print("added", eid, "->", save(root, "questions", data))
+    elif x.cmd == "add-gotcha":
+        # BOM gotchas only make us more careful, so they apply straight away (asymmetric rule); read by sc-bom
+        data = load(root, "gotchas")
+        eid = next_id(data, "gotchas")
+        mark_superseded(data, x.supersedes, eid)
+        data["entries"].append({
+            "id": eid, "area": x.area, "gotcha": x.gotcha, "applies_when": x.applies_when, "question": x.question,
+            "source_ref": x.source_ref, "deal": x.deal, "date": today, "reported_by": x.by, "status": "open",
+            "supersedes": x.supersedes})
+        print("added", eid, "->", save(root, "gotchas", data))
     elif x.cmd == "add-explanation":
         data = load(root, "explanations")
         eid = next_id(data, "explanations")
