@@ -4,6 +4,16 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.22.0 (16 Nov 2026): Delivery Assurance knowledge (internal)
+
+- **New `knowledge/DELIVERY-ASSURANCE-v0.1.md`** (internal only), from the Jan 2026 Delivery Assurance deck: the
+  Start / Build / Grow framework, the three packages plus Freedom with prices and limits, which partner-risk signals
+  call for which package, and what you can and can't say to a customer.
+- `sc-rfp`: on **Bid with conditions** (or must-haves rated custom, partner or integration) the recommendation now
+  suggests Delivery Assurance to cut partner delivery risk. No prices in customer outputs; the AE owns package and price.
+- **Each SC: nothing to do.** Read the file once; raise it with your AE when a deal has a new partner, heavy
+  integrations or a customer burned by a past CRM project.
+
 ## 0.21.0 (16 Nov 2026): one sidebar section per customer, UI kit standard v0.4, deck standard v0.5
 
 ### Deck standard v0.5 (decks that don't look AI-made)
