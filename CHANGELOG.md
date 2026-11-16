@@ -7,7 +7,8 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 ## Unreleased: UI kit standard v0.4 (pages that look finished)
 - **`standards/UI-KIT-STANDARD-v0.4.md`** (was v0.3). New section 2b, the look of every demo page around our components:
   **no text directly on the grey page background** (titles, subtitles and section headings on white cards), one
-  header card per page, headline numbers first, lists without row numbers, one accent colour, chart colours by meaning,
+  header card per page, headline numbers first, lists with row numbers always on and an add-column (+) button, one
+  accent colour, chart colours by meaning,
   slots that fit their cards, and a top-to-bottom check at 1440 x 900 before calling a page done.
 - Section 1 now lists all eight live `labUiKit` 0.5.0 components (Stage funnel, Request checklist, Group overlap, Rate
   against target, Cycle time added); new build rules: every setting picked, not typed; exclusions apply to the person.
