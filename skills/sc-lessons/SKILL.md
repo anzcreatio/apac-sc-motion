@@ -70,6 +70,11 @@ what SCs edited or dropped in the deck before presenting, and library modules ha
 - Keep the SC's words. Don't polish them into marketing.
 - Never add a claim, a proof point or a "can say" line here. Those wait for Friday.
 - No customer data beyond what the lesson needs. Record numbers in their exact unit ("200 million customers").
+- **Confidential terms** (`../../standards/CONFIDENTIAL-TERMS-v0.1.md`): keep the lesson, lose the customer's
+  confidential labels. If the deal has a `confidential.json`, write with its generic labels and run
+  `python scripts/confidential.py scan --deal "<deal>" <the files you wrote>` before you report; a hit = fix it first.
+  If the SC's paste says something is confidential and the deal has no file yet, propose the terms and generic labels
+  at the top of your message and, on their yes, `confidential.py add`.
 - Practice folders are excluded: don't log lessons from `Deals/_practice/`.
 
 ## Talking to the SC

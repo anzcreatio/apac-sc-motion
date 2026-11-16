@@ -883,7 +883,12 @@ def s_roadmap(deck, slide, d, n):
         shape(slide, MSO_SHAPE.OVAL, "Stage %d" % (i + 1), x, line_y - dot / 2 + 0.015, dot, dot, fill=T.ACC if i == 0 else T.INK)
         run(textbox(slide, "Step %d title" % (i + 1), x, line_y + 0.35, width, 0.95), s["title"], 17, T.INK, bold=True)
         run(textbox(slide, "Step %d what" % (i + 1), x, line_y + 1.35, width, 1.6), s["what"], 14, T.BODY)
-        run(textbox(slide, "Step %d when" % (i + 1), x, line_y + 2.97, width, 0.7), s.get("when", ""), 13, T.ACC if i == 0 else T.GREY, bold=True)
+        run(textbox(slide, "Step %d when" % (i + 1), x, line_y + 2.97, width, 0.4), s.get("when", ""), 13, T.ACC if i == 0 else T.GREY, bold=True)
+        if s.get("owner"):
+            # Who can own it after handover (existing-customer roadmaps, sc-guide mode D).
+            run(textbox(slide, "Step %d owner" % (i + 1), x, line_y + 3.32, width, 0.35), s["owner"], 12, T.GREY)
+    if d.get("timing") and any(s.get("owner") for s in steps):
+        warn(n, "roadmap: 'timing' and step owners share the same space; move the timing line to the caption or notes")
     if d.get("timing"):
         rule(slide, "Timing rule", T.L, 5.6, T.W)
         run(textbox(slide, "Timing", T.L, 5.72, T.W, 0.5), d["timing"], 16, T.INK, bold=True)

@@ -41,6 +41,11 @@ quits PowerPoint afterwards unless the SC already had it open, and never removes
 Follow `../../standards/WRITING-STYLE-v0.1.md`. The builder prints `style:` warnings (vendor words, colon titles,
 long titles, semicolons, em dashes): fix them in `deck.json`, don't ignore them.
 
+**Confidential terms** (`../../standards/CONFIDENTIAL-TERMS-v0.1.md`): a deck for the customer itself may use
+their terms, but keep anything they asked us not to share off the slides anyway (decks get forwarded). A deck for
+anyone else (another customer, a team or training deck): `python ../sc-lessons/scripts/confidential.py scan --all
+<deck.json>` first.
+
 **Delivery support:** when the deal shows partner delivery risk, the roadmap or next-steps slide can carry one line
 such as "Creatio supports your team and partner through delivery" (`../../knowledge/DELIVERY-ASSURANCE-v0.2.md`
 §5–6). Never a price, hour count or package name on a slide or in the notes.

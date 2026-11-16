@@ -78,6 +78,9 @@ Paths below are relative to this skill's folder. Plugin root = `../..`.
    track to the meeting plan: Creatio stays involved through delivery (Delivery Assurance). Words only from
    `../../knowledge/DELIVERY-ASSURANCE-v0.2.md` §6; a slide line only if the customer raised it. Never a price,
    hour count or package name in any output; tell the SC which package fits in chat (§0 rules).
+12. **Delivery partner and account owner** (Renzo, 16 Nov 2026): record at the top of the prep who would deliver
+   (a named partner, Creatio, the customer's own team, or unknown) and who owns the account. Unknown = a question for
+   the AE. It decides the delivery wording later and who owns each roadmap step.
 
 ## Steps
 

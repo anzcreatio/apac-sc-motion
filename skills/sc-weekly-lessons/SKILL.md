@@ -81,6 +81,10 @@ Paths are relative to this skill's folder; plugin root = `../..`.
   feedback files keep the name for one-on-one coaching.
 - Customer names stay in the deal folders; the digest names deals by account, never quotes customer data beyond
   what's needed.
+- **Confidential terms** (`../../standards/CONFIDENTIAL-TERMS-v0.1.md`): before writing the digest, `TEAM-LESSONS.md`
+  or the team Artifact, run `python ../sc-lessons/scripts/confidential.py scan --all <digest> <TEAM-LESSONS.md>
+  <the week's new feedback and lessons files>`. A hit = replace it with the generic label (`redact`) before anything
+  goes out, and tell Renzo which file had it.
 
 ## Talking to the SC
 

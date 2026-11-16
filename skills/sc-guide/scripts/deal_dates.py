@@ -5,10 +5,14 @@
   python deal_dates.py set   --deal <deal folder> --field first_call --date 2026-11-04 [--type BDR|AE|discovery] [--source "..."]
   python deal_dates.py set   --deal <deal folder> --field sc_notified --date 2026-11-05 [--source "Teams message from Andrew"]
   python deal_dates.py set   --deal <deal folder> --field demo --date 2026-11-11 [--status planned|done|moved|cancelled]
+  python deal_dates.py event --deal <deal folder> --type handover|go_live|session --date 2026-10-07 [--what "..."] [--session training|roadmap|enablement|qbr] [--status planned|done|moved|cancelled] [--source "..."]
   python deal_dates.py stats [--root <team root>]
 
 `show` lists what's missing, so the skill knows which question to ask. Dates are yyyy-mm-dd. Writes only deal-dates.json
 and the stats page.
+
+Existing customers (sc-guide mode D): a deal with a `handover` or `go_live` event is an expansion deal. `show` doesn't
+ask for the sales dates, and `stats` keeps it out of the sales medians and lists it in its own table.
 """
 import argparse
 import datetime
@@ -29,8 +33,16 @@ FIELDS = {
 }
 
 
+EVENT_TYPES = ["handover", "go_live", "session"]
+SESSION_TYPES = ["training", "roadmap", "enablement", "qbr"]
+
+
 def path(deal):
     return os.path.join(deal, "deal-dates.json")
+
+
+def is_expansion(d):
+    return any(e.get("type") in ("handover", "go_live") for e in d.get("events", []))
 
 
 def load(deal):
@@ -49,6 +61,13 @@ def days(a, b):
 
 def show(a):
     d = load(a.deal)
+    if is_expansion(d):
+        print("existing customer (expansion path): sales dates not needed")
+        for e in sorted(d.get("events", []), key=lambda e: e["date"]):
+            print("%-10s %s %s%s" % (e["type"], e["date"], e.get("session") or "", (" (%s)" % e["status"]) if e.get("status") else ""))
+        if not any(e["type"] == "session" for e in d.get("events", [])):
+            print("next session MISSING: ask \"When is the next session with them, and what is it for?\"")
+        return
     for k, q in FIELDS.items():
         v = d.get(k) or {}
         print("%-12s %s" % (k, ("%s %s" % (v.get("date"), v.get("type") or v.get("status") or "")).strip() if v.get("date") else "MISSING: ask \"%s\"" % q))
@@ -73,6 +92,30 @@ def set_(a):
     print("%s: %s = %s%s" % (d["deal"], a.field, a.date, " (was %s)" % old if old and old != a.date else ""))
 
 
+def event(a):
+    try:
+        datetime.date.fromisoformat(a.date)
+    except ValueError:
+        sys.exit("Date must be yyyy-mm-dd, e.g. 2026-11-14 (got %s)" % a.date)
+    if a.session and a.type != "session":
+        sys.exit("--session only goes with --type session")
+    d = load(a.deal)
+    e = {"type": a.type, "date": a.date}
+    for k in ("session", "what", "status", "source"):
+        if getattr(a, k):
+            e[k] = getattr(a, k)
+    events = d.setdefault("events", [])
+    # The same session moved: replace it (matched on type + session kind + what), keep the old date in history.
+    same = [x for x in events if x["type"] == a.type and x.get("session") == a.session and x.get("what") == a.what]
+    old = same[0]["date"] if same else None
+    if same:
+        events.remove(same[0])
+    events.append(e)
+    d.setdefault("history", []).append({"field": "event:%s" % a.type, "date": a.date, "was": old, "recorded": datetime.date.today().isoformat()})
+    json.dump(d, open(path(a.deal), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
+    print("%s: %s %s%s" % (d["deal"], a.type, a.date, " (was %s)" % old if old and old != a.date else ""))
+
+
 def team_root():
     try:
         return json.load(open(os.path.join(os.path.expanduser("~"), ".apac-sc-motion.json"), encoding="utf-8"))["sharepoint_root"]
@@ -83,12 +126,20 @@ def team_root():
 def stats(a):
     root = a.root or team_root()
     deals_dir = os.path.join(root, "Deals")
-    rows = []
+    rows, expansion = [], []
     for name in sorted(os.listdir(deals_dir)):
         p = os.path.join(deals_dir, name, "deal-dates.json")
         if name.startswith("_") or not os.path.isfile(p):
             continue
         d = json.load(open(p, encoding="utf-8"))
+        if is_expansion(d):
+            ev = sorted(d.get("events", []), key=lambda e: e["date"])
+            first = next((e["date"] for e in ev if e["type"] in ("handover", "go_live")), None)
+            sessions = [e for e in ev if e["type"] == "session"]
+            nxt = sessions[0]["date"] if sessions else None
+            expansion.append({"deal": name, "start": first, "sessions": len(sessions), "first_session": nxt,
+                              "days": days(first, nxt)})
+            continue
         f, s, m = (d.get(k, {}).get("date") for k in ("first_call", "sc_notified", "demo"))
         sc = name.rsplit("-", 1)[-1] if name.rsplit("-", 1)[-1] in ("rh", "wn", "fa") else ""
         rows.append({"deal": name, "sc": sc, "first_call": f, "sc_notified": s, "demo": m,
@@ -112,6 +163,12 @@ def stats(a):
     no_file = [n for n in sorted(os.listdir(deals_dir)) if not n.startswith("_") and os.path.isdir(os.path.join(deals_dir, n))
                and not os.path.isfile(os.path.join(deals_dir, n, "deal-dates.json"))]
     L += ["", "Missing a date: %s" % (", ".join(missing) or "none"), "", "No dates file yet: %s" % (", ".join(no_file) or "none")]
+    if expansion:
+        L += ["", "## Existing customers (not in the medians above)", "",
+              "| Deal | Handover or go-live | First session | Days | Sessions |", "|---|---|---|---|---|"]
+        for r in expansion:
+            L.append("| %s | %s | %s | %s | %d |" % (r["deal"], r["start"] or "?", r["first_session"] or "?",
+                                                   "" if r["days"] is None else r["days"], r["sessions"]))
     out = os.path.join(root, "Lessons", "stats")
     os.makedirs(out, exist_ok=True)
     open(os.path.join(out, "deal-timing.md"), "w", encoding="utf-8").write("\n".join(L) + "\n")
@@ -125,9 +182,12 @@ def main():
     p = sp.add_parser("set"); p.add_argument("--deal", required=True); p.add_argument("--field", required=True, choices=list(FIELDS))
     p.add_argument("--date", required=True); p.add_argument("--type", choices=["BDR", "AE", "discovery"]); p.add_argument("--source")
     p.add_argument("--status", choices=["planned", "done", "moved", "cancelled"])
+    p = sp.add_parser("event"); p.add_argument("--deal", required=True); p.add_argument("--type", required=True, choices=EVENT_TYPES)
+    p.add_argument("--date", required=True); p.add_argument("--session", choices=SESSION_TYPES); p.add_argument("--what")
+    p.add_argument("--status", choices=["planned", "done", "moved", "cancelled"]); p.add_argument("--source")
     p = sp.add_parser("stats"); p.add_argument("--root")
     a = ap.parse_args()
-    {"show": show, "set": set_, "stats": stats}[a.cmd](a)
+    {"show": show, "set": set_, "event": event, "stats": stats}[a.cmd](a)
 
 
 if __name__ == "__main__":

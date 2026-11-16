@@ -4,6 +4,36 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.24.0 (16 Nov 2026): existing customers, confidential terms, who owns what
+
+### Confidential customer terms (new standard)
+- **`standards/CONFIDENTIAL-TERMS-v0.1.md`**: when a customer asks us not to share something (their own categories,
+  criteria, programme names), it stays in their deal folder. Everything shared (library, lessons, feedback, the
+  Friday digest, team lessons) uses a generic label instead, e.g. "Archetype A". Criteria values and curated lists
+  are never harvested at all.
+- New script `skills/sc-lessons/scripts/confidential.py` (`add`, `never`, `show`, `redact`, `scan`). `scan` stops a
+  shared write if a listed term is still there, and never prints the term itself.
+- `sc-harvest`, `sc-lessons`, `sc-meeting-review`, `sc-weekly-lessons`, `sc-deck` and `sc-guide` (feedback) now check
+  it before writing anything outside the deal folder.
+- **Each SC: if a customer has asked you not to share something, tell Claude on that deal: "add confidential terms".**
+
+### Existing customers get their own path (`sc-guide` mode D)
+- For a customer already live on Creatio (often delivered by a partner): **as-built summary → gaps → Now / Next /
+  Later roadmap with an owner per item → session deck → customer enablement → review and harvest.** Start with
+  "what's next on <account>" as usual; the guide picks mode D when the solution is live.
+- New template `knowledge/TEMPLATE-As-Built-v0.1.md` for a partner's handover or "reverse demo" (a meeting review
+  didn't fit: there's no deck of ours to compare). `sc-meeting-review` now points handovers there.
+- `deal_dates.py event` records a handover, go-live and each session (training / roadmap / enablement / QBR).
+  Existing customers stay out of the sales-speed medians and get their own table in the stats.
+
+### Who delivers and who owns each step
+- Roadmap slides take an `owner` line per step (who can own it after handover). Required on existing-customer decks
+  (`DECK-STANDARD-v0.5.md`).
+- `sc-first-meeting` records the delivery partner and the account owner at the top of the prep.
+- Taking over from a partner: customer-facing words stay "you own it", never a contrast with the partner; the
+  as-built's "ownership gaps" table (source, API contracts and credentials, prompts, support) is filled first.
+- **Each SC: nothing to do.** Rebuild a deck to use the roadmap owner line.
+
 ## 0.23.0 (16 Nov 2026): build on top of master stands
 
 - **`standards/DEMO-BAR-v0.3.md`** (was v0.2), new §6c: when a new deal's use cases are complementary to a master

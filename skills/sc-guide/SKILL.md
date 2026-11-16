@@ -1,6 +1,6 @@
 ---
 name: sc-guide
-description: Step-by-step guide for a Creatio APAC solution consultant using the apac-sc-motion plugin - onboards a new SC one step at a time (setup, the motion, a worked deal, a practice run, the rules, their first real deal), remembers where they got to, tells an SC what to do next on any deal by reading the deal folder, and logs their feedback for the weekly digest. Use when an SC is new to the motion, says "start", "onboard me", "guide me", "where was I", "what's next" or "what do I do now" on a deal, isn't sure which skill to use, or says something in the motion didn't work or could be better.
+description: Step-by-step guide for a Creatio APAC solution consultant using the apac-sc-motion plugin - onboards a new SC one step at a time (setup, the motion, a worked deal, a practice run, the rules, their first real deal), remembers where they got to, tells an SC what to do next on any deal by reading the deal folder, runs the existing-customer path (as-built summary from a partner's handover, roadmap with an owner per item, training or "what else can Creatio do" session, enablement), and logs their feedback for the weekly digest. Use when an SC is new to the motion, says "start", "onboard me", "guide me", "where was I", "what's next" or "what do I do now" on a deal, isn't sure which skill to use, or says something in the motion didn't work or could be better.
 ---
 
 # sc-guide
@@ -20,6 +20,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Team root = `s
 | "start", "onboard me", new to the motion, or no progress file yet | **A. Onboarding** |
 | "where was I", "continue" | A, from the saved step |
 | "what's next", "what now", names a deal | **B. Next step on a deal** |
+| An existing customer: a live solution, a partner's handover or "reverse demo", training, a roadmap, "what else can Creatio do", expansion | **D. Existing customer** |
 | "what's on today", "what's on my plate", "done: <what>", "am I overloaded?" | The SC's desk: `sc-desk` |
 | "how do I run a deal?", "do I need a new chat?" | Show `../../rollout/HOW-TO-RUN-A-DEAL.md` (also in SharePoint `Plugin/`): the steps with the line to start each chat, new chat or same chat, the ten habits. Then offer "what's next on <account>" |
 | "this didn't work", "this could be better", "feedback" | **C. Log feedback** (a batch of lessons → `/sc-lessons`) |
@@ -74,6 +75,7 @@ message. If they want to skip a step, let them and note it.
 | Within 2 working days of a demo | `sc-harvest` | L1 library entry, including the AI as text |
 | New Knowledge Hub content | `sc-inbox` | Library and catalogue proposals |
 | Any time | `sc-lessons` (a chat of its own) | Lessons filed; product limitations and questions to ask, live for everyone straight away |
+| An existing customer: handover, training, roadmap, expansion | `sc-guide` mode D (existing-customer path) | As-built summary, gap review, roadmap with an owner per item, session deck, enablement offer, harvest |
 | A customer wants to build on Creatio themselves (after they buy) | `sc-customer-academy` ("customer enablement") | Sessions you run for their business builders (Track 1) and IT (Track 2) with Creatio's public toolkit, in their dev or sandbox only; a customer pack (workbook + Claude coach) they keep, after your SC check |
 | Learning to build, any time | `sc-academy` ("train me") | Guided labs on a fictional deal, one module per skill area (setup → first meeting → demo plan → object model → pages → data → processes → AI → click path and harvest), on your own training stand |
 | Every morning, and "done: <what>" | `sc-desk` ("what's on today") | Top 5 actions, today's meetings and prep, follow-up drafts for stalled deals, our commitments (a task desk, not a CRM) |
@@ -116,6 +118,11 @@ you already have (the handoff form, the transcript's date or file name, the SC's
 `set ... --source "<where it came from>"`. **Only when a date is missing, ask for it at the top of your message**, one
 line each. Don't guess a date. If a date changes (the demo moves), set it again: the old one stays in the history.
 
+**Existing customers** don't have sales dates. Record events instead: `deal_dates.py event --type handover|go_live
+--date ...` once, then `--type session --session training|roadmap|enablement|qbr --date ... --what "..."` for each
+session. A deal with a handover or go-live event is kept out of the sales medians and gets its own table in `stats`.
+A month without a day ("sometime in October") is not a date: ask, or look for it in the transcript header.
+
 ## B. Next step on a deal
 
 1. Find the deal folder (`<team root>/Deals/<account>/` or `<account>-<initials>/`; ask which if unclear). For a new
@@ -131,6 +138,7 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 
    | If the folder has… | …but not | Next step |
    |---|---|---|
+   | a live customer (a delivered solution, a handover, a go-live event) | | **Mode D**, the existing-customer path, not this table |
    | nothing | | Create the folder; ask for the AE's handoff and the call transcript, and **the demo depth**: "introduction to Creatio, or a detailed demo on their pains?" (`sc-first-meeting` step 0b) |
    | a transcript or handoff | a first-meeting prep / `deck.json` | `sc-first-meeting` |
    | `deck.json` | its `.pptx` | `sc-deck` build |
@@ -155,6 +163,27 @@ line each. Don't guess a date. If a date changes (the demo moves), set it again:
 3. Answer in at most six lines: where the deal is, the **one** next step, the skill, and what you need from them.
    Offer to start it. If their stage is shadow or paired, add who checks it.
 
+## D. Existing customer (expansion path, Renzo 16 Nov 2026)
+
+For a customer already live on Creatio: we inherit or extend a solution (often a partner's), run training, show what
+else Creatio can do, and help them own more of it. Same deal folder rule, sidebar rule and "one step per message" as
+mode B. Ask first, at the top: **who owns the account and the roadmap (Creatio, the partner, both), who delivered it,
+and is anyone from the partner in the room at the next session?** The answers change the wording of everything below.
+
+| Step | If the folder has… but not | Do | Output |
+|---|---|---|---|
+| **1. As-built** | a handover transcript, scope slide or walkthrough · no `*as-built*` | Fill `../../knowledge/TEMPLATE-As-Built-v0.1.md`. A partner's walkthrough is **P**, not C. Record `deal_dates.py event --type handover` (or `go_live`). Propose confidential terms (section 7) | `01-as-built-<date>.md`, `confidential.json` if needed |
+| **2. Gaps and value** | an as-built · no gap review | From the as-built's "asked for, not built" and "known limits", plus what the customer still does by hand: each gap in their words, tagged | A gap list in the session prep |
+| **3. Roadmap** | gaps · no roadmap | Now / Next / Later. **Every item names who can own it after handover** (customer business user / customer IT / Creatio) and starts from something they do or asked for. Claims only from the catalogue. No effort or price on a slide | Roadmap section in `NN-session-prep-<date>.md` |
+| **4. Session deck** | a roadmap · no `deck.json` for the session | `sc-deck`: slide 1 "what you have today" (a `flow` slide from the as-built), what they control, the `roadmap` slide with `owner` per step, next steps. Waive the sales slides in `meta.waive`. Record `deal_dates.py event --type session` | The session deck |
+| **5. Enablement** | the customer wants to change or build more themselves · no `enablement/plan.md` | Offer `sc-customer-academy` (recommend the 1-hour format first), in **their** dev or sandbox environment | An enablement plan |
+| **6. Review and harvest** | a session that's happened · no review after it | `sc-meeting-review` Parts B and C (no deck comparison unless we presented one), then `sc-harvest` for anything we built, with generic labels | Review, lessons, library entry |
+
+**Taking over from a partner** (the account owner changes): keep it out of the room. Customer-facing words are "you
+own it", "your team can change this", never a contrast with the partner, who may be present. Internally, fill the
+as-built's "ownership gaps" table before promising support: package source, API contracts and credentials, AI prompts,
+who fixes it when it breaks. Without those, the customer swaps one outside dependency for another.
+
 ## C. Log feedback
 
 Write `<team root>/Lessons/feedback/<yyyy-mm-dd>-<sc-kebab-name>-<short-slug>.md` (shared: it's about the skills and
@@ -171,7 +200,9 @@ Claude, never about how the SC performed, `../../standards/FEEDBACK-LOOP-v0.2.md
 
 Format and rules: `../../standards/FEEDBACK-LOOP-v0.2.md`. For a batch of lessons (meeting notes, an R&D email,
 "we should have asked…"), suggest a chat of its own with `/sc-lessons`: it also updates the shared registers of
-product limitations and discovery questions. Keep their words. Don't change the motion here: the Friday digest (`sc-weekly-lessons`) reads these files and Renzo
+product limitations and discovery questions. Keep their words, except a customer's confidential terms: use the
+generic labels from the deal's `confidential.json` (`../../standards/CONFIDENTIAL-TERMS-v0.1.md`) and run
+`python ../sc-lessons/scripts/confidential.py scan --deal "<deal>" <file>` before saving. Don't change the motion here: the Friday digest (`sc-weekly-lessons`) reads these files and Renzo
 decides. If it's a blocker on a live deal, suggest they message Renzo too.
 
 ## Rules

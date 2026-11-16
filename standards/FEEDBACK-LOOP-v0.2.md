@@ -81,6 +81,8 @@ and keep sharing their recordings, so nothing about how someone performed reache
 - **Recordings** are used only for what the SC asked. Coaching never runs on someone else's recording unless that SC
   asked for it; when Renzo coaches a recording an SC sent him, the result goes back to that SC and Renzo keeps no file.
 - No scores per person anywhere: not in the digest, the desk view or a deal folder.
+- **A customer's confidential terms stay in their deal folder.** Feedback, lessons, registers and the digest use the
+  generic labels from the deal's `confidential.json` (`CONFIDENTIAL-TERMS-v0.1.md`, 16 Nov 2026).
 
 ## 6. Changes
 

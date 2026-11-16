@@ -81,6 +81,12 @@ manual_steps, customer_specific, ai: [{type: agent|skill|mcp_tool|process_step, 
 
 - Read-only on every stand. Installs and compiles only with the SC's explicit yes, per the toolkit's gates.
 - Never put credentials, real customer data or customer documents in the library. Demo data only.
+- **Confidential terms** (`../../standards/CONFIDENTIAL-TERMS-v0.1.md`): if the deal has a `confidential.json`, harvest
+  the pattern with the generic labels. Before writing the README, the `ai/` files and the catalogue entry, run
+  `python ../sc-lessons/scripts/confidential.py redact --deal "<deal>" --in <file>` on each, then
+  `confidential.py scan --deal "<deal>" "<Library/<module-id>>"`. A hit means don't register it yet. Never harvest
+  what its `never_harvest` list names (criteria values, thresholds, curated lists). Agent and skill prompts are the
+  most likely place for a customer's own terms: check them word by word.
 - Packages and screenshots go to SharePoint `Library/`; only the catalogue and READMEs' summaries go in git.
 
 ## Talking to the SC

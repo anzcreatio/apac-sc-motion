@@ -10,6 +10,10 @@ description: After a Creatio APAC customer meeting, review it and feed what we l
 Run per meeting, in the deal folder (`<team root>/Deals/<account>/`). Three parts; do the ones the inputs allow.
 Nothing customer-facing is sent from here.
 
+**Not for handovers:** a partner's walkthrough, "reverse demo" or go-live handover has no deck of ours and often no
+customer in the room. Write an as-built summary instead (`../sc-guide/SKILL.md` mode D step 1,
+`../../knowledge/TEMPLATE-As-Built-v0.1.md`). For an existing customer's session that we ran, use Parts B and C.
+
 ## Part A: deck comparison (needs the presented deck)
 
 1. Find the decks: generated = the `out` of the deal's `deck.json`; presented = the newest other `.pptx` in the deal
@@ -82,6 +86,12 @@ feedback file.
 Append to `../../lessons/<yyyy-mm-dd>-<deal>.md`: what we'd keep, change or stop, each with evidence and a proposed
 change to a skill, standard, pack or template. Don't change the motion here: the weekly lessons run decides, and a
 change needs 2+ deals or 2+ SCs (or one serious failure).
+
+**Confidential terms** (`../../standards/CONFIDENTIAL-TERMS-v0.1.md`): if the transcript has the customer asking us
+not to share something (their own categories, criteria, programme names), propose the terms and generic labels at
+the top of your message and, on the SC's yes, `python ../sc-lessons/scripts/confidential.py add`. Everything this
+skill writes outside the deal folder (`Lessons/deck-edits/`, `lessons/`, feedback files) uses the generic labels:
+`confidential.py scan --deal "<deal>" <files>` before you report.
 
 End customer-facing drafts with "SC check required before this is used with the customer."
 
