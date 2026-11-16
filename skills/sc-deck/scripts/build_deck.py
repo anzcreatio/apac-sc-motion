@@ -1231,7 +1231,72 @@ def s_library(deck, slide, d, n):
     pass  # handled by copy_library
 
 
+def s_map(deck, slide, d, n):
+    """Opportunity map: the customer's platform as a hub, connected ideas on the left, wider ideas on the right,
+    each an icon tile joined to the hub. For "what else can it do" slides (existing customers, sc-guide mode D)."""
+    from pptx.enum.shapes import MSO_CONNECTOR
+    left, right = d.get("left", {}), d.get("right", {})
+    sides = [(left.get("label", ""), left.get("items", []), True), (right.get("label", ""), right.get("items", []), False)]
+    for label, items, _ in sides:
+        if not 1 <= len(items) <= 4:
+            warn(n, "map side '%s' has %d items; use 1-4" % (label, len(items)))
+    top = T.T - 0.1
+    if d.get("outcome"):
+        run(textbox(slide, "Outcome", T.L, top, T.W, 0.45), d["outcome"], 17, T.INK, bold=True)
+        top += 0.6
+    hub_w = 2.3
+    gap = 0.6
+    cw = (T.W - hub_w - 2 * gap) / 2
+    head_h = 0.4
+    tiles_top = top + head_h
+    tiles_bottom = T.B - 0.45
+    most = max(len(s[1]) for s in sides) or 1
+    tgap = 0.16
+    th = min(1.25, (tiles_bottom - tiles_top - tgap * (most - 1)) / most)
+    cx = T.L + T.W / 2
+    span = most * th + (most - 1) * tgap
+    cy = tiles_top + span / 2
+    connectors = []
+    for si, (label, items, near) in enumerate(sides):
+        x = T.L if si == 0 else T.L + T.W - cw
+        run(textbox(slide, "Map heading %d" % si, x, top, cw, 0.35), label, 14, T.ACC if near else T.GREY, bold=True,
+            align=PP_ALIGN.LEFT if si == 0 else PP_ALIGN.RIGHT)
+        y0 = tiles_top + (span - (len(items) * th + (len(items) - 1) * tgap)) / 2
+        for i, it in enumerate(items):
+            y = y0 + i * (th + tgap)
+            box = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, "Map tile %d.%d" % (si, i), x, y, cw, th,
+                        fill=T.TINT if near else T.SOFT)
+            box.adjustments[0] = 0.12
+            iw = icon(slide, it.get("icon"), x + 0.2, y + 0.2, 0.42, n)
+            tx = x + 0.2 + (iw + 0.2 if iw else 0)
+            tw = cw - (tx - x) - 0.2
+            title_h = est_h(it["title"], 14, tw) * 1.1
+            run(textbox(slide, "Map title %d.%d" % (si, i), tx, y + 0.16, tw, title_h), it["title"], 14, T.INK, bold=True)
+            ty = 0.16 + title_h + 0.08
+            run(textbox(slide, "Map text %d.%d" % (si, i), tx, y + ty, tw, th - ty - 0.05), it.get("text", ""), 11.5, T.BODY)
+            if ty + est_h(it.get("text", ""), 11.5, tw) > th - 0.05:
+                warn(n, "map item '%s' text may not fit: shorten it" % it["title"])
+            connectors.append((x + cw if si == 0 else x, y + th / 2, near))
+    for (ex, ey, near) in connectors:  # drawn before the hub, so each line meets the hub's edge
+        c = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(cx), Inches(cy), Inches(ex), Inches(ey))
+        c.line.color.rgb = T.ACC if near else T.RULE
+        c.line.width = Pt(1.75)
+    hub = d.get("hub", {})
+    hs = hub_w
+    h = shape(slide, MSO_SHAPE.OVAL, "Map hub", cx - hs / 2, cy - hs / 2, hs, hs, fill=T.ACC)
+    tf = h.text_frame
+    tf.word_wrap = True
+    tf.margin_left = tf.margin_right = Inches(0.2)
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    run(tf, hub.get("title", "Your Creatio"), 18, T.WHITE, bold=True, align=PP_ALIGN.CENTER)
+    if hub.get("text"):
+        run(tf, hub["text"], 11, T.WHITE, first=False, align=PP_ALIGN.CENTER, space_before=4)
+    if d.get("caption"):
+        caption(slide, T.L, T.B - 0.25, T.W, d["caption"])
+
+
 TYPES = {
+    "map": s_map,
     "cover": s_cover, "understanding": s_understanding, "facts": s_facts, "why": s_why,
     "hypothesis": s_hypothesis, "component": s_component, "screen": s_screen, "summary": s_summary,
     "roadmap": s_roadmap, "next_steps": s_next_steps, "section": s_section, "library": s_library, "build": s_build,
