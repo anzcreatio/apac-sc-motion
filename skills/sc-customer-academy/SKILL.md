@@ -15,7 +15,7 @@ Script: `scripts/customer_academy.py` (no arguments = help). Course upkeep reuse
 ## What it teaches with (and what it never hands over)
 
 - **Only public tools:** Claude Code, **Creatio's AI App Development Toolkit** (`creatio-ai-app-development-toolkit`,
-  installed through Creatio's setup wizard) and **clio**. Customers can install them themselves and keep using them.
+  installed by the customer with the self-install prompts in `modules/F0-install-windows.md` and `F0-install-mac.md`) and **clio**. Customers can install them themselves and keep using them.
 - **Never** our internal tools in a customer session: not `creatio-demo-toolkit`, not this plugin, not the demo
   library, packs, catalogue or deal files. The demo toolkit takes demo shortcuts (SQL writes, lab packages) that
   aren't production practice.
@@ -59,7 +59,7 @@ Ask at the top, numbered, in one message:
 Then: `python scripts/customer_academy.py prep --deal <deal> --product "<product>" --format 1h|3h|full
 --env-name <env> --env-url <url> [--customer-name "<as they write it>"]`. It **refuses an environment that looks like production** unless you pass
 `--non-prod-confirmed-by "<their name, role>"` after the customer confirmed it. Add each person with `person`.
-Send `F0` (pre-work) a week before and check each person's result the day before. **Rehearse the build on their
+Send `F0` (pre-work, with its Windows and Mac install guides; full course: send the two guides before `B0`) a week before and check each person's result the day before. **Rehearse the build on their
 product and site and time it**; keep your own pre-built copy to show if it runs long. For the full course, propose
 2-3 hour sessions (one track per session) in `<deal>/enablement/plan.md`. Customer-facing materials end with "SC check required before this is used with the customer."
 

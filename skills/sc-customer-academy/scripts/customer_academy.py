@@ -238,10 +238,14 @@ def cmd_pack(a):
         skill = fh.read().replace("{{CUSTOMER}}", p.get("customer") or p["account"]).replace("{{PRODUCT}}", p["product"])
     with open(os.path.join(sk, "SKILL.md"), "w", encoding="utf-8") as fh:
         fh.write(skill)
-    for m in mods:
-        with open(os.path.join(SKILL_DIR, m["file"]), encoding="utf-8") as fh:
+    # every module file plus its attachments; F0's Windows and Mac install guides go in every pack (full course too)
+    files = [(m, f) for m in mods for f in [m["file"]] + m.get("attachments", [])]
+    guides = next((m.get("attachments", []) for m in modules(c) if m["id"] == "F0"), [])
+    files += [(None, f) for f in guides if f not in [x for _, x in files]]
+    for _, f in files:
+        with open(os.path.join(SKILL_DIR, f), encoding="utf-8") as fh:
             body = strip_facilitator(fh.read())
-        with open(os.path.join(sk, m["file"]), "w", encoding="utf-8") as fh:
+        with open(os.path.join(sk, f), "w", encoding="utf-8") as fh:
             fh.write(body)
     for fx in ("practice-scenario.md", "glossary.md"):
         shutil.copy(os.path.join(SKILL_DIR, "fixtures", fx), os.path.join(sk, fx))
@@ -257,13 +261,17 @@ def cmd_pack(a):
            "| Part | Module | Minutes |", "|---|---|---|"]
     head = ("<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>"
             "<title>%s</title><style>%s</style>")
-    for m in mods:
-        with open(os.path.join(SKILL_DIR, m["file"]), encoding="utf-8") as fh:
+    for m, f in files:
+        with open(os.path.join(SKILL_DIR, f), encoding="utf-8") as fh:
             body = strip_facilitator(fh.read())
-        name = os.path.basename(m["file"]).replace(".md", ".html")
-        with open(os.path.join(pg, name), "w", encoding="utf-8") as fh:
-            fh.write(head % ("%s %s" % (m["id"], m["title"]), academy.CSS) + banner +
+        # pages are flat HTML: links between module files point at their .html copies
+        body = re.sub(r"\]\(([A-Za-z0-9_-]+)\.md\)", r"](\1.html)", body)
+        title = "%s %s" % (m["id"], m["title"]) if m and f == m["file"] else body.splitlines()[0].lstrip("# ")
+        with open(os.path.join(pg, os.path.basename(f).replace(".md", ".html")), "w", encoding="utf-8") as fh:
+            fh.write(head % (title, academy.CSS) + banner +
                      "<p><a href='index.html'>Course index</a></p>" + academy.md_to_html(body))
+    for m in mods:
+        name = os.path.basename(m["file"]).replace(".md", ".html")
         idx.append("| %s | [%s](%s) | %s |" % ({"F": "Session"}.get(m["path"], m["path"]), m["title"], name, m.get("minutes", "")))
     with open(os.path.join(SKILL_DIR, "fixtures", "glossary.md"), encoding="utf-8") as fh:
         gl = fh.read()
@@ -271,7 +279,7 @@ def cmd_pack(a):
         fh.write(head % ("Words you'll hear", academy.CSS) + banner + "<p><a href='index.html'>Course index</a></p>" + academy.md_to_html(gl))
     idx.append("| | [Words you'll hear](glossary.html) | |")
     idx += ["", "## Keep learning", "",
-            "- Toolkit setup guide (Creatio Academy): %s" % c["references"]["toolkit_setup"],
+            "- Set up Claude on another computer: [Windows](F0-install-windows.html) · [Mac](F0-install-mac.html)",
             "- The toolkit on GitHub: %s" % c["references"]["toolkit_repo"],
             "- To keep using the coach after the course: copy the `creatio-build-coach` folder into `~/.claude/skills/` and say \"coach me\" in Claude Code."]
     with open(os.path.join(pg, "index.html"), "w", encoding="utf-8") as fh:

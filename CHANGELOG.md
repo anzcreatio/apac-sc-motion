@@ -4,6 +4,23 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.26.0 (17 Nov 2026): customer self-install guides for Claude + the Creatio toolkit (Windows and Mac)
+
+- 📣 **You can now send a customer one page that gets Claude Code, clio and Creatio's AI App Development Toolkit
+  running on their own Windows or Mac machine.** `sc-customer-academy` pre-work `F0` ("Before you come") links to two
+  new guides, `modules/F0-install-windows.md` and `modules/F0-install-mac.md`: a few steps by hand, then one prompt
+  pasted into Claude Code that installs everything and connects their **sandbox** site. Creatio's Academy setup-wizard
+  page (what F0 used to point to) returns 404.
+- Rules built in: the customer types every password in their own terminal (never in Claude, never `sudo` in
+  Claude's shell); only public tools; covers Business Studio, not AI Studio. Fixes from real failures included:
+  Mac uses Microsoft's .NET 10 installer (no Homebrew), the clio `rollForward` fix when only a newer .NET is
+  installed, and the Windows Claude app's private copy of clio's settings.
+- The customer pack (`customer_academy.py pack`) now ships both guides in every format, full course included, and
+  links them from the workbook index. `B0` points to them too. Course v0.3.
+- **Not yet tested on a clean machine.** On your first customer run, be on a call and log anything that breaks
+  (`sc-guide` mode C).
+- **Each SC: before you next run customer enablement, read the two guides once so you can walk a customer through them.**
+
 ## 0.25.1 (17 Nov 2026): NEW in the Slide-library: AI coding agent explainer deck
 
 - 📣 **New deck for when a customer asks "what is the AI Coding Toolkit / AI coding agent?"**

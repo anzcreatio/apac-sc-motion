@@ -1,7 +1,7 @@
 {
  "title": "Build on Creatio with Claude",
- "version": "0.2",
- "updated": "2026-11-14",
+ "version": "0.3",
+ "updated": "2026-11-17",
  "state_dir": "Lessons/customer-training",
  "teaches_sources": [
   "appdev"
@@ -22,7 +22,7 @@
   ]
  },
  "references": {
-  "toolkit_setup": "https://academy.creatio.com/docs/8.x/no-code-customization/ai-development/creatio-ai-toolkit-setup",
+  "toolkit_setup": "modules/F0-install-windows.md and modules/F0-install-mac.md (self-install by prompt; Creatio's Academy setup-wizard page returned 404 on 16 Nov 2026)",
   "toolkit_repo": "https://github.com/Creatio-Platform/creatio-ai-app-development-toolkit",
   "clio_repo": "https://github.com/Advance-Technologies-Foundation/clio"
  },
@@ -36,7 +36,11 @@
      "id": "F0",
      "title": "Before you come",
      "file": "modules/F0-before-you-come.md",
-     "minutes": 15,
+     "attachments": [
+      "modules/F0-install-windows.md",
+      "modules/F0-install-mac.md"
+     ],
+     "minutes": 30,
      "stand": false,
      "skills": [
       "appdev-doc:runbooks/01-environment-setup.md"
@@ -45,8 +49,8 @@
       "appdev-doc:runbooks/01-environment-setup.md": "4d0f29b373df361b"
      },
      "stamped": {
-      "date": "2026-11-14",
-      "by": "authoring session, waiting for Renzo's approval",
+      "date": "2026-11-17",
+      "by": "authoring session (self-install guides), waiting for Renzo's approval",
       "status": "pending"
      }
     },

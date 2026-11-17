@@ -10,8 +10,9 @@ safely when three things are in place: the tools installed, Claude connected to 
 
 ## Lab
 
-1. **Install the kit** with Creatio's setup wizard (Creatio Academy: "Set up the Creatio AI app development toolkit").
-   It installs the toolkit and clio for Claude Code. Open Claude Code and check the toolkit's skills are listed.
+1. **Install the kit** with the install guide for your computer: [Windows](F0-install-windows.md) or
+   [Mac](F0-install-mac.md). You paste one prompt into Claude Code; it installs clio and the toolkit. Open Claude
+   Code and check the toolkit's skills are listed.
 2. **Register your development environment in clio yourself**, in your own terminal, with your own sign-in. Claude
    never needs your password; don't paste it into the chat.
 3. **Ask Claude:** "Which Creatio environments can you see, and which one will you use?" It should name your
@@ -39,5 +40,5 @@ safely when three things are in place: the tools installed, Claude connected to 
 
 - Check `plan.json` before the session; the participant's clio URL must match its environment.
 - Windows + Claude desktop app: clio environments registered in a terminal can be invisible to the app until the
-  clio settings file is copied into the app's packaged copy. Let them do it, following the toolkit's setup guide.
+  clio settings file is copied into the app's packaged copy. The Windows guide's check prompt does this safely.
 - If they can't install software on their laptop, solve it with their IT before the session, not during it.
