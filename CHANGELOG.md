@@ -4,6 +4,21 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.25.1 (17 Nov 2026): NEW in the Slide-library: AI coding agent explainer deck
+
+- 📣 **New deck for when a customer asks "what is the AI Coding Toolkit / AI coding agent?"**
+  `Slide-library/ai-coding-agent-explainer-2026-11.pptx`, 5 slides on the designed template: (1) describe it,
+  approve the plan, it's built; (2) where it runs and what it can touch (diagram, for IT); (3) what it can build and
+  fix; (4) three screens from our own builds, made-up data; (5) why it matters. Customer-safe talk track in the
+  speaker notes.
+- Use it whole, or pull slides into a deal deck:
+  `{"type": "library", "file": "library:ai-coding-agent-explainer-2026-11.pptx", "slides": [2, 4]}`.
+- **Before you present it, read the SC-only rules** in `Deals/_examples/ai-coding-toolkit-explainer/README.md`:
+  no "10x", no data-residency claims for the coding agent, be upfront that the agent itself needs a licence, never
+  name the customers behind slide 4.
+- `sc-deck`: new `map` slide type (the customer's platform as a hub, connected and wider opportunities around it).
+- **Each SC: open the new deck once (Slide-library/ai-coding-agent-explainer-2026-11.pptx) and read its README, so it's ready the next time a customer asks.**
+
 ## 0.25.0 (16 Nov 2026): which licences a deal needs (sc-bom)
 
 - **New skill `sc-bom`**: the bill of materials. From what we know about the customer (solution summary, demo plan,
