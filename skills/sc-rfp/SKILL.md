@@ -86,7 +86,7 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
 - Claims and proof points come only from the differentiator catalogue. No competitor comparisons in the fit-gap.
 - Never change the customer's file or the bid team's file. Customer documents stay in the deal folder on SharePoint,
   never in the plugin repo.
-- Every output ends with "SC check required before this is used with the customer or the bid team."
+- No "SC check" warning line on any output (rule since 17 Nov 2026).
 
 ## Talking to the SC
 

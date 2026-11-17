@@ -274,7 +274,7 @@ function render(){
   <section><h2>Example data</h2><div class="card"><ul>${(D.data||[]).map(x=>`<li><b>${esc(x.what)}</b>: ${esc(x.detail)}</li>`).join("")}</ul></div></section>
   <section><h2>Not in this build</h2><div class="card tbl-wrap"><table><thead><tr><th>What</th><th>If they ask, we say</th></tr></thead><tbody>${(D.not_built||[]).map(x=>`<tr><td style="white-space:normal">${esc(x.what)}</td><td style="white-space:normal">${esc(x.say)}</td></tr>`).join("")}</tbody></table></div></section>
   <section><h2>Decisions for you</h2><div class="card"><ol class="decisions">${(D.decisions||[]).map(x=>`<li>${esc(x.q)} <span class="muted">Our recommendation: ${esc(x.rec)}</span></li>`).join("")}</ol></div></section>
-  <footer>Approve in chat before anything is built. SC check required before this is used with the customer.</footer>`;
+  <footer>Approve in chat before anything is built.</footer>`;
 }
 render();
 </script>

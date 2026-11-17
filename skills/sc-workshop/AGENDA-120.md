@@ -19,5 +19,3 @@ The draft journey is on screen the whole time; their own spreadsheet or form bes
 - Integration detail is not for the room: note the system, the direction and move on. The IT follow-up takes it.
 - A debate about a rule (a limit, an SLA, who approves): get both views and the number, mark it **disputed**, move on.
   It becomes the live change in the next session.
-
-SC check required before this is used with the customer.

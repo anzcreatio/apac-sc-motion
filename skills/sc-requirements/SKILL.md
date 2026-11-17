@@ -102,7 +102,7 @@ shows it as a tab; the SC can publish it as a private artifact to read on a phon
 - Security, hosting and AI data lines only from the governance pack's "can say" lines (for example AI hosted in
   Australia; not New Zealand until confirmed).
 - If the customer later issues an RFP, run `sc-rfp` on it: the consistency check shows which of our lines they kept.
-- Customer-facing: SC check required before this is used with the customer.
+- No "SC check" warning line on any output (rule since 17 Nov 2026).
 
 ## Talking to the SC
 

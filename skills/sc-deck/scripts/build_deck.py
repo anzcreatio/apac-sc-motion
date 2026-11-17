@@ -28,7 +28,6 @@ from pptx.util import Inches, Pt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES = os.path.join(os.path.dirname(HERE), "templates")
-SC_CHECK = "SC check required before this is used with the customer."
 WARNINGS = []
 
 
@@ -324,9 +323,6 @@ class Deck:
                 if sh.name == T.shapes.get("page"):
                     set_text(sh, str(page))
         last = self.slides[-1][0]
-        notes = notes_frame(last)
-        if SC_CHECK not in notes.text:
-            notes.text = (notes.text + "\n" if notes.text else "") + SC_CHECK
         self.prs.core_properties.title = self.meta.get("title", "Creatio")
         self.prs.save(out)
 
@@ -1085,7 +1081,7 @@ def s_outputs(deck, slide, d, n):
     int_w = T.W - step_w - cust_w - 0.4
     xs = [T.L, T.L + step_w + 0.2, T.L + step_w + cust_w + 0.4]
     ws = [step_w, cust_w, int_w]
-    labels = d.get("labels", ["Step", "The customer gets (after the SC check)", "We keep (internal)"])
+    labels = d.get("labels", ["Step", "The customer gets", "We keep (internal)"])
     y = T.T + 0.05
     for i, lbl in enumerate(labels):
         run(textbox(slide, "Outputs head %d" % i, xs[i], y, ws[i], 0.3), lbl, 11, T.ACC if i == 1 else T.GREY, bold=True)

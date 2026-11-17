@@ -48,7 +48,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PLUGIN = os.path.normpath(os.path.join(HERE, "..", "..", ".."))
 TEAM = {"rh": "Renzo Huruiti", "wn": "Willy Noviandy", "fa": "Ferdhi Adrian"}
 LEDGER = "commitments.json"
-CHECK = "SC check required before this is used with the customer."
+CHECK = "Not sent: you or the AE send it."
 
 # Stall and load thresholds (agreed design, 14 Nov 2026). Change here, not in the skill text.
 STALE_DAYS = 7          # no activity
@@ -894,7 +894,7 @@ def draft_followup(deal, r, sc):
         lines += ["On our side:"] + ["- %s (%s%s)" % (i["what"], i["owner"], ", due %s" % i["due"] if i.get("due") else "") for i in ours[:4]] + [""]
     if "no_meeting" in kinds or "idle" in kinds:
         lines += ["We don't have the next session with them booked. Could you propose two times for the next step?", ""]
-    lines += ["Thanks,", me, "", "_DRAFT. %s Not sent: you or the AE send it. Please also update your CRM if the deal has moved._" % CHECK]
+    lines += ["Thanks,", me, "", "_%s Please also update your CRM if the deal has moved._" % CHECK]
     return "\n".join(lines)
 
 
@@ -942,7 +942,7 @@ def c_brief(a):
     ahead = sorted([(r["info"]["next_meeting"], r["deal"]) for r in scans if r["info"].get("next_meeting")])[:5]
     if ahead:
         L += ["**Coming up:** " + " · ".join("%s %s" % (pdate(d).strftime("%a %d %b"), n) for d, n in ahead), ""]
-    L += ["## Follow-up drafts (SC check; never sent automatically)", ""]
+    L += ["## Follow-up drafts (never sent automatically)", ""]
     nd = 0
     MAXD = 3
     drafted = []

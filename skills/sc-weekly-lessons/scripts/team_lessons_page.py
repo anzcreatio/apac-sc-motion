@@ -210,8 +210,7 @@ def render(meta, sections, fragment):
         out.append("</div></section>")
     out.append('<p class="empty" id="empty" hidden>No lesson matches that search.</p>')
     out.append("<footer>%s<br>Built from <code>Lessons/TEAM-LESSONS.md</code>: change the lessons there, then re-run "
-               "<code>team_lessons_page.py</code>. SC check required before any of this wording is used with a "
-               "customer.</footer></div>" % inline(meta["how"]))
+               "<code>team_lessons_page.py</code>.</footer></div>" % inline(meta["how"]))
     out.append("<script>%s</script>" % JS)
     if not fragment:
         out.append("</body></html>")

@@ -95,5 +95,3 @@ Don't hide them: show the workaround or say how it's handled. These are the eval
 - **W1-20** (integration): ~For portal clients, the invoice and the signed job sheet go into the client's portal with the job number the portal expects.
 - **W1-24** (ai): ~Client data in emails and job notes (names, phone numbers, hospital ward details, photos) is handled in line with the clients' contract cl…
 - **W1-27** (standard): ~A written answer on where client data is processed by AI, what's kept and what can be switched off per client, for the risk committee.
-
-SC check required before this is used with the customer or the bid team.

@@ -27,7 +27,7 @@ slides you can fix without PowerPoint surgery.
 
 - [ ] `01-fm-prep.md`, `deck.json` and the `.pptx` exist in the practice folder; the deck built with no warnings.
 - [ ] The hypothesis slide quotes Greg's P1 ask (C) and nothing on it is a claim outside the differentiator catalogue.
-- [ ] The deck's last line/notes carry "SC check required before this is used with the customer."
+- [ ] No "SC check" warning line in the deck or its notes.
 - [ ] The SC can explain C / P / I / A and which ones may build a scene straight away (only C).
 
 ## Traps

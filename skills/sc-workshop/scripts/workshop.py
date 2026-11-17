@@ -213,7 +213,7 @@ def followup(model, G):
             L.append("")
         if n > 12:
             L.insert(0, "<!-- %d questions: trim to the ones that block the next build; the rest can wait for workshop %s -->" % (n, (meta.get("workshop") or 1) + 1))
-    L += ["Thanks,", meta.get("from") or "<AE / SC>", "", "---", "", "SC check required before this is used with the customer."]
+    L += ["Thanks,", meta.get("from") or "<AE / SC>", "", "---"]
     return "\n".join(L) + "\n"
 
 
@@ -291,10 +291,6 @@ def playback(a):
     d.add_heading("Sign-off", 1)
     d.add_paragraph("Confirmed as an accurate record of our needs for %s." % ("these journeys" if len(journeys) > 1 else "this journey"))
     d.add_paragraph("Name: ______________________   Role: ______________________   Date: ____________")
-    p = d.add_paragraph()
-    r = p.add_run("DRAFT. SC check required before this is used with the customer. (Delete this line once checked.)")
-    r.font.color.rgb = RGBColor(0xC0, 0x00, 0x00)
-    r.bold = True
     d.save(a.out)
     pr = collections.Counter((q.get("extra") or {}).get("priority") for q in rq)
     print("Playback: %d journeys, %d requirements (%s) -> %s" % (len(journeys), len(rq), dict(pr), a.out))

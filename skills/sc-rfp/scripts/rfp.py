@@ -321,7 +321,6 @@ def summary_md(reg, ver, mt, deal, xlsx="fit-gap.xlsx"):
         L.append("| | None | | |")
     L += ["", "## Fit by category", "", "| Fit | Count |", "|---|---|"] + \
          ["| %s | %d |" % (FITS[k]["label"], n) for k, n in mt["by_fit"].most_common()]
-    L += ["", "SC check required before this is used with the customer or the bid team."]
     return "\n".join(L) + "\n"
 
 
@@ -363,7 +362,6 @@ def workshop_md(reg, ver, mt, deal, xlsx):
           for q in eff[:15]]
     L += ["", "## Fit by category", "", "| Fit | Count |", "|---|---|"] + \
          ["| %s | %d |" % (FITS[k]["label"], n) for k, n in mt["by_fit"].most_common()]
-    L += ["", "SC check required before this is used with the customer."]
     return "\n".join(L) + "\n"
 
 
@@ -450,7 +448,6 @@ def check(a):
     for q, v, t, issue, expl in rows:
         L.append("| %s | %s | %s | %s | %s | %s |" % (q["rid"], (v.get("english") or q["text"]).replace("|", "/").replace("\n", " ")[:120], t,
                                                      FITS[v["fit"]]["label"], issue, (expl or "").replace("|", "/").replace("\n", " ")[:160]))
-    L += ["", "SC check required before this is used with the customer or the bid team."]
     open(a.out, "w", encoding="utf-8").write("\n".join(L) + "\n")
     if a.xlsx:
         wb = openpyxl.Workbook()
@@ -528,8 +525,7 @@ def poc(a):
     L += ["", "## 4. Questions to settle before building", ""] + \
          ["- **%s**: %s" % (q["rid"], short(ver[q["rid"]]["question"], 220)) for q in qs] + \
          ["", "## 5. Low-confidence lines to confirm (product or SC)", ""] + \
-         ["- **%s** (%s): %s" % (q["rid"], ver[q["rid"]]["fit"], short(eng(q), 140)) for q in mt["low_conf"]] + \
-         ["", "SC check required before this is used with the customer or the bid team."]
+         ["- **%s** (%s): %s" % (q["rid"], ver[q["rid"]]["fit"], short(eng(q), 140)) for q in mt["low_conf"]]
     open(a.out, "w", encoding="utf-8").write("\n".join(L) + "\n")
     json.dump({"deal": a.deal or reg.get("customer"), "build": [q["rid"] for q in build], "show": [q["rid"] for q in show],
                "gaps": [q["rid"] for q in mt["must_gaps"]]}, open(os.path.splitext(a.out)[0] + ".json", "w", encoding="utf-8"), indent=1)

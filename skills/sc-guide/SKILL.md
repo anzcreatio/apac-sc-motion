@@ -52,7 +52,7 @@ message. If they want to skip a step, let them and note it.
 | **3. A real deal, end to end** | Walk them through `Deals/suntory-oceania/` in this order, opening each file for them (Windows, PowerShell: `Invoke-Item "<file>"`; Mac: `open "<file>"`) and saying in one line what it is and what made it (a skill today, or the older workflow it replaced; the presented deck was edited by hand after the build): `02-discovery-card.md` → `Suntory Introduction Nov 2026.pptx` (the deck presented on 11 Nov) → `clickpath/suntory-oceania-click-path-sc.html` (try practice mode) → `clickpath/suntory-oceania-click-path-customer.html` (the approved recap) → `15-meeting-review-2026-11-11.md` → `16-january-session-draft.pptx` → `Library/field-sales-visit/README.md`. Read-only: don't change anything in a real deal | They've opened each one; answer their questions |
 | **4. Practice: a first meeting** | Copy `Deals/suntory-oceania/01-call-transcript-2026-11-04.md` into `Deals/_practice/<name>-suntory/`. Run `sc-first-meeting` with **deal folder = `Deals/_practice/<name>-suntory/`** (say so explicitly, so it never writes into `Deals/suntory-oceania/`) and **treat the meeting as a week away** (so it doesn't skip the configuration brief). **Practice stops at the prep and the deck: no configuration, no Creatio stand, no clio.** They answer the questions; they play the SC. Then compare their deck with the one Renzo presented, side by side: what's the same, what they'd change. **No meeting review, harvest or deck review on practice folders** (they'd pollute the weekly digest) | Their practice deck is built and compared |
 | **5. Practice: plan a demo** | In the same practice folder, run `sc-demo-plan` up to the plan (no build): they answer the three pre-build questions, see the demo bar check, the library and pattern reuse, and the build order ending in the harvest | A practice `demo-plan.md` exists |
-| **6. The rules** | Go through the rules card below. Ask them to tell you back, in their own words, the three they think matter most. Correct gently if they miss "nothing reaches the customer without the SC check". Then open `<team root>/Lessons/TEAM-LESSONS.md` with them (what the team has learnt, no names or deals) and ask which lesson surprised them | They've said them back |
+| **6. The rules** | Go through the rules card below. Ask them to tell you back, in their own words, the three they think matter most. Correct gently if they miss "nothing reaches the customer without your review". Then open `<team root>/Lessons/TEAM-LESSONS.md` with them (what the team has learnt, no names or deals) and ask which lesson surprised them | They've said them back |
 | **7. Feedback** | Explain mode C: "Tell me whenever something doesn't work or could be better; I log it and it reaches Renzo's Friday digest." Ask them for one thing from the practice run and log it (mode C) | One feedback note logged |
 | **8. Your first real deal** | Set the stage to **shadow**. Explain the stages below. Tell them: on any deal, say "what's next on <account>" and you'll read the folder and tell them. Delete nothing in `_practice`; Renzo cleans it up. Before their first build, point them to `sc-academy` ("train me"): it teaches building with the toolkit, step by step, on a lab stand | Stage set; onboarding complete. Say so in one line and suggest they tell Renzo |
 
@@ -83,8 +83,9 @@ message. If they want to skip a step, let them and note it.
 
 ### The rules card
 
-1. **Nothing reaches the customer without the SC check.** Every customer-facing output ends with "SC check required
-   before this is used with the customer." Recaps stay DRAFT until you approve them.
+1. **Nothing reaches the customer without your review.** Claude never sends anything; you read every output before
+   it goes out. Outputs carry no "SC check" warning line (you'd only have to delete it). Recaps stay DRAFT until you
+   approve them.
 2. **Claims only from the catalogue.** Differentiators and proof points come only from the differentiator catalogue;
    AI, data, hosting and security answers only from the governance pack's "can say" lines. Otherwise: "we'll confirm
    in writing".

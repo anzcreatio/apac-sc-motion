@@ -358,7 +358,6 @@ def md(cat, bom, team):
           "4. Questions about a product line: ask the SC, not the customer.", ""]
     if bom.get("inputs"):
         L += ["## Sources used", ""] + ["- %s" % i for i in bom["inputs"]] + [""]
-    L += ["SC check required before this is used with the customer."]
     return "\n".join(L) + "\n"
 
 

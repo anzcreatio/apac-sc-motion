@@ -117,7 +117,7 @@ the customer page.
 
 ## Rules
 
-- The customer page never shows the SC check line; the DRAFT banner does that job until approval.
+- No page shows an "SC check" line; the DRAFT banner on the customer page stays until approval.
 - Never send or publish the customer page yourself. The SC sends it.
 - Example data only. If a screenshot shows real customer data, hide it and tell the SC.
 - They said = confirmed words only (C), with who and when. Never put an inferred pain in someone's mouth.

@@ -203,4 +203,4 @@ Only when the SC running the review is the SC who presented (never on another SC
 
 Questions at the **top** of every message, numbered, before any summary ("No questions" if none). Recommend, don't
 list options. Plain Australian English, tables, short lines. Be direct about weak answers and specific about the fix:
-this is coaching, not marking. Customer-facing wording ends with "SC check required before this is used with the customer."
+this is coaching, not marking. No "SC check" warning line on any output (rule since 17 Nov 2026).

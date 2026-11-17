@@ -180,8 +180,8 @@ the next workshop.
 - **Delivery support:** if the room worries about implementation, the partner or cost blowouts, the "how we'd start"
   close and the roadmap can say Creatio reviews requirements and design before the build and stays involved through
   delivery (`../../knowledge/DELIVERY-ASSURANCE-v0.2.md` §6 "can say"). No prices, hours or package names.
-- Every customer-facing output (pre-work email, follow-up email, playback) ends with "SC check required before this
-  is used with the customer."
+- No "SC check" warning line on any output (pre-work email, follow-up email, playback); the SC reviews before
+  anything goes to the customer.
 
 ## Talking to the SC
 

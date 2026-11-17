@@ -102,5 +102,3 @@ Per year, as on deck slide 8 ("$", currency not stated): #1 $30,000 · #2 $65,00
 ## 8. Open points
 
 - Currency, and whether prices are list or negotiable: not on the deck. Ask Alex Klochkov.
-
-SC check required before any of this is used with a customer.

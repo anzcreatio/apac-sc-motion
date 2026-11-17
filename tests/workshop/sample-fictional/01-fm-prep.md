@@ -33,5 +33,3 @@
 - Approval rules and who signs off what.
 - What MYOB integration they expect.
 - Where AI could help, and any concerns about it.
-
-SC check required before this is used with the customer.

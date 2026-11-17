@@ -48,8 +48,7 @@ team lead) may look across SCs, and he sets who owns a deal (`owner`). Deal fold
    actions table, today's meetings with prep gaps, the follow-up drafts, the open commitments. Keep the SC's words.
 4. **Follow-up drafts:** the script writes a starting draft per stalled deal (at most 3, addressed to the AE so they
    can forward or adapt it). Rework each in plain words (`../../standards/WRITING-STYLE-v0.1.md`): short, one ask,
-   their names, what we owe and what they owe. Each ends with "SC check required before this is used with the
-   customer." **Never send mail, never save a draft into Outlook, never book a meeting.** The SC or the AE sends it.
+   their names, what we owe and what they owe. No "SC check" warning line. **Never send mail, never save a draft into Outlook, never book a meeting.** The SC or the AE sends it.
 5. Offer the one action you'd do first, and do it on their yes (e.g. run `sc-harvest`, finish the AE brief).
 
 The brief ranks actions by deadline and how close the deal is to the customer's decision: a demo under 3 days with no
@@ -145,7 +144,7 @@ The task runs while the Claude app is open; if the PC is off at 8, it runs at th
 ## Rules
 
 - **Not a CRM** (top of this file). No stage, forecast, value or probability anywhere.
-- **Nothing is sent.** Drafts end with "SC check required before this is used with the customer."
+- **Nothing is sent.** Drafts carry no "SC check" warning line; the SC reads them before they go.
 - The ledger is the SC's: capture is a dry run until the SC picks what was agreed. Never close a commitment the SC
   didn't confirm, except a recap or follow-up Outlook shows as sent (say so in the brief).
 - Only `commitments.json` is written in a deal folder; everything else the desk reads.

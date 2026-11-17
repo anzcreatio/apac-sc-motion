@@ -4,6 +4,18 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.27.0 (17 Nov 2026): no more "SC check required" lines
+
+- 📣 **Nothing the plugin makes ends with "SC check required before this is used with the customer." any more**:
+  decks (speaker notes), fm-prep, emails, RFP and requirements outputs, workshop docs, BOM, desk drafts, build plans,
+  AE briefs, lessons page. You no longer have to delete it before sending, and it can't slip through to a customer.
+- The rule hasn't changed: **you still review everything before it reaches a customer, and Claude never sends.** The
+  DRAFT banners that hold a customer pack or click path until you approve it stay.
+- The requirements checklist's red "DRAFT…" first row is gone (the title is now row 1); the workshop playback
+  .docx no longer ends with a red DRAFT line.
+- Existing Slide-library decks were cleaned too.
+- **Each SC: delete the line from any draft you still have open from before today.**
+
 ## 0.26.0 (17 Nov 2026): customer self-install guides for Claude + the Creatio toolkit (Windows and Mac)
 
 - 📣 **You can now send a customer one page that gets Claude Code, clio and Creatio's AI App Development Toolkit

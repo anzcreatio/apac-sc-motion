@@ -254,7 +254,7 @@ packages. Name a library module here if one is reused, and say what gets promote
 - The SC owns the demo. Present options and trade-offs, recommend one, and let them choose.
 - Plain words, their vocabulary, per `../../standards/WRITING-STYLE-v0.1.md`.
 - Don't touch a Creatio stand from this skill. Building is the toolkit's job, after the SC approves the plan.
-- End with "SC check required before this is used with the customer." when anything in it will be shown.
+- No "SC check" warning line on any output (rule since 17 Nov 2026).
 
 ## Talking to the SC
 

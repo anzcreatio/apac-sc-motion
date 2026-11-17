@@ -65,7 +65,7 @@ titles, titles over 12 words, semicolons and em dashes.
 | Limits: understanding 3–5 rows (≤ 15 words per cell; **4 rows when there is a timing line**) · hypothesis 3 parts · summary 3, 4 or 6 parts · component 2–4 points + 1–2 AI lines | Slides are read in seconds |
 | Talk track, sources and cautions go in `notes`, never on the slide | The deck stays clean; the SC still has everything |
 | Screenshots: example data only, captioned ("Example data on fictional sites") | No customer data in a demo deck |
-| The last slide's notes end with "SC check required before this is used with the customer." (the builder adds it) | Project rule |
+| No "SC check" warning line in any slide or notes (the builder no longer adds it; 17 Nov 2026) | Project rule |
 
 ## 3. `deck.json`
 

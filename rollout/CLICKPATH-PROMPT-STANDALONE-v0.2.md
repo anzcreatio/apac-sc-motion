@@ -152,7 +152,7 @@ Light theme only.
    copied). Show "N of M screenshots loaded". If the download is blocked, show a message: "Download this page and open
    it from your computer, then try again."
 8. Mobile: works at 375px wide (rail collapses above the content, screenshot above the blocks), no sideways scroll.
-9. Footer: "SC check required before this is used with the customer."
+9. No "SC check" warning line or footer.
 
 **Customer recap page (only if I asked):** a separate file, same masthead, flow strip and use-case cards, no tabs,
 no filter rail, no practice mode, no footer line. Eyebrow "WHAT YOU SAW", a yellow **DRAFT** banner until I say

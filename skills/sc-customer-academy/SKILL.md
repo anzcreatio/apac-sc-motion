@@ -61,7 +61,7 @@ Then: `python scripts/customer_academy.py prep --deal <deal> --product "<product
 `--non-prod-confirmed-by "<their name, role>"` after the customer confirmed it. Add each person with `person`.
 Send `F0` (pre-work, with its Windows and Mac install guides; full course: send the two guides before `B0`) a week before and check each person's result the day before. **Rehearse the build on their
 product and site and time it**; keep your own pre-built copy to show if it runs long. For the full course, propose
-2-3 hour sessions (one track per session) in `<deal>/enablement/plan.md`. Customer-facing materials end with "SC check required before this is used with the customer."
+2-3 hour sessions (one track per session) in `<deal>/enablement/plan.md`. Customer-facing materials stay DRAFT until you approve the pack; no "SC check" warning line.
 
 ## T. Teach (in the session)
 

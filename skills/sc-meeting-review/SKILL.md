@@ -96,7 +96,7 @@ the top of your message and, on the SC's yes, `python ../sc-lessons/scripts/conf
 skill writes outside the deal folder (`Lessons/deck-edits/`, `lessons/`, feedback files) uses the generic labels:
 `confidential.py scan --deal "<deal>" <files>` before you report.
 
-End customer-facing drafts with "SC check required before this is used with the customer."
+No "SC check" warning line on any output (rule since 17 Nov 2026).
 
 **BFSI deal:** new requirements or pains the customer stated in this meeting go to `sc-bank-ai-log` (`add`): their words and our proposed configuration only, never the scorecard, the deck comparison or the lessons.
 

@@ -37,8 +37,6 @@ RESPONSES = ["Standard (out of the box)", "Configuration without code", "Custom 
 CUSTOMER_COLS = [("Ref", "ref", 8), ("Area", "area", 18), ("Requirement", "requirement", 60), ("Why it matters", "why", 42),
                  ("Priority", "priority", 10), ("How to verify", "verify", 42), ("Vendor response", None, 24),
                  ("Vendor explanation", None, 40)]
-SC_CHECK = "DRAFT. SC check required before this is used with the customer. Delete this line once checked."
-
 
 def check(m):
     E, W = [], []
@@ -90,7 +88,7 @@ def customer(m, path):
     wb = openpyxl.Workbook()
     rm = wb.active
     rm.title = "Read me"
-    rows = [(SC_CHECK,), (m.get("title") or "Business requirements",), ("",)]
+    rows = [(m.get("title") or "Business requirements",), ("",)]
     rows += [(p,) for p in m.get("intro", [])]
     rows += [("",), ("How to respond",), ("For each requirement, choose one response and explain how it's met:",)]
     rows += [("- " + r,) for r in RESPONSES]
@@ -98,8 +96,7 @@ def customer(m, path):
              ("How to verify: what the vendor shows during evaluation. Where it says live, it's shown in the session, not in slides.",)]
     for r in rows:
         rm.append(list(r))
-    rm["A1"].font = Font(bold=True, color="C00000")
-    rm["A2"].font = Font(bold=True, size=14)
+    rm["A1"].font = Font(bold=True, size=14)
     rm.column_dimensions["A"].width = 120
     for row in rm.iter_rows():
         for c in row:

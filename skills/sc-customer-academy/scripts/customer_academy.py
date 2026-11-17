@@ -39,7 +39,7 @@ load_json, save_json, kebab, today = academy.load_json, academy.save_json, acade
 
 PROD_HINT = re.compile(r"(^|[-_.])(prod|production|live|prd)([-_.]|$)", re.I)
 NONPROD_HINT = re.compile(r"(dev|test|sandbox|uat|trial|demo|staging|stage|qa|training|sbx|preprod)", re.I)
-SC_CHECK = "SC check required before this is used with the customer."
+SC_CHECK = "not yet approved for the customer."
 
 
 def course():

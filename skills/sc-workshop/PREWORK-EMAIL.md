@@ -32,5 +32,3 @@ Thanks,
 <AE>
 
 ---
-
-SC check required before this is used with the customer.

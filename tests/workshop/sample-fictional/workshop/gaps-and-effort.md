@@ -54,5 +54,3 @@ A fit we can't stand behind yet is a risk as big as a gap: confirm these with Cr
 | Creatio.ai / AI Studio | 4 |
 | Standard (out of the box) | 3 |
 | Marketplace app | 1 |
-
-SC check required before this is used with the customer.

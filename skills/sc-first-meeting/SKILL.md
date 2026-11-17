@@ -185,7 +185,7 @@ minutes; the current-understanding part walks the best-practice pains and asks t
 doing nothing, risks, words to avoid) · go / no-go for the light config: pain in their words + owner + timeframe; if
 any is missing, say so and let the SC decide.
 
-**Output 5 (detailed only): success-criteria email for the AE** — 3–5 best-practice pains in plain words, the ask to rank and correct them, and the meeting date. Customer-facing, so it ends with the SC check line.
+**Output 5 (detailed only): success-criteria email for the AE** — 3–5 best-practice pains in plain words, the ask to rank and correct them, and the meeting date. Customer-facing: no "SC check" warning line.
 
 ## Quality check before you report
 
@@ -197,7 +197,7 @@ any is missing, say so and let the SC decide.
 - [ ] Every "shown today" is in the configuration brief, and the brief fits half a day
 - [ ] No claim outside the catalogue; no AI/data line outside "can say"
 - [ ] Deck rendered (or, if rendering was skipped, the SC has looked at every slide), no builder warnings left unexplained
-- [ ] The deck's last notes and `01-fm-prep.md` end with "SC check required before this is used with the customer."
+- [ ] No "SC check" warning line anywhere (deck notes, `01-fm-prep.md`, emails).
 
 ## Talking to the SC
 
