@@ -1,9 +1,10 @@
-# UI kit standard v0.4: reusable, no-code, upgrade-safe custom components and the pages around them
+# UI kit standard v0.5: reusable, no-code, upgrade-safe custom components and the pages around them
 
 > Applies to every component in `labUiKit`, the team's shared package of custom Freedom UI components. First written
 > for East West Bank (12 Nov 2026), updated after the Navalo build (13 Nov 2026), where three components were built,
 > installed and used live (v0.2: two components; v0.3: Flow timeline and its lessons; v0.4: pickers for every setting,
-> five more components, and the look of the pages they sit on). Sources: the AI-driven development kit's `dev-custom-components` skill, Creatio Academy "Add
+> five more components, and the look of the pages they sit on; v0.5, 18 Nov 2026: §2c native patterns harvested from a
+> clean Creatio 10 stand, and the tokens rule corrected). Sources: the AI-driven development kit's `dev-custom-components` skill, Creatio Academy "Add
 > the remote module to the library of the Freedom UI Designer", and what broke on the two builds. Demo bar §6 points
 > here.
 
@@ -36,7 +37,7 @@ pick its settings in the panel, save the page. Every setting and a worked exampl
 | Remote module with `@creatio-devkit/common` (`@CrtViewElement`, `@CrtInput`, `@CrtOutput`, designer definitions); devkit and Angular pinned to the clio template | The documented, supported way to extend Freedom UI |
 | Data only through the devkit `Model` API (`Model.create(schema).load(...)`, forward paths as `{name, path}` attributes) and `crt.*` requests; no internal services, no hard-coded URLs | The devkit API is the contract that survives upgrades |
 | Shadow DOM; never style or read Creatio's own screen elements | A Creatio restyle can't break the component, and the component can't break Creatio |
-| **Look: kit tokens with native fallbacks.** Creatio's `--crt-*` theme variables are **not** set at page level, so a component styled only on them falls back to its own defaults and looks off (Navalo 0.1.1). Use `--kit-*` tokens (`shared/_kit-tokens.scss`) that read `--usr-kit-*` overrides first, then the measured native values below | Matches the native cards next to it; a theme can still override every value |
+| **Look: kit tokens chained to Creatio's tokens (v0.5).** Each `--kit-*` token (`shared/_kit-tokens.scss`) reads `--usr-kit-*` first, then the matching Creatio token (§2c), then the measured value: `var(--usr-kit-x, var(--crt-…, #measured))`. Creatio 10 does set its tokens at page level (primitives on `:root`, colours on `body.freedom-theme`), and they reach inside our Shadow DOM (tested 18 Nov 2026). Navalo 0.1.1 looked off because it used names that don't exist (`--crt-color-primary`, `--crt-font-family`, `--crt-border-radius-medium`, `--crt-color-surface` are all empty) | Matches the native cards next to it, follows a customer's theme and dark mode, and a page can still override every value |
 | Every setting optional with a safe default; nothing set shows **Set me up**; a new record shows **Save the record**; a load error shows a short alert inside the component, never an exception into the page | A wrong setting or an upgrade never breaks the page |
 | `type` names never change; settings are added, never renamed or removed (old names still read, like `caption` → `heading` in 0.1.1); the kit carries a version | Pages built on an older kit keep working |
 | A `refreshOn` input bound to a page field (`$PDS_<Column>`) so the component reloads when that field changes; a sequence guard drops stale loads | The live demo needs no Refresh click |
@@ -44,14 +45,73 @@ pick its settings in the panel, save the page. Every setting and a worked exampl
 | Dates show as stored (the user's profile time zone); "so far" uses the browser clock. Present from a machine in the profile's time zone, and seed demo dates relative to the demo day (a future date sorts before a live stamp) | Otherwise an open step is off by the time-zone difference, and a rehearsal before the demo day scrambles the order |
 | Read-only components never write data; components that write say so in their panel | No surprises on a customer stand |
 | `labUiKit` holds components only: no objects, no standard schema changes, depends only on `CrtCore` + `CrtUIv2`, JS only. Delete clio's C# scaffold (`Files/src/cs`, `Files/Libs`) after `new-ui-project` | Installs on any stand without a compile |
-| Accessibility: keyboard use, ARIA labels, visible focus, text beside every colour, visually hidden state text, `role=meter` on bars; loading state; container queries for laptop and tablet | NFR practices in the dev kit |
+| Accessibility: keyboard use, ARIA labels, visible focus (the native ring, §2c), `aria-expanded` on anything that collapses (native expansion panels leave it out; we don't), text beside every colour, visually hidden state text, `role=meter` on bars; loading state; container queries for laptop and tablet | NFR practices in the dev kit |
 | Strings in resource files, English first | Translation without code changes |
 | **Every setting is picked, not typed (0.5.0).** Panels use the shared picker: object from the stand's objects, column filtered by type (one step through a lookup allowed), lookup values as ticks or an ordered list, a colour per value, page fields, numbers with their unit, choices, condition rows (field, is / is not / is empty / has a value, values). A lookup column fills in its lookup object. Each picker saves the same text the component read before, and falls back to a text box when the stand can't be read | A business analyst sets a component up from drop-downs; pages built before the pickers keep working ("configuration over customisation" in RFPs) |
 | A condition that leaves people out applies to the person, not the row: anyone with any record that meets it is left out of every group (Group overlap `excludePeople`) | Otherwise a customer in arrears with one business is offered a loan by another (responsible lending) |
 
 **Measured native look (Freedom UI profile card, Creatio 10.0):** white card, `0.8px rgba(0,0,0,.1)` border, 8px
 radius, 16px 24px padding, Montserrat. Title 16/500 `#181818`, label 12/500 `#606060`, value 13/500 `#181818`.
-Positive `#0C8701`, critical `#D2310D`, accent `#004FD6`.
+Positive `#0C8701`, critical `#D2310D`, accent `#004FD6`. Full set of tokens and patterns: §2c.
+
+## 2c. Native patterns (harvested 18 Nov 2026)
+
+Read-only harvest of a clean Creatio 10 stand (11014982, Sales Enterprise). It covered 14 native page schemas
+(Contacts, Accounts, Opportunities, Leads, Cases and Orders form pages, three list pages, five page templates) and
+measured the rendered Contacts list, Contacts form and the home page. Only what the stand shows from the outside:
+schemas, computed styles, ARIA and CSS tokens. No compiled Creatio code was read. Check again on each major version.
+
+### Tokens to use (exact names; anything else is empty)
+
+| Group | Tokens (value on this stand) |
+|---|---|
+| Spacing (`:root`) | `--crt-spacing-0` 0 · `-50` 2 · `-100` 4 · `-150` 6 · `-200` 8 · `-250` 10 · `-300` 12 · `-400` 16 · `-500` 20 · `-600` 24 · `-700` 28 · `-800` 32 · `-900` 36 · `-1000` 40 px |
+| Radius (`:root`) | `--crt-radius-0` 0 · `-50` 2 · `-100` 4 · `-150` 6 · `-200` 8 · `-250` 10 · `-300` 12 · `-400` 16 · `-600` 24 · `-800` 32 · `-infinite` 999 px |
+| Font size (`:root`) | `--crt-font-size-50` 10 · `-100` 12 · `-200` 13 · `-300` 14 · `-400` 16 · `-500` 18 · `-600` 20 · `-700` 24 · `-800` 28 · `-900` 32 px |
+| Line height (`:root`) | `--crt-line-height-100` 16 · `-200` 18 · `-300` 20 · `-400` 24 · `-600` 32 · `-700` 36 px |
+| Weight (`:root`) | `--crt-font-weight-regular` 400 · `-medium` 500 · `-semi-bold` 600 · `-bold` 700 |
+| Font (theme) | `--crt-font-family-body`, `--crt-font-family-heading` (Montserrat) |
+| Text (theme) | `--crt-color-text-body` #181818 · `-heading` #0d2e4e · `-muted` #606060 · `-disabled` #757575 · `-link` #004fd6 · `-link-hover` #0041b5 · `-success` #0b8500 · `-error` #d2310d · `-accent` #ff4013 |
+| Surfaces (theme) | `--crt-color-background-base` #fff · `-interaction-hover` #eff4fb · `-interaction-selected` #e3ebfa · `-primary` #004fd6 · `-primary-soft` #e3ebfa · `-success-soft` #e6f0e5 · `-error-soft` #fbe9e5 · `-disabled-subtle` #ededed |
+| Borders (theme) | `--crt-color-border-base` #dfdfdf · `-muted` #ededed · `-selected` #004fd6; card border `--container-border-color` rgba(0,0,0,.1) |
+| Icons (theme) | `--crt-color-icon-base` #0d2e4e · `-action-hover` #004fd6 · `-muted` #606060 · `-success` · `-error` |
+| Palette (theme) | 18 named colours, each with `-hover` and `-pastel`: `blue`, `celestial-blue`, `light-blue`, `navy-blue`, `violet`, `purple`, `coral`, `red`, `bright-red`, `orange`, `orange-red`, `green`, `dark-green`, `light-green`, `turquoise`, `dark-turquoise` (e.g. `--crt-color-violet` #7848ed) |
+| Focus | `--focus-outline-outer-color` #0d2e4e, `--focus-outline-inner-color` white |
+
+Every colour has a twin under `.dark-mode`, so a component on these tokens follows dark mode with no extra work. Native
+components write them with a fallback, e.g. `var(--crt-color-background-base, var(--background))`: do the same.
+
+### Component patterns (measured)
+
+| Element | Native look | Our rule |
+|---|---|---|
+| Card / container | White, 1px `rgba(0,0,0,.1)` border, radius 8, padding 16 × 24, gap 24 (schema: `color: "primary"`, `borderRadius: "medium"`, padding `medium`/`large`) | `@include card`; padding `--crt-spacing-400` × `-600` |
+| Page title | h1 24/600 `text-heading`, 32 line | Not ours: the page header owns it |
+| Card title | 16/500 `text-body`, 20 line | `@include title` |
+| Section title (expansion panel) | 14/500 `text-heading`, collapse arrow before it, + / refresh / ⋮ / search icons after | Collapsible blocks copy this order |
+| Field | 52px tall with label above: label 12/500, value 13/500 `text-body` | `@include label` / `value` |
+| Link | 13/500 `text-link`, underline on hover only | Same |
+| List | Rows and header 40px; header 12/400 `text-muted`; cells 14/400 `text-body`, padding 0 × 6 | Lists inside a component use 40px rows |
+| Chip / status | Pill radius 16, padding 1 × 8, 13/500; text in a palette colour on the same colour at 20% (e.g. violet on violet 20%); score chips solid with white text | `@include pill` uses palette tokens: no new colours |
+| Button | 32px, radius 4, padding 0 × 16, 14/500; primary solid #004fd6 white text; secondary text `text-heading`, no fill | Same sizes; one primary button per component at most |
+| Icon button | 32 × 32, icon only, hover fill `background-interaction-hover` | `@include ghost-button` |
+| Focus | Two inset rings: 1px `#0d2e4e` outside, 2px white inside, radius 4, no outline | `@include focus-ring` on every focusable element |
+| Tabs | 36px, UPPERCASE 14/500; selected `text-heading` with underline, others `text-link`; `role=tab` + `aria-selected` | Tabs inside a component copy this |
+| Home page widget | Glass card `rgba(24,24,24,.8)` + blur, radius 8; title 14–16/500 white; metric 28/600 white | A component for a home page needs a glass variant (white text) or sits in a white card (§2b) |
+| Page loading | Glass page with a small centred logo skeleton | Component loading: a skeleton in the component's own shape, never a spinner over the page |
+
+### Schema conventions (how native pages are put together)
+
+| Pattern | What native pages do | Use it for |
+|---|---|---|
+| Size and spacing words | `gap`, `padding`, `borderRadius` take `none` / `small` / `medium` / `large`, never pixels | Our designer settings offer the same words, not pixel boxes |
+| Layout | `crt.GridContainer` with `minmax(32px, 1fr)` columns and `minmax(max-content, 32px)` rows; `crt.FlexContainer` with `wrap: nowrap` and `alignItems: stretch` | Placing our component (§3) |
+| Text | `crt.Label` with `labelType` (`headline-1/3`, `body`, `body-large`), `labelThickness`, `labelColor: auto` | Labels around our components |
+| Captions | All from resources (`#ResourceString(...)#`), never literal text in the body | Already rule: strings in resource files |
+| Data source names | `PDS` for the page record; list data sources `<Name>DS`; list attribute `<Name>` with `<Name>_PredefinedFilter` and the search filter as `filterAttributes`, `loadOnChange: true` | Name our data attributes the same way so they read like native ones |
+| Hide when empty | Attribute with converter `crt.HideComponentWithNoItems` and a trigger on the list | A component with nothing to show hides itself or says so; it never shows an empty frame |
+| Actions | Buttons and menu items call `crt.*` requests (`crt.CreateRecordRequest`, `crt.OpenPageRequest`, `crt.RunBusinessProcessRequest`, `crt.LoadDataRequest`, `crt.ExportDataGridToExcelRequest`); `clickMode: menu` for a button with a menu | Our components raise the same requests, so page handlers and business rules still apply |
+| Icon buttons | `iconPosition: only-icon` (27 of 43 buttons), sizes `medium` or `large` | Header tools in our components: icon only, with an ARIA label |
 
 ## 2b. The pages around the components (look)
 

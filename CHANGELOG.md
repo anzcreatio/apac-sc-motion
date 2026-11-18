@@ -4,6 +4,18 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.2 (18 Nov 2026): custom components follow Creatio's own design tokens
+
+- **`standards/UI-KIT-STANDARD-v0.5.md`** (was v0.4). New §2c, native patterns harvested read-only from a clean
+  Creatio 10 stand: the exact `--crt-*` token names (spacing, radius, type, colours, palette, focus), how native
+  cards, fields, lists, chips, buttons, tabs, focus and home-page widgets look, and the schema conventions native
+  pages follow (size words not pixels, `PDS`/`<Name>DS` naming, `crt.*` requests, hide-when-empty converter).
+- **Correction:** v0.4 said Creatio's `--crt-*` tokens aren't set at page level. They are, and they reach inside a
+  component's Shadow DOM. The Navalo issue came from guessed token names that don't exist.
+- **UI kit (`labUiKit`, not yet installed anywhere):** tokens now chain `--usr-kit-*` → Creatio token → measured
+  value, so components follow a customer's theme and dark mode; the native focus ring and hover colour; pills in the
+  native shape. Built locally; needs a rehearsal on a stand before the next deal uses it.
+
 ## 0.32.1 (18 Nov 2026): sizing fix
 
 - **`sc-sizing`:** the database Data, Tempdb and Logs disks were dropped from the sizing when the calculator showed a
