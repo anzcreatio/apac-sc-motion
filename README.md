@@ -29,7 +29,7 @@ library for every SC, updated in one place.
 
 | Folder | What |
 |---|---|
-| `standards/` | `DECK-STANDARD-v0.5.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.3.md` (the minimum for every demo) |
+| `standards/` | `DECK-STANDARD-v0.6.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.3.md` (the minimum for every demo) |
 | `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet, Delivery Assurance and the BOM catalogue (both internal) |
 | `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
 | `patterns/` | Pattern book: demo ideas from our deals, competitors and the Knowledge Hub (screenshots in SharePoint `Patterns/`) |
@@ -87,7 +87,7 @@ Later, when Creatio IT gives us a company GitHub repo: push this repo there, and
 ## Changing the motion
 
 1. Change the skill, standard or template here. Bump the version in the file name for standards
-   (`DECK-STANDARD-v0.5.md`) and in `.claude-plugin/plugin.json`.
+   (`DECK-STANDARD-v0.6.md`) and in `.claude-plugin/plugin.json`.
 2. Rebuild `tests/deck/sample-fictional/deck.json` with `--render` and look at every slide.
 3. Add a line to `CHANGELOG.md` and, if it came from the field, a file in `lessons/`.
 4. A change to the standard needs evidence from **2+ deals or 2+ SCs**, or one serious failure.

@@ -11,7 +11,13 @@ The deck is data: `deck.json` in the deal folder is the source, the `.pptx` is b
 rebuild; don't hand-edit the built deck unless the SC asks (hand edits are lost on the next build, and the
 `sc-meeting-review` skill learns from what the SC changed in the presented deck).
 
-Standard: `../../standards/DECK-STANDARD-v0.5.md` (slide order, word rules, every field). Read it before writing JSON.
+Standard: `../../standards/DECK-STANDARD-v0.6.md` (slide order, word rules, every field). Read it before writing JSON.
+
+**Visual types (v0.6, creatio.com style):** reach for `landscape` (what they run + the gap, a source per tile),
+`compare` (two ways side by side), `milestones` (dated why-now), `statement` (one big idea), `band` (section
+divider), `hero_screen` (a product screen on navy), `quote` (their own words) and `photo_cards` (brand photos only)
+where they make the point better than text. Every visual carries a point; no decoration (Navalo: "reads as AI-made").
+Example: `../../tests/deck/visual-types/deck.json`.
 
 ## Before a new or reworked deck
 

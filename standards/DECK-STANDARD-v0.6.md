@@ -1,4 +1,4 @@
-# Deck standard v0.4
+# Deck standard v0.6
 
 **What it is:** the slides every APAC SC customer deck is made of, their order, and the `deck.json` that builds them.
 **Built from:** the decks presented at H&G (10 Nov 2026), Suntory (11 Nov, `Suntory Introduction Nov 2026.pptx`) and
@@ -95,6 +95,14 @@ titles, titles over 12 words, semicolons and em dashes.
 | `build` | `lead`?, `platform`: `[{name, what, icon?, see?}]`, `ai`: same, `caption`? (`see` = the demo step, e.g. "Step 2" or "Next time") |
 | `section` | `text`, `sub`? |
 | `map` | `hub`: `{title, text?}` (their platform, e.g. "Your Creatio"), `left` / `right`: `{label, items: [{title, text, icon}]}` (1-4 each: left = connected to what they have, right = elsewhere in their organisation), `outcome`?, `caption`? · "what else can it do" slides for existing customers (`sc-guide` mode D). Only ideas the customer can configure themselves; say how each is built in the notes |
+| `statement` | `lines`: 1-3 short lines (first in the accent colour, or `accent_line`), `text`?, `label`? · one big idea in display type. No frame title |
+| `landscape` | `title`, `systems`: `[{label?, name, text, source}]` (2-4 tiles, the source as a pill: a public source or "You told us"), `gap`?: `{label?, title, text?, chips?}` (dashed box), `footer`? · what we think they run today, and where the gap is |
+| `compare` | `title`, `left` / `right`: `{label, items: [..] (2-5), footer?}` · two ways side by side: theirs muted, ours in the accent colour |
+| `band` | `label` (spaced caps), `text` (one line, big), `sub`?, `fill`? (`orange` default, `navy`) · section divider on the brand gradient |
+| `milestones` | `title`, `items`: `[{date, text, source?, accent?, future?}]` (2-5) · dated why-now; `future` = a step that hasn't happened |
+| `hero_screen` | `title`, `points`: [..] (≤3), `screenshot`: `{file, crop?, region?, alt}`, `caption`? · one product screen on the navy gradient |
+| `photo_cards` | `title`, `cards`: `[{image, title, label, alt?}]` (2-4) · people at work with an orange label band. **Brand photos only** (Slide-library / Creatio brand library); no stock or AI images |
+| `quote` | `text`, `who` (who and when), `so`? (our one-line answer) · the customer's own words, large. Only real quotes (tag C) |
 | `flow` | `steps`: `[{title, skills?: [..], who?, highlight?}]` (up to 8, one row), `loop`?, `title_size`?, `skill_size`? · internal and training decks |
 | `outputs` | `rows`: `[{step, customer, internal}]`, `labels`?, `size`? · what each step produces |
 | `agenda` | `items`: `[{min, what, who}]` (min + who → notes as a run sheet; `show_owners: true` brings back the old minutes/what/who table and pale goal box), `length`? (warns if the minutes don't add up), `decision` (today's goal = the closing question), `outcomes`: `[{if, then}]` (fits, then not yet), `goal_label`? (default "Today's goal") |
@@ -149,4 +157,5 @@ outcome that pins down the next step. **Always render
 | v0.5 | 16 Nov 2026 | No caps label (kicker) above titles by default; agenda as numbered cards with no minutes or names, solid accent goal panel; no owners on agenda or next-steps slides (both in the notes); summary with nothing shown yet uses two columns | Navalo as presented: Renzo removed owners (2nd deal after Suntory) and minutes, and had the look restyled "so it doesn't look like Claude made it" |
 | v0.5 | 16 Nov 2026 | Roadmap steps take an optional `owner` line (who owns it after handover), required on existing-customer decks. A session deck for a live customer waives the sales slides (`understanding`, `platform`, `hypothesis`, `summary`, `agenda`) in `meta.waive` and opens with a `flow` slide of what they have today | A live customer's training and roadmap session; 2 deals where the partner's role shaped delivery (feedback `…-delivery-partner-and-ownership.md`) |
 | v0.5 | 16 Nov 2026 | New `map` slide type: the customer's platform as a hub with icon tiles for connected and wider opportunities | Renzo asked for a visual expansion slide on a live customer's session deck |
+| v0.6 | 18 Nov 2026 | Eight visual types in the creatio.com style: `statement`, `landscape`, `compare`, `band`, `milestones`, `hero_screen`, `photo_cards`, `quote` (Montserrat, #FF4013, orange and navy gradients, rounded soft cards, pills). Every visual must carry a point (no decoration); photos only from the brand library. The website's three glossy tiles are kept for Creatio's values, not deal slides | Renzo asked for more variety and a more visual, attractive deck (FirstCape, 18 Nov); style taken from creatio.com |
 | v0.2 | 11 Nov 2026 | Next steps may show the month only and no owner on the slide (owners in the notes) | Suntory field edit (1 deal). Builder still warns without dates |

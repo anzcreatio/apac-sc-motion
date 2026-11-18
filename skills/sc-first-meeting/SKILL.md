@@ -107,7 +107,7 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
    without being asked counts; the opener is reported separately, not scored. Report it as "4.5 / 6".
 2. **Set the track and pick the pack** (BFSI, Manufacturing, Core for anything else).
 3. **Research the company** (rule 3).
-4. **Write `deck.json`** in the deal folder, per `../../standards/DECK-STANDARD-v0.5.md`:
+4. **Write `deck.json`** in the deal folder, per `../../standards/DECK-STANDARD-v0.6.md`:
    `meta.meeting` (`first_demo`, or `intro` when nothing is shown) → `cover` → **`agenda`** (every demo meeting: the
    AE's run of the meeting and **today's goal = the closing question below, word for word**, with "if it fits" and a
    "not yet" that pins down what to do next; DECK-STANDARD §1b) → `understanding` (today → where they want to be; cards if we only have what we heard) → `platform` (the whole standard

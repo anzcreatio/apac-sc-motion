@@ -278,7 +278,7 @@ class Deck:
         lay = self.source.slide_layout
         if kind == "cover" and T.cfg.get("cover_layout"):
             lay = self.layout(T.cfg["cover_layout"])
-        elif kind in ("library", "section") and T.cfg.get("plain_layout"):
+        elif kind in ("library", "section", "band", "hero_screen") and T.cfg.get("plain_layout"):
             lay = self.layout(T.cfg["plain_layout"])
         slide = self.prs.slides.add_slide(lay)
         for ph in list(slide.placeholders):
@@ -1291,7 +1291,319 @@ def s_map(deck, slide, d, n):
         caption(slide, T.L, T.B - 0.25, T.W, d["caption"])
 
 
+# ---------------------------------------------------------------- v0.6 visual types (creatio.com style, Renzo 18 Nov 2026)
+
+ORANGE_HOT, ORANGE_WARM = RGBColor(0xFF, 0x40, 0x00), RGBColor(0xFF, 0x91, 0x00)
+NAVY_DEEP, NAVY_INK = RGBColor(0x01, 0x1D, 0x59), RGBColor(0x19, 0x1F, 0x24)
+
+
+def mix(a, b, t):
+    """Blend colour a towards b by t (0..1)."""
+    return RGBColor(*(round(a[i] + (b[i] - a[i]) * t) for i in range(3)))
+
+
+def gradient(shp, c1, c2, angle=315):
+    f = shp.fill
+    f.gradient()
+    f.gradient_angle = angle
+    stops = f.gradient_stops
+    stops[0].color.rgb, stops[0].position = c1, 0.0
+    stops[1].color.rgb, stops[1].position = c2, 1.0
+
+
+def alpha(shp, pct):
+    """Make a solid fill partly transparent (pct = opacity 0..100)."""
+    from lxml import etree
+    clr = shp.fill._xPr.find(".//{http://schemas.openxmlformats.org/drawingml/2006/main}srgbClr")
+    if clr is not None:
+        a = etree.SubElement(clr, "{http://schemas.openxmlformats.org/drawingml/2006/main}alpha")
+        a.set("val", str(int(pct * 1000)))
+
+
+def spaced(p, pts):
+    """Letter spacing on a paragraph's runs (the website's spaced caps labels)."""
+    for r in p.runs:
+        r._r.get_or_add_rPr().set("spc", str(int(pts * 100)))
+
+
+def rounded(slide, name, x, y, w, h, fill=None, line=None, radius=0.08, line_w=1.0):
+    s = shape(slide, MSO_SHAPE.ROUNDED_RECTANGLE, name, x, y, w, h, fill=fill, line=line, line_w=line_w)
+    s.adjustments[0] = min(0.5, radius / max(0.01, min(w, h)))
+    return s
+
+
+def pill_w(text, size):
+    return 0.4 + len(text) * size * 0.0095
+
+
+def pill(slide, name, x, y, text, size=10, fill=None, colour=None):
+    w = pill_w(text, size)
+    p = rounded(slide, name, x, y, w, 0.3, fill=fill or T.WHITE, radius=0.15)
+    tf = p.text_frame
+    tf.word_wrap = False
+    tf.margin_left = tf.margin_right = Inches(0.1)
+    tf.margin_top = tf.margin_bottom = 0
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    run(tf, text, size, colour or T.GREY, align=PP_ALIGN.CENTER)
+    return w
+
+
+def brand_mark(slide, colour=None):
+    run(textbox(slide, "Brand", 0.75, 0.55, 4, 0.5), T.cfg.get("brand", ""), 22, colour or T.WHITE, bold=True)
+
+
+def full_bleed(slide, name, c1, c2, angle=315):
+    bg = shape(slide, MSO_SHAPE.RECTANGLE, name, 0, 0, 13.334, 7.5)
+    gradient(bg, c1, c2, angle)
+    return bg
+
+
+def s_statement(deck, slide, d, n):
+    """One big idea in display type: 1-3 short lines, the first in the accent colour."""
+    lines = d["lines"]
+    if not 1 <= len(lines) <= 3:
+        warn(n, "statement has %d lines; use 1-3" % len(lines))
+    longest = max(len(x) for x in lines)
+    size = 96 if longest <= 14 else 80 if longest <= 18 else 64
+    if longest > 24:
+        warn(n, "statement line has %d characters; keep each under about 20" % longest)
+    lh = size * 1.05 / 72
+    top = 3.75 - lh * len(lines) / 2 - (0.35 if d.get("text") else 0)
+    for i, line in enumerate(lines):
+        accent = i == 0 if d.get("accent_line") is None else i == d["accent_line"]
+        run(textbox(slide, "Statement %d" % (i + 1), T.L, top + i * lh, T.W, lh + 0.1), line, size, T.ACC if accent else T.INK, bold=True)
+    if d.get("text"):
+        run(textbox(slide, "Statement text", T.L, top + len(lines) * lh + 0.35, 8.8, 1.0), d["text"], 22, T.GREY)
+    if d.get("label"):
+        run(textbox(slide, "Statement label", T.R - 3.5, 6.75, 3.5, 0.3), d["label"], 11, T.GREY, align=PP_ALIGN.RIGHT)
+
+
+def s_landscape(deck, slide, d, n):
+    """What they run today: one tile per system with a source pill, and the gap underneath in a dashed box."""
+    systems = d["systems"]
+    if not 2 <= len(systems) <= 4:
+        warn(n, "landscape has %d systems; use 2-4" % len(systems))
+    gap = 0.25
+    w = (T.W - gap * (len(systems) - 1)) / len(systems)
+    th = 2.35 if d.get("gap") else 3.6
+    for i, s in enumerate(systems):
+        x = T.L + i * (w + gap)
+        rounded(slide, "System %d" % (i + 1), x, T.T - 0.1, w, th, fill=T.SOFT, radius=0.18)
+        tx, tw = x + 0.25, w - 0.5
+        y = T.T + 0.1
+        if s.get("label"):
+            p = run(textbox(slide, "System %d label" % (i + 1), tx, y, tw, 0.25), s["label"].upper(), 9.5, T.GREY, bold=True)
+            spaced(p, 1.2)
+            y += 0.32
+        run(textbox(slide, "System %d name" % (i + 1), tx, y, tw, 0.45), s["name"], 20, T.INK, bold=True)
+        y += est_h(s["name"], 20, tw) + 0.12
+        run(textbox(slide, "System %d text" % (i + 1), tx, y, tw, 0.9), s.get("text", ""), 13, T.BODY)
+        if est_h(s.get("text", ""), 13, tw) + (y - T.T) > th - 0.55:
+            warn(n, "system '%s' text may not fit" % s["name"])
+        if s.get("source"):
+            pw = pill(slide, "System %d source" % (i + 1), tx, T.T - 0.1 + th - 0.48, s["source"], 9.5)
+            if pw > w - 0.35:
+                warn(n, "system '%s' source is long: shorten it" % s["name"])
+    g = d.get("gap")
+    if g:
+        gy = T.T - 0.1 + th + 0.25
+        gh = T.B - gy - (0.35 if d.get("footer") else 0)
+        box = rounded(slide, "Gap", T.L, gy, T.W, gh, line=T.ACC, radius=0.18, line_w=2.25)
+        from pptx.enum.dml import MSO_LINE
+        box.line.dash_style = MSO_LINE.DASH
+        lw = 2.6
+        run(textbox(slide, "Gap label", T.L + 0.35, gy, lw, gh, anchor=MSO_ANCHOR.MIDDLE), g.get("label", "The gap?"), 30, T.ACC, bold=True)
+        chips = g.get("chips", [])
+        cw = sum(pill_w(c, 11) + 0.12 for c in chips)
+        tx = T.L + 0.35 + lw + 0.2
+        tw = T.W - (tx - T.L) - cw - 0.4
+        tf = textbox(slide, "Gap text", tx, gy, tw, gh, anchor=MSO_ANCHOR.MIDDLE)
+        run(tf, g["title"], 18, T.INK, bold=True)
+        if g.get("text"):
+            run(tf, g["text"], 13, T.GREY, first=False, space_before=4)
+        cx = T.R - 0.3 - cw
+        for i, c in enumerate(chips):
+            cx += pill(slide, "Gap chip %d" % (i + 1), cx, gy + gh / 2 - 0.15, c, 11, fill=T.INK, colour=T.WHITE) + 0.12
+    if d.get("footer"):
+        caption(slide, T.L, T.B - 0.2, T.W, d["footer"])
+
+
+def s_compare(deck, slide, d, n):
+    """Two ways side by side: theirs muted (left), ours in the accent colour (right), an arrow between."""
+    arrow_w = 0.7
+    w = (T.W - arrow_w) / 2
+    top, h = T.T - 0.1, T.B - T.T + 0.1
+    for side, x, ours in ((d["left"], T.L, False), (d["right"], T.L + w + arrow_w, True)):
+        fill = T.ACC if ours else T.SOFT
+        rounded(slide, "Compare %s" % ("ours" if ours else "theirs"), x, top, w, h, fill=fill, radius=0.18)
+        ink = T.WHITE if ours else T.GREY
+        p = run(textbox(slide, "Compare label", x + 0.3, top + 0.25, w - 0.6, 0.3), side["label"].upper(), 10, T.WHITE if ours else T.GREY, bold=True)
+        spaced(p, 1.2)
+        items = side.get("items", [])
+        if not 2 <= len(items) <= 5:
+            warn(n, "compare side '%s' has %d items; use 2-5" % (side["label"], len(items)))
+        foot = 0.55 if side.get("footer") else 0.2
+        ih = min(0.62, (h - 0.8 - foot) / max(1, len(items)) - 0.12)
+        y = top + 0.7
+        for i, it in enumerate(items):
+            box = rounded(slide, "Compare item %d" % (i + 1), x + 0.3, y, w - 0.6, ih,
+                          fill=mix(T.ACC, T.WHITE, 0.18) if ours else T.WHITE, radius=0.1)
+            tf = box.text_frame
+            tf.margin_left = tf.margin_right = Inches(0.18)
+            tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+            tf.word_wrap = True
+            run(tf, it, 14, T.WHITE if ours else T.GREY, align=PP_ALIGN.LEFT)
+            if est_h(it, 14, w - 0.96) > ih:
+                warn(n, "compare item '%s' may not fit" % it[:30])
+            y += ih + 0.12
+        if side.get("footer"):
+            run(textbox(slide, "Compare footer", x + 0.3, top + h - 0.5, w - 0.6, 0.35), side["footer"], 12, ink, bold=ours)
+    shape(slide, MSO_SHAPE.RIGHT_ARROW, "Compare arrow", T.L + w + 0.15, top + h / 2 - 0.2, arrow_w - 0.3, 0.4, fill=T.ACC)
+
+
+def s_band(deck, slide, d, n):
+    """Section divider on the brand's orange (or navy) gradient: spaced caps label, big white line."""
+    navy = d.get("fill") == "navy"
+    full_bleed(slide, "Band background", NAVY_DEEP if navy else ORANGE_WARM, NAVY_INK if navy else ORANGE_HOT, 135)
+    brand_mark(slide)
+    if d.get("label"):
+        p = run(textbox(slide, "Band label", T.L - 0.05, 2.5, T.W, 0.5), d["label"].upper(), 20, T.WHITE)
+        spaced(p, 9)
+    run(textbox(slide, "Band text", T.L - 0.05, 3.1, 10.5, 2.4), d["text"], 54, T.WHITE, bold=True)
+    if est_h(d["text"], 54, 10.5, 1.1) > 2.4:
+        warn(n, "band text runs to three lines or more: shorten it")
+    if d.get("sub"):
+        run(textbox(slide, "Band sub", T.L - 0.05, 6.55, T.W, 0.4), d["sub"], 14, T.WHITE)
+
+
+def s_milestones(deck, slide, d, n):
+    """Dated points on a line, each with a source; 'future' marks a step that hasn't happened yet."""
+    items = d["items"]
+    if not 2 <= len(items) <= 5:
+        warn(n, "milestones has %d items; use 2-5" % len(items))
+    w = T.W / len(items)
+    line_y = T.T + 1.35
+    shape(slide, MSO_SHAPE.RECTANGLE, "Milestone line", T.L, line_y - 0.025, T.W - 0.3, 0.05, fill=T.RULE)
+    for i, it in enumerate(items):
+        x = T.L + i * w
+        future = it.get("future")
+        colour = T.ACC if it.get("accent") else T.INK
+        dot = shape(slide, MSO_SHAPE.OVAL, "Milestone dot %d" % (i + 1), x, line_y - 0.16, 0.32, 0.32,
+                    fill=None if future else colour, line=T.ACC if future else None, line_w=2.25)
+        if future:
+            from pptx.enum.dml import MSO_LINE
+            dot.line.dash_style = MSO_LINE.DASH
+        tw = w - 0.35
+        run(textbox(slide, "Milestone date %d" % (i + 1), x, line_y + 0.4, tw, 0.6), it["date"], 26,
+            T.GREY if future else colour, bold=True)
+        th = est_h(it["text"], 14, tw)
+        run(textbox(slide, "Milestone text %d" % (i + 1), x, line_y + 1.1, tw, th + 0.1), it["text"], 14, T.BODY)
+        if it.get("source"):
+            run(textbox(slide, "Milestone source %d" % (i + 1), x, line_y + 1.2 + th + 0.1, tw, 0.3), it["source"], 10, T.GREY)
+        if line_y + 1.5 + th > T.B:
+            warn(n, "milestone %d text may not fit" % (i + 1))
+    if d.get("caption"):
+        caption(slide, T.L, T.B - 0.2, T.W, d["caption"])
+
+
+def s_hero_screen(deck, slide, d, n):
+    """A product screen on the brand's navy gradient, with the title and numbered points on the left."""
+    full_bleed(slide, "Hero background", NAVY_INK, NAVY_DEEP, 315)
+    brand_mark(slide, T.ACC)
+    lx, lw = 0.75, 3.9
+    th = est_h(d["title"], 28, lw, 1.15)
+    run(textbox(slide, "Hero title", lx, 1.5, lw, th + 0.1), d["title"], 28, T.WHITE, bold=True)
+    y = 1.5 + th + 0.45
+    for i, p in enumerate(d.get("points", [])):
+        number(slide, "Hero number %d" % (i + 1), lx, y + 0.02, str(i + 1), 0.34, fill=T.ACC)
+        ph = est_h(p, 14, lw - 0.55)
+        run(textbox(slide, "Hero point %d" % (i + 1), lx + 0.55, y, lw - 0.55, ph + 0.1), p, 14, T.WHITE)
+        y += max(0.6, ph + 0.3)
+    if y > 7.0:
+        warn(n, "hero points run past the bottom: use 3 short points")
+    px, pw, ptop, pmax = 5.1, 7.5, 0.95, 5.9
+    sc = d.get("screenshot")
+    if sc and os.path.isfile(deck.path(sc["file"])):
+        iw, ih = Image.open(deck.path(sc["file"])).size
+        c = sc.get("crop") or sc.get("region") or [0, 0, iw, ih]
+        est = min(pmax, pw * (c[3] - c[1]) / (c[2] - c[0]))
+        ptop = max(0.95, (7.5 - est) / 2 - 0.15)  # centred on the slide, under the brand line
+        geo = picture(deck, slide, sc, px, ptop, pw, max_h=pmax)
+        card = rounded(slide, "Hero card", px - 0.12, ptop - 0.12, geo.w + 0.24, geo.h + 0.24, fill=T.WHITE, radius=0.15)
+        pic_el = [s for s in slide.shapes if s.name.startswith("Screen ")][-1]._element
+        pic_el.addprevious(card._element)  # the white card sits behind the picture
+        caption_y = ptop + geo.h + 0.2
+    else:
+        warn(n, "hero_screen has no screenshot file: a placeholder is shown")
+        box = rounded(slide, "Hero placeholder", px, ptop, pw, pmax, fill=T.WHITE, radius=0.15)
+        tf = box.text_frame
+        tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        run(tf, "[Screenshot from the demo stand]", 16, T.GREY, align=PP_ALIGN.CENTER)
+        caption_y = ptop + pmax + 0.15
+    run(textbox(slide, "Hero caption", px, caption_y, pw, 0.3), d.get("caption", deck.meta.get("example_caption", "Example data")), 10, mix(T.WHITE, NAVY_INK, 0.3))
+
+
+def s_photo_cards(deck, slide, d, n):
+    """Tall photo cards: people at work, a bold name and an orange label band (brand photos only)."""
+    cards = d["cards"]
+    if not 2 <= len(cards) <= 4:
+        warn(n, "photo_cards has %d cards; use 2-4" % len(cards))
+    gap = 0.25
+    w = (T.W - gap * (len(cards) - 1)) / len(cards)
+    top, h = T.T - 0.1, T.B - T.T + 0.1
+    for i, c in enumerate(cards):
+        x = T.L + i * (w + gap)
+        path = deck.path(c["image"]) if c.get("image") else None
+        if path and os.path.isfile(path):
+            iw, ih = Image.open(path).size
+            pic = slide.shapes.add_picture(path, Inches(x), Inches(top), Inches(w), Inches(h))
+            target = w / h
+            if iw / ih > target:
+                cut = (1 - target * ih / iw) / 2
+                pic.crop_left = pic.crop_right = cut
+            else:
+                cut = (1 - iw / ih / target) / 2
+                pic.crop_top = pic.crop_bottom = cut
+            pic.name = "Card %d photo" % (i + 1)
+            pic._element.nvPicPr.cNvPr.set("descr", c.get("alt", c["title"]))
+            shade = shape(slide, MSO_SHAPE.RECTANGLE, "Card %d shade" % (i + 1), x, top + h * 0.55, w, h * 0.45, fill=T.INK)
+            alpha(shade, 45)
+        else:
+            warn(n, "card %d has no image: use a photo from the Creatio brand library" % (i + 1))
+            ph = rounded(slide, "Card %d placeholder" % (i + 1), x, top, w, h, radius=0.15)
+            gradient(ph, RGBColor(0x5A, 0x5A, 0x5A), RGBColor(0x2A, 0x2A, 0x2A), 90)
+            run(textbox(slide, "Card %d hint" % (i + 1), x + 0.3, top + 0.3, w - 0.6, 0.3), "[Brand photo]", 11, T.WHITE)
+        tw = w - 0.6
+        label_h = 0.42
+        name_h = est_h(c["title"], 26, tw)
+        y = top + h - 0.35 - label_h - 0.1 - name_h
+        run(textbox(slide, "Card %d title" % (i + 1), x + 0.3, y, tw, name_h + 0.1), c["title"], 26, T.WHITE, bold=True)
+        if c.get("label"):
+            lw = min(tw, 0.3 + len(c["label"]) * 15 * 0.0085)
+            band = shape(slide, MSO_SHAPE.RECTANGLE, "Card %d label" % (i + 1), x + 0.3, top + h - 0.35 - label_h, lw, label_h, fill=T.ACC)
+            tf = band.text_frame
+            tf.margin_left = tf.margin_right = Inches(0.1)
+            tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+            run(tf, c["label"], 15, T.WHITE, bold=True, align=PP_ALIGN.LEFT)
+
+
+def s_quote(deck, slide, d, n):
+    """The customer's own words, large, with who said it and when; optional 'so' line answers it."""
+    run(textbox(slide, "Quote mark", T.L - 0.05, 1.0, 1.5, 1.6), "“", 140, T.ACC, bold=True)
+    words = d["text"].strip("“”\"")
+    size = 34 if len(words) <= 110 else 28
+    if len(words) > 170:
+        warn(n, "quote is %d characters; cut it to one or two sentences" % len(words))
+    qh = est_h(words, size, 10.8, 1.2)
+    run(textbox(slide, "Quote text", T.L, 2.55, 10.8, qh + 0.2), words, size, T.INK, bold=True)
+    run(textbox(slide, "Quote who", T.L, 6.4, 6.0, 0.4), d.get("who", ""), 15, T.GREY)
+    if d.get("so"):
+        run(textbox(slide, "Quote so", T.R - 5.5, 6.4, 5.5, 0.4), d["so"], 15, T.ACC, bold=True, align=PP_ALIGN.RIGHT)
+
+
 TYPES = {
+    "statement": s_statement, "landscape": s_landscape, "compare": s_compare, "band": s_band,
+    "milestones": s_milestones, "hero_screen": s_hero_screen, "photo_cards": s_photo_cards, "quote": s_quote,
     "map": s_map,
     "cover": s_cover, "understanding": s_understanding, "facts": s_facts, "why": s_why,
     "hypothesis": s_hypothesis, "component": s_component, "screen": s_screen, "summary": s_summary,
@@ -1299,7 +1611,7 @@ TYPES = {
     "agenda": s_agenda, "flow": s_flow, "outputs": s_outputs,
     "platform": s_library,
 }
-NO_TITLE = {"cover", "library", "section"}
+NO_TITLE = {"cover", "library", "section", "statement", "band", "hero_screen", "quote"}
 
 
 DEMO_MEETINGS = ("first_demo", "value_demo", "proof")

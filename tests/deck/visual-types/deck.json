@@ -1,0 +1,33 @@
+{
+  "meta": {"title": "Visual types test", "customer": "Harbourline Wealth", "meeting": "intro", "deck_standard": "v0.6",
+           "example_caption": "Example data on fictional clients",
+           "waive": ["understanding", "platform", "hypothesis", "summary", "next_steps"],
+           "source": "Test for the v0.6 visual slide types (fictional wealth group)."},
+  "slides": [
+    {"type": "cover", "title": "Where Creatio fits next to what you have", "subtitle": "Harbourline Wealth and Creatio"},
+    {"type": "statement", "lines": ["3 businesses.", "1 client."], "text": "A family seen once, whichever business they deal with.", "label": "Our starting idea"},
+    {"type": "landscape", "title": "What we think you run today",
+     "systems": [
+       {"label": "The office", "name": "Microsoft 365", "text": "Email, Teams and Copilot Studio for agents", "source": "You told us, call 3 Nov"},
+       {"label": "The platform", "name": "Wealth platform", "text": "Core platform and custody for all three businesses", "source": "News release, May 2026"},
+       {"label": "The adviser desk", "name": "Adviser front end", "text": "Portfolios and orders. Onboarding planned later", "source": "Vendor release, Oct 2024"}],
+     "gap": {"label": "The gap?", "title": "One client across the three businesses", "text": "and the steps that move between these systems", "chips": ["Advice", "Funds", "Platform"]},
+     "footer": "Built from public sources and our call. Tell us what we got wrong."},
+    {"type": "compare", "title": "The same journey, built two ways",
+     "left": {"label": "Typical build", "items": ["A database plus a separately licensed app", "Flows for the steps", "Agents paid by credit packs", "Developers make the changes"], "footer": "Several tools, each licensed separately"},
+     "right": {"label": "Creatio", "items": ["Client, steps, rules and portal on one data model", "Rules held as data, changed the same day", "Agents inside the steps, a person confirms", "An analyst makes the change"], "footer": "One platform. Your systems stay"}},
+    {"type": "band", "label": "Why now", "text": "Check a client once, for the whole group", "sub": "The AML reforms of 2026"},
+    {"type": "milestones", "title": "The rules are moving towards one check",
+     "items": [
+       {"date": "19 May", "text": "Amendment Act in force", "source": "legislation.govt.nz"},
+       {"date": "1 Jul", "text": "One supervisor for AML", "source": "DIA, Jul 2026"},
+       {"date": "28 Aug", "text": "Final bill introduced. It would let group entities rely on each other's checks", "source": "Law firm note, Sep 2026", "accent": true},
+       {"date": "Next", "text": "If it passes, one client record and one evidence trail across the group", "source": "Our view", "future": true}]},
+    {"type": "hero_screen", "title": "One client, every business",
+     "points": ["The family's holdings across all three businesses", "One customer check, reused by each business", "The agent flags what's missing, the adviser confirms"],
+     "screenshot": {"file": "example-screen.png", "alt": "Client page"}},
+    {"type": "photo_cards", "title": "Who it helps, day to day",
+     "cards": [{"title": "Advisers", "label": "Time back with clients"}, {"title": "Compliance", "label": "One check, one trail"}, {"title": "Operations", "label": "Fewer hand-offs"}]},
+    {"type": "quote", "text": "Any new tool I introduce is yet another tool I have to worry about, manage and pay for.", "who": "What you told us, 3 Nov 2026", "so": "So we start from what you already run"}
+  ]
+}
