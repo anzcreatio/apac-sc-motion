@@ -162,9 +162,11 @@ therefore shows the grey like background looks cheap").
 | Export | `clio pull-pkg labUiKit -e <env>` (CLI; clio MCP has no pull tool) → SharePoint `Library/ui-kit/packages/`. The `Files/obj` folder in the export is made by the stand; ignore it |
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
-replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today: `main`
-= 0.5.0 (Navalo, 8 components, pickers); `ewb-components` = 0.3.x-0.4.x (EWB components, lacks 0.1.2-0.5.0). Version
-numbers on `main` skip what the EWB branch used.
+replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today (18 Nov
+2026): `main` = 0.5.5 (Navalo components, pickers, native tokens); `ewb-components` = 0.5.6 = `main` merged in plus
+the EWB components, so it is the superset and safe to install anywhere. Version numbers on each line skip what the
+other used. The EWB components still style from `_kit-runtime.scss`, whose `--crt-palette-*` names don't exist (always
+fallback, radius 14 + shadows, not native): move them onto `_kit-tokens.scss` before reusing them on another deal.
 
 ## 5. Where things live
 
