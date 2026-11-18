@@ -151,6 +151,46 @@ def log(a):
     sys.exit(code)
 
 
+HEAVY = {"node_modules", ".angular", "dist"}
+
+
+def handover_check(deal):
+    """BUILD-RULES v0.6 §5: by build end the deal folder holds what another SC needs to change the demo.
+    Looks in the deal folder (the parent when the pack sits in a subfolder such as map-sandbox/)."""
+    root = os.path.abspath(deal)
+    parent = os.path.dirname(root)
+    if not os.path.exists(os.path.join(root, "00-chats.md")) and os.path.exists(os.path.join(parent, "00-chats.md")):
+        root = parent
+    found = {"source": [], "readme": [], "bodies": [], "handover": [], "heavy": []}
+    for d, dirs, files in os.walk(root):
+        depth = os.path.relpath(d, root).count(os.sep)
+        for h in [x for x in dirs if x in HEAVY]:
+            found["heavy"].append(os.path.relpath(os.path.join(d, h), root))
+        dirs[:] = [x for x in dirs if x not in HEAVY and not x.startswith(".") and depth < 5]
+        rel = os.path.relpath(d, root)
+        if "angular.json" in files or ("package.json" in files and "src" in dirs):
+            found["source"].append(rel)
+        for f in files:
+            lf = f.lower()
+            if lf.endswith(".md") and "readme" in lf:
+                found["readme"].append(os.path.join(rel, f))
+            if lf.endswith(".body.js"):
+                found["bodies"].append(os.path.join(rel, f))
+            if lf.endswith(".md") and "handover" in lf:
+                found["handover"].append(os.path.join(rel, f))
+    L = ["", "## Handover material in the deal folder (BUILD-RULES v0.6 §5)", ""]
+    if not found["source"] and not found["bodies"]:
+        L.append("- No custom component source or saved page bodies found. If the build had custom code or page changes, "
+                 "copy the source (no node_modules/.angular/dist), its README and the page bodies into the deal folder.")
+    for key, label in (("source", "Component source"), ("readme", "README (reads, writes, settings)"),
+                       ("bodies", "Saved page bodies"), ("handover", "Handover note")):
+        items = found[key]
+        L.append("- %s: %s" % (label, ", ".join("`%s`" % x for x in items[:4]) + (" …" if len(items) > 4 else "") if items else "**missing**"))
+    if found["heavy"]:
+        L.append("- **Remove from the deal folder (synced to every SC):** " + ", ".join("`%s`" % x for x in found["heavy"][:5]))
+    return L
+
+
 def report(a):
     p = load_pack(a.deal)
     e = entries(a.deal)
@@ -175,6 +215,7 @@ def report(a):
     hs = [x for x in e if x["result"].startswith("HARD STOP")]
     L += ["", "## Needs the SC", ""] + (["- %s" % x["result"] for x in hs] or ["- Nothing."])
     L += ["", "## Scope check", "", "Compare what's on the stand in our packages with the items above; list anything extra here."]
+    L += handover_check(a.deal)
     b, _, _ = paths(a.deal)
     out = os.path.join(b, "build-report.md")
     open(out, "w", encoding="utf-8").write("\n".join(L) + "\n")

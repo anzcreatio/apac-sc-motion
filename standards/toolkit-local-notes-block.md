@@ -1,4 +1,4 @@
-<!-- apac-sc-motion build rules v0.5 (16 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.5.md -->
+<!-- apac-sc-motion build rules v0.6 (18 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.6.md -->
 ## APAC SC team build rules (apac-sc-motion)
 
 1. **Compile and restart only when really needed, and only with the SC's OK (or the approval pack's).** Pages, captions, layouts, business
@@ -21,4 +21,15 @@
    items. On a master stand (pack `master`, demo bar §6c), the library modules in `extends` are in scope and go in the
    restore point; a master another deal holds (`in_use_by` in library/stands.json) is a hard stop. Reversible choices: default + log; irreversible ones stop. Don't ask in chat otherwise. Keep the laptop
    awake, notify at the end, run `report`.
+5. **Custom components start on the UI kit** (`UI-KIT-STANDARD` §2) even outside `labUiKit`: copy the kit's `kit-data.ts`,
+   `kit-write.ts` and `_kit-tokens.scss` in unchanged (devkit `Model` reads with row caps, writes through `canSave` +
+   `ensureOk`, Creatio tokens), strings in a resource file, devkit pinned exactly, own JS-only package.
+6. **By build end the deal folder holds what another SC needs:** component source (no `node_modules`/`.angular`/`dist`),
+   its README (reads, writes, settings), saved page bodies, seed scripts and data, a handover note. `report` lists gaps.
+7. **Pane signed out? Check headless:** clio `page-smoke`, or Playwright with clio's session (`get-browser-session`).
+   Delete any record a rehearsal saves. Tell the SC plainly it was the real stand, and send the pictures.
+8. **clio traps:** `create-app` names the package after the app code; Lead/Account columns from a new package need
+   `add-package-dependency` first; `rows-file` must sit in the OS temp folder or the workspace; a component package:
+   `create-package` first, then `push-workspace` with the server package's UId in the descriptor. A web map is a custom
+   component (no native one): Leaflet + OpenStreetMap passes the default CSP.
 <!-- end apac-sc-motion build rules -->

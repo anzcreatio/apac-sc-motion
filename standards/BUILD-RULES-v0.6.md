@@ -1,4 +1,4 @@
-# Build rules v0.5: while configuring a demo stand
+# Build rules v0.6: while configuring a demo stand
 
 **What it is:** how every demo build runs, whichever tool does it, whichever tool runs it (the demo toolkit, clio, or Claude by hand).
 **Agreed:** Renzo, 13 Nov 2026. `sc-setup` copies the short version into the demo toolkit's local notes for
@@ -101,10 +101,23 @@ allow, deleting Creatio data or packages outside the deal's demo packages, and s
 are allowed only in the deal folder and the builds folder, not the plugin or the instructions. Settings load in the
 next session.
 
+## 5. Custom components, checks and handover (v0.6)
+
+From the BPD Bali map build (18 Nov 2026): each of these cost rework or blocked a check that night.
+
+| Rule | Why |
+|---|---|
+| **A custom component starts on the UI kit from day one**, even when it won't go into `labUiKit` yet: copy the kit's `kit-data.ts` (devkit `Model` reads, row caps), `kit-write.ts` (`canSave` + `ensureOk`) and `_kit-tokens.scss` into the project unchanged, with a header line naming the kit version; follow `UI-KIT-STANDARD` §2 (settings with safe defaults, strings in a resource file, devkit pinned exactly, error inside the component, skeleton). Keep it in its own JS-only package, never in the app package | Raw `fetch`/PATCH made a refused write look saved and hard-coded colours didn't follow the theme; moving it later becomes lift-and-shift, not a rewrite |
+| **By the end of the build, the deal folder holds everything another SC needs to change it:** component source (no `node_modules`, `.angular`, `dist`), its README (what it reads and **writes**, every setting), the page bodies saved, the seed scripts and data files, and a handover note. `approval_pack.py report` lists what's missing | The source lived only on one PC; nobody else could have changed the demo |
+| **When the browser pane is signed out** (a session restart signs it out; a sign-in is the SC's), don't stop the checks: verify headless with clio `page-smoke` (fields, buttons, console errors) or Playwright with clio's stored session (`get-browser-session` → `storageState`) for screenshots and clicks. A rehearsal that saves a record deletes it after. Report it in plain words: "a Chrome signed in to your sandbox opened the real page; here is the picture", and send the images | The SC can't sign in at 2 am; and "headless screenshots" alone read as "not real" |
+| **clio traps:** `create-app` names the package after the app **code** (not the name you planned); a column on `Lead` or `Account` from a new app package needs `add-package-dependency` first (the owning layers: `SalesEnterprise`, `CrtLeadOppMgmtApp`, `CrtOCMInLeadOppMgmt`, `CrtCustomer360App` on a Sales Enterprise stand), else "Reference schema 'Lead' was not found"; `odata-create` / `odata-update` `rows-file` must sit in the OS temp folder or the clio workspace; a new package for a component: `create-package` first (unlocked), then `push-workspace` with the descriptor's UId set to the server package's UId, C# scaffold removed | Each one failed once on the BPD Bali build |
+| **Freedom UI web has no map component** (register L-001): a map is a custom component (Leaflet + OpenStreetMap passes Creatio's default CSP: `img-src *`, Nominatim in `connect-src`). Plan GPS geotag, address search and pin → address from the start; address search is approximate, GPS and a pin are exact | The SC asked for auto-filled coordinates after seeing the first version |
+
 ## Changes
 
 | Version | Date | Change |
 |---|---|---|
+| v0.6 | 18 Nov 2026 | §5: custom components start on the UI kit (vendored kit-data / kit-write / tokens); the deal folder holds source, README, page bodies, seed scripts and a handover note by build end (report checks); headless checks when the pane is signed out; clio traps; web map = custom component (Renzo, after the BPD Bali map build) |
 | v0.5 | 16 Nov 2026 | Building on top of a master stand (demo bar §6c): library modules named in the pack's `extends` are in scope and go into the restore point; a master that another deal holds (`in_use_by`) is a hard stop (Renzo) |
 | v0.4 | 14 Nov 2026 | Section 4 rewritten: pre-flight before leaving, restore point, check each item and fail soft (two tries, then skip and carry on), irreversible decisions = hard stop, time budget and plan fingerprint, scope check in the report; caps enforced by `approval_pack.py`; auto-mode rules for the hard stops; edits only in deal and builds folders (Renzo) |
 | v0.3 | 14 Nov 2026 | Section 4: one approval pack upfront (scope, stand, compiles, restarts on our own stand, custom code, auto-rollback, data, decisions log), then a non-stop build with six hard stops; keep-awake, notifications and a build report; permission allowlist via `sc-setup` (Renzo) |

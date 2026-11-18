@@ -1,5 +1,5 @@
 {
-  "_what": "Permission setup for unattended demo builds (BUILD-RULES-v0.5 section 4). sc-setup merges it into <the folder the SC builds from>/.claude/settings.local.json after asking, with <DEALS> and <BUILDS> replaced by the SC's own paths (forward slashes). Build sessions run in auto mode; autoMode rules enforce the hard stops.",
+  "_what": "Permission setup for unattended demo builds (BUILD-RULES-v0.6 section 4). sc-setup merges it into <the folder the SC builds from>/.claude/settings.local.json after asking, with <DEALS> and <BUILDS> replaced by the SC's own paths (forward slashes). Build sessions run in auto mode; autoMode rules enforce the hard stops.",
   "permissions": {
     "allow": [
       "mcp__plugin_creatio-ai-app-development-toolkit_clio",

@@ -4,6 +4,20 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.6 (18 Nov 2026): build rules v0.6, lessons from the BPD Bali map build
+
+- **Build rules v0.6** (`standards/BUILD-RULES-v0.6.md` §5, and rules 5–8 in the block your demo toolkit reads):
+  custom components start on the UI kit from day one (copy the kit's `kit-data`, `kit-write`, `_kit-tokens`); by
+  build end the deal folder holds the component source (no `node_modules`), its README, the saved page bodies, the
+  seed scripts and a handover note; when the browser pane is signed out, check headless with clio `page-smoke` or
+  Playwright with clio's session; clio traps (package named after the app code, Lead/Account need package
+  dependencies, `rows-file` in the temp folder, component package created first).
+- **Web maps:** Freedom UI web pages have no map component (register L-001). A map is a custom component: Leaflet +
+  OpenStreetMap passes Creatio's default security policy. Plan GPS, address search and pin → address from the start.
+- **Build report** (`approval_pack.py report`) now lists the handover material in the deal folder and flags
+  `node_modules`, `.angular` or `dist` folders that must not be synced.
+- **Each SC:** run `sc-setup` once after updating, so the demo toolkit's notes get build rules v0.6.
+
 ## 0.32.5 (18 Nov 2026): UI kit 0.6.4 in the library; channels and integrations playbook
 
 - **UI kit `labUiKit` 0.6.4** is now the one kit: Navalo and East West Bank components in one package (15
