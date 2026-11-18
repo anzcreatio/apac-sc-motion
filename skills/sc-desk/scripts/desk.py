@@ -981,7 +981,7 @@ def work_md(items, unset, who):
             if top["due"] and top["due"] < TODAY:
                 why = "overdue since %s" % short_day(top["due"])
             elif top["status"] == "waiting-sc":
-                why = "waiting on you for %s" % plural(top["age"], "day")
+                why = "waiting on you for %s" % plural(top["age"], "day") if top["age"] else "waiting on you"
             else:
                 why = "due first"
             L += ["", "**Do first:** %s %s, %s (%s)." % (top["deal"], top["no"], top["next"], why)]
