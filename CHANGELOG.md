@@ -15,6 +15,9 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   components to 10.2.1 before that test.
 - Kit to-dos it found: pin library versions exactly, show settings-panel errors in the panel, cap rows on components
   that load a whole object, check `canSave` / `canDelete` before writes, translation files before a non-English customer.
+- New §2e: field lessons from 40 Creatio Community forum threads. For SCs: custom components don't show in the
+  **mobile app** (use native fields there), the kit needs **Creatio 8.3.3 or later**, and test a component by opening
+  two records in a row (record A, then record B).
 
 ## 0.32.3 (18 Nov 2026): every Word document in the Creatio look
 

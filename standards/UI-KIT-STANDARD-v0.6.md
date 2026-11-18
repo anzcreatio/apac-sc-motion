@@ -188,6 +188,53 @@ Creatio 10.2 has zoneless as a beta (`EnableZoneless` additional feature); **10.
 | Business logic in request handlers, not custom view models; destroy handlers synchronous; `#ResourceString` resolves once, bindings stay live; built-in converters (`crt.IsEqual`, `crt.ToObjectProp`, `crt.InvertBooleanValue` …) and validators (`crt.Required`, `crt.MaxLength` …) before custom ones (Overview; converters; validators references) | Rule |
 | Classic UI wrapped components can't go in the Designer palette: always build a Freedom UI remote module (Classic UI remote module) | ✅ |
 
+## 2e. Field lessons (Creatio Community forum, read 19 Nov 2026)
+
+40 component threads and articles on community.creatio.com (picked from 449 search hits across 23 searches). Forum
+answers carry no staff badge and many date from 8.0–8.2; where they disagree with §2d (version 10), §2d wins. Several
+older answers say custom components "can't have a settings panel": outdated since setup areas (8.3.3+).
+
+### Inputs, outputs, lifecycle
+
+| Lesson (source) | Kit |
+|---|---|
+| **Bound inputs arrive after `ngOnInit` / `ngAfterViewInit`**: read them in `ngOnChanges` or `@CrtInput` setters; never wait with `setTimeout`; a value that never arrives still shows the empty or "Set me up" state | ✅ all 8 use `ngOnChanges` |
+| One component instance can live across record opens: reload on every `recordId` change, reset state when it goes empty. **Re-open test:** open record A, back to the list, open record B, check B's data shows | Rule; add to every rehearsal |
+| Bind `recordId` to the page record (`$Id`), never to a column of another data source (that one comes back undefined on the second open) | ✅ panel binds `Id` |
+| The component can't discover its page or object: everything comes through bound inputs; if it needs the object name, make it a setting | ✅ |
+| Output to the page: `@Output() @CrtOutput()` `EventEmitter`, bound in the element's values as `{ request: "usr.<name>" }`, reaches a page request handler (scope it, §2d) | Pattern for future components |
+| No Designer hooks when a component is dropped or deleted: nothing may depend on side effects at placement; deleting a component doesn't clean up what its panel created | Rule |
+| No global event bus or `BroadcastChannel` between components (it crosses browser tabs); talk through bound attributes and `crt.*` / `usr.*` requests | Rule |
+| Never call `customElements.define` / `sdk.registerViewElement` from page handlers (throws "name already used" on the second open); the remote module registers once, guarded by `customElements.get` | ✅ |
+| `@CrtInput({ propertyBindable: true })` (seen in a forum article) is not in the public devkit types ("Excluded from this release"): don't use it; ordinary `@CrtInput` binds fine | ✅ not used |
+
+### Data and services
+
+| Lesson (source) | Kit |
+|---|---|
+| **Counts and totals: a Model `type: "function"` attribute** with `functionConfig: { aggregation: AggregationFunction.Count, type: "aggregation", aggregationEval: "all" }` and the filter as `ModelParameterType.Filter`. Never load every row and use `.length` | ⚠️ Stage funnel, Group overlap, Rate against target, Cycle time load rows: move counts to aggregation (and cap rows, §2d) |
+| `load` attributes and filter paths must be real object column names (`Usr…`); a page attribute name comes back silently empty (only `Id`). Show our alert when a configured column returns nothing | Pickers save real columns ✅; add the check |
+| No client ESQ (the devkit `EntitySchemaQuery` has no executor) and no Classic `ProcessModuleUtilities`: Model and `crt.*` requests only | ✅ |
+| Run a process from code through `HandlerChainService.instance.process({ type: 'crt.RunBusinessProcessRequest', processName, processParameters, $context })` (the forum's `request:` / `params:` shape and `processParamters` typo fail). Keep one tested snippet in the kit before using it | ⚠️ untested |
+| Portal (external) users: Model calls run under the portal user's object permissions; a custom C# web service needs `[DefaultServiceRoute, SspServiceRoute]` on the class and the `0/ssp/rest/` path. Test every component on a portal page **logged in as a portal user** | ⚠️ Request checklist is on a portal page: run that test |
+| A filtered Model load returning HTTP 500 or one row on 8.0.6–8.0.9 = known `FilterGroup` bug (workaround: `Object.assign({}, filters)` with `items` copied); fixed later | 8.x stands only |
+| Custom converters in calculated attributes need 8.3.2+ | Version note |
+
+### Build, dev loop, platform limits
+
+| Lesson (source) | Kit |
+|---|---|
+| "Remote entry with name '…' does not exist" (the most-asked error): (a) running `npm start` / `ng serve` outside Creatio: expected, a remote module needs Creatio's runtime; (b) template macros left in the project (`<%projectName%>`, `<%vendorPrefix%>`) or the webpack `uniqueName` not matching the project name. After scaffolding, search the project for `<%` | Troubleshooting row |
+| No live preview against a stand. Mock look and feel with a local harness if useful, logic in Jest, data and Designer behaviour on a stand only. Dev loop: `ng build`, `push-workspace` (no compile: don't use `clio compile-package` for our JS-only kit), hard refresh (Ctrl+F5) in the Designer and the page | ✅ our route |
+| Build error "The 'compilation' argument must be an instance of Compilation" = two webpack or Angular-builder versions installed: clean `node_modules` and the lockfile, versions pinned exactly (§2d) | Troubleshooting row |
+| **Custom components don't render in the mobile app** (different UI framework). Mobile pages use native fields; say so in the build plan | §8 |
+| Sidebars: `crt.OpenSidebarRequest` passes no data; the sidebar's view model is created once and only hidden on close (no Init/Resume on reopen). Don't promise "the sidebar shows the current record" without testing reopen | Demo caution |
+| Long page actions: `request.$context.maskService.showBodyMask()` / `hideBodyMask()` in `try`/`finally` (no custom message). Our components keep their own skeleton | Pattern for page buttons |
+| Check the native controls first (e.g. multiselect is native since 8.2.1) before building a component | Rule (demo plan) |
+| Version floors: setup areas (our pickers) need **8.3.3+**; the coding-agent and design-token route **8.3.4+**. Don't offer the kit on an older customer stand | §6 |
+| Zoneless timeline (Creatio staff, 17 Nov 2026): 10.2 Dec 2026–Jan 2027 (zoneless optional), **10.2.1 about Feb 2027 (default)**. It also covers page handlers and client modules around our components: await everything there too. Open question (unanswered on the forum): updates after the first `await` in a handler; until answered, `await Promise.all(...)` first, then set state once | §6 |
+| Marketplace patterns worth copying: a colour per value and theme/size in the setup panel; search and copy; column layout saved per user; row click opens the record; README tells the customer to add `labUiKit` as a dependency of the page's package | Ideas |
+
 ## 2b. The pages around the components (look)
 
 A polished component on a cheap-looking page still looks cheap. These rules apply to every page we build for a demo:
@@ -250,7 +297,8 @@ fallback, radius 14 + shadows, not native): move them onto `_kit-tokens.scss` be
 | 10.0 | 11014108-demo (Navalo) | Group holdings, Decision checks and Flow timeline installed, placed, used live; full rehearsal of straight-through, approval and lodgement (13 and 14 Nov 2026). 0.5.0 installed 15 Nov: all eight components on pages; pickers built and unit-tested, not yet opened in the live designer |
 | 10.1 | 11014930-demo (EWB) | `ewb-components` 0.5.6 installed 18 Nov 2026 (main merged in); EWB pages render |
 | 10.x clean | 11014982-demo (`clean82`) | 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
-| 10.2.1 | none yet | ⚠️ Zoneless on by default: run the §2d zoneless test before any customer stand moves to 10.2.1 |
+| 10.2.1 | none yet | ⚠️ Zoneless on by default (about Feb 2027; 10.2 with it optional Dec 2026–Jan 2027): run the §2d zoneless test before any customer stand moves to 10.2.1 |
+| Below 8.3.3 | – | Not offered: no setup areas (our pickers) |
 
 Pinned versions (kit `main`, 19 Nov 2026): Angular 22.0.8, `@creatio-devkit/common` 0.1000.3, `@creatio/interface-designer`
 0.1000.3, TypeScript 6.0.3. Not yet proven: keyboard-only pass, zoneless on a 10.2 stand.
@@ -265,12 +313,13 @@ Pinned versions (kit `main`, 19 Nov 2026): Angular 22.0.8, `@creatio-devkit/comm
 
 - Every future Creatio release: we follow the supported route and smoke-test after upgrades.
 - Right-to-left layouts and languages beyond English.
+- The mobile app: custom components don't render there (different UI framework); mobile pages use native fields.
 
 ## 9. Changes
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
-| v0.6 | 19 Nov 2026 | New §2d: the rules from all 37 Freedom UI pages of Academy › Front-end development (build route, zoneless for 10.2.1, settings panels, data, strings, icons, handlers), each checked against kit 0.5.5; §4 zoneless check; §6 versions pinned and the 10.2.1 risk | Academy version-10 guides read 19 Nov 2026; kit `main` source |
+| v0.6 | 19 Nov 2026 | New §2d: the rules from all 37 Freedom UI pages of Academy › Front-end development (build route, zoneless for 10.2.1, settings panels, data, strings, icons, handlers), each checked against kit 0.5.5; new §2e: field lessons from 40 Community forum threads (inputs after init, re-open test, counts by aggregation, portal-user test, common build errors, mobile not supported, version floors); §4 zoneless check; §6 versions pinned, the 10.2.1 date and the 8.3.3 floor; §8 mobile | Academy version-10 guides and community.creatio.com threads read 19 Nov 2026; kit `main` source |
 | v0.5 | 18 Nov 2026 | §2c native patterns (tokens, component looks, schema conventions); tokens rule corrected; rehearsal on clean82 | Clean stand 11014982, kit 0.5.5 |
 | v0.4 | 15 Nov 2026 | Section 2b page look rules (no text on the grey page background, one header card, metrics first, lists with row numbers and add-column, one accent colour, palette chart colours by meaning, slots fit their cards); every setting picked not typed (0.5.0 pickers); person-level exclusion; five more components in section 1; versions 0.5.0 | Navalo 14-15 Nov: plan 15 build (labUiKit 0.5.0) and Renzo's "looks cheap" feedback on the lending overview (`Lessons/feedback/2026-11-15-renzo-huruiti-home-pages-look-cheap.md`) |
 | v0.3 | 13 Nov 2026 | Flow timeline added (live); rules for optional steps, honest wording and time zones; traps: moves on inserted components, stale baseline after page rules; native next-step banners as the pattern; versions 0.1.5 | Navalo FWP1–FWP6, 13 Nov (labUiKit 0.1.3–0.1.5) |
