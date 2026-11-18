@@ -29,6 +29,10 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   the customer's own words as a quote. Deck standard v0.6 (`standards/DECK-STANDARD-v0.6.md`) lists the fields.
 - Every visual must make a point. `photo_cards` takes **brand photos only** (no stock or AI images); without one you
   get a placeholder and a warning.
+- **New default cover**: orange gradient, the customer lockup in spaced capitals, and a real Creatio product screen
+  bleeding off the right edge (from the corporate deck). Put `
+` in the title to choose the line breaks; `"art": false`
+  or a `fill` brings back the plain cover.
 - Try them: `python skills/sc-deck/scripts/build_deck.py tests/deck/visual-types/deck.json --render`.
 
 ## 0.27.0 (17 Nov 2026): no more "SC check required" lines

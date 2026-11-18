@@ -417,9 +417,44 @@ def style_check(d, n):
 
 # ---------------------------------------------------------------- slide types
 
+def _cover_art(deck, slide, d, n):
+    """v0.6 cover (creatio.com hero): orange gradient, spaced-caps lockup, big white title on the left, the
+    template's product shot bleeding off the right edge. Off with "art": false; a photo cover uses "image"."""
+    art = os.path.join(T.dir, T.cfg["cover_art"])
+    full_bleed(slide, "Cover background", ORANGE_WARM, ORANGE_HOT, 135)
+    brand_mark(slide)
+    lx, lw = 0.75, 5.9
+    y = 2.0
+    if d.get("subtitle"):
+        p = run(textbox(slide, "Cover lockup", lx, y, lw, 0.4), d["subtitle"].upper(), 13, T.WHITE, bold=True)
+        spaced(p, 3)
+        y += 0.6
+    if "\n" in d["title"]:  # the SC chose the line breaks: size so the longest line fits on one line
+        size = min(40, int(lw * 72 / (max(len(x) for x in d["title"].split("\n")) * 0.62)))
+    else:
+        size = 40 if len(d["title"]) <= 28 else 36 if len(d["title"]) <= 48 else 30
+    th = est_h(d["title"], size, lw, 1.1)
+    run(textbox(slide, "Title", lx, y, lw, th + 0.2), d["title"], size, T.WHITE, bold=True)
+    if th > 3.4:
+        warn(n, "cover title runs to five lines or more: shorten it")
+    if d.get("date"):
+        shape(slide, MSO_SHAPE.RECTANGLE, "Cover rule", lx, 6.35, 1.2, 0.03, fill=T.WHITE)
+        run(textbox(slide, "Date", lx, 6.5, lw, 0.4), d["date"], 14, T.WHITE)
+    iw, ih = Image.open(art).size
+    x, w = 6.75, 7.4
+    h = w * ih / iw
+    pic = slide.shapes.add_picture(art, Inches(x), Inches((7.5 - h) / 2 + 0.25), Inches(13.334 - x), Inches(h))
+    pic.crop_right = 1 - (13.334 - x) / w  # bleeds off the right edge, like the website hero
+    pic.name = "Cover product"
+    pic._element.nvPicPr.cNvPr.set("descr", "Creatio product screen")
+
+
 def s_cover(deck, slide, d, n):
     for sh in list(slide.shapes):
         sh._element.getparent().remove(sh._element)
+    if not d.get("image") and not d.get("screenshot") and d.get("art", True) and T.cfg.get("cover_art") \
+            and not d.get("fill"):
+        return _cover_art(deck, slide, d, n)
     fill = RGBColor.from_string(d.get("fill") or T.cfg.get("cover_fill", str(T.INK)))
     shape(slide, MSO_SHAPE.RECTANGLE, "Cover background", 0, 0, 13.34, 7.5, fill=fill)
     if d.get("image"):  # full-bleed photo, cropped to the slide; title sits on accent blocks
