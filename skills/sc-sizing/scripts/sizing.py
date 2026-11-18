@@ -973,6 +973,9 @@ def build_internal(s, r, path, warns):
         for ln in env["recommended"]:
             L.append(f"| {ln['label']} | {ln['count']} | {ln.get('cores') or '-'} | {ln.get('ram_gb') or '-'} | "
                      f"{disk_txt(ln)} | {', '.join(ln['rules']) or '-'} | {ln['source']} |")
+        notes = [f"- {ln['label']}: {n}" for ln in env["recommended"] for n in ln.get("internal", [])]
+        if notes:
+            L += ["", "For the infra review:"] + notes
         L.append(f"\nRules applied: {', '.join(env['rules_applied']) or 'none'}. "
                  f"Reduced option: {', '.join(env['reduced_rules']) or 'same as recommended'}.")
         if env["kind"] == "prod" and env.get("channels"):
