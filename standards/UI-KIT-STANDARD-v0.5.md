@@ -81,6 +81,14 @@ schemas, computed styles, ARIA and CSS tokens. No compiled Creatio code was read
 Every colour has a twin under `.dark-mode`, so a component on these tokens follows dark mode with no extra work. Native
 components write them with a fallback, e.g. `var(--crt-color-background-base, var(--background))`: do the same.
 
+**Rehearsed 18 Nov 2026 (kit 0.5.5, Stage funnel on clean82, live data):** card, border, radius, padding and title
+match the native card exactly; the keyboard focus ring is the native one and keeps the tile's 8px radius; tokens are
+read live (track `#e1e5e9` from `--crt-color-background-secondary-soft`). With `.dark-mode` on the body the kit card
+turns dark with the native card. But Creatio's dark semantic colours look like inversions (success `#f47aff`, pink),
+so before a customer uses dark mode, check status colours on that stand. Rehearsal traps: changing only the `#` part
+of the URL doesn't reload the kit's JS, so use a real reload (a new `?r=` query); a fresh load straight onto a blank
+page's `#Section/...` hangs on the splash, so load `#Desktop` first.
+
 ### Component patterns (measured)
 
 | Element | Native look | Our rule |
