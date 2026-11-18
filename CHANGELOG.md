@@ -4,6 +4,13 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.1 (18 Nov 2026): sizing fix
+
+- **`sc-sizing`:** the database Data, Tempdb and Logs disks were dropped from the sizing when the calculator showed a
+  decimal size (for example "Data — 1224.9 GB", which happens at larger user counts). Fixed. If you ran a sizing for
+  more than a few hundred users, run `calc` and `build` again.
+- **Each SC:** update the plugin (`claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`) and restart Claude Code.
+
 ## 0.32.0 (18 Nov 2026): learning loop pilot (Renzo only)
 
 - **Nothing changes for you yet.** This is a 2-week pilot on Renzo's deals (review 2 Dec). It only switches on for
