@@ -1,6 +1,6 @@
 ---
 name: sc-sizing
-description: Recommend on-premise (or customer-managed cloud) infrastructure for a Creatio APAC deal - servers per environment (application, database, Redis, load balancer, Kubernetes, RabbitMQ, MongoDB, Creatio.ai), a reduced-footprint option, storage (object storage, database, backups) and the software stack - starting from Creatio's system requirements calculator and adjusted with Creatio Academy and the infrastructure team's rules. Produces a customer-ready Word document and Excel sheet worded as a recommendation pending review by Creatio's infrastructure team, plus an internal file with every source and a draft note for the infra review. Use when an SC asks about hardware sizing, server specs, on-prem or self-hosted requirements, infrastructure for an RFP or RFI, storage or database sizing, Redis or Kubernetes questions, minimum or POC hardware, or how many servers a customer needs.
+description: Recommend on-premise (or customer-managed cloud) infrastructure for a Creatio APAC deal - servers per environment (application, database, Redis, load balancer, Kubernetes, RabbitMQ, MongoDB, Creatio.ai), a reduced-footprint option, storage (object storage, database, backups) and the software stack - starting from Creatio's system requirements calculator and adjusted with Creatio Academy and the infrastructure team's rules. Produces a customer-ready Word document and Excel sheet worded as a recommendation pending review by Creatio's infrastructure team, plus an internal file with every source and a draft note for the infra review. Use when an SC asks about hardware sizing, server specs, on-prem or self-hosted requirements, infrastructure for an RFP or RFI, storage or database sizing, Redis or Kubernetes questions, minimum or POC hardware, or how many servers a customer needs - including a brand-new deal where sizing is the only ask (for example a partner ran the earlier stages): it creates the deal folder without starting the motion from the beginning.
 ---
 
 # sc-sizing
@@ -44,9 +44,30 @@ Background: `references/calculator-notes.md` (how the calculator behaves), `refe
 | Products in scope | `bom.json`, `deck.json` summary | Ask: bank products are Windows only today (ST11) |
 | The customer's own template | RFI spreadsheet | Fill it from the `.xlsx` (one row per server type, per environment) |
 
+## Starting a deal with sizing only
+
+Some deals reach us mid-way: a partner ran discovery and the demo, and all they need from us is a sizing. **Start
+there; don't run the motion from the beginning** (Renzo, 18 Nov 2026). No transcript, deck, demo-depth question or
+first-meeting pack is needed.
+
+1. **Folder.** `python scripts/sizing.py start --account "<customer full name>" [--partner "<partner>"] [--asked-by "<who>"]`.
+   It follows the deal folder rule (`../sc-setup/SKILL.md`): reuses the account's folder with any SC suffix, stops on
+   a close match (ask the SC, then pass that folder to `new` or rerun with `--confirm-new`), otherwise creates
+   `Deals/<kebab-account>-<sc>/`. It writes `00-deal-start.md` (entry: sizing only, partner, who asked) and
+   `sizing.json` with `entry.type = "sizing-only"`. It prints `DEAL=<folder>`.
+2. **Chat.** Number and title the chat as usual (`../../standards/CHAT-TRACKING-v0.1.md`) with stage **`Sizing`**:
+   `python ../sc-desk/scripts/desk.py chat-open --deal "<folder>" --stage Sizing --topic "<2-4 words>" --short <SHORT>`.
+3. **Dates.** Record only what's known (`../sc-guide/scripts/deal_dates.py set … --field sc_notified`). No first-call
+   date is fine on a partner deal; don't ask for it.
+4. Then the steps below from step 2 (fill inputs). The BFSI rule still applies: a bank's requirements and our
+   proposed infrastructure go to `sc-bank-ai-log`.
+5. **Later.** If the deal moves into discovery, a demo or a proposal, `sc-guide` picks it up from the folder; the
+   sizing stays as it is. Never start the motion on your own because the folder looks empty.
+
 ## Steps
 
-1. **Start.** `python scripts/sizing.py new "<deal folder>" --customer "<short name>"` writes `<deal>/sizing.json`.
+1. **Start.** Sizing-only deal: see above. A deal already in the motion:
+   `python scripts/sizing.py new "<deal folder>" --customer "<short name>"` writes `<deal>/sizing.json`.
    If one exists, update it; never start a second.
 2. **Fill inputs.** Each input is `{value, tag, source}` (tags **C** customer said · **P** partner said · **I**
    inferred · **A** assumed). Values:

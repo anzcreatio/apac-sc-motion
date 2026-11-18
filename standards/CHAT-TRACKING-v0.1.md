@@ -19,7 +19,7 @@ tasks, not `Deals/_practice/`):
 3. **Title:** `set_session_title` self → `<Customer> NN · <Stage> · <topic>`, under ~50 characters.
 
 Stages: `Intake`, `FM prep`, `Meeting review`, `Demo plan`, `Build`, `Deck`, `RFP`, `Workshop`, `Click path`,
-`Proposal`, `Admin`.
+`Sizing`, `Proposal`, `Admin`.
 
 ## 2. Keep the row current
 

@@ -140,6 +140,8 @@ A month without a day ("sometime in October") is not a date: ask, or look for it
    | If the folder has… | …but not | Next step |
    |---|---|---|
    | a live customer (a delivered solution, a handover, a go-live event) | | **Mode D**, the existing-customer path, not this table |
+   | `00-deal-start.md` with entry **sizing only** (a partner or someone else ran the earlier stages) | an infra-reviewed `sizing.json` | `sc-sizing`. **Don't send the SC back to the first meeting**: only move into the motion when the SC says the deal is going to discovery, a demo or a proposal |
+   | nothing, and the ask is only a hardware or infrastructure sizing | | `sc-sizing` "Starting a deal with sizing only" (creates the folder; no transcript or deck needed) |
    | nothing | | Create the folder; ask for the AE's handoff and the call transcript, and **the demo depth**: "introduction to Creatio, or a detailed demo on their pains?" (`sc-first-meeting` step 0b) |
    | a transcript or handoff | a first-meeting prep / `deck.json` | `sc-first-meeting` |
    | `deck.json` | its `.pptx` | `sc-deck` build |

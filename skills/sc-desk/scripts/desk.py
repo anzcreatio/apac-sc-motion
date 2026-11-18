@@ -792,7 +792,7 @@ def c_scan(a):
 
 CHATS = "00-chats.md"
 CHAT_COLS = ["No", "Date", "Machine", "Stage", "Topic", "Status", "Next", "Due", "Updated", "Outcome"]
-STAGES = ["Intake", "FM prep", "Meeting review", "Demo plan", "Build", "Deck", "RFP", "Workshop", "Click path", "Proposal", "Admin"]
+STAGES = ["Intake", "FM prep", "Meeting review", "Demo plan", "Build", "Deck", "RFP", "Workshop", "Click path", "Sizing", "Proposal", "Admin"]
 STATUS = {"active": "🟢 Active", "waiting-sc": "🟡 Waiting on SC", "waiting-customer": "🔵 Waiting on customer",
           "done": "✅ Done", "parked": "⏸ Parked"}
 STATUS_ORDER = {"waiting-sc": 0, "active": 1, "waiting-customer": 2, "parked": 3}

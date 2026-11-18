@@ -4,6 +4,7 @@ The Creatio system requirements calculator is the base; the rules in SIZING-RULE
 Creatio infrastructure team guidance). Outputs are customer-ready but always worded as a recommendation pending
 review by Creatio's infrastructure team.
 
+  python sizing.py start    --account "Name" [--partner "X"] [--asked-by "Y"]   # sizing-only deal: find/create folder
   python sizing.py new      <deal folder> [--customer "Name"]   # writes <deal>/sizing.json
   python sizing.py url      <deal>/sizing.json                   # calculator links per environment
   python sizing.py calc     <deal>/sizing.json [--offline DIR]   # fetch calculator, apply rules -> plan
@@ -91,6 +92,84 @@ def val(s, key, default=None):
 
 
 # ---------------------------------------------------------------- new
+def kebab(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def team_config():
+    try:
+        return load_json(os.path.join(os.path.expanduser("~"), ".apac-sc-motion.json"))
+    except (OSError, ValueError):
+        return {}
+
+
+def find_deal(deals_dir, account):
+    """Deal folder rule (sc-setup): reuse the account with no suffix or any SC suffix; report close matches."""
+    want = kebab(account)
+    exact, close = [], []
+    if os.path.isdir(deals_dir):
+        for d in sorted(os.listdir(deals_dir)):
+            if not os.path.isdir(os.path.join(deals_dir, d)) or d.startswith(("_", ".")):
+                continue
+            sfx = {"rh", "wn", "fa"} | ({team_config().get("sc")} - {None})
+            base = re.sub(r"-(" + "|".join(sorted(sfx)) + r")$", "", d)
+            if base == want or d == want:
+                exact.append(d)
+            else:
+                a_t = {t for t in want.split("-") if len(t) >= 4}
+                b_t = {t for t in base.split("-") if len(t) >= 4}
+                if want in base or base in want or (a_t & b_t):
+                    close.append(d)
+    return exact, close
+
+
+def cmd_start(a):
+    """Sizing-only entry: find or create the deal folder, record how the deal started, then `new`."""
+    cfg = team_config()
+    root = a.root or cfg.get("sharepoint_root")
+    if not root:
+        sys.exit("No team root: run sc-setup (sets sharepoint_root in ~/.apac-sc-motion.json) or pass --root")
+    sc = cfg.get("sc")
+    if not sc:
+        sys.exit("No SC initials ('sc') in ~/.apac-sc-motion.json: run sc-setup step 1b. Never guess them.")
+    deals_dir = os.path.normpath(os.path.join(root, "Deals"))
+    exact, close = find_deal(deals_dir, a.account)
+    if exact:
+        deal = os.path.join(deals_dir, exact[0])
+        print(f"Using the existing deal folder {exact[0]} (one folder per account).")
+    elif close and not a.confirm_new:
+        print("Close matches, ask the SC whether one of these is the same account:")
+        for c in close:
+            print("  -", c)
+        sys.exit("Rerun with --confirm-new to create a new folder anyway, or pass that folder to `new`.")
+    else:
+        deal = os.path.join(deals_dir, f"{kebab(a.account)}-{sc}")
+        os.makedirs(deal, exist_ok=True)
+        print(f"Created {os.path.basename(deal)}")
+    start = os.path.join(deal, "00-deal-start.md")
+    if not os.path.exists(start):
+        lines = [f"# {a.account}: how this deal started", "",
+                 "| | |", "|---|---|",
+                 f"| Entry | **Sizing only** (sc-sizing), {datetime.date.today().isoformat()} |",
+                 f"| Asked by | {a.asked_by or 'unknown'} |",
+                 f"| Partner | {a.partner or 'none named'} |",
+                 f"| Earlier stages | Run by {'the partner' if a.partner else 'someone else'}; not redone by us |",
+                 "| Full motion | Not started. Start it only if the SC says the deal moves into discovery, demo or proposal |",
+                 ""]
+        with open(start, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(lines))
+    a.deal, a.customer = deal, a.customer or a.account
+    if os.path.exists(os.path.join(deal, "sizing.json")):
+        print(f"sizing.json already exists in {os.path.basename(deal)}: update it (no second one).")
+    else:
+        cmd_new(a)
+    s = load_json(os.path.join(deal, "sizing.json"))
+    s["entry"] = {"type": "sizing-only", "partner": a.partner or "", "asked_by": a.asked_by or "",
+                  "date": datetime.date.today().isoformat()}
+    save_json(os.path.join(deal, "sizing.json"), s)
+    print(f"DEAL={deal}")
+
+
 def cmd_new(a):
     deal = os.path.abspath(a.deal)
     p = os.path.join(deal, "sizing.json")
@@ -1022,6 +1101,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("new"); p.add_argument("deal"); p.add_argument("--customer"); p.set_defaults(f=cmd_new)
+    p = sub.add_parser("start"); p.add_argument("--account", required=True); p.add_argument("--customer")
+    p.add_argument("--partner"); p.add_argument("--asked-by", dest="asked_by"); p.add_argument("--root")
+    p.add_argument("--confirm-new", dest="confirm_new", action="store_true"); p.set_defaults(f=cmd_start)
     p = sub.add_parser("url"); p.add_argument("sizing"); p.set_defaults(f=cmd_url)
     p = sub.add_parser("calc"); p.add_argument("sizing"); p.add_argument("--offline"); p.set_defaults(f=cmd_calc)
     p = sub.add_parser("storage"); p.add_argument("sizing"); p.set_defaults(f=cmd_storage)

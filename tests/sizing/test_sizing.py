@@ -153,6 +153,30 @@ try:
     ok(r.returncode != 0 and "guaranteed" in r.stdout, "wording check catches 'guaranteed'")
     ok(run("build", p, "--nn", "5").returncode != 0, "build refuses on wording errors")
 
+    # 9. Sizing-only start: create, reuse with any suffix, stop on a close match
+    root = os.path.join(tmp, "team")
+    os.makedirs(os.path.join(root, "Deals", "harbour-lending-wn"))
+    os.makedirs(os.path.join(root, "Deals", "northwind-bank"))
+    sc = sizing.team_config().get("sc")
+    if sc:
+        r = run("start", "--account", "Fictional Pawn Co", "--partner", "Partner X", "--root", root)
+        d = os.path.join(root, "Deals", f"fictional-pawn-co-{sc}")
+        ok(r.returncode == 0 and os.path.isdir(d), f"start creates <kebab>-<sc>: {r.stdout} {r.stderr}")
+        ok(os.path.exists(os.path.join(d, "00-deal-start.md")), "start writes 00-deal-start.md")
+        s = json.load(open(os.path.join(d, "sizing.json"), encoding="utf-8"))
+        ok(s.get("entry", {}).get("type") == "sizing-only" and s["entry"]["partner"] == "Partner X", "entry recorded")
+        r = run("start", "--account", "Fictional Pawn Co", "--root", root)
+        ok(r.returncode == 0 and "already exists" in r.stdout, "second start reuses, no second sizing.json")
+        r = run("start", "--account", "Harbour Lending", "--root", root)
+        ok(r.returncode == 0 and "harbour-lending-wn" in r.stdout and
+           not os.path.exists(os.path.join(root, "Deals", f"harbour-lending-{sc}")), "reuses another SC's folder")
+        r = run("start", "--account", "Northwind Bank Group", "--root", root)
+        ok(r.returncode != 0 and "northwind-bank" in r.stdout, "close match stops and asks")
+        r = run("start", "--account", "Northwind Bank Group", "--root", root, "--confirm-new")
+        ok(r.returncode == 0, "--confirm-new creates it anyway")
+    else:
+        print("note: no 'sc' in ~/.apac-sc-motion.json, start tests skipped")
+
     # 8. Status wording is never definitive
     for k, t in rules["wording"]["status"].items():
         ok(any(w in t.lower() for w in ("pending", "review", "to be confirmed")), f"status '{k}' stays tentative")

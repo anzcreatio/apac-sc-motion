@@ -4,6 +4,16 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.31.0 (18 Nov 2026): start a deal with just a sizing request
+
+- 📣 **When a partner has already run discovery and the demo and all they need is a sizing, start there.** Tell Claude
+  "<customer> needs an on-prem sizing" and `sc-sizing` creates the deal folder by the usual rule (it reuses the
+  account's folder whoever made it, and asks you on a close match). No transcript, deck or first-meeting pack needed.
+- The folder gets `00-deal-start.md` (entry: sizing only, partner, who asked), and the chat is numbered with the new
+  stage **`Sizing`**.
+- `sc-guide` won't push you back to the first meeting on these deals. It moves them into the motion only when you
+  say the deal is going to discovery, a demo or a proposal.
+
 ## 0.30.0 (18 Nov 2026): on-prem hardware sizing (`sc-sizing`)
 
 - 📣 **New skill `sc-sizing`: ask Claude "what hardware does this customer need on-prem?"** and get a customer-ready
