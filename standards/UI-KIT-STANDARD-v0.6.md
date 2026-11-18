@@ -279,12 +279,12 @@ therefore shows the grey like background looks cheap").
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
 replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today (18 Nov
-2026, updated 19 Nov): `main` = 0.5.5 (Navalo components, pickers, native tokens); `ewb-components` = **0.6.1**
-(tags `kit-0.6.0`, `kit-0.6.1`) = `main` plus the 7 EWB components, now on `_kit-tokens` (no `--crt-palette-*`), all
-on pickers, with shape skeletons and a row cap. It is the superset: merge it back into `main` (separate worktree)
-before the §2d / §2e kit to-dos. Version numbers on each line skip what the other used.
+2026, updated 19 Nov): **`main` = `ewb-components` = 0.6.1** (fast-forwarded 19 Nov; tags `kit-0.6.0`, `kit-0.6.1`):
+the Navalo components plus the 7 EWB components, all on `_kit-tokens`, all on pickers, with shape skeletons and a row
+cap. Build OK, 18 suites / 107 tests pass. New work goes on `main`; installs need a yes per stand (EWB stand only after
+a clean-stand test, with the EWB chat told first).
 
-**Known bug on `main` (fixed per panel on `ewb-components` 0.6.1):** a `choice` picker with no empty option shows its
+**Known bug in the Navalo panels (the EWB panels are fixed in 0.6.1):** a `choice` picker with no empty option shows its
 first option when nothing is saved (e.g. Flow timeline "Hide until requested" reads "Yes"), so an author can save the
 wrong value without touching it. Fix once in the shared picker: when the saved value is empty, show a "(default)"
 option that keeps it empty, **unless `spec.options` already has a `''` option** (EWB's `ON_OFF` does: "No (default)" /
