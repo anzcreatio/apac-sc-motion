@@ -4,6 +4,18 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.4 (19 Nov 2026): custom components follow the Creatio Academy rules
+
+- **`standards/UI-KIT-STANDARD-v0.6.md`** (was v0.5). New §2d: the rules from all 37 Freedom UI pages of Creatio
+  Academy › Front-end development, each checked against the kit: build route (deferred format, Designer entries,
+  ShadowDom + OnPush), zoneless change detection, settings panels (Academy "setup areas"), data loading, strings,
+  icons, request handlers.
+- **Heads-up for custom components:** Creatio 10.2.1 turns zoneless change detection on by default. Our kit is ready
+  for it (Angular 22, zoneless provider) but not yet tested on a 10.2 stand: don't move a customer stand with our
+  components to 10.2.1 before that test.
+- Kit to-dos it found: pin library versions exactly, show settings-panel errors in the panel, cap rows on components
+  that load a whole object, check `canSave` / `canDelete` before writes, translation files before a non-English customer.
+
 ## 0.32.3 (18 Nov 2026): every Word document in the Creatio look
 
 - **New `standards/DOC-STANDARD-v0.1.md` + `standards/doc-kit/creatio_doc.py`.** Every Word document the motion makes

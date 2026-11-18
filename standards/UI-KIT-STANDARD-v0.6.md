@@ -1,12 +1,13 @@
-# UI kit standard v0.5: reusable, no-code, upgrade-safe custom components and the pages around them
+# UI kit standard v0.6: reusable, no-code, upgrade-safe custom components and the pages around them
 
 > Applies to every component in `labUiKit`, the team's shared package of custom Freedom UI components. First written
 > for East West Bank (12 Nov 2026), updated after the Navalo build (13 Nov 2026), where three components were built,
 > installed and used live (v0.2: two components; v0.3: Flow timeline and its lessons; v0.4: pickers for every setting,
 > five more components, and the look of the pages they sit on; v0.5, 18 Nov 2026: §2c native patterns harvested from a
-> clean Creatio 10 stand, and the tokens rule corrected). Sources: the AI-driven development kit's `dev-custom-components` skill, Creatio Academy "Add
-> the remote module to the library of the Freedom UI Designer", and what broke on the two builds. Demo bar §6 points
-> here.
+> clean Creatio 10 stand, and the tokens rule corrected; v0.6, 19 Nov 2026: §2d, the rules from every Freedom UI page
+> of Creatio Academy › Front-end development, checked against the kit). Sources: the AI-driven development kit's
+> `dev-custom-components` skill, Creatio Academy front-end guides (version 10, 37 pages, §2d), and what broke on the
+> builds. Demo bar §6 points here.
 
 ## 1. The components
 
@@ -121,6 +122,72 @@ page's `#Section/...` hangs on the splash, so load `#Desktop` first.
 | Actions | Buttons and menu items call `crt.*` requests (`crt.CreateRecordRequest`, `crt.OpenPageRequest`, `crt.RunBusinessProcessRequest`, `crt.LoadDataRequest`, `crt.ExportDataGridToExcelRequest`); `clickMode: menu` for a button with a menu | Our components raise the same requests, so page handlers and business rules still apply |
 | Icon buttons | `iconPosition: only-icon` (27 of 43 buttons), sizes `medium` or `large` | Header tools in our components: icon only, with an ARIA label |
 
+## 2d. Academy rules (front-end guides, version 10, read 19 Nov 2026)
+
+All 37 Freedom UI pages under Academy › Development on Creatio platform › Front-end development (`/guides/dev/sitemap.xml`;
+the 24 Classic UI pages don't apply). Kit column = `main` 0.5.5 checked against the rule on 19 Nov.
+
+### Build route
+
+| Rule (Academy page) | Kit |
+|---|---|
+| Deferred remote-module format: `main.ts` exports `RemoteEntryDefinition`, webpack `uniqueName`, `commonChunk: true`, runtime and design features load separately; no `@CrtInterfaceDesignerItem` on components (Migrate to deferred format; legacy = built for 8.3.3 and earlier) | ✅ |
+| Designer entry per component in `runtime.designer-definitions.ts`: same `type`, `toolbarConfig` (caption + **icon, required**), `defaultPropertyValues`, `propertiesPanel` (Freedom UI remote module; Localization) | ✅ |
+| Components `ViewEncapsulation.ShadowDom` + `ChangeDetectionStrategy.OnPush`; `@CrtInput` with `@Input`, `@CrtOutput` with `@Output` + `EventEmitter`; field-like components take `@CrtValidationInput` (`CrtValidationInfo`) (Implement Freedom UI component) | ✅ ShadowDom + OnPush 8 of 8 |
+| An `AGENTS.md` at the project root pointing at the guides bundled in `node_modules/@creatio-devkit/common` and `@creatio/interface-designer` (every example's first step) | ✅ |
+| No libraries that register as globals (lodash and the like) under Module Federation (Freedom UI remote module) | Rule |
+| Pin versions **exactly** (no `^`): Angular, `@creatio-devkit/common`, `@creatio/interface-designer`, `class-transformer`; record them per Creatio version in §6 (no Academy page gives versions) | ⚠️ `^0.1000.3` on both Creatio libraries: pin |
+| Images and icons through `DomSanitizer.bypassSecurityTrustResourceUrl()`; Base64 when a stand may have no internet (Assets in the remote module) | Rule (kit uses inline SVG) |
+
+### Change detection: zoneless
+
+Creatio 10.2 has zoneless as a beta (`EnableZoneless` additional feature); **10.2.1 turns it on by default**
+(Migrate to zoneless). Every component must work without zone.js:
+
+| Rule | Kit |
+|---|---|
+| Angular 20+ with `provideZonelessChangeDetection()`; no `zone.js` in polyfills (build and test); no `NgZone` events | ✅ Angular 22, provider in `remote-app-context.ts` |
+| Await every fetch, Model call and `HandlerChainService.process()`; no `setTimeout` waits or timer loops to wait for the page; stop page-lifetime timers in `crt.HandleViewModelDestroyRequest` / `ngOnDestroy`; `try`/`finally` to reset a mask or a locked button | Rule; check on every review |
+| NG0908 "requires Zone.js" in the console = a component isn't zoneless-ready: migrate it, don't import zone.js (that intercepts the whole page) | Rule |
+| Test: a 10.2 stand with `EnableZoneless` on: clicks, saves, close the page, run a process; nothing runs on a closed page, no new console errors | ⚠️ Not yet done: needs a 10.2 stand |
+
+### Settings panels (Academy: "setup areas")
+
+| Rule (Setup area basics; Collection-based setup area; Error handling) | Kit |
+|---|---|
+| Panel `implements PropertyPanel` from `@creatio/interface-designer`, is a `@CrtViewElement`, registered in the design feature (`design-feature.module`, `design.feature-activation`, `design.feature-definition`) and linked by `propertiesPanel` | ✅ (`kit-panel-base.ts`) |
+| The panel instance is reused across components of the same type: reload all state on every `viewNodeEditor` setter call | ✅ |
+| `getPropertyValue` / `setPropertyValue` are async: await them; clear with `{ constant: null }`; read with `value ?? default` | ✅ |
+| Wrap the panel in `crt-interface-designer-properties-panel-wrapper` and use `@creatio/interface-designer/styles/properties-panel-styles`; panel encapsulation `Emulated` (Academy examples) | Wrapper ✅; ⚠️ some panels use `ViewEncapsulation.None`: move to `Emulated` |
+| **Show errors in the panel**, not only the console: catch the specific `SchemaValidationError` subclasses first (`DataSourceAlreadyExists`, `ViewModelAttributeAlreadyExists`, `BoundViewModelAttributeRemoval`, …), fall back to `SchemaValidationError`, rethrow the rest; message in a `role="alert"` area, e.g. "Changes are not applied: …" | ⚠️ Panels only `console.error`: add a visible message |
+| Call `canRemoveAttribute` / `canRemoveDataSource` before removing; check `getDataSourceEditor` / `getAttributeConfig` before creating (create throws if it exists); can't remove → say so as information, not an error | Rule (kit creates only the `recordId` binding today) |
+| Check required settings before writing anything that creates schema objects; an Apply button only when applying creates data sources or attributes (saving constants on change is fine) | ✅ constants save on change |
+| **Since 10.1 the Designer saves only properties that differ from the default** (`UseViewConfigDefaultsFilter`): the component must apply the same default as `defaultPropertyValues` when a setting is missing from the schema (Client schema overview) | Rule: §2 "every setting optional with a safe default" covers it; keep the two defaults identical |
+
+### Data
+
+| Rule (Data sources; Model class; Best practices for data fetching) | Kit |
+|---|---|
+| Our route: `Model.create(...)` + `load({ attributes, parameters, options })` inside the component. Academy's other route: a page data source + an `isCollection` attribute bound with `bindToAttribute` (follows the page's filters and the data-source designer). Use that route when a list must follow page filters | Model route ✅ |
+| Select only the columns you need; **cap the rows** (paging `rowCount`) on anything that loads a whole object; sort in the query, not in code | ⚠️ Group overlap, Rate against target, Cycle time, Stage funnel load whole objects: add a cap and say "first N" |
+| Independent loads in parallel (`Promise.all`); share one in-flight promise for the same query; a timeout on slow calls | Rule (`refreshOn` sequence guard stays) |
+| Before a write, `canSave` / `canDelete`: disable the action and say why instead of failing | ⚠️ Not used: add to writing components |
+| `update` / `delete` pick the record by filter: always filter on the primary key only | ✅ (`byId`) |
+| What a refused write returns is not documented: check the result **and** catch a rejected promise (our `ensureOk`, go-live test E5) | EWB branch ✅; `main` gets it when EWB merges back |
+| Calculated attributes (`from`, `converter`, `filter`, `triggers`, `triggersOptions.debounce`) for page-side derived values instead of handler code; read-only, lazy; `crt.Input` can't bind to them | Use on pages around components |
+| Collection callbacks (`registerOnCollectionChangeCallback`): register on init, keep the function reference, unregister on destroy (unregistering an unknown callback throws), treat a bulk add (10+) as a refresh | Rule if a component listens to a page list |
+
+### Strings, icons, page logic
+
+| Rule | Kit |
+|---|---|
+| Remote-module strings in `src/assets/i18n/*.json` (ngx-translate or own service), language from `SysValuesService.loadSysValues().userCulture`; **designer definitions are not translated automatically** in the deferred format: the module returns translated captions and defaults (Localization). Page-schema captions stay `#ResourceString` / `$Resources.Strings` | ⚠️ No i18n yet: English strings in code. Needed before a non-English customer |
+| Palette icons: SVG, transparent, trim 72 × 64 (live area 56 × 50), stroke 2.5 px, corner radius 3 px, Academy palette (#70ACEE live area, #004FD6, #FF4013, #181818 …); show the function, not the layout (Requirements for icons) | Size ✅ 72 × 64; check stroke, radius and palette per icon |
+| Custom converters `@CrtConverter`, request handlers `@CrtRequestHandler`, validators `@CrtValidator` (sync, `validate()` returns `null` or `{ error: { message } }`) register in the runtime module **and** `discovery`. Type prefix `usr.` for everything we make (Academy samples use `crt.` for custom requests: we don't) | Not used yet |
+| **A request handler with no `scopes` runs on every page**: always scope ours to named pages | Rule |
+| Business logic in request handlers, not custom view models; destroy handlers synchronous; `#ResourceString` resolves once, bindings stay live; built-in converters (`crt.IsEqual`, `crt.ToObjectProp`, `crt.InvertBooleanValue` …) and validators (`crt.Required`, `crt.MaxLength` …) before custom ones (Overview; converters; validators references) | Rule |
+| Classic UI wrapped components can't go in the Designer palette: always build a Freedom UI remote module (Classic UI remote module) | ✅ |
+
 ## 2b. The pages around the components (look)
 
 A polished component on a cheap-looking page still looks cheap. These rules apply to every page we build for a demo:
@@ -158,7 +225,7 @@ therefore shows the grey like background looks cheap").
 | Test | `npx ng test` (the project's Jest builder). Plain `npx jest` fails most suites: wrong runner, not a fault |
 | Build | `npx ng build` → `packages/labUiKit/Files/src/js/ui_kit` |
 | Install | Renzo's yes per stand. `push-workspace` (application installer): package locked, about a second, no compile, no restart. An early "500" poll in the log is harmless |
-| Check | In the designer palette (**Custom components**), then live on a page with real data; zoneless on and off |
+| Check | In the designer palette (**Custom components**), then live on a page with real data; on a 10.2+ stand also with `EnableZoneless` on (§2d checklist) |
 | Export | `clio pull-pkg labUiKit -e <env>` (CLI; clio MCP has no pull tool) → SharePoint `Library/ui-kit/packages/`. The `Files/obj` folder in the export is made by the stand; ignore it |
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
@@ -181,10 +248,12 @@ fallback, radius 14 + shadows, not native): move them onto `_kit-tokens.scss` be
 | Version | Stand | Result |
 |---|---|---|
 | 10.0 | 11014108-demo (Navalo) | Group holdings, Decision checks and Flow timeline installed, placed, used live; full rehearsal of straight-through, approval and lodgement (13 and 14 Nov 2026). 0.5.0 installed 15 Nov: all eight components on pages; pickers built and unit-tested, not yet opened in the live designer |
-| 10.1 | 11014930-demo (EWB) | Not installed yet |
+| 10.1 | 11014930-demo (EWB) | `ewb-components` 0.5.6 installed 18 Nov 2026 (main merged in); EWB pages render |
+| 10.x clean | 11014982-demo (`clean82`) | 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
+| 10.2.1 | none yet | ⚠️ Zoneless on by default: run the §2d zoneless test before any customer stand moves to 10.2.1 |
 
-Not yet proven: a first install on a stand that never had `labUiKit` (next: master stand `11011710-demo`, which moves
-the kit to L3), keyboard-only pass, zoneless off.
+Pinned versions (kit `main`, 19 Nov 2026): Angular 22.0.8, `@creatio-devkit/common` 0.1000.3, `@creatio/interface-designer`
+0.1000.3, TypeScript 6.0.3. Not yet proven: keyboard-only pass, zoneless on a 10.2 stand.
 
 ## 7. After every Creatio upgrade (10 minutes)
 
@@ -201,6 +270,8 @@ the kit to L3), keyboard-only pass, zoneless off.
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| v0.6 | 19 Nov 2026 | New §2d: the rules from all 37 Freedom UI pages of Academy › Front-end development (build route, zoneless for 10.2.1, settings panels, data, strings, icons, handlers), each checked against kit 0.5.5; §4 zoneless check; §6 versions pinned and the 10.2.1 risk | Academy version-10 guides read 19 Nov 2026; kit `main` source |
+| v0.5 | 18 Nov 2026 | §2c native patterns (tokens, component looks, schema conventions); tokens rule corrected; rehearsal on clean82 | Clean stand 11014982, kit 0.5.5 |
 | v0.4 | 15 Nov 2026 | Section 2b page look rules (no text on the grey page background, one header card, metrics first, lists with row numbers and add-column, one accent colour, palette chart colours by meaning, slots fit their cards); every setting picked not typed (0.5.0 pickers); person-level exclusion; five more components in section 1; versions 0.5.0 | Navalo 14-15 Nov: plan 15 build (labUiKit 0.5.0) and Renzo's "looks cheap" feedback on the lending overview (`Lessons/feedback/2026-11-15-renzo-huruiti-home-pages-look-cheap.md`) |
 | v0.3 | 13 Nov 2026 | Flow timeline added (live); rules for optional steps, honest wording and time zones; traps: moves on inserted components, stale baseline after page rules; native next-step banners as the pattern; versions 0.1.5 | Navalo FWP1–FWP6, 13 Nov (labUiKit 0.1.3–0.1.5) |
 | v0.2 | 13 Nov 2026 | Promoted from the EWB deal folder. Two live components added; status per component; look rule changed to kit tokens with measured native fallbacks; refreshOn, read-only and naming rules; page-placement traps; build/test/ship, one-package rule; versions tested | Navalo build 13 Nov (labUiKit 0.1.0–0.1.2, CWP1–CWP7) |
