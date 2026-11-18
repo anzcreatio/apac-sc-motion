@@ -138,7 +138,7 @@ the 24 Classic UI pages don't apply). Kit column = `main` 0.5.5 checked against 
 | Components `ViewEncapsulation.ShadowDom` + `ChangeDetectionStrategy.OnPush`; `@CrtInput` with `@Input`, `@CrtOutput` with `@Output` + `EventEmitter`; field-like components take `@CrtValidationInput` (`CrtValidationInfo`) (Implement Freedom UI component) | ✅ ShadowDom + OnPush 8 of 8 |
 | An `AGENTS.md` at the project root pointing at the guides bundled in `node_modules/@creatio-devkit/common` and `@creatio/interface-designer` (every example's first step) | ✅ |
 | No libraries that register as globals (lodash and the like) under Module Federation (Freedom UI remote module) | Rule |
-| Pin versions **exactly** (no `^`): Angular, `@creatio-devkit/common`, `@creatio/interface-designer`, `class-transformer`; record them per Creatio version in §6 (no Academy page gives versions) | ⚠️ `^0.1000.3` on both Creatio libraries: pin |
+| Pin versions **exactly** (no `^`): Angular, `@creatio-devkit/common`, `@creatio/interface-designer`, `class-transformer`; record them per Creatio version in §6 (no Academy page gives versions) | ✅ pinned exactly (kit 0.6.2) |
 | Images and icons through `DomSanitizer.bypassSecurityTrustResourceUrl()`; Base64 when a stand may have no internet (Assets in the remote module) | Rule (kit uses inline SVG) |
 
 ### Change detection: zoneless
@@ -160,8 +160,8 @@ Creatio 10.2 has zoneless as a beta (`EnableZoneless` additional feature); **10.
 | Panel `implements PropertyPanel` from `@creatio/interface-designer`, is a `@CrtViewElement`, registered in the design feature (`design-feature.module`, `design.feature-activation`, `design.feature-definition`) and linked by `propertiesPanel` | ✅ (`kit-panel-base.ts`) |
 | The panel instance is reused across components of the same type: reload all state on every `viewNodeEditor` setter call | ✅ |
 | `getPropertyValue` / `setPropertyValue` are async: await them; clear with `{ constant: null }`; read with `value ?? default` | ✅ |
-| Wrap the panel in `crt-interface-designer-properties-panel-wrapper` and use `@creatio/interface-designer/styles/properties-panel-styles`; panel encapsulation `Emulated` (Academy examples) | Wrapper ✅; ⚠️ some panels use `ViewEncapsulation.None`: move to `Emulated` |
-| **Show errors in the panel**, not only the console: catch the specific `SchemaValidationError` subclasses first (`DataSourceAlreadyExists`, `ViewModelAttributeAlreadyExists`, `BoundViewModelAttributeRemoval`, …), fall back to `SchemaValidationError`, rethrow the rest; message in a `role="alert"` area, e.g. "Changes are not applied: …" | ⚠️ Panels only `console.error`: add a visible message |
+| Wrap the panel in `crt-interface-designer-properties-panel-wrapper` and use `@creatio/interface-designer/styles/properties-panel-styles`; panel encapsulation `Emulated` (Academy examples) | Wrapper ✅; panels stay `ViewEncapsulation.None` **on purpose**: every own selector is `.kit-` prefixed (nothing leaks into the Designer) and `Emulated` would cut the panel styles off from the shared picker inside it |
+| **Show errors in the panel**, not only the console: catch the specific `SchemaValidationError` subclasses first (`DataSourceAlreadyExists`, `ViewModelAttributeAlreadyExists`, `BoundViewModelAttributeRemoval`, …), fall back to `SchemaValidationError`, rethrow the rest; message in a `role="alert"` area, e.g. "Changes are not applied: …" | ✅ shown in the panel (`kit-panel-errors.ts`, kit 0.6.2) |
 | Call `canRemoveAttribute` / `canRemoveDataSource` before removing; check `getDataSourceEditor` / `getAttributeConfig` before creating (create throws if it exists); can't remove → say so as information, not an error | Rule (kit creates only the `recordId` binding today) |
 | Check required settings before writing anything that creates schema objects; an Apply button only when applying creates data sources or attributes (saving constants on change is fine) | ✅ constants save on change |
 | **Since 10.1 the Designer saves only properties that differ from the default** (`UseViewConfigDefaultsFilter`): the component must apply the same default as `defaultPropertyValues` when a setting is missing from the schema (Client schema overview) | Rule: §2 "every setting optional with a safe default" covers it; keep the two defaults identical |
@@ -171,9 +171,9 @@ Creatio 10.2 has zoneless as a beta (`EnableZoneless` additional feature); **10.
 | Rule (Data sources; Model class; Best practices for data fetching) | Kit |
 |---|---|
 | Our route: `Model.create(...)` + `load({ attributes, parameters, options })` inside the component. Academy's other route: a page data source + an `isCollection` attribute bound with `bindToAttribute` (follows the page's filters and the data-source designer). Use that route when a list must follow page filters | Model route ✅ |
-| Select only the columns you need; **cap the rows** (paging `rowCount`) on anything that loads a whole object; sort in the query, not in code | ⚠️ Group overlap, Rate against target, Cycle time, Stage funnel load whole objects: add a cap and say "first N" |
+| Select only the columns you need; **cap the rows** (paging `rowCount`) on anything that loads a whole object; sort in the query, not in code | ✅ row cap on whole-object loads (0.6.1); Stage funnel counts on the server (0.6.2) |
 | Independent loads in parallel (`Promise.all`); share one in-flight promise for the same query; a timeout on slow calls | Rule (`refreshOn` sequence guard stays) |
-| Before a write, `canSave` / `canDelete`: disable the action and say why instead of failing | ⚠️ Not used: add to writing components |
+| Before a write, `canSave` / `canDelete`: disable the action and say why instead of failing | ✅ in the shared writer before every write; a "no" stops it with Creatio's reason (kit 0.6.2) |
 | `update` / `delete` pick the record by filter: always filter on the primary key only | ✅ (`byId`) |
 | What a refused write returns is not documented: check the result **and** catch a rejected promise (our `ensureOk`, go-live test E5) | EWB branch ✅; `main` gets it when EWB merges back |
 | Calculated attributes (`from`, `converter`, `filter`, `triggers`, `triggersOptions.debounce`) for page-side derived values instead of handler code; read-only, lazy; `crt.Input` can't bind to them | Use on pages around components |
@@ -214,7 +214,7 @@ older answers say custom components "can't have a settings panel": outdated sinc
 
 | Lesson (source) | Kit |
 |---|---|
-| **Counts and totals: a Model `type: "function"` attribute** with `functionConfig: { aggregation: AggregationFunction.Count, type: "aggregation", aggregationEval: "all" }` and the filter as `ModelParameterType.Filter`. Never load every row and use `.length` | ⚠️ Stage funnel, Group overlap, Rate against target, Cycle time load rows: move counts to aggregation (and cap rows, §2d) |
+| **Counts and totals: a Model `type: "function"` attribute** with `functionConfig: { aggregation: AggregationFunction.Count, type: "aggregation", aggregationEval: "all" }` and the filter as `ModelParameterType.Filter`. Never load every row and use `.length` | ✅ Stage funnel (0.6.2, verified on clean82: one `KitCount` row per stage, row fallback). Group overlap, Rate against target and Cycle time need row data (combinations, per-group bars, medians): they keep rows under the cap |
 | `load` attributes and filter paths must be real object column names (`Usr…`); a page attribute name comes back silently empty (only `Id`). Show our alert when a configured column returns nothing | Pickers save real columns ✅; add the check |
 | No client ESQ (the devkit `EntitySchemaQuery` has no executor) and no Classic `ProcessModuleUtilities`: Model and `crt.*` requests only | ✅ |
 | Run a process from code through `HandlerChainService.instance.process({ type: 'crt.RunBusinessProcessRequest', processName, processParameters, $context })` (the forum's `request:` / `params:` shape and `processParamters` typo fail). Keep one tested snippet in the kit before using it | ⚠️ untested |
@@ -279,16 +279,12 @@ therefore shows the grey like background looks cheap").
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
 replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today (18 Nov
-2026, updated 19 Nov): **`main` = `ewb-components` = 0.6.1** (fast-forwarded 19 Nov; tags `kit-0.6.0`, `kit-0.6.1`):
+2026, updated 19 Nov): **`main` = 0.6.2** (`ewb-components` 0.6.1 fast-forwarded in 19 Nov, then the §2d/§2e to-dos, `c92cebc`; installed on clean82 only):
 the Navalo components plus the 7 EWB components, all on `_kit-tokens`, all on pickers, with shape skeletons and a row
-cap. Build OK, 18 suites / 107 tests pass. New work goes on `main`; installs need a yes per stand (EWB stand only after
+cap. Build OK, 19 suites / 116 tests pass. New work goes on `main`; installs need a yes per stand (EWB stand only after
 a clean-stand test, with the EWB chat told first).
 
-**Known bug in the Navalo panels (the EWB panels are fixed in 0.6.1):** a `choice` picker with no empty option shows its
-first option when nothing is saved (e.g. Flow timeline "Hide until requested" reads "Yes"), so an author can save the
-wrong value without touching it. Fix once in the shared picker: when the saved value is empty, show a "(default)"
-option that keeps it empty, **unless `spec.options` already has a `''` option** (EWB's `ON_OFF` does: "No (default)" /
-"Yes (default)"; keep those, they say which way the default goes), so no field shows two default rows.
+**Choice-picker default (fixed in 0.6.2):** an unset setting shows "Default" (or the panel's own "Yes/No (default)") instead of the first option, and an empty choice clears the setting (`{ constant: null }`) so the component's default applies.
 
 ## 5. Where things live
 
@@ -304,7 +300,7 @@ option that keeps it empty, **unless `spec.options` already has a `''` option** 
 |---|---|---|
 | 10.0 | 11014108-demo (Navalo) | Group holdings, Decision checks and Flow timeline installed, placed, used live; full rehearsal of straight-through, approval and lodgement (13 and 14 Nov 2026). 0.5.0 installed 15 Nov: all eight components on pages; pickers built and unit-tested, not yet opened in the live designer |
 | 10.1 | 11014930-demo (EWB) | `ewb-components` 0.6.1 live 19 Nov 2026 (main merged in, EWB components aligned to v0.6) |
-| 10.x clean | 11014982-demo (`clean82`) | 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
+| 10.x clean | 11014982-demo (`clean82`) | 0.6.2 rehearsed 19 Nov (Stage funnel server counts match 104 records). 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
 | 10.2.1 | none yet | ⚠️ Zoneless on by default (about Feb 2027; 10.2 with it optional Dec 2026–Jan 2027): run the §2d zoneless test before any customer stand moves to 10.2.1 |
 | Below 8.3.3 | – | Not offered: no setup areas (our pickers) |
 
