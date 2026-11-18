@@ -321,7 +321,7 @@ def apply_rules(s, env, lines, calc_kv):
                                      ("machine learning", "ml"), ("Email Listener", "email_listener")) if c in comps]
                 ln["notes"].append("Runs the Creatio services as Kubernetes workloads: " + ", ".join(wl) + ".")
                 ln["rules"] += ["R5", "R7"]
-                need = workload_demand(s, comps)
+                need = workload_demand(s, comps, env["kind"])
                 cap_c, cap_r = ln["count"] * (ln["cores"] or 4) * 0.8, ln["count"] * (ln["ram_gb"] or 16) * 0.8
                 if need["cores"] > cap_c or need["ram_gb"] > cap_r:
                     n = max(math.ceil(need["cores"] / ((ln["cores"] or 4) * 0.8)),
@@ -379,7 +379,7 @@ def el_replicas(mailboxes, flow):
     return worker, api
 
 
-def workload_demand(s, comps):
+def workload_demand(s, comps, kind="prod"):
     """Rough Kubernetes workload demand from the calculator's component specs and the Email Listener table."""
     cores, ram, detail = 0.0, 0.0, []
     if "global_search" in comps:
@@ -392,7 +392,10 @@ def workload_demand(s, comps):
         cores, ram = cores + 4, ram + 8
         detail.append("ML 4/8")
     if "email_listener" in comps:
-        w, a = el_replicas(int(val(s, "mailboxes", 0) or 0), float(val(s, "email_flow_per_s", 0) or 0))
+        mb = int(val(s, "mailboxes", 0) or 0)
+        if kind != "prod":  # test environments sync a sample of mailboxes (same 10% as users, R8)
+            mb = math.ceil(mb * 0.10)
+        w, a = el_replicas(mb, float(val(s, "email_flow_per_s", 0) or 0) if kind == "prod" else 0)
         c = w * 0.1 + a * 0.15
         r_ = w * 1.1 + a * 0.85
         cores, ram = cores + c, ram + r_
