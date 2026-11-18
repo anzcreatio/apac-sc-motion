@@ -1,6 +1,6 @@
 ---
 name: sc-desk
-description: An APAC solution consultant's work desk, so deals never stall on our side - keeps each deal's commitments ledger (what, owner, due, source, status; captured from meeting reviews, next-steps slides, AE briefs and follow-up drafts), spots stalls (no activity for 7 days, an overdue commitment, a demo under 3 days away with no approved build plan, a harvest overdue, an approved recap not sent, no next meeting booked), writes the daily brief (top 5 actions, today's meetings and prep, a follow-up draft for each stalled deal), the Friday desk view (each SC's deals by health, quality trend, tips) and a load check. Reads Outlook calendar and sent mail read-only when the Microsoft 365 connector is on. Use when an SC asks "what's on today", "what's on my plate", "what am I waiting on", says "done: <something>" or "add: <something>", asks whether a deal is stalled or their week is overloaded, after a meeting review, or on the 8 am scheduled run.
+description: An APAC solution consultant's work desk, so deals never stall on our side - keeps each deal's commitments ledger (what, owner, due, source, status; captured from meeting reviews, next-steps slides, AE briefs and follow-up drafts), spots stalls (no activity for 7 days, an overdue commitment, a demo under 3 days away with no approved build plan, a harvest overdue, an approved recap not sent, no next meeting booked), writes the daily brief (top 5 actions, today's meetings and prep, a follow-up draft for each stalled deal), the Friday desk view (each SC's deals by health, quality trend, tips) and a load check. Reads Outlook calendar and sent mail read-only when the Microsoft 365 connector is on. Use when an SC asks "what's on today", "what's on my plate", "what am I waiting on", says "done: <something>" or "add: <something>", asks "what's running?" or what chats are open (the 00-chats.md open-work table), asks whether a deal is stalled or their week is overloaded, after a meeting review, or on the 8 am scheduled run.
 ---
 
 # sc-desk
@@ -37,6 +37,7 @@ team lead) may look across SCs, and he sets who owns a deal (`owner`). Deal fold
 | "am I overloaded?", "can I take this demo?" | **D. Load check** |
 | Friday, with `sc-weekly-lessons` | **E. Weekly view** |
 | "connect my calendar / Outlook" | **F. Outlook (read-only)** |
+| "what's running?", "what's open?", "what am I juggling?", a customer chat starts or wraps up | **G. Open work (chat registry)** |
 
 ## A. Daily brief
 
@@ -45,7 +46,10 @@ team lead) may look across SCs, and he sets who owns a deal (`owner`). Deal fold
 2. Run `python scripts/desk.py brief [--calendar <scratch json>]` (written to the SC's own PC, never SharePoint). Add `--preview` until the SC's deals have a
    ledger: it shows the commitments it **would** capture from meeting reviews (marked "preview", nothing written).
 3. Show it in chat, **questions first** (the brief's own Questions section, then any of yours). Then the top 5
-   actions table, today's meetings with prep gaps, the follow-up drafts, the open commitments. Keep the SC's words.
+   actions table, the 📋 open work table (mode G), today's meetings with prep gaps, the follow-up drafts, the open
+   commitments. Keep the SC's words.
+   **Sidebar** (if the session has the sidebar tools): put the brief's chat in a section named **Desk** (create it
+   once, pin it if the app allows), title `Desk · <Ddd DD Mon>`. A fresh brief chat each day: there is no master chat.
 4. **Follow-up drafts:** the script writes a starting draft per stalled deal (at most 3, addressed to the AE so they
    can forward or adapt it). Rework each in plain words (`../../standards/WRITING-STYLE-v0.1.md`): short, one ask,
    their names, what we owe and what they owe. No "SC check" warning line. **Never send mail, never save a draft into Outlook, never book a meeting.** The SC or the AE sends it.
@@ -126,6 +130,23 @@ the deal folders.
   Scott, 13 Nov"); add `--recap-sent` when the recap went. Don't copy mail bodies into the ledger or the brief.
 - **Never** send, reply, forward, draft in Outlook, accept or create meetings, or read mail unrelated to a deal.
 
+## G. Open work (chat registry)
+
+Rules: `../../standards/CHAT-TRACKING-v0.1.md` (loaded into every chat by the plugin hook). Agreed with Renzo 18 Nov
+2026: **track deals, not chats.** Each customer chat is one row in `<deal>/00-chats.md` (No · Date · Machine · Stage ·
+Topic · Status · Next · Due · Updated · Outcome); the desk shows the open ones. No master chat.
+
+| When | Run |
+|---|---|
+| A customer chat starts | `desk.py chat-open --deal <deal> --stage <Stage> --topic "<2-4 words>"` (first chat on a deal: add `--short <name> --section "<sidebar section>"`). Use the printed title |
+| Wrap-up, or the status changes | `desk.py chat-set --deal <deal> --no NN --status <...> --next "..." [--due yyyy-mm-dd] [--outcome "..."]` |
+| "what's running?" | `desk.py work` → show the table as printed, then the "Do first" line |
+| Older rows with no status | Ask the SC once which are done; `chat-set --status done` each |
+
+Status: 🟢 `active` · 🟡 `waiting-sc` (the SC must act) · 🔵 `waiting-customer` (customer or AE owes it) · ✅ `done`
+· ⏸ `parked`. Due only from a date someone gave; otherwise it shows **unknown**. ⚠️ marks an overdue due date and
+anything waiting on the SC for more than 3 days. On `done`, mark the chat completed in the sidebar if the session can.
+
 ## Scheduled daily brief (8 am, each SC's own PC)
 
 Offered by `sc-setup` (step 4); Renzo's is set up. Create it with the scheduled-tasks tool, only after showing the
@@ -147,7 +168,7 @@ The task runs while the Claude app is open; if the PC is off at 8, it runs at th
 - **Nothing is sent.** Drafts carry no "SC check" warning line; the SC reads them before they go.
 - The ledger is the SC's: capture is a dry run until the SC picks what was agreed. Never close a commitment the SC
   didn't confirm, except a recap or follow-up Outlook shows as sent (say so in the brief).
-- Only `commitments.json` is written in a deal folder; everything else the desk reads.
+- Only `commitments.json` and `00-chats.md` are written in a deal folder; everything else the desk reads.
 - **Private per SC** (top of this file): never show one SC another SC's brief, commitments, stalls or workload.
 - Never in practice folders (`Deals/_practice/`).
 

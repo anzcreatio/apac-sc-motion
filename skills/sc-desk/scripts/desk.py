@@ -4,6 +4,7 @@ An SC TASK DESK, NOT A CRM: it never stores pipeline stage, forecast or deal val
 worked out fresh from the folder each run (demo done, RFP folder, ...) and never saved.
 
 Ledger (one per deal):  <deal>/commitments.json
+Chat registry:          <deal>/00-chats.md (one row per chat; status, next, due)
 Daily brief:            the SC's own PC only, ~/.apac-sc-motion/desk/<yyyy-mm-dd>-brief.md (never SharePoint)
 Weekly (Renzo only):    team page Lessons/desk/weekly/<yyyy-Www>.md + .json (totals, no SC named);
                         per-SC view in his local folder (--private-out, default ~/SC-Desk)
@@ -24,6 +25,9 @@ PRIVATE PER SC (FEEDBACK-LOOP v0.2 section 5): every command works only on the S
   python desk.py brief    [--sc rh] [--calendar events.json] [--out file.md] [--no-write]
   python desk.py week     [--private-out <local folder>] [--no-write]
   python desk.py load     [--sc rh] [--week 2026-W47] [--calendar events.json]
+  python desk.py chat-open --deal <deal> --stage Build --topic "perf page" [--short BAF --section "Bussan Auto Finance (BAF)"]
+  python desk.py chat-set  --deal <deal> --no 04 [--status active|waiting-sc|waiting-customer|done|parked] [--next "..."] [--due 2026-11-20|unknown] [--outcome "..."]
+  python desk.py work      [--sc rh] [--deal <deal>]          open work across my deals (00-chats.md, CHAT-TRACKING-v0.1)
 
 --calendar: a JSON list Claude saves from the Microsoft 365 connector (read-only), each
   {"subject": "...", "start": "2026-11-16T08:30:00+11:00", "end": "...", "attendees": ["..."], "location": "..."}.
@@ -782,6 +786,220 @@ def c_scan(a):
             print("  - %s" % s["text"])
 
 
+# ---------- chat registry (00-chats.md) and open work ----------
+# CHAT-TRACKING-v0.1: one row per chat in <deal>/00-chats.md; `work` shows what's open. Columns are found by header
+# name, so older files (No · Date · Machine · Stage · Topic · Outcome) are upgraded in place on the next write.
+
+CHATS = "00-chats.md"
+CHAT_COLS = ["No", "Date", "Machine", "Stage", "Topic", "Status", "Next", "Due", "Updated", "Outcome"]
+STAGES = ["Intake", "FM prep", "Meeting review", "Demo plan", "Build", "Deck", "RFP", "Workshop", "Click path", "Proposal", "Admin"]
+STATUS = {"active": "🟢 Active", "waiting-sc": "🟡 Waiting on SC", "waiting-customer": "🔵 Waiting on customer",
+          "done": "✅ Done", "parked": "⏸ Parked"}
+STATUS_ORDER = {"waiting-sc": 0, "active": 1, "waiting-customer": 2, "parked": 3}
+WAIT_SC_DAYS = 3  # waiting on the SC longer than this gets a warning
+
+
+def status_key(cell):
+    c = (cell or "").lower()
+    for k, word in (("waiting-sc", "on sc"), ("waiting-customer", "on customer"), ("done", "done"), ("parked", "parked"), ("active", "active")):
+        if word in c:
+            return k
+    return None
+
+
+def fmt_day(d):
+    return "%d %s %d" % (d.day, d.strftime("%b"), d.year)
+
+
+def parse_day(s):
+    s = (s or "").strip()
+    if not s or s.lower() == "unknown":
+        return None
+    d = pdate(s)
+    if d:
+        return d
+    for f in ("%d %b %Y", "%d %B %Y"):
+        try:
+            return dt.datetime.strptime(s, f).date()
+        except ValueError:
+            pass
+    return None
+
+
+def split_row(line):
+    return [c.strip() for c in line.strip().strip("|").split("|")]
+
+
+def read_chats(deal):
+    """(head lines before the table, [row dicts], tail lines after it). No file -> (None, [], [])."""
+    p = os.path.join(deal, CHATS)
+    if not os.path.exists(p):
+        return None, [], []
+    lines = rtext(p).splitlines()
+    start = next((i for i, l in enumerate(lines) if l.strip().startswith("|") and "No" in split_row(l)), None)
+    if start is None:
+        return lines, [], []
+    hdr = split_row(lines[start])
+    rows, i = [], start + 2
+    while i < len(lines) and lines[i].strip().startswith("|"):
+        cells = split_row(lines[i])
+        if len(cells) > len(hdr):  # a "|" inside the last column: glue the overflow back on
+            cells = cells[:len(hdr) - 1] + [" / ".join(cells[len(hdr) - 1:])]
+        rows.append({h: (cells[n] if n < len(cells) else "") for n, h in enumerate(hdr)})
+        i += 1
+    return lines[:start], rows, lines[i:]
+
+
+def write_chats(deal, head, rows, tail):
+    cell = lambda v: (v or "").replace("\n", " ").replace("|", "/")
+    out = list(head)
+    out += ["| " + " | ".join(CHAT_COLS) + " |", "|" + "---|" * len(CHAT_COLS)]
+    out += ["| " + " | ".join(cell(r.get(c, "")) for c in CHAT_COLS) + " |" for r in rows]
+    out += tail
+    p = os.path.join(deal, CHATS)
+    tmp = p + ".tmp"
+    open(tmp, "w", encoding="utf-8").write("\n".join(out).rstrip("\n") + "\n")
+    os.replace(tmp, p)
+
+
+def short_name(deal, head):
+    for l in head or []:
+        m = re.search(r"short name.*\*\*(.+?)\*\*", l)
+        if m:
+            return m.group(1)
+    for l in head or []:
+        m = re.match(r"#\s*Chats:\s*(.+)", l)
+        if m:
+            return m.group(1).strip()
+    return None
+
+
+def machine():
+    return "Mac" if sys.platform == "darwin" else "PC"
+
+
+def c_chat_open(a):
+    root = team_root(a.root)
+    deal = guard_deal(resolve_deal(root, a.deal))
+    if a.stage not in STAGES:
+        sys.exit("Stage must be one of: %s" % ", ".join(STAGES))
+    head, rows, tail = read_chats(deal)
+    if head is None:
+        if not a.short:
+            sys.exit("No %s yet in %s: rerun with --short <customer short name> [--section \"<sidebar section>\"]" % (CHATS, os.path.basename(deal)))
+        head = ["# Chats: %s" % a.short, "",
+                "- Customer short name (used in every chat title): **%s**" % a.short,
+                "- Sidebar section: **%s**" % (a.section or a.short),
+                "- Title: `<Customer> NN · <Stage> · <topic>`. Next number = last row + 1. Rules: plugin standards/CHAT-TRACKING-v0.1.md.", ""]
+    nums = [int(r["No"]) for r in rows if (r.get("No") or "").strip().isdigit()]
+    no = "%02d" % (max(nums or [0]) + 1)
+    rows.append({"No": no, "Date": fmt_day(TODAY), "Machine": a.machine or machine(), "Stage": a.stage, "Topic": a.topic,
+                 "Status": STATUS["active"], "Next": "", "Due": "", "Updated": fmt_day(TODAY), "Outcome": ""})
+    write_chats(deal, head, rows, tail)
+    name = short_name(deal, head) or os.path.basename(deal)
+    print("%s %s · %s · %s" % (name, no, a.stage, a.topic))
+
+
+def c_chat_set(a):
+    root = team_root(a.root)
+    deal = guard_deal(resolve_deal(root, a.deal))
+    head, rows, tail = read_chats(deal)
+    want = "%02d" % int(a.no)
+    hit = [r for r in rows if (r.get("No") or "").strip() == want]
+    if not hit:
+        sys.exit("No row %s in %s/%s" % (want, os.path.basename(deal), CHATS))
+    r = hit[0]
+    if a.status:
+        r["Status"] = STATUS[a.status]
+    if a.next is not None:
+        r["Next"] = a.next
+    if a.due is not None:
+        unknown = a.due.strip().lower() in ("", "unknown")
+        d = None if unknown else parse_day(a.due)
+        if not unknown and not d:
+            sys.exit("Due must be a date (yyyy-mm-dd), or 'unknown'")
+        r["Due"] = fmt_day(d) if d else ""
+    if a.outcome is not None:
+        r["Outcome"] = a.outcome
+    if a.topic:
+        r["Topic"] = a.topic
+    if a.stage:
+        if a.stage not in STAGES:
+            sys.exit("Stage must be one of: %s" % ", ".join(STAGES))
+        r["Stage"] = a.stage
+    r["Updated"] = fmt_day(TODAY)
+    write_chats(deal, head, rows, tail)
+    print("%s %s · %s · next: %s · due: %s" % (short_name(deal, head) or os.path.basename(deal), want, r["Status"],
+                                               r.get("Next") or "-", r.get("Due") or "unknown"))
+
+
+def open_work(deals):
+    """Open rows across deals (dated first by due, then waiting on SC, then oldest), plus rows with no status yet."""
+    items, unset = [], []
+    for d in deals:
+        head, rows, _ = read_chats(d)
+        name = short_name(d, head) or os.path.basename(d)
+        for r in rows:
+            k = status_key(r.get("Status"))
+            if k is None:
+                unset.append("%s %s" % (name, r.get("No", "?")))
+                continue
+            if k == "done":
+                continue
+            upd = parse_day(r.get("Updated")) or parse_day(r.get("Date")) or TODAY
+            due = parse_day(r.get("Due"))
+            age = (TODAY - upd).days
+            flag = bool((due and due < TODAY) or (k == "waiting-sc" and age > WAIT_SC_DAYS))
+            items.append(dict(deal=name, no=r.get("No", "?"), stage=r.get("Stage", ""), status=k,
+                              next=r.get("Next") or r.get("Topic") or "-", due=due, age=age, flag=flag))
+    items.sort(key=lambda x: (x["status"] == "parked", x["due"] is None, x["due"] or TODAY,
+                              STATUS_ORDER.get(x["status"], 9), -x["age"]))
+    return items, unset
+
+
+def short_day(d):
+    return "%s %d %s" % (d.strftime("%a"), d.day, d.strftime("%b"))
+
+
+def work_md(items, unset, who):
+    L = ["## 📋 Open work: %s, %s" % (who, short_day(TODAY)), ""]
+    if not items:
+        L.append("No open chats on record. Customer chats add themselves with `desk.py chat-open`.")
+    else:
+        L += ["| Deal | # | Stage | Status | Next | Due | Age |", "|---|---|---|---|---|---|---|"]
+        for x in items:
+            if x["due"]:
+                due = "**%s** ⚠️ overdue" % short_day(x["due"]) if x["due"] < TODAY else short_day(x["due"])
+            else:
+                due = "unknown"
+            age = plural(x["age"], "day")
+            if x["status"] == "waiting-sc" and x["age"] > WAIT_SC_DAYS:
+                age = "**%s** ⚠️" % age
+            L.append("| %s | %s | %s | %s | %s | %s | %s |" % (x["deal"], x["no"], x["stage"], STATUS[x["status"]], x["next"], due, age))
+        top = next((x for x in items if x["flag"]), None) or next((x for x in items if x["status"] == "waiting-sc"), None)
+        if top:
+            if top["due"] and top["due"] < TODAY:
+                why = "overdue since %s" % short_day(top["due"])
+            elif top["status"] == "waiting-sc":
+                why = "waiting on you for %s" % plural(top["age"], "day")
+            else:
+                why = "due first"
+            L += ["", "**Do first:** %s %s, %s (%s)." % (top["deal"], top["no"], top["next"], why)]
+    if unset:
+        more = " and %d more" % (len(unset) - 10) if len(unset) > 10 else ""
+        L += ["", "%s %s no status yet: %s%s. Say which are done (`desk.py chat-set ... --status done`)." % (
+            plural(len(unset), "older chat"), "has" if len(unset) == 1 else "have", ", ".join(unset[:10]), more)]
+    return L
+
+
+def c_work(a):
+    root = team_root(a.root)
+    sc = my_sc(a.sc)
+    deals = [guard_deal(resolve_deal(root, a.deal))] if a.deal else my_deals(root, sc)
+    items, unset = open_work(deals)
+    print("\n".join(work_md(items, unset, TEAM.get(sc, sc))))
+
+
 # ---------- daily brief ----------
 
 SCORE = {"demo_no_plan": 95, "prep": 90, "overdue_ours": 85, "recap": 70, "harvest": 65, "due_soon": 60, "overdue_theirs": 55,
@@ -906,7 +1124,7 @@ def c_brief(a):
     scans = [scan_deal(d, cal, a.preview) for d in deals]
     acts = rank(scans)
     by = {os.path.basename(d): d for d in deals}
-    L = ["# What's on today: %s, %s" % (TEAM.get(sc, sc or "SC"), TODAY.strftime("%a %d %b %Y")), ""]
+    L = ["# 📋 What's on today: %s, %s" % (TEAM.get(sc, sc or "SC"), TODAY.strftime("%a %d %b %Y")), ""]
     unassigned = [r["deal"] for r in scans if not r["sc"]]
     parked_q = [r for r in scans if any(s["kind"] == "park_hint" for s in r["stalls"])]
     no_date = [s for x in acts if x["kind"] == "no_date" for s in [x]]
@@ -917,7 +1135,7 @@ def c_brief(a):
         qs.append("No activity for 3+ weeks and nothing booked. Still live, or park them (and until when)? %s" % ", ".join(r["deal"] for r in parked_q))
     if no_date:
         qs.append("%d of our commitments have no due date. Give each a date (listed under Open commitments)" % len(no_date))
-    L += ["## Questions"] + (["%d. %s" % (n, q) for n, q in enumerate(qs, 1)] or ["No questions"]) + [""]
+    L += ["## ❓ Questions for you"] + (["%d. %s" % (n, q) for n, q in enumerate(qs, 1)] or ["No questions"]) + [""]
     L += ["## Top 5 actions", "", "| # | Deal | What | Next move |", "|---|---|---|---|"]
     for n, x in enumerate([x for x in acts if x["kind"] != "no_date"][:5], 1):
         L.append("| %d | %s | %s | %s |" % (n, x["deal"], x["text"], ACTION.get(x["kind"], "")))
@@ -925,6 +1143,8 @@ def c_brief(a):
     if rest > 0:
         L.append("\n%d more below the line (run `desk.py scan` for all)." % rest)
     L += ["", "Ranked by deadline and how close the deal is to the customer's decision.", ""]
+    w_items, w_unset = open_work(deals)
+    L += work_md(w_items, w_unset, TEAM.get(sc, sc or "SC")) + [""]
     meets = todays_meetings(root, deals, cal)
     L += ["## Today's meetings", ""]
     if not cal:
@@ -1310,6 +1530,12 @@ def main():
     p.add_argument("--preview", action="store_true", help="include capture candidates not yet on the ledger (read-only)")
     p = sp.add_parser("brief"); p.add_argument("--sc"); p.add_argument("--calendar"); p.add_argument("--out"); p.add_argument("--no-write", action="store_true")
     p.add_argument("--preview", action="store_true", help="include capture candidates not yet on the ledger (read-only)")
+    p = sp.add_parser("chat-open"); p.add_argument("--deal", required=True); p.add_argument("--stage", required=True)
+    p.add_argument("--topic", required=True); p.add_argument("--short"); p.add_argument("--section"); p.add_argument("--machine")
+    p = sp.add_parser("chat-set"); p.add_argument("--deal", required=True); p.add_argument("--no", required=True)
+    p.add_argument("--status", choices=list(STATUS)); p.add_argument("--next"); p.add_argument("--due"); p.add_argument("--outcome")
+    p.add_argument("--topic"); p.add_argument("--stage")
+    p = sp.add_parser("work"); p.add_argument("--sc"); p.add_argument("--deal")
     p = sp.add_parser("week"); p.add_argument("--private-out"); p.add_argument("--no-write", action="store_true")
     p = sp.add_parser("load"); p.add_argument("--sc"); p.add_argument("--week"); p.add_argument("--calendar")
     a = ap.parse_args()
@@ -1317,7 +1543,7 @@ def main():
         sys.exit("drop needs --deal and --id")
     {"add": c_add, "done": c_done, "drop": lambda x: c_done(x, "dropped"), "list": c_list, "capture": c_capture,
      "meeting": c_meeting, "touch": c_touch, "status": c_status, "owner": c_owner, "scan": c_scan, "brief": c_brief,
-     "week": c_week, "load": c_load}[a.cmd](a)
+     "week": c_week, "load": c_load, "chat-open": c_chat_open, "chat-set": c_chat_set, "work": c_work}[a.cmd](a)
 
 
 if __name__ == "__main__":

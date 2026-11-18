@@ -2,6 +2,8 @@
 
 - Update available: the published version (synced SharePoint folder, `Plugin/apac-sc-motion`) is newer than the
   installed one -> one line with the update command and the titles of what they're missing.
+- Chat standards: standards/CHAT-FORMAT-* and CHAT-TRACKING-* (newest) go into every session's context, also
+  after compaction, so plain chats follow them too (18 Nov 2026).
 - What's new: the installed version is newer than `seen_version` in ~/.apac-sc-motion.json -> the changelog entries
   since then, shown once; then `seen_version` is saved.
 
@@ -52,6 +54,28 @@ def between(entries, low, high):
         if k <= vkey(high) and ((low is None and k == vkey(high)) or (low is not None and k > vkey(low))):
             out.append((v, title, body))
     return out
+
+
+STANDARDS = ("CHAT-FORMAT", "CHAT-TRACKING")  # loaded into every chat (newest version of each in standards/)
+
+
+def standards(root):
+    """The chat standards as session context, so every chat (not only skill runs) follows them."""
+    d = os.path.join(root, "standards")
+    parts = []
+    for stem in STANDARDS:
+        try:
+            files = sorted((f for f in os.listdir(d) if re.match(re.escape(stem) + r"-v[\d.]+\.md$", f)),
+                           key=lambda f: vkey(re.search(r"v([\d.]+)\.md$", f).group(1).rstrip(".")))
+            if files:
+                with open(os.path.join(d, files[-1]), encoding="utf-8-sig") as f:
+                    parts.append(f.read().strip())
+        except (OSError, ValueError, AttributeError):
+            pass
+    if not parts:
+        return ""
+    return ("apac-sc-motion chat standards (follow in every reply and every customer chat this session; "
+            "plugin dir: " + os.path.abspath(root) + "):\n\n" + "\n\n---\n\n".join(parts))
 
 
 def main(argv):
@@ -110,6 +134,10 @@ def main(argv):
                 cfg["seen_version"] = installed
                 with open(cfg_path, "w", encoding="utf-8") as f:
                     json.dump(cfg, f, indent=2)
+
+    rules = standards(root)
+    if rules:
+        context.insert(0, rules)
 
     if user or context:
         print(json.dumps({

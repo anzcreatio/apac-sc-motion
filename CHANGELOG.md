@@ -4,6 +4,33 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.28.0 (18 Nov 2026): replies you can scan, and one table of everything you have open
+
+- 📣 **Every Claude reply now has the same shape**: ❓ Questions for you first (each with Claude's default, so a
+  one-word answer works), ⚠️ Watch out only when something is really at risk, ✅ Done with file links, then the
+  detail in tables. Six marks, each with one meaning; no decorative emoji. Applies in every chat, not only skill
+  runs (`standards/CHAT-FORMAT-v0.1.md`). Customer files are unchanged: no emoji there.
+- 📣 **"What's running?" in any chat shows your 📋 Open work**: every customer chat that isn't done, across your
+  deals, with Stage, Status (🟢 active · 🟡 waiting on you · 🔵 waiting on the customer · ⏸ parked), Next, **Due**
+  (or "unknown") and Age, plus a "Do first" line. ⚠️ flags overdue dates and anything waiting on you for 3+ days.
+  The 8 am brief shows the same table and now sits in a **Desk** section in your sidebar.
+- Each customer chat takes a number and a row in `<deal>/00-chats.md` when it starts and updates its status, next
+  step and due date when it wraps up (`standards/CHAT-TRACKING-v0.1.md`, `desk.py chat-open | chat-set | work`).
+  Chats are titled `<Customer> NN · <Stage> · <topic>` and grouped one sidebar section per customer. This was
+  Renzo's own rule; it's now everyone's.
+- The rules load at the start of every session (and again after a long chat is compacted) through the plugin's
+  start-up hook.
+- **Each SC: start a new session after updating, then ask "what's running?" and tell Claude which older chats are done.**
+
+## 0.28.0 (18 Nov 2026): eight new visual slide types
+
+- 📣 **Decks can now look like creatio.com**: big statements, a "what you run today" landscape with a source on every
+  tile, a side-by-side comparison, an orange section band, dated milestones, a product screen on navy, photo cards and
+  the customer's own words as a quote. Deck standard v0.6 (`standards/DECK-STANDARD-v0.6.md`) lists the fields.
+- Every visual must make a point. `photo_cards` takes **brand photos only** (no stock or AI images); without one you
+  get a placeholder and a warning.
+- Try them: `python skills/sc-deck/scripts/build_deck.py tests/deck/visual-types/deck.json --render`.
+
 ## 0.27.0 (17 Nov 2026): no more "SC check required" lines
 
 - 📣 **Nothing the plugin makes ends with "SC check required before this is used with the customer." any more**:
