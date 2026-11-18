@@ -331,9 +331,9 @@ def role_line(role, kv, env_name):
             name = {"HDD (OS)": "OS", "HDD (application)": "Application", "HDD": "Disk"}[k]
             line["disks"].append({"name": name, "gb": gb, "iops": iops, "latency_ms": lat})
     if kv.get("HDD (Database)"):
-        for name, rx in (("Data", r"Data\s*[—-]\s*(\d+)\s*GB,\s*(\d+)\s*IOPS,\s*latency less than (\d+)"),
-                         ("Tempdb", r"Tempdb\s*[—-]\s*(\d+)\s*GB,\s*(\d+)\s*IOPS,\s*latency less than (\d+)"),
-                         ("Logs", r"Logs\s*[—-]\s*(\d+)\s*GB,\s*(\d+)\s*IOPS,\s*latency less than (\d+)")):
+        for name, rx in (("Data", r"Data\s*[—-]\s*(\d+(?:\.\d+)?)\s*GB,\s*(\d+)\s*IOPS,\s*latency less than (\d+)"),
+                         ("Tempdb", r"Tempdb\s*[—-]\s*(\d+(?:\.\d+)?)\s*GB,\s*(\d+)\s*IOPS,\s*latency less than (\d+)"),
+                         ("Logs", r"Logs\s*[—-]\s*(\d+(?:\.\d+)?)\s*GB,\s*(\d+)\s*IOPS,\s*latency less than (\d+)")):
             m = re.search(rx, kv["HDD (Database)"])
             if m:
                 line["disks"].append({"name": name, "gb": float(m.group(1)), "iops": float(m.group(2)),
