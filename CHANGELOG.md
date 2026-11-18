@@ -4,6 +4,24 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.30.0 (18 Nov 2026): on-prem hardware sizing (`sc-sizing`)
+
+- 📣 **New skill `sc-sizing`: ask Claude "what hardware does this customer need on-prem?"** and get a customer-ready
+  Word document and Excel sheet: servers per environment (application, database, Redis, load balancer, Kubernetes,
+  RabbitMQ, MongoDB, Creatio.ai), a reduced-footprint option with its trade-offs, storage at 1, 3 and 5 years
+  (object storage, database, backups) and the software stack.
+- It starts from Creatio's system requirements calculator (fetched live for every environment, page saved in the deal
+  folder) and adjusts it only with sourced rules: Academy's on-site guides plus everything Sergey Sinienok has told
+  us (Redis 1 or 6 nodes, Kubernetes for the services, no separate Kubernetes balancer, non-prod at 10% of users,
+  how to reduce for a minimum, POC layout, files in S3 from day one, his storage method).
+- **Everything is worded as a recommendation pending review by Creatio's infrastructure team**, and the check
+  refuses words like "guaranteed" or "final sizing". An internal file lists every source and has a draft note for
+  Sergey; nothing is final until he has reviewed it.
+- Quick answers too: MS SQL edition, Redis Enterprise, Elasticsearch licence, "do we really need 6 Redis servers?".
+- Tested against the bank RFI Sergey reviewed in January (every line matches) and his storage example from October.
+- **Each SC: the next time a customer asks for on-prem sizing, run `sc-sizing` and send the draft note to Sergey with
+  the document before it goes to the customer.**
+
 ## 0.29.0 (18 Nov 2026): replies you can scan, one table of your open work, creatio.com-style slides, no "SC check" lines
 
 One update with everything since 0.26.0 (0.27.0 and 0.28.0 were never published on their own).

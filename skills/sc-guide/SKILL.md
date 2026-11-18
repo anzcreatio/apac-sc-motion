@@ -151,6 +151,7 @@ A month without a day ("sometime in October") is not a date: ask, or look for it
    | click path cards | the two click path pages | `sc-clickpath` |
    | a demo built or shown, no RFP issued yet | a `*requirements-checklist*` | `sc-requirements` (ask who receives it) |
    | a demo plan, a demo, or licence answers from the AE | a `bom.json` updated after them | `sc-bom` (which licences and products; internal, for Deal Desk) |
+   | an on-prem requirement, or an RFI/RFP asking for hardware | a `sizing.json` reviewed by the infra team | `sc-sizing` (servers and storage; infra review before it goes out) |
    | a customer recap | `"approved": true` | Review the recap screen by screen, then approve |
    | a demo that's happened | the deal in `library/catalogue.json` | `sc-harvest` (overdue after 2 working days: say so first) |
    | everything above for the last meeting, and a next meeting is planned | a deck or demo plan newer than the latest review | `sc-demo-plan` (for a demo) or `sc-deck` (update the deck from the review's summary) for the next meeting |

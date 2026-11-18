@@ -1,0 +1,759 @@
+{
+ "version": "0.1",
+ "date": "2026-11-18",
+ "owner": "Renzo Huruiti (APAC SC). Infra authority: Sergey Sinienok (Creatio infrastructure). Creatio.ai on-site: Roman Prus.",
+ "purpose": "Rules for an on-premise (or customer-managed cloud) infrastructure sizing RECOMMENDATION for Creatio. The Creatio system requirements calculator is the base for server specs; the rules below adjust it with Creatio Academy and with the infrastructure team's guidance. Every number in an output must trace to a source id here.",
+ "principles": [
+  "The calculator is the base for every server line. Fetch it live for the deal (sizing.py calc); never type server specs from memory.",
+  "Every adjustment to the calculator comes from a rule below (id + source). No rule, no adjustment: ask the infra team.",
+  "Everything is a recommendation pending review by Creatio's infrastructure team. The customer-ready output says so, politely, in every section that has a number.",
+  "Ask before sizing: does the customer really need fault tolerance? The simple scheme cuts hardware significantly (Sergey, 19 Oct 2026).",
+  "Customer names from past cases stay in deal folders. Here they are generic labels (CONFIDENTIAL-TERMS-v0.1)."
+ ],
+ "sources": {
+  "CALC": {
+   "what": "Creatio system requirements calculator for on-site (results page)",
+   "url": "https://academy.creatio.com/resources/system-requirements-calculator",
+   "read": "2026-11-18",
+   "notes": "Server-side form; results URL callable directly. Portal users count as a quarter of a user. Bulk email has no effect on the output. Fault tolerant = app N+1, 2 DB, 6 Redis, 2 LB; per-server specs unchanged. The Kubernetes set is fixed (simple 1 master / 2 nodes / 1 balancer, FT 3/3/2) and appears only when duplicate search, ML or Exchange is ticked. Shows Oracle although Academy v10 no longer lists it. Reverse-engineered notes: skills/sc-sizing/references/calculator-notes.md."
+  },
+  "AC-SRV": {
+   "what": "Academy: server-side system requirements (v10 = 8.3 content)",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/system-requirements/server-side-system-requirements",
+   "read": "2026-11-18"
+  },
+  "AC-NET": {
+   "what": "Academy: Creatio .NET products FAQ",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-faq/creatio-net-products",
+   "read": "2026-11-18"
+  },
+  "AC-FW": {
+   "what": "Academy: framework compatibility",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-faq/framework-compatibility",
+   "read": "2026-11-18"
+  },
+  "AC-WIN": {
+   "what": "Academy: required Windows components",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/application-server-on-windows/enable-required-windows-components",
+   "read": "2026-11-18"
+  },
+  "AC-LNX": {
+   "what": "Academy: deploy Creatio .NET on Linux",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/application-server-on-linux/deploy-the-creatio-net-application-on-linux",
+   "read": "2026-11-18"
+  },
+  "AC-MSSQL": {
+   "what": "Academy: deploy MS SQL database",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/database-server/deploy-ms-sql-database-for-creatio",
+   "read": "2026-11-18"
+  },
+  "AC-PG": {
+   "what": "Academy: deploy PostgreSQL database (Linux)",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/database-server/deploy-postgresql-database-linux",
+   "read": "2026-11-18"
+  },
+  "AC-REDIS": {
+   "what": "Academy: Redis Cluster",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/caching-server/redis-cluster",
+   "read": "2026-11-18"
+  },
+  "AC-FARM": {
+   "what": "Academy: application server web farm",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-additional-setup/application-server-web-farm",
+   "read": "2026-11-18"
+  },
+  "AC-PORTAL": {
+   "what": "Academy: secure access to the portal",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-additional-setup/secure-access-to-the-portal",
+   "read": "2026-11-18"
+  },
+  "AC-RMQ": {
+   "what": "Academy: RabbitMQ",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-additional-setup/rabbit-mq",
+   "read": "2026-11-18"
+  },
+  "AC-FILES": {
+   "what": "Academy: external file storages and S3",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-additional-setup/file-storage/use-external-file-storages",
+   "read": "2026-11-18"
+  },
+  "AC-EL": {
+   "what": "Academy: Email Listener synchronization service",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/containerized-components/email-listener-synchronization-service",
+   "read": "2026-11-18"
+  },
+  "AC-GS": {
+   "what": "Academy: global search",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/containerized-components/global-search",
+   "read": "2026-11-18"
+  },
+  "AC-GSFAQ": {
+   "what": "Academy: global search and deduplication FAQ",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/containerized-components/global-search-and-deduplication-faq",
+   "read": "2026-11-18"
+  },
+  "AC-DD": {
+   "what": "Academy: bulk duplicate search",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/containerized-components/bulk-duplicate-search",
+   "read": "2026-11-18"
+  },
+  "AC-ML": {
+   "what": "Academy: machine learning service",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/containerized-components/machine-learning-service",
+   "read": "2026-11-18"
+  },
+  "AC-AI": {
+   "what": "Academy: Creatio.ai on-site",
+   "url": "https://academy.creatio.com/guides/setup-and-administration/on-site-deployment/deployment-additional-setup/creatio-ai-on-site",
+   "read": "2026-11-18"
+  },
+  "INFRA-RFI-2026-01": {
+   "what": "Sergey Sinienok's comments on an Indonesian bank's hardware sizing RFI (20,000 users, no bulk email, no portal), threaded comments in the spreadsheet + email 12-14 Jan 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "INFRA-EDITIONS-2026-01": {
+   "what": "Sergey Sinienok confirmed SC answers on MS SQL edition, Redis edition and Elasticsearch edition, 14 Jan 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "INFRA-REDIS-2026-02": {
+   "what": "Sergey Sinienok on Redis cost and alternatives, Indonesian bank service POC, 6-7 Feb 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "INFRA-POC-2026-07": {
+   "what": "Sergey Sinienok on a minimal on-prem POC (insurer via a Taiwan partner), 15 Jul 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "INFRA-HYBRID-2026-07": {
+   "what": "Sergey Sinienok's review of a partner's ~1,000-user hybrid architecture (Kubernetes + VMs), 24 Jul 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "AI-ONSITE-2026-07": {
+   "what": "Roman Prus on Creatio.ai on-site deployment and custom LLM, 15 Jul 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "INFRA-STORAGE-2026-10": {
+   "what": "Sergey Sinienok's storage method for an Indonesian securities firm (80 RMs, ~62 GB files/month), 16 Oct 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  },
+  "INFRA-SCHEME-2026-10": {
+   "what": "Sergey Sinienok on simple vs fault-tolerant scheme and Redis in a fault-tolerant setup, 19-20 Oct 2026",
+   "url": "internal email",
+   "read": "2026-11-18"
+  }
+ },
+ "stack": [
+  {
+   "id": "ST1",
+   "text": "Application server, .NET Framework line: Windows Server 2022 or later, IIS 10 or later, .NET Framework 4.7.2 (plus .NET 8 SDK for compilation).",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST2",
+   "text": "Application server, .NET line: Linux Debian 12 (kernel 5.10+), .NET 8. Academy recommends Linux for the .NET line.",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST3",
+   "text": "Database: MS SQL 2022 or later, or PostgreSQL 16 or later. Oracle is not listed for current versions.",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST4",
+   "text": "The .NET (Linux) line does not support MS SQL yet: a Linux application server means PostgreSQL.",
+   "source": "AC-NET"
+  },
+  {
+   "id": "ST5",
+   "text": "Caching: Redis Server 7.4 or later on Linux Debian 12. Redis is the only cache Creatio supports.",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST6",
+   "text": "Load balancer: HAProxy (tested) or MS ARR; Citrix, Cisco, NginX and FortiGate are known to work. Must support WebSockets.",
+   "source": "AC-FARM"
+  },
+  {
+   "id": "ST7",
+   "text": "Containerised services (global search, bulk duplicate search, Email Listener, machine learning, Creatio.ai): Linux Debian 12 with Kubernetes (production) or Docker (development).",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST8",
+   "text": "Version control (SVN 1.14+) is for development environments only.",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST9",
+   "text": "Supported virtual platforms: AWS, Microsoft Azure / Hyper-V, VMware vCloud Director / vSphere. Others are not guaranteed by Creatio.",
+   "source": "AC-SRV"
+  },
+  {
+   "id": "ST10",
+   "text": "Windows 10/11 application servers and Docker for the Creatio application itself are for development and test only, never production.",
+   "source": "AC-WIN"
+  },
+  {
+   "id": "ST11",
+   "text": "Some products (Bank Sales, Bank Customer Journey, Lending, Sales Commerce, Customer Center) show .NET Framework only in Academy's compatibility table. For these, plan on Windows + IIS unless the infra team confirms otherwise.",
+   "source": "AC-FW"
+  },
+  {
+   "id": "ST12",
+   "text": "Telephony via Creatio Messaging Service for Avaya or TAPI needs Windows.",
+   "source": "AC-NET"
+  }
+ ],
+ "editions": [
+  {
+   "id": "ED1",
+   "q": "MS SQL: Standard or Enterprise?",
+   "a": "Both editions are supported. The choice depends on the customer's availability, scalability and performance needs (for example Always On), not on a Creatio dependency.",
+   "source": "INFRA-EDITIONS-2026-01"
+  },
+  {
+   "id": "ED2",
+   "q": "Redis: do we need Redis Enterprise?",
+   "a": "No. Redis 7.4 or later, Open Source or commercial editions are both supported. Redis Open Source has everything Creatio needs; a paid tier is the customer's choice.",
+   "source": "INFRA-EDITIONS-2026-01 + INFRA-REDIS-2026-02 + AC-SRV"
+  },
+  {
+   "id": "ED3",
+   "q": "Elasticsearch: open source or licensed?",
+   "a": "Creatio does not need Elastic Enterprise. Open-source-compatible Elasticsearch distributions are enough.",
+   "source": "INFRA-EDITIONS-2026-01"
+  },
+  {
+   "id": "ED4",
+   "q": "Can we replace Redis with something else?",
+   "a": "No. Redis is the only caching option Creatio supports today.",
+   "source": "INFRA-REDIS-2026-02"
+  }
+ ],
+ "schemes": {
+  "simple": {
+   "label": "Standard (single node per role)",
+   "calc_option": "simple",
+   "when": "No high-availability requirement, or a POC, or non-production. Cuts hardware significantly.",
+   "source": "INFRA-SCHEME-2026-10"
+  },
+  "fault_tolerant": {
+   "label": "High availability (fault tolerant)",
+   "calc_option": "fault_tolerant",
+   "when": "The customer needs high availability and fault tolerance (typical for production in banks).",
+   "source": "INFRA-SCHEME-2026-10"
+  }
+ },
+ "rules": [
+  {
+   "id": "R1",
+   "area": "scheme",
+   "applies": "always",
+   "text": "Confirm the customer actually needs high availability before using the fault-tolerant scheme. If they don't, use the simple scheme: it reduces hardware significantly.",
+   "source": "INFRA-SCHEME-2026-10",
+   "action": "ask"
+  },
+  {
+   "id": "R2",
+   "area": "redis",
+   "applies": "fault_tolerant and minimise",
+   "text": "Fault tolerant but the customer wants to minimise infrastructure: one Redis node is a fair trade-off. Keep the critical components fault tolerant. If Redis fails, the system stays up; users sign in again and some requests are slower. Creatio Cloud uses this approach.",
+   "source": "INFRA-SCHEME-2026-10",
+   "action": "redis_nodes=1"
+  },
+  {
+   "id": "R3",
+   "area": "redis",
+   "applies": "always",
+   "text": "Redis Cluster needs 6 nodes. Never design custom HA on top of Redis (for example 2-3 nodes with home-grown failover): it is complicated to manage. Either a 6-node Redis Cluster or a single node.",
+   "source": "INFRA-SCHEME-2026-10 + AC-REDIS",
+   "action": "redis_nodes in (1, 6)"
+  },
+  {
+   "id": "R4",
+   "area": "redis",
+   "applies": "minimum or non-HA",
+   "text": "When the setup is not truly HA (minimum or non-production), use a single Redis node. 3 nodes make no sense when the rest is not HA.",
+   "source": "INFRA-RFI-2026-01",
+   "action": "redis_nodes=1"
+  },
+  {
+   "id": "R5",
+   "area": "kubernetes",
+   "applies": "containerised components",
+   "text": "Run the microservices (global search, bulk duplicate search, ML, Email Listener) on a Kubernetes cluster, not standalone Docker. Kubernetes gives self-healing, scaling and balancing; with Docker the customer or partner has to solve those themselves.",
+   "source": "INFRA-RFI-2026-01",
+   "action": "drop standalone Docker lines"
+  },
+  {
+   "id": "R6",
+   "area": "kubernetes",
+   "applies": "containerised components",
+   "text": "The Kubernetes balancer is not a separate server. It is a logical abstraction in the cluster and is already counted in the master and node servers. Remove it from the server list.",
+   "source": "INFRA-RFI-2026-01",
+   "action": "drop Kubernetes balancer line"
+  },
+  {
+   "id": "R7",
+   "area": "kubernetes",
+   "applies": "containerised components",
+   "text": "Global search and the other services run on the Kubernetes node (worker) servers. Master servers only run the control plane.",
+   "source": "INFRA-RFI-2026-01",
+   "action": "wording"
+  },
+  {
+   "id": "R8",
+   "area": "environments",
+   "applies": "non-production",
+   "text": "Size each non-production environment (SIT, UAT, pre-prod) with the calculator at 10% of production users, same scheme as production (as in the infra-reviewed RFI). The reduced option then halves it (R11).",
+   "source": "INFRA-RFI-2026-01",
+   "action": "users=ceil(prod*0.10)"
+  },
+  {
+   "id": "R9",
+   "area": "minimum",
+   "applies": "minimum production",
+   "text": "Minimum production: the application server can go to 8 cores and 32 GB RAM per server.",
+   "source": "INFRA-RFI-2026-01",
+   "action": "app cpu=8 ram=32 (only if calculator is higher)"
+  },
+  {
+   "id": "R10",
+   "area": "minimum",
+   "applies": "minimum production, large DB",
+   "text": "Minimum production, very large DB servers: about 11% fewer cores and 7% less RAM is acceptable (the reference case went from 144 cores / 1106 GB to 128 cores / 1024 GB per server). The system slows a little at peak but performs well under regular load.",
+   "source": "INFRA-RFI-2026-01",
+   "action": "db cpu*0.89 ram*0.93, rounded to sensible sizes; only for DB >= 32 cores"
+  },
+  {
+   "id": "R11",
+   "area": "minimum",
+   "applies": "minimum non-production",
+   "text": "Minimum non-production: halve the server counts (round up, at least 1). Single Redis, RabbitMQ and MongoDB (R4). Kubernetes goes to the calculator's simple set (1 master, 2 workers) unless the capacity check (R31) needs more. Keep a load balancer while there are 2+ application servers (R12).",
+   "source": "INFRA-RFI-2026-01",
+   "action": "count=ceil(count/2)"
+  },
+  {
+   "id": "R12",
+   "area": "minimum",
+   "applies": "minimum production (simple scheme)",
+   "text": "A load balancer can be dropped only when there is a single application server. With a web farm (2+ app servers) a load balancer is needed.",
+   "source": "INFRA-RFI-2026-01 + AC-FARM",
+   "action": "drop LB if app servers == 1"
+  },
+  {
+   "id": "R13",
+   "area": "poc",
+   "applies": "POC",
+   "text": "Minimal POC: one VM for Redis, global search, bulk duplicate search and MS Exchange integration combined: 6 CPU, 16 GB RAM, 100 GB disk, Linux Debian 12. Recommended POC specs = the calculator at 10 users. Application and database server specs for the POC were in an image in the email; until recovered, use the calculator at 10 users, simple scheme.",
+   "source": "INFRA-POC-2026-07",
+   "action": "poc profile"
+  },
+  {
+   "id": "R14",
+   "area": "architecture",
+   "applies": "Windows team, HA",
+   "text": "Hybrid pattern the infra team supports: Creatio application as a web farm on Windows nodes (not in Kubernetes) when the customer's team runs Windows; Kubernetes for ML, Email Listener, global search and deduplication; MS SQL Always On and Redis on VMs as long as each is a cluster; single-instance third-party tools on a VM only with a well-defined (ideally automated) recovery plan.",
+   "source": "INFRA-HYBRID-2026-07",
+   "action": "wording"
+  },
+  {
+   "id": "R15",
+   "area": "architecture",
+   "applies": "always",
+   "text": "Components should each run on their own OS. Merging components is possible but not recommended (POC and minimum setups are the exception, and say so).",
+   "source": "AC-SRV",
+   "action": "wording"
+  },
+  {
+   "id": "R16",
+   "area": "architecture",
+   "applies": "always",
+   "text": "Active components must be in one location (data centre). Backup components can be in a remote site for disaster recovery.",
+   "source": "AC-SRV",
+   "action": "wording"
+  },
+  {
+   "id": "R17",
+   "area": "database",
+   "applies": "MS SQL + HA",
+   "text": "MS SQL Always On availability groups is Creatio's recommended high-availability method.",
+   "source": "AC-MSSQL",
+   "action": "wording"
+  },
+  {
+   "id": "R18",
+   "area": "database",
+   "applies": "PostgreSQL > 100 simultaneous users",
+   "text": "PostgreSQL tuning: max_connections = simultaneous users x 1.5 (cap 1024); shared_buffers = max_connections x 0.24 MB.",
+   "source": "AC-PG",
+   "action": "note"
+  },
+  {
+   "id": "R19",
+   "area": "portal",
+   "applies": "portal",
+   "text": "With a portal: deploy as a web farm, with a separate set of application nodes for portal users (not shared with internal users) and a reverse proxy as the only public component in the DMZ. Separate DB accounts for portal and internal users.",
+   "source": "AC-PORTAL",
+   "action": "portal node group + reverse proxy"
+  },
+  {
+   "id": "R20",
+   "area": "email",
+   "applies": "Email Listener",
+   "text": "Email Listener needs RabbitMQ and its own Redis database. Size replicas by mailbox count and average email flow per second (table in components.EL). Per replica: worker 0.1 vCPU / 1.1 GB, API 0.15 vCPU / 850 MB. Kubernetes for production.",
+   "source": "AC-EL",
+   "action": "EL replicas"
+  },
+  {
+   "id": "R21",
+   "area": "queue",
+   "applies": "Email Listener, or web farm with heavy background work",
+   "text": "RabbitMQ: 0.5 vCPU, 4 GB RAM, 10 GB disk per node. One instance can be shared by Creatio and Email Listener. Single node is a single point of failure; cluster for HA (quorum queues).",
+   "source": "AC-RMQ",
+   "action": "RabbitMQ line"
+  },
+  {
+   "id": "R22",
+   "area": "dedup",
+   "applies": "bulk duplicate search",
+   "text": "Bulk duplicate search needs global search (same Elasticsearch) and MongoDB. MongoDB starting point: 1 core, 16 GB RAM, SSD. Standalone is enough; 3-node replica set for HA. Share Redis and RabbitMQ with global search.",
+   "source": "AC-GSFAQ + AC-DD",
+   "action": "MongoDB line"
+  },
+  {
+   "id": "R23",
+   "area": "search",
+   "applies": "global search",
+   "text": "Elasticsearch disk depends on the search template: n-gram templates multiply index size 2.5x (ngram_3) to 4x (ngram_2). Daily Elasticsearch and MongoDB backups are recommended.",
+   "source": "AC-GS",
+   "action": "note"
+  },
+  {
+   "id": "R24",
+   "area": "ml",
+   "applies": "machine learning",
+   "text": "Machine learning service: Linux server with Docker for production (Windows for development only). Needs the 'creatio predictive service on-site' licence.",
+   "source": "AC-ML",
+   "action": "note"
+  },
+  {
+   "id": "R25",
+   "area": "network",
+   "applies": "always",
+   "text": "App to DB: 10 Mb/s per 100 active users, latency 15-20 ms or less. App to user: 256 Kb/s minimum, 512 Kb/s recommended per active user. IOPS per 1,000 active users: 100 on the app server, 1,000 on the DB.",
+   "source": "AC-SRV",
+   "action": "note"
+  },
+  {
+   "id": "R26",
+   "area": "bulk_email",
+   "applies": "bulk email",
+   "text": "Bulk email DB disk: 300 IOPS (<8 ms) up to 1M recipients per email or above 1M per month; 500 IOPS (<8 ms) 1-2M per email or above 3M per month; 1,000 IOPS (<7 ms) 2-5M per email or above 5M per month.",
+   "source": "AC-SRV",
+   "action": "note"
+  },
+  {
+   "id": "R27",
+   "area": "ai",
+   "applies": "Creatio.ai on-site",
+   "text": "Creatio.ai on-site is a separate service layer (enrichment service, LiteLLM, PostgreSQL): Docker Compose for a single server, Kubernetes 1.19+ / Helm 3+ for production. Minimum: Docker-friendly Linux (Ubuntu or Debian), Docker 18.03.1+, 4+ cores, 8+ GB RAM, 20+ GB disk. Needs registry.creatio.com access and a firewall rule (5006 Docker / 30082 Kubernetes).",
+   "source": "AI-ONSITE-2026-07 + AC-AI",
+   "action": "AI line"
+  },
+  {
+   "id": "R28",
+   "area": "ai",
+   "applies": "Creatio.ai on-site",
+   "text": "The LLM is sized separately. It must be reachable through an OpenAI-compatible API with tool calling, structured JSON output and a context window of 40K tokens or more. If self-hosted, its CPU/GPU and memory depend on the chosen model: out of scope of this sizing. On-prem AI availability is limited: involve Roman Prus before promising AI scenarios on-prem.",
+   "source": "AI-ONSITE-2026-07 + INFRA-POC-2026-07",
+   "action": "escalate"
+  },
+  {
+   "id": "R29",
+   "area": "files",
+   "applies": "always",
+   "text": "Keep files out of the database from day one: by default Creatio stores every file in the database, which makes backups, restores, upgrades and environment copies slow. Use S3 file storage; the database keeps metadata only. Enable it before go-live so nothing has to be migrated.",
+   "source": "INFRA-STORAGE-2026-10 + AC-FILES",
+   "action": "files=s3"
+  },
+  {
+   "id": "R30",
+   "area": "files",
+   "applies": "files=s3",
+   "text": "Object storage options: on-premises object storage in the customer's data centre (the infra team suggested SeaweedFS), or an S3 service from a cloud provider with a local region, under the customer's own account. Note: Academy says Creatio officially supports and guarantees compatibility with AWS S3 only; confirm the S3-compatible product with the infra team.",
+   "source": "INFRA-STORAGE-2026-10 + AC-FILES",
+   "action": "note + open question"
+  },
+  {
+   "id": "R31",
+   "area": "kubernetes",
+   "applies": "containerised components",
+   "text": "Capacity check: add up the service workloads (global search 4 cores / 12 GB, bulk duplicate search 1 / 3 GB, ML 4 / 8 GB, Email Listener replicas from the AC-EL table) and compare with the worker nodes at 80% usable. If they don't fit, raise the node count. This check is ours (inferred), not the calculator's: the calculator's Kubernetes set does not scale with users or mailboxes. Always flag it for the infra review.",
+   "source": "CALC + AC-EL (I)",
+   "action": "k8s_node count"
+  }
+ ],
+ "storage_method": {
+  "source": "INFRA-STORAGE-2026-10",
+  "steps": [
+   "Files per month (usable): sum over activities of (count per user per day x size x working days x users). Look for shared content uploaded per user (news, templates): if published once and shared, it drops out.",
+   "Usable file capacity per horizon = monthly x 12 x years, plus about 30% growth headroom. Physical disk depends on the object store's redundancy (2 replicas roughly doubles raw disk).",
+   "Database with files stored externally: business records only (clients, interactions, cases, history and audit). Reference: about 1 GB of growth per month for ~56,000 new interactions and cases per month. Data volume over the horizon plus log and temp volume (50-100 GB in the reference). SSD-class storage.",
+   "Database backups: e.g. weekly full, daily differential, transaction log backups, 30-day retention: plan about 4-5x the database size, ideally on separate storage or a separate site.",
+   "File backups: replication to a second site or cluster and/or bucket versioning; plan up to 1x the file capacity. Deleted files are kept for the same period as database backups, so align the two retention policies.",
+   "Application servers: 50-100 GB per node for OS, application and rotated logs. A central SIEM or log platform is sized by the customer.",
+   "Say these are estimates from stated assumptions, not measurements; monitor growth in the first 2-3 months after go-live and adjust. Starting object storage at the 1-year figure and expanding is reasonable."
+  ],
+  "defaults": {
+   "working_days_per_month": 20,
+   "headroom_pct": 30,
+   "db_gb_per_1000_records": 0.018,
+   "db_min_gb": 50,
+   "db_log_temp_gb": [
+    50,
+    100
+   ],
+   "db_backup_multiplier": [
+    4,
+    5
+   ],
+   "file_secondary_copy_multiplier": 1.0,
+   "app_node_gb": [
+    50,
+    100
+   ],
+   "horizons_years": [
+    1,
+    3,
+    5
+   ]
+  },
+  "defaults_note": "db_gb_per_1000_records is inferred (I) from one reference case (~1 GB per ~56,000 records a month incl. history and audit). Treat it as a starting point for the infra team to confirm.",
+  "reference_case": {
+   "label": "Indonesian securities firm, 80 relationship managers (Oct 2026)",
+   "inputs": "780 MB files per RM per month = 62.4 GB/month; ~48,000 interactions + 8,000 complaint cases per month",
+   "outputs": {
+    "object_storage_usable_3y": "~3 TB (1y ~1 TB, 5y ~5 TB)",
+    "db_data_3y_gb": "150-200",
+    "db_log_temp_gb": "50-100",
+    "db_backups_gb": "250-500",
+    "file_secondary_copy": "up to ~3 TB",
+    "app_node_gb": "50-100 per node"
+   }
+  }
+ },
+ "components": {
+  "EL": {
+   "label": "Email Listener (mailbox sync)",
+   "source": "AC-EL",
+   "replicas": [
+    {
+     "mailboxes": "1-150",
+     "flow": "<1",
+     "worker": 0,
+     "api": 4
+    },
+    {
+     "mailboxes": "1-150",
+     "flow": "1-5",
+     "worker": 15,
+     "api": 4
+    },
+    {
+     "mailboxes": "1-150",
+     "flow": ">5",
+     "worker": 25,
+     "api": 4
+    },
+    {
+     "mailboxes": ">150",
+     "flow": "<1",
+     "worker": 2,
+     "api": "1 per 30 mailboxes"
+    },
+    {
+     "mailboxes": ">150",
+     "flow": "1-5",
+     "worker": 15,
+     "api": "1 per 30 mailboxes"
+    },
+    {
+     "mailboxes": ">150",
+     "flow": ">5",
+     "worker": 25,
+     "api": "1 per 30 mailboxes"
+    }
+   ],
+   "per_replica": {
+    "worker": {
+     "vcpu": 0.1,
+     "ram_gb": 1.1
+    },
+    "api": {
+     "vcpu": 0.15,
+     "ram_gb": 0.85
+    },
+    "redis": {
+     "vcpu": 0.5,
+     "ram_gb": 3
+    },
+    "rabbitmq": {
+     "vcpu": 0.5,
+     "ram_gb": 4
+    }
+   }
+  },
+  "RMQ": {
+   "label": "RabbitMQ",
+   "source": "AC-RMQ",
+   "vcpu": 0.5,
+   "ram_gb": 4,
+   "disk_gb": 10
+  },
+  "MONGO": {
+   "label": "MongoDB (bulk duplicate search)",
+   "source": "AC-GSFAQ",
+   "cores": 1,
+   "ram_gb": 16,
+   "disk": "SSD, sized to dataset"
+  },
+  "AI": {
+   "label": "Creatio.ai on-site service",
+   "source": "AI-ONSITE-2026-07",
+   "cores": 4,
+   "ram_gb": 8,
+   "disk_gb": 20
+  },
+  "POC_SVC": {
+   "label": "POC services VM (Redis, global search, bulk duplicate search, Exchange integration combined)",
+   "source": "INFRA-POC-2026-07",
+   "cores": 6,
+   "ram_gb": 16,
+   "disk_gb": 100,
+   "os": "Linux Debian 12"
+  }
+ },
+ "intake_questions": [
+  {
+   "id": "Q1",
+   "q": "How many users will work in Creatio in total, and how many at the busiest time of day?",
+   "why": "The calculator sizes on active (concurrent) users.",
+   "field": "active_users"
+  },
+  {
+   "id": "Q2",
+   "q": "Will customers, partners or agents log in through a portal? How many?",
+   "why": "Portal adds a separate node group and a reverse proxy.",
+   "field": "portal_users"
+  },
+  {
+   "id": "Q3",
+   "q": "Does production need high availability (no single point of failure), and what downtime is acceptable?",
+   "why": "Fault-tolerant vs simple scheme is the biggest driver of hardware.",
+   "field": "scheme"
+  },
+  {
+   "id": "Q4",
+   "q": "Which environments do you need (production, UAT, SIT, development, DR)?",
+   "why": "Each environment is sized separately.",
+   "field": "environments"
+  },
+  {
+   "id": "Q5",
+   "q": "Windows or Linux for application servers? MS SQL or PostgreSQL?",
+   "why": "Linux means PostgreSQL; some products are Windows only.",
+   "field": "stack"
+  },
+  {
+   "id": "Q6",
+   "q": "Do you run Kubernetes today, and who operates it?",
+   "why": "Microservices are recommended on Kubernetes.",
+   "field": "kubernetes"
+  },
+  {
+   "id": "Q7",
+   "q": "Which optional services are in scope: global search, bulk duplicate search, mailbox sync (how many mailboxes, emails per second), machine learning, bulk email (recipients per month), Creatio.ai on-site?",
+   "why": "Each adds servers or containers.",
+   "field": "components"
+  },
+  {
+   "id": "Q8",
+   "q": "Roughly how many files will users upload per month (count and typical size), and how many new records (interactions, cases, applications)?",
+   "why": "Drives object storage and database growth.",
+   "field": "volumes"
+  },
+  {
+   "id": "Q9",
+   "q": "How many years should storage cover, and what are your backup retention, RPO and RTO targets?",
+   "why": "Drives backup and DR capacity.",
+   "field": "retention"
+  },
+  {
+   "id": "Q10",
+   "q": "Which virtualisation platform will host it (VMware, Hyper-V, AWS, Azure, other)?",
+   "why": "Only some platforms are officially supported.",
+   "field": "platform"
+  },
+  {
+   "id": "Q11",
+   "q": "Where should files be stored: object storage in your data centre, or an S3 service in a local cloud region under your account?",
+   "why": "Files out of the database from day one.",
+   "field": "file_store"
+  },
+  {
+   "id": "Q12",
+   "q": "Do logs go to a central SIEM or log platform?",
+   "why": "If so, log retention is sized on your side.",
+   "field": "siem"
+  }
+ ],
+ "wording": {
+  "status": {
+   "draft": "Preliminary recommendation, pending review by Creatio's infrastructure team",
+   "in_review": "Recommendation under review by Creatio's infrastructure team",
+   "infra_reviewed": "Recommendation reviewed by Creatio's infrastructure team, to be confirmed against your detailed workload"
+  },
+  "intro": "This document sets out our recommended starting infrastructure for running Creatio in your environment. It is based on Creatio's published system requirements and on what you have shared with us so far. Infrastructure needs depend on how the platform is used day to day, so we treat these figures as a recommendation to plan and budget against, which we will refine with you as the details become clearer.",
+  "basis": "These recommendations are based on the information available today and on the assumptions listed below. If any assumption changes, the recommendation may change too.",
+  "storage_caveat": "Storage figures are estimates from the stated assumptions, not measurements. We suggest monitoring actual growth in the first 2 to 3 months after go-live and adjusting from there. Object storage scales easily, so starting at the 1-year figure and expanding later is a reasonable approach.",
+  "minimum_caveat": "The reduced configuration lowers the hardware footprint with some trade-offs, noted against each line. We recommend it only where those trade-offs are acceptable to your team.",
+  "next_steps": [
+   "Review the assumptions and tell us what's different in your environment.",
+   "A short working session between your infrastructure team and Creatio's infrastructure specialists to confirm the design.",
+   "Creatio's infrastructure team confirms the final recommendation."
+  ],
+  "closing": "We're happy to walk your infrastructure team through this recommendation and refine it together.",
+  "avoid": [
+   "guarantee",
+   "guaranteed",
+   "guarantees",
+   "will support",
+   "will handle",
+   "ensures",
+   "certified",
+   "definitive",
+   "final sizing",
+   "exact sizing",
+   "100%",
+   "must be",
+   "is sufficient",
+   "proven",
+   "no risk"
+  ],
+  "prefer": "recommend, suggest, plan for, indicative, based on, we expect, starting point, to be confirmed"
+ },
+ "conflicts_to_resolve": [
+  "AI licence: BOM-CATALOGUE-v0.1 says BYO LLM / on-prem AI = Freedom package; Roman Prus (15 Jul 2026) says custom LLM is part of the Accelerate AI package. Licence is out of scope for sizing; resolve in sc-bom with Deal Desk.",
+  "S3: Academy guarantees AWS S3 only; the infra team suggested SeaweedFS on-prem. Confirm per deal.",
+  "Email Listener: 40 mailboxes per handler (server-side page) vs 1 API replica per 30 mailboxes above 150 (Email Listener page). We use the Email Listener page.",
+  "Client bandwidth: 3 Mbps per active user (client-side page) vs 256-512 Kb/s per active user (server-side page).",
+  "POC app + DB specs were in an image in the 15 Jul 2026 email; not recovered."
+ ]
+}

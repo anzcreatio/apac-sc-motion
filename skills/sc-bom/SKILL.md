@@ -56,6 +56,7 @@ Catalogue (SKUs, tiers, gotchas, sizing questions, rules): `../../knowledge/BOM-
    - every AI scene shown or planned needs **A1 AI Package**, also on Unlimited; BYO LLM or on-prem AI is **A3 Freedom**;
    - merged or large books → **I3 database** and **I4 file storage** (separate allowances); heavy integration → **I2 blocks**;
    - Creatio cloud reaching on-prem systems → **I7 VPN tunnel**; data residency → **I9**;
+   - on-premise deployment → the licence lines here; the servers and storage are `sc-sizing`;
    - brokers, dealers or customers logging in → **U1–U3 portals**; mobile-only field staff → **U4**; approvers → **U5**;
    - partner delivery risk → **V1 Delivery Assurance** (else No-Code Magic).
 4. **Gotchas.** For every gotcha that applies (the script works out which from the lines and facts), set `status`

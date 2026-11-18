@@ -1,0 +1,119 @@
+URL: https://academy.creatio.com/resources/system-requirements-calculator/results?users=10&options=398-393-421-401-404-415-418
+Fetched: 2026-11-18T12:18
+
+Selected options
+Application type
+Creatio .NET Framework application
+Database
+PostgreSQL
+Number of active users
+10
+Bulk emails
+Without bulk emails
+Deployment scheme
+Simple
+Recovery mode
+Simple recovery
+Portal
+Without portal
+Containerized components
+Without сontainerized components
+Reset
+System requirements calculator for Creatio on-site
+System requirements for 10 users
+System requirements for 10 users
+Main application infrastructure
+Connection channels
+| Web server – DBMS server
+| 1 Mb/sec
+| Web server – user
+| Minimum: 2.56 Mbps
+Recommended: 5.12 Mbps
+| Input/output
+| 100 IOPS
+| Input/output (DBMS server)
+| 1000 IOPS
+Application server
+| Number of servers
+| 1
+| OS
+| Windows Server 2022 and up
+| Software requirements
+| IIS 10 and up
+64-bit .Net framework 4.7.2
+.NET 8
+| Environment
+| Virtual infrastructure
+| vCPU
+| Number of cores — 2 and more. Maximum number of cores — 16. Frequency 2,6 GHz and more (Haswell gen. or newer) per server
+| vRAM
+| 8 GB per server
+| HDD (OS)
+| 60 GB, 100 IOPS, latency less than 10 ms per server
+| HDD (application)
+| 20 GB, 100 IOPS, latency less than 10 ms per server
+| Network interface
+| Number — 1, speed 1 GbE and more
+| Ratio of virtual and physical cores
+| No more than 2 virtual cores per 1 physical core
+Database server
+| Number of servers
+| 1
+| OS
+| Windows Server 2022 and up
+Linux Debian 12
+| OS (Amazon RDS)
+| PostgreSQL 16
+| Software requirements (PostgreSQL)
+| PostgreSQL 16 and up.
+PostgreSQL setup files are available for download at postgresql.org.
+| Environment
+| Virtual infrastructure (physical servers preferable)
+| vCPU
+| Number of cores — 2 and more, frequency 3 GHz and more (Haswell gen. or newer) per server
+| vRAM
+| 16 GB per server
+| HDD (OS)
+| 80 GB, 100 IOPS, latency less than 8 ms per server
+| HDD (Database)
+| Data — 3  GB, 50 IOPS, latency less than 8 ms per server
+Database Tempdb — 5  GB, 50 IOPS, latency less than 8 ms per server
+Logs — 5 GB, 50 IOPS, latency less than 8 ms per server
+The specified drive capacity, IOPS, and latency values are general recommendations. Actual requirements can vary based on the user dataset size, workload, and system usage patterns. We recommend assessing storage needs based on real-world data growth and performance demands.
+| Network interface
+| Number — 1, speed 0.1 GbE and more
+| Ratio of virtual and physical cores
+| No more than 1 virtual core per 1 physical core
+Caching server (user sessions)
+| Number of servers
+| 1
+| OS
+| Linux Debian 12
+| Software requirements
+| Redis Server 7.4 and up
+Creatio supports Redis Open Source and other Redis editions. Creatio is fully compatible with all supported Redis versions. Redis Open Source provides all the required functionality for performance, reliability, and scalability in standard Creatio environments. The choice of Redis edition (Open Source or commercial) is determined by the customer's infrastructure requirements and licensing preferences.
+| Environment
+| Virtual infrastructure
+| vCPU
+| Number of cores — 1 and more, frequency 2,4 GHz and more per server
+| vRAM
+| 2 GB (on Linux) per server
+| HDD
+| 20 GB, 20 IOPS, latency less than ms (on Linux) per server
+| Network interface
+| Number — 1, speed 0.1 GbE and more
+| Ratio of virtual and physical cores
+| No more than 2 virtual cores per 1 physical core
+Marketplace solution requirements
+Using of additional Marketplace solutions may affect system requirements. For more information, contact the vendor of the solution.
+Implementation recommendations
+Listed system requirements are based on common user workloads.
+The main parameter for calculating hardware requirements is the predicted number of users. At the same time, other indicators can affect the performance of the system:
+number of integrations;
+number of sections and pages;
+average number of requests;
+minimum and maximum response time;
+file storage mode;
+average file size, etc.
+It is recommended during the implementation of the application to form practical cases with a high load and count performance measurements in conditions close to the real load on the application.
+If the load increases, it may be necessary to revise the system requirements.
