@@ -30,7 +30,7 @@ library for every SC, updated in one place.
 
 | Folder | What |
 |---|---|
-| `standards/` | `DECK-STANDARD-v0.6.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DEMO-BAR-v0.3.md` (the minimum for every demo) |
+| `standards/` | `DECK-STANDARD-v0.6.md` (slide order, two stages, `deck.json` format) · `WRITING-STYLE-v0.1.md` (sound like an SC) · `DOC-STANDARD-v0.1.md` + `doc-kit/` (every Word document in the Creatio look) · `DEMO-BAR-v0.3.md` (the minimum for every demo) |
 | `knowledge/` | Industry packs, differentiator catalogue, AI governance "can say" lines, live-change kit, call sheet, Delivery Assurance and the BOM catalogue (both internal) |
 | `skills/sc-deck/templates/` | Slide templates: `creatio-designed-2026` (default), `creatio-2026` |
 | `patterns/` | Pattern book: demo ideas from our deals, competitors and the Knowledge Hub (screenshots in SharePoint `Patterns/`) |

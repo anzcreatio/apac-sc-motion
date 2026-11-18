@@ -10,6 +10,7 @@
       Customer playback for sign-off: outcomes, each journey, requirements by priority in their words, open questions.
 """
 import argparse
+import os
 import collections
 import datetime
 import json
@@ -234,66 +235,60 @@ def check(a):
 
 
 def playback(a):
+    """Customer playback in the Creatio document look (standards/DOC-STANDARD-v0.1.md, doc kit)."""
     try:
-        from docx import Document
-        from docx.shared import Pt, RGBColor
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "standards", "doc-kit"))
+        from creatio_doc import CreatioDoc
     except ImportError:
         sys.exit("python-docx missing: python -m pip install python-docx")
     model = json.load(open(a.model, encoding="utf-8"))
     reg = json.load(open(a.register, encoding="utf-8"))
     meta = model.get("meta", {})
     deal = a.deal or model.get("customer", "")
-    d = Document()
-    st = d.styles["Normal"]
-    st.font.name, st.font.size = "Calibri", Pt(10.5)
-    d.add_heading("%s: what we heard" % deal, 0)
     when = meta.get("date_text") or meta.get("date") or datetime.date.today().isoformat()
-    d.add_paragraph("Workshop playback (%s). This is our understanding of how things work today and what matters most, "
-                    "in your words. Please correct anything we've got wrong. Once you're happy with it, it's the list "
-                    "we'll show working in Creatio." % when)
-
-    def table(head, rows):
-        t = d.add_table(rows=1, cols=len(head))
-        t.style = "Light Grid Accent 1"
-        for i, h in enumerate(head):
-            t.rows[0].cells[i].text = h
-        for r in rows:
-            cells = t.add_row().cells
-            for i, v in enumerate(r):
-                cells[i].text = fmt(v)
-        d.add_paragraph()
-
-    if model.get("outcomes"):
-        d.add_heading("What success looks like", 1)
-        table(["Measure", "Today", "Target", "Owner"],
-              [[o.get("measure"), o.get("baseline") or "to confirm", o.get("target") or "to confirm", o.get("owner") or "to confirm"]
-               for o in model["outcomes"]])
+    doc = CreatioDoc(title="What we heard", label="%s · Workshop playback" % deal,
+                     subtitle="How things work today and what matters most, in your words",
+                     meta=[("Prepared for", deal), ("Workshop", when)],
+                     status="Draft for your review and sign-off",
+                     note="How to use this document. Please correct anything we've got wrong. Once you're happy with it, "
+                          "it's the list we'll show working in Creatio.")
     rq = [q for q in reg["requirements"] if q["scope"] == "ours"]
+    if model.get("outcomes"):
+        doc.section("Outcomes", "What success looks like")
+        rows, est = [], set()
+        for n, o in enumerate(model["outcomes"]):
+            vals = [o.get("measure"), o.get("baseline"), o.get("target"), o.get("owner")]
+            if not all(vals[1:]):
+                est.add(n)
+            rows.append([fmt(vals[0])] + [fmt(v) if v else "to confirm" for v in vals[1:]])
+        doc.table(["Measure", "Today", "Target", "Owner"], rows, [6.5, 3.5, 3.5, 3.5], highlight=est)
     journeys = list(collections.OrderedDict.fromkeys(q["sheet"] for q in rq))
     steps_by = meta.get("journeys") or {}
     clean = lambda t: re.sub(r"^~\s*", "", str(t or ""))
     for j in journeys:
-        d.add_heading(re.sub(r"^Workshop \d+:\s*", "", j), 1)
+        doc.section("Journey", re.sub(r"^Workshop \d+:\s*", "", j))
         steps = steps_by.get(j) or [s for s in collections.OrderedDict.fromkeys(q["section"] for q in rq if q["sheet"] == j)
                                     if s and not re.match(r"(?i)across|general|overall", s)]
-        d.add_paragraph("The journey as you described it: " + " → ".join(re.sub(r"^\d+\.\s*", "", s) for s in steps))
+        doc.callout(" → ".join(re.sub(r"^\d+\.\s*", "", s) for s in steps), "The journey as you described it: ")
         for label, pr in (("Must have", "must"), ("Should have", "should"), ("Could have", "could"), ("Not ranked yet", "unconfirmed")):
-            rows = [[q["rid"], re.sub(r"^\d+\.\s*", "", q["section"] or ""), clean(q["text"]), (q.get("extra") or {}).get("pain")]
+            rows = [[q["rid"], re.sub(r"^\d+\.\s*", "", q["section"] or ""), clean(q["text"]), fmt((q.get("extra") or {}).get("pain"))]
                     for q in rq if q["sheet"] == j and (q.get("extra") or {}).get("priority") == pr]
             if rows:
-                d.add_heading(label, 2)
-                table(["Ref", "Step", "What you need", "Why (what goes wrong today)"], rows)
+                doc.sub(label)
+                doc.table(["Ref", "Step", "What you need", "Why (what goes wrong today)"], rows, [1.6, 3.4, 6.5, 5.5], first_bold=False)
     opens = [o.get("ask") for o in model.get("open", []) if o.get("ask") and (o.get("to") or "").lower() != "us"]
     if opens:
-        d.add_heading("Still to confirm", 1)
-        for o in opens:
-            d.add_paragraph(o, style="List Number")
-    d.add_heading("Sign-off", 1)
-    d.add_paragraph("Confirmed as an accurate record of our needs for %s." % ("these journeys" if len(journeys) > 1 else "this journey"))
-    d.add_paragraph("Name: ______________________   Role: ______________________   Date: ____________")
-    d.save(a.out)
+        doc.section("To confirm", "Still to confirm")
+        doc.bullets(opens, numbered=True)
+    doc.section("Sign-off", "Sign-off")
+    doc.para("Confirmed as an accurate record of our needs for %s." % ("these journeys" if len(journeys) > 1 else "this journey"))
+    doc.signoff()
+    doc.save(a.out)
     pr = collections.Counter((q.get("extra") or {}).get("priority") for q in rq)
     print("Playback: %d journeys, %d requirements (%s) -> %s" % (len(journeys), len(rq), dict(pr), a.out))
+    if getattr(a, "pdf", False):
+        pdf = os.path.splitext(a.out)[0] + ".pdf"
+        print("PDF:", pdf if CreatioDoc.export_pdf(a.out, pdf) else "not exported (Word not available): save as PDF from Word")
 
 
 def main():
@@ -303,6 +298,7 @@ def main():
     p.add_argument("--md"); p.add_argument("--followup"); p.add_argument("--deal")
     p = sp.add_parser("playback"); p.add_argument("--model", required=True); p.add_argument("--register", required=True)
     p.add_argument("--out", required=True); p.add_argument("--deal")
+    p.add_argument("--pdf", action="store_true", help="also export a PDF through Word (keeps the brand fonts)")
     a = ap.parse_args()
     {"check": check, "playback": playback}[a.cmd](a)
 

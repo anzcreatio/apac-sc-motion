@@ -92,7 +92,9 @@ first-meeting pack is needed.
    method, Oct 2026).
 5. **Check.** `python scripts/sizing.py check <deal>/sizing.json`. Fix every ERROR; read every WARN to the SC.
 6. **Build.** `python scripts/sizing.py build <deal>/sizing.json --nn <next number>` writes:
-   - `NN-sizing.docx`: customer-ready recommendation (basis, assumptions to confirm, architecture, servers per
+   - `NN-sizing.docx`: customer-ready recommendation. **Must follow `../../standards/DOC-STANDARD-v0.1.md`** (Creatio
+     look, PDF through Word); `build` moves to the doc kit in 0.33.0, until then rebuild it with the kit as the
+     Agrobank deal did (`Deals/agrobank-fa/sizing/build_doc.py`) (basis, assumptions to confirm, architecture, servers per
      environment with the reduced option, storage, software, what could change it, next steps)
    - `NN-sizing.xlsx`: the same servers, one sheet per environment, plus storage (easy to paste into an RFI template)
    - `NN-sizing-internal.md`: inputs with tags, calculator links and snapshots, every rule used with its source,

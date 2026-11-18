@@ -2,7 +2,8 @@
 
 Agreed with Renzo 18 Nov 2026 (mock-up A approved). Loaded into every chat by the plugin's SessionStart hook, so it
 applies to plain chats as well as skill runs. Customer-facing content (decks, emails, documents) follows
-`WRITING-STYLE-v0.1.md` instead: no emoji there.
+`WRITING-STYLE-v0.1.md` instead: no emoji there. **Every Word document uses the Creatio look** (`DOC-STANDARD-v0.1.md`,
+built with `standards/doc-kit/creatio_doc.py`; export a PDF through Word and check every page).
 
 ## 1. Reply order (every reply that isn't a one-liner)
 

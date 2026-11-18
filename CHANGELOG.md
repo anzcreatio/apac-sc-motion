@@ -4,6 +4,17 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.3 (18 Nov 2026): every Word document in the Creatio look
+
+- **New `standards/DOC-STANDARD-v0.1.md` + `standards/doc-kit/creatio_doc.py`.** Every Word document the motion makes
+  (playbacks, sizing, proposals, partner packs, anything Claude writes in Word) uses the creatio.com look: logo,
+  orange cover band, Montserrat headings with orange section labels, navy tables, key-number tiles, estimates shaded
+  orange, status line in the footer. Export a PDF through Word so the fonts travel, and check every page.
+- **`sc-workshop` playback** now uses the kit; `workshop.py playback ... --pdf` also writes the PDF.
+- `sc-sizing` moves to the kit in 0.33.0.
+- **Each SC:** install the Montserrat font if `sc-setup` says it's missing (free from Google Fonts), then update the
+  plugin (`claude plugin marketplace update apac-sc`, then `claude plugin update apac-sc-motion@apac-sc`).
+
 ## 0.32.2 (18 Nov 2026): custom components follow Creatio's own design tokens
 
 - **`standards/UI-KIT-STANDARD-v0.5.md`** (was v0.4). New §2c, native patterns harvested read-only from a clean

@@ -1,6 +1,7 @@
 # Writing style v0.1: sound like an SC, not like AI
 
 **Applies to:** every word a customer sees (slides, one-pagers, emails) and the talk track in the notes.
+**Look:** Word documents follow `DOC-STANDARD-v0.1.md` (Creatio brand, doc kit); decks follow `DECK-STANDARD-v0.6.md`.
 **Built from:** Renzo's own edits to generated decks (H&G, 10 Nov 2026) and his click-path speaker lines (Suntory,
 11 Nov). The builder flags the patterns in §3, but read the whole page: the checker can't hear tone.
 

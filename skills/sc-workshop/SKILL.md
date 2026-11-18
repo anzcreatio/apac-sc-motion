@@ -32,7 +32,7 @@ folder if it exists with any suffix).
 | `solution-model.json` → `solution-model.md` | 3 | Internal: `sc-demo-plan` and the toolkit build from it |
 | `wN-03-follow-up-email.md` | 4 | Customer, SC check |
 | `verdicts.json`, `fit-gap.xlsx`, `gaps-and-effort.md`, `poc-brief.md/.json` | 5 | Internal |
-| `playback-<yyyy-mm-dd>.docx` | 6 | Customer, after the SC check, for sign-off |
+| `playback-<yyyy-mm-dd>.docx` (+ `.pdf` with `--pdf`) | 6 | Customer, for sign-off. Creatio look per `../../standards/DOC-STANDARD-v0.1.md`; send the PDF |
 
 ## Steps
 
@@ -152,7 +152,7 @@ The summary is "gaps and effort": the gaps we must handle honestly and the effor
 ### 6. Playback for sign-off (after the SC check)
 
 ```
-python scripts/workshop.py playback --model workshop/solution-model.json --register workshop/register.json --out workshop/playback-<date>.docx --deal "<Customer>"
+python scripts/workshop.py playback --model workshop/solution-model.json --register workshop/register.json --out workshop/playback-<date>.docx --deal "<Customer>" --pdf
 ```
 
 Their outcomes, the journey as they described it, the requirements by priority in their words (no fit, no Creatio
