@@ -11,7 +11,7 @@
 
 ## 1. The components
 
-| Component (`type`) | What it does | Set up in the designer (no code) | Status (15 Nov 2026) |
+| Component (`type`) | What it does | Set up in the designer (no code) | Status (19 Nov 2026) |
 |---|---|---|---|
 | Group holdings (`usr.GroupHoldings`) | One card per group (business, brand, entity) with the open record's related records: total, record count, status pill, red or amber top bar when a status needs attention; empty groups dashed | Records object, link column, group column, lookup that lists every group, title / second line / amount / status / note columns, statuses to hide, status colours (`Active=positive; Hardship=critical`), empty-card text, currency, reload-on field | **Live** on Navalo (11014108, Creatio 10.0), kit 0.5.0 |
 | Decision checks (`usr.DecisionChecks`) | Each rule that routes a record: passed, not met or waiting, with detail ("$6,000 over $40,000"), limit bar and a result pill | Record object; checks list (yes/no field, field equals a value incl. `Link.Column` paths, all related records done, amount within a limit); result column and label; currency; reload-on field | **Live** on Navalo, kit 0.5.0 |
@@ -21,11 +21,13 @@
 | Group overlap (`usr.GroupOverlap`) | People by the combination of groups they hold with ("Payright + Taurus: 4"), headline "N of M in two or more"; or only people in one group (who to offer next), leaving out anyone with a record that meets an exclusion; click a tile to list and open them | Records object, person and group columns (lookup objects filled in), amount, combinations to show, condition rows, exclusion rows, wording | **Live** on Navalo performance page, kit 0.5.0 |
 | Rate against target (`usr.RateTarget`) | Share of records meeting a condition out of a base, with a target line and "N points under target", overall and one bar per group; higher or lower is better | Records object, base and success condition rows, labels, target %, direction, group column, label for no group (e.g. Direct), bars at most | **Live** on Navalo performance page, kit 0.5.0 |
 | Cycle time (`usr.CycleTime`) | Median and slowest 10% between two dates, per group, against a target; "N of M inside target" | Records object, from and to date columns, condition rows, target hours, group column | **Live** on Navalo performance page, kit 0.5.0 |
-| Criteria scorer (`usr.CriteriaScorer`) | Scores a record 1–3 per criterion with descriptions; live weighted total | Criteria object, score object, link and value columns, total column. Criteria are records (name, three descriptions, weight, active, order) | Built for EWB (branch `ewb-components`, kit 0.2.0), not installed |
-| Step strip (`usr.StepStrip`) | Child records as editable steps with a flag and flag text; add between, reorder | Child object, link, order, title, subtitle, flag and flag-text columns, captions | Built for EWB, not installed |
-| Priority matrix (`usr.PriorityMatrix`) | Records on two axes, size by a third, drag to rescore, ranked list | Object, x, y, size, label, rank and filter columns, axis captions | Built for EWB, not installed |
-| Guided review (`usr.GuidedReview`) | Section-by-section review: Keep / Change against drafted values; tells the page which section is open | Object, section and question records, output attribute | Built for EWB, not installed |
-| Who's working (`usr.SessionIdentity`) | Name and role once per visit; stamps them on save and on a contribution log | Stamp columns, log object, prompt text | Built for EWB, not installed |
+| Criteria scorer (`usr.CriteriaScorer`) | Scores a record 1–3 per criterion with descriptions; live weighted total | Criteria object, score object, link and value columns, total column. Criteria are records (name, three descriptions, weight, active, order) | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
+| Step strip (`usr.StepStrip`) | Child records as editable steps with a flag and flag text; add between, reorder | Child object, link, order, title, subtitle, flag and flag-text columns, captions | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
+| Priority matrix (`usr.PriorityMatrix`) | Records on two axes, size by a third, drag to rescore, ranked list | Object, x, y, size, label, rank and filter columns, axis captions | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
+| Guided review (`usr.GuidedReview`) | Section-by-section review: Keep / Change against drafted values; tells the page which section is open | Object, section and question records, output attribute | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
+| Who's working (`usr.SessionIdentity`) | Name and role once per visit; stamps them on save and on a contribution log | Stamp columns, log object, prompt text | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
+| Help panel (`usr.HelpPanel`) | A slim "how this works" line that opens the page's guidance, with a User guide link (`guideUrl`, site paths or https only) | Text, guide link and label | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
+| Card tiles (`usr.CardTiles`) | One tile per card or request with its status; counts a sent card, splits own cards from other units' | Records object, date and owner columns, statuses | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
 | Trace map (`usr.TraceMap`) | A chain of linked records left to right; highlight what a change affects | Objects, link, label and status columns | Idea (Phase 2) |
 
 **No code for the next customer:** drag the component from **Custom components** in the Freedom UI Designer palette,
@@ -277,10 +279,15 @@ therefore shows the grey like background looks cheap").
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
 replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today (18 Nov
-2026): `main` = 0.5.5 (Navalo components, pickers, native tokens); `ewb-components` = 0.5.6 = `main` merged in plus
-the EWB components, so it is the superset and safe to install anywhere. Version numbers on each line skip what the
-other used. The EWB components still style from `_kit-runtime.scss`, whose `--crt-palette-*` names don't exist (always
-fallback, radius 14 + shadows, not native): move them onto `_kit-tokens.scss` before reusing them on another deal.
+2026, updated 19 Nov): `main` = 0.5.5 (Navalo components, pickers, native tokens); `ewb-components` = **0.6.1**
+(tags `kit-0.6.0`, `kit-0.6.1`) = `main` plus the 7 EWB components, now on `_kit-tokens` (no `--crt-palette-*`), all
+on pickers, with shape skeletons and a row cap. It is the superset: merge it back into `main` (separate worktree)
+before the §2d / §2e kit to-dos. Version numbers on each line skip what the other used.
+
+**Known bug on `main` (fixed per panel on `ewb-components` 0.6.1):** a `choice` picker with no empty option shows its
+first option when nothing is saved (e.g. Flow timeline "Hide until requested" reads "Yes"), so an author can save the
+wrong value without touching it. Fix once in the shared picker: when the saved value is empty, show a "(default)"
+option that keeps it empty.
 
 ## 5. Where things live
 
@@ -295,7 +302,7 @@ fallback, radius 14 + shadows, not native): move them onto `_kit-tokens.scss` be
 | Version | Stand | Result |
 |---|---|---|
 | 10.0 | 11014108-demo (Navalo) | Group holdings, Decision checks and Flow timeline installed, placed, used live; full rehearsal of straight-through, approval and lodgement (13 and 14 Nov 2026). 0.5.0 installed 15 Nov: all eight components on pages; pickers built and unit-tested, not yet opened in the live designer |
-| 10.1 | 11014930-demo (EWB) | `ewb-components` 0.5.6 installed 18 Nov 2026 (main merged in); EWB pages render |
+| 10.1 | 11014930-demo (EWB) | `ewb-components` 0.6.1 live 19 Nov 2026 (main merged in, EWB components aligned to v0.6) |
 | 10.x clean | 11014982-demo (`clean82`) | 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
 | 10.2.1 | none yet | ⚠️ Zoneless on by default (about Feb 2027; 10.2 with it optional Dec 2026–Jan 2027): run the §2d zoneless test before any customer stand moves to 10.2.1 |
 | Below 8.3.3 | – | Not offered: no setup areas (our pickers) |
