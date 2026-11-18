@@ -4,6 +4,18 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.5 (18 Nov 2026): UI kit 0.6.4 in the library; channels and integrations playbook
+
+- **UI kit `labUiKit` 0.6.4** is now the one kit: Navalo and East West Bank components in one package (15
+  components). Install file: SharePoint `Library/ui-kit/packages/labUiKit-0.6.4-2026-11-18.zip` (JS only, no compile,
+  no restart). New since 0.5.0: every setting is a picker, native Creatio look, row caps, and writing components check
+  permissions and the record's stage before saving, and say "not saved" when Creatio refuses.
+- **`standards/UI-KIT-STANDARD-v0.6.md`**: kit status updated (Academy and forum to-dos done in 0.6.2; panels keep
+  `ViewEncapsulation.None` on purpose, with `.kit-` prefixed selectors).
+- **New `knowledge/CHANNELS-AND-INTEGRATIONS-PLAYBOOK-v0.1.md`**: how to configure and show integrations, chat
+  channels (WhatsApp, Messenger, Instagram, Telegram, SMS, web chat), social comments and WhatsApp/SMS from a campaign,
+  from Creatio Academy 8.3 and version 10. Nothing in it is proven on our stands yet: rehearse on a clean stand first.
+
 ## 0.32.4 (19 Nov 2026): custom components follow the Creatio Academy rules
 
 - **`standards/UI-KIT-STANDARD-v0.6.md`** (was v0.5). New §2d: the rules from all 37 Freedom UI pages of Creatio

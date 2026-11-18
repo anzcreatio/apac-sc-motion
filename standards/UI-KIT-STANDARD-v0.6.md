@@ -279,7 +279,7 @@ therefore shows the grey like background looks cheap").
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
 replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today (18 Nov
-2026, updated 19 Nov): **`main` = 0.6.2** (`ewb-components` 0.6.1 fast-forwarded in 19 Nov, then the §2d/§2e to-dos, `c92cebc`; installed on clean82 only):
+2026, updated 19 Nov): **`main` = 0.6.4 since 18 Nov evening** (fast-forwarded to `ewb-components` `2b2721c`: 0.6.3 stage re-check before unit writes, 0.6.4 "not saved" when a write changes no rows; 121 tests; package `Library/ui-kit/packages/labUiKit-0.6.4-2026-11-18.zip`). Before that, **`main` = 0.6.2** (`ewb-components` 0.6.1 fast-forwarded in 19 Nov, then the §2d/§2e to-dos, `c92cebc`; installed on clean82 only):
 the Navalo components plus the 7 EWB components, all on `_kit-tokens`, all on pickers, with shape skeletons and a row
 cap. Build OK, 19 suites / 116 tests pass. New work goes on `main`; installs need a yes per stand (EWB stand only after
 a clean-stand test, with the EWB chat told first).
