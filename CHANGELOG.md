@@ -4,7 +4,7 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.28.0 (18 Nov 2026): replies you can scan, and one table of everything you have open
+## 0.29.0 (18 Nov 2026): replies you can scan, and one table of everything you have open
 
 - 📣 **Every Claude reply now has the same shape**: ❓ Questions for you first (each with Claude's default, so a
   one-word answer works), ⚠️ Watch out only when something is really at risk, ✅ Done with file links, then the
