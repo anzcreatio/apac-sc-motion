@@ -287,7 +287,8 @@ before the §2d / §2e kit to-dos. Version numbers on each line skip what the ot
 **Known bug on `main` (fixed per panel on `ewb-components` 0.6.1):** a `choice` picker with no empty option shows its
 first option when nothing is saved (e.g. Flow timeline "Hide until requested" reads "Yes"), so an author can save the
 wrong value without touching it. Fix once in the shared picker: when the saved value is empty, show a "(default)"
-option that keeps it empty.
+option that keeps it empty, **unless `spec.options` already has a `''` option** (EWB's `ON_OFF` does: "No (default)" /
+"Yes (default)"; keep those, they say which way the default goes), so no field shows two default rows.
 
 ## 5. Where things live
 
