@@ -330,7 +330,7 @@ def apply_rules(s, env, lines, calc_kv):
                                           f"({need['detail']}); calculator nodes give ~{cap_c:.0f} / {cap_r:.0f} at 80%. "
                                           f"Raised {ln['count']} -> {n}. Inferred: ask infra to confirm.")
                     ln["notes"].append(f"Node count raised from {ln['count']} to {n} to fit the expected service load "
-                                       "(mainly mailbox synchronisation); to be confirmed in the infrastructure review.")
+                                       "of the services above; to be confirmed in the infrastructure review.")
                     ln["count"] = n
                     ln["rules"].append("R31")
                     applied.append("R31")
