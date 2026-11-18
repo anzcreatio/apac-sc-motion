@@ -56,6 +56,13 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
    **asked** to see, and any **must** (a stated requirement or constraint). Scenes follow demo bar item 3: C builds;
    P and I build only after a check with the customer, written into the plan (the email or the opening question);
    A becomes a question.
+1b. **Call it first (pilot: learning loop, Renzo 18 Nov 2026).** Only if `python ../sc-ready/scripts/ready.py pilot
+   --feature call-it-first` says on. Before the hero journey or scenes: show the step 1 pains list (**evidence and
+   quotes only, unranked**) in the **same message** as the step 0 pre-build questions, and ask for 3 lines: **the 3
+   pains to demo · the hero journey in one line · the moment that should land**. Save it (`ready.py call --deal <deal>
+   --stage demo-plan --text "..."`; "skip" → `--skip`). After the plan, add **Your call vs mine** (table; why for each
+   difference, with the evidence) and up to 2 💡 Learn points picked by impact; log the match and the points. Rules:
+   `../../standards/LEARNING-LOOP-v0.1.md` §1–§2. Pilot off → skip this step.
 2. **Hero journey.** One end-to-end story in their terms (a persona, a trigger, the steps, the outcome) that carries
    the top pain. It opens on their outcome (demo bar item 2).
 3. **Scenes.** The scenes in demo order, about 3–4 main scenes for 45–60 minutes, with minutes per scene. Each has

@@ -53,6 +53,8 @@ team lead) may look across SCs, and he sets who owns a deal (`owner`). Deal fold
 4. **Follow-up drafts:** the script writes a starting draft per stalled deal (at most 3, addressed to the AE so they
    can forward or adapt it). Rework each in plain words (`../../standards/WRITING-STYLE-v0.1.md`): short, one ask,
    their names, what we owe and what they owe. No "SC check" warning line. **Never send mail, never save a draft into Outlook, never book a meeting.** The SC or the AE sends it.
+4b. **Readiness check (pilot, `LEARNING-LOOP-v0.1` §3):** if the brief has a "Readiness check" section, show it
+   after today's meetings as a suggestion, not a task: `sc-ready` the working day before, the 2-minute recheck on the day.
 5. Offer the one action you'd do first, and do it on their yes (e.g. run `sc-harvest`, finish the AE brief).
 
 The brief ranks actions by deadline and how close the deal is to the customer's decision: a demo under 3 days with no

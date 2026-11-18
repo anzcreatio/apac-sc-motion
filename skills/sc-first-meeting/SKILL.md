@@ -3,7 +3,7 @@ name: sc-first-meeting
 description: Turn the transcript of a BDR or AE discovery call (the six questions), or a partner call about a customer, into the first-meeting pack for a Creatio APAC solution consultant - the standard customer deck (current understanding, solution hypothesis, one slide per solution component with Business Studio first and AI second, solution summary, next steps), a light-configuration brief split into Business Studio then AI, and a meeting plan with the closing question. Use when an SC shares a discovery or BDR call transcript, asks to prepare a first meeting, a first demo deck or a playback, or names a new deal.
 ---
 
-# sc-first-meeting (FM v0.6)
+# sc-first-meeting (FM v0.7)
 
 > **Mac:** run every `python …` command below as `python3 …` (`sc-setup` records which one works in `~/.apac-sc-motion.json`).
 
@@ -105,6 +105,14 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
    Q4 why now, by when · Q5 who runs it and who signs off · Q6 which job AI would take first. **Score coverage** (the
    feedback loop's input-quality signal): answered = 1, partly = 0.5, not asked = 0; an answer the customer gave
    without being asked counts; the opener is reported separately, not scored. Report it as "4.5 / 6".
+1b. **Call it first (pilot: learning loop, Renzo 18 Nov 2026).** Only if `python ../sc-ready/scripts/ready.py pilot
+   --feature call-it-first` says on. Most SCs weren't on the BDR/AE call, so before you write any hypothesis, pains or
+   deck: show the SC the step 1 table (**quotes only**, who, when, coverage) in the **same message** as the step 0b
+   demo-depth question, and ask for 3 lines: **top 3 pains · the hypothesis in one line · the one thing you'd show**
+   (the SC was on the call → skip the table, just ask). Save it (`ready.py call --deal <deal> --stage fm --text "..."`;
+   "skip" → `--skip`), then carry on with step 2. In the report (step 8) add **Your call vs mine** (table: theirs ·
+   mine · same/different; why for each difference, with the quote) and up to 2 💡 Learn points picked by impact, then
+   log the match and the points. Rules: `../../standards/LEARNING-LOOP-v0.1.md` §1–§2. Pilot off → skip this step.
 2. **Set the track and pick the pack** (BFSI, Manufacturing, Core for anything else).
 3. **Research the company** (rule 3).
 4. **Write `deck.json`** in the deal folder, per `../../standards/DECK-STANDARD-v0.6.md`:
@@ -138,7 +146,8 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
    slide, and replace each `component` slide with 1–2 `screen` slides: the real screenshot, numbered callouts or icon
    headings that summarise the element in one line each, and the customer's quote. Keep `component` slides only for
    parts that weren't built. Rebuild, render, look at every slide (slides were added and replaced, so numbers moved).
-8. **Report back** in ≤ 10 lines: coverage score, track, top pain, the deck path, what the SC must check, and open gaps.
+8. **Report back** in ≤ 10 lines: coverage score, track, top pain, the deck path, what the SC must check, and open gaps
+   (pilot: then Your call vs mine and the 💡 Learn points, step 1b).
 
 ## `01-fm-prep.md` outputs
 

@@ -4,6 +4,16 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.32.0 (18 Nov 2026): learning loop pilot (Renzo only)
+
+- **Nothing changes for you yet.** This is a 2-week pilot on Renzo's deals (review 2 Dec). It only switches on for
+  an SC whose `~/.apac-sc-motion.json` has `"pilot": ["call-it-first", "ready"]`.
+- What's being tried: Claude asks for the SC's own 3-line call (pains, hypothesis, what to show) before writing the
+  first-meeting pack or demo plan, then shows where it differs and why; a readiness check before a meeting
+  (`sc-ready`: quiz from memory first, crib sheet after); and 💡 Learn points (at most 2, the ones that matter most).
+  The goal: Claude makes us faster without making us dependent. Rules: `standards/LEARNING-LOOP-v0.1.md`.
+- Chat format v0.2 adds the 💡 mark; new chat stage `Ready`.
+
 ## 0.31.0 (18 Nov 2026): start a deal with just a sizing request
 
 - 📣 **When a partner has already run discovery and the demo and all they need is a sizing, start there.** Tell Claude

@@ -1,4 +1,4 @@
-# Chat format v0.1: replies the SC can scan
+# Chat format v0.2: replies the SC can scan
 
 Agreed with Renzo 18 Nov 2026 (mock-up A approved). Loaded into every chat by the plugin's SessionStart hook, so it
 applies to plain chats as well as skill runs. Customer-facing content (decks, emails, documents) follows
@@ -15,7 +15,7 @@ applies to plain chats as well as skill runs. Customer-facing content (decks, em
 
 Put `---` between blocks 1, 2 and 3.
 
-## 2. Marks: six, one meaning each, never decorative
+## 2. Marks: seven, one meaning each, never decorative
 
 | Mark | Meaning | Only in |
 |---|---|---|
@@ -25,6 +25,7 @@ Put `---` between blocks 1, 2 and 3.
 | 🟢 🟡 🔵 ⏸ | Active · Waiting on SC · Waiting on customer · Parked | Work-status cells |
 | 📋 | Desk view | Desk brief / open-work heading |
 | 📄 | Files produced | Files heading |
+| 💡 | Learn: a rule worth keeping, with its evidence and the habit (max 2 per output, picked by impact) | Learning-loop steps only (`LEARNING-LOOP-v0.1.md` §2; v0.2, 18 Nov 2026) |
 
 No other emoji. Never in customer-facing files.
 

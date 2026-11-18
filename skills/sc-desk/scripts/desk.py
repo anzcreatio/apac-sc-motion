@@ -792,7 +792,7 @@ def c_scan(a):
 
 CHATS = "00-chats.md"
 CHAT_COLS = ["No", "Date", "Machine", "Stage", "Topic", "Status", "Next", "Due", "Updated", "Outcome"]
-STAGES = ["Intake", "FM prep", "Meeting review", "Demo plan", "Build", "Deck", "RFP", "Workshop", "Click path", "Sizing", "Proposal", "Admin"]
+STAGES = ["Intake", "FM prep", "Meeting review", "Demo plan", "Build", "Deck", "RFP", "Workshop", "Click path", "Sizing", "Ready", "Proposal", "Admin"]
 STATUS = {"active": "🟢 Active", "waiting-sc": "🟡 Waiting on SC", "waiting-customer": "🔵 Waiting on customer",
           "done": "✅ Done", "parked": "⏸ Parked"}
 STATUS_ORDER = {"waiting-sc": 0, "active": 1, "waiting-customer": 2, "parked": 3}
@@ -1091,6 +1091,37 @@ def todays_meetings(root, deals, cal):
     return sorted(out, key=lambda m: m["time"] or "99")
 
 
+def ready_nudge(deals, cal):
+    """Learning-loop pilot (LEARNING-LOOP-v0.1 §3): suggest sc-ready the working day before a customer meeting,
+    and the morning recheck on the day. A suggestion only; shown only for SCs with "ready" in the pilot list."""
+    if "ready" not in (cfg().get("pilot") or []):
+        return []
+    nxt = TODAY + dt.timedelta(days=3 if TODAY.weekday() == 4 else 1)
+    names = {os.path.basename(d): d for d in deals}
+    hits = {}
+    for ev in cal:
+        d = pdate(ev.get("start", ""))
+        if ev.get("deal") in names and d in (TODAY, nxt):
+            hits.setdefault((d, ev["deal"]), ev.get("subject", "Meeting"))
+    for d in deals:
+        b = os.path.basename(d)
+        demo, st = demo_info(d)
+        nm = pdate((load_ledger(d).get("next_meeting") or {}).get("date"))
+        if demo in (TODAY, nxt) and st in (None, "planned", "moved"):
+            hits.setdefault((demo, b), "Demo")
+        if nm in (TODAY, nxt):
+            hits.setdefault((nm, b), (load_ledger(d).get("next_meeting") or {}).get("what") or "Meeting")
+    if not hits:
+        return []
+    L = ["## Readiness check (pilot)", ""]
+    for (d, b), what in sorted(hits.items()):
+        if d == TODAY:
+            L.append("- **%s** today (%s): 2-minute morning recheck of what you missed? Say \"recheck %s\"." % (b, what, b))
+        else:
+            L.append("- **%s** %s (%s): run the readiness check today? Say \"am I ready for %s?\" (`sc-ready`, ~10 min)." % (b, d.strftime("%a %d %b"), what, b))
+    return L + [""]
+
+
 def draft_followup(deal, r, sc):
     """A starting draft for the SC to rework. Never sent: the SC (or the AE) sends it."""
     kinds = {s["kind"] for s in r["stalls"]}
@@ -1162,6 +1193,7 @@ def c_brief(a):
     ahead = sorted([(r["info"]["next_meeting"], r["deal"]) for r in scans if r["info"].get("next_meeting")])[:5]
     if ahead:
         L += ["**Coming up:** " + " · ".join("%s %s" % (pdate(d).strftime("%a %d %b"), n) for d, n in ahead), ""]
+    L += ready_nudge(deals, cal)
     L += ["## Follow-up drafts (never sent automatically)", ""]
     nd = 0
     MAXD = 3
