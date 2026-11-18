@@ -4,48 +4,28 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
-## 0.29.0 (18 Nov 2026): replies you can scan, and one table of everything you have open
+## 0.29.0 (18 Nov 2026): replies you can scan, one table of your open work, creatio.com-style slides, no "SC check" lines
 
-- 📣 **Every Claude reply now has the same shape**: ❓ Questions for you first (each with Claude's default, so a
-  one-word answer works), ⚠️ Watch out only when something is really at risk, ✅ Done with file links, then the
-  detail in tables. Six marks, each with one meaning; no decorative emoji. Applies in every chat, not only skill
-  runs (`standards/CHAT-FORMAT-v0.1.md`). Customer files are unchanged: no emoji there.
+One update with everything since 0.26.0 (0.27.0 and 0.28.0 were never published on their own).
+
+- 📣 **Every Claude reply has the same shape**: ❓ Questions for you first (each with Claude's default, so a one-word
+  answer works), ⚠️ Watch out only for a real risk, ✅ Done with file links, then tables. Six marks, one meaning
+  each; none in customer files. Applies in every chat (`standards/CHAT-FORMAT-v0.1.md`).
 - 📣 **"What's running?" in any chat shows your 📋 Open work**: every customer chat that isn't done, across your
-  deals, with Stage, Status (🟢 active · 🟡 waiting on you · 🔵 waiting on the customer · ⏸ parked), Next, **Due**
-  (or "unknown") and Age, plus a "Do first" line. ⚠️ flags overdue dates and anything waiting on you for 3+ days.
-  The 8 am brief shows the same table and now sits in a **Desk** section in your sidebar.
-- Each customer chat takes a number and a row in `<deal>/00-chats.md` when it starts and updates its status, next
-  step and due date when it wraps up (`standards/CHAT-TRACKING-v0.1.md`, `desk.py chat-open | chat-set | work`).
-  Chats are titled `<Customer> NN · <Stage> · <topic>` and grouped one sidebar section per customer. This was
-  Renzo's own rule; it's now everyone's.
-- The rules load at the start of every session (and again after a long chat is compacted) through the plugin's
-  start-up hook.
-- **Each SC: start a new session after updating, then ask "what's running?" and tell Claude which older chats are done.**
-
-## 0.28.0 (18 Nov 2026): eight new visual slide types
-
-- 📣 **Decks can now look like creatio.com**: big statements, a "what you run today" landscape with a source on every
-  tile, a side-by-side comparison, an orange section band, dated milestones, a product screen on navy, photo cards and
-  the customer's own words as a quote. Deck standard v0.6 (`standards/DECK-STANDARD-v0.6.md`) lists the fields.
-- Every visual must make a point. `photo_cards` takes **brand photos only** (no stock or AI images); without one you
-  get a placeholder and a warning.
-- **New default cover**: orange gradient, the customer lockup in spaced capitals, and a real Creatio product screen
-  bleeding off the right edge (from the corporate deck). Put `
-` in the title to choose the line breaks; `"art": false`
-  or a `fill` brings back the plain cover.
-- Try them: `python skills/sc-deck/scripts/build_deck.py tests/deck/visual-types/deck.json --render`.
-
-## 0.27.0 (17 Nov 2026): no more "SC check required" lines
-
-- 📣 **Nothing the plugin makes ends with "SC check required before this is used with the customer." any more**:
-  decks (speaker notes), fm-prep, emails, RFP and requirements outputs, workshop docs, BOM, desk drafts, build plans,
-  AE briefs, lessons page. You no longer have to delete it before sending, and it can't slip through to a customer.
-- The rule hasn't changed: **you still review everything before it reaches a customer, and Claude never sends.** The
-  DRAFT banners that hold a customer pack or click path until you approve it stay.
-- The requirements checklist's red "DRAFT…" first row is gone (the title is now row 1); the workshop playback
-  .docx no longer ends with a red DRAFT line.
-- Existing Slide-library decks were cleaned too.
-- **Each SC: delete the line from any draft you still have open from before today.**
+  deals: Stage, Status (🟢 active · 🟡 waiting on you · 🔵 waiting on the customer · ⏸ parked), Next, **Due** (or
+  "unknown"), Age and a "Do first" line; ⚠️ on overdue and on anything waiting on you 3+ days. The 8 am brief shows it
+  too, in a **Desk** sidebar section. Each customer chat keeps its row in `<deal>/00-chats.md`, is titled
+  `<Customer> NN · <Stage> · <topic>` and sits in one sidebar section per customer (`standards/CHAT-TRACKING-v0.1.md`).
+- 📣 **Decks can look like creatio.com**: eight new slide types (big statement, "what you run today" landscape with a
+  source per tile, side-by-side compare, orange section band, dated milestones, product screen on navy, photo cards,
+  the customer's words as a quote), deck standard v0.6. Every visual must make a point; `photo_cards` takes brand
+  photos only. Try: `python skills/sc-deck/scripts/build_deck.py tests/deck/visual-types/deck.json --render`.
+- **New default cover**: orange gradient, customer lockup in spaced capitals, a real product screen off the right
+  edge. Put `\n` in the title to choose line breaks; `"art": false` or a `fill` brings back the plain cover.
+- 📣 **No more "SC check required…" line** on anything the plugin makes (decks, emails, RFP, workshop, BOM, desk
+  drafts, build plans, AE briefs). You still review everything and Claude never sends; DRAFT banners stay.
+- **Each SC: start a new session after updating, ask "what's running?" and tell Claude which older chats are done.
+  Delete any "SC check" line from drafts you made before 17 Nov.**
 
 ## 0.26.0 (17 Nov 2026): customer self-install guides for Claude + the Creatio toolkit (Windows and Mac)
 

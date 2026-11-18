@@ -8,3 +8,5 @@ tests/demo-plan/
 rollout/overview/*-png/
 tests/deck/*/deck.pptx
 tests/deck/*/deck-png/
+tests/deck/*/deck-png/
+tests/deck/*/deck.pptx
