@@ -4,6 +4,14 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.33.1 (19 Nov 2026): duplicates in a demo need one feature switched on
+
+- **Build rules v0.6 §5, new row:** the Freedom UI "Potential duplicates found" pop-up on save (Contacts: Edit record,
+  Merge, Save anyway) only appears once the feature `EnableDeduplicationFreedomUI` is registered and switched on. Demo
+  stands don't have it, so a duplicate contact saves with no warning. Feature toggles page → Create feature → switch
+  on → Save changes → reload the page; no compile. It's on for the signed-in user only, so add every demo login.
+  Found on bpd-bali-map, 19 Nov 2026.
+
 ## 0.33.0 (19 Nov 2026): open chats carry a status mark; say "end chat" to close one
 
 - **Chat tracking v0.2** (`standards/CHAT-TRACKING-v0.2.md` §2, replaces v0.1): every new chat's title starts with
