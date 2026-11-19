@@ -1,4 +1,4 @@
-<!-- apac-sc-motion build rules v0.6 (18 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.6.md -->
+<!-- apac-sc-motion build rules v0.7 (19 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.7.md -->
 ## APAC SC team build rules (apac-sc-motion)
 
 1. **Compile and restart only when really needed, and only with the SC's OK (or the approval pack's).** Pages, captions, layouts, business
@@ -32,4 +32,9 @@
    `add-package-dependency` first; `rows-file` must sit in the OS temp folder or the workspace; a component package:
    `create-package` first, then `push-workspace` with the server package's UId in the descriptor. A web map is a custom
    component (no native one): Leaflet + OpenStreetMap passes the default CSP.
+9. **Configuration quality (BUILD-RULES §6).** On VPN, load `creatio-instructions-mcp` for the area first. Handlers:
+   `return this.next?.handle(request)` and `scopes`; new lookup data = a new data binding; C# as source, never a DLL;
+   bulk processes in the background; one business rule per field; "missing in the Designer" = add the package
+   dependency; extend standard objects, lookups not text; Read Data columns only; no default-valued properties in page
+   bodies; NCD naming (`Contact_FormPage`, `AddButton`, `<Domain>Agent`); demo agents use delegated credentials.
 <!-- end apac-sc-motion build rules -->

@@ -1,4 +1,4 @@
-# Build rules v0.6: while configuring a demo stand
+# Build rules v0.7: while configuring a demo stand
 
 **What it is:** how every demo build runs, whichever tool does it, whichever tool runs it (the demo toolkit, clio, or Claude by hand).
 **Agreed:** Renzo, 13 Nov 2026. `sc-setup` copies the short version into the demo toolkit's local notes for
@@ -114,10 +114,39 @@ From the BPD Bali map build (18 Nov 2026): each of these cost rework or blocked 
 | **Freedom UI web has no map component** (register L-001): a map is a custom component (Leaflet + OpenStreetMap passes Creatio's default CSP: `img-src *`, Nominatim in `connect-src`). Plan GPS geotag, address search and pin → address from the start; address search is approximate, GPS and a pin are exact | The SC asked for auto-filled coordinates after seeing the first version |
 | **Duplicates in the demo? Register `EnableDeduplicationFreedomUI` first.** The Freedom UI "Potential duplicates found" pop-up on save (Contacts: Edit record · Merge · Save anyway) needs that feature plus `ESDeduplication`, `DeduplicationWebApiUrl` set and a duplicate rule with "Use this rule on save". Demo stands don't ship the feature registered, so a duplicate saves silently. Feature toggles page (`/0/Nui/ViewModule.aspx#BaseSchemaModuleV2/FeaturesPage`) → Create feature → switch on → Save changes → reload the page; no compile. The page turns it on for the signed-in user only: add every demo login (or "All employees"). Undo = switch it off. Bulk "Show duplicate" works without it, but its page shows the results only after a reload, so run it before the demo | 19 Nov 2026, bpd-bali-map (v10.1.0): a second "James Smith" saved with no warning until the feature was added (source: Academy 8.3.3 Twin changelog) |
 
+## 6. Configuration quality (v0.7)
+
+From Creatio's internal Confluence (NCD no-code standards, R&D, support checklists; read 19 Nov 2026, sources in
+`research/CONFLUENCE-BEST-PRACTICE-2026-11-19.md` in the motion folder). The demo toolkit already covers idempotent
+processes, recursion guards, no hard-coded values and gateways; these are the rules it doesn't.
+
+**Before building:** when the `creatio-instructions-mcp` server is connected (Creatio VPN), load R&D's instructions for
+the area you're about to touch (pages, processes, components) and follow them where they're stricter than the toolkit.
+Off VPN it fails to connect; carry on with the toolkit.
+
+| Area | Rule | Why |
+|---|---|---|
+| Safety | **Shared or customer stand:** the change is tested on our own stand first, a backup is taken, and the build log names **a test case that proves it worked** and what to do if it fails. Do nothing that isn't in the plan; no ad-hoc SQL transactions | Support's rule for customer sites (2025): improvised steps are what break them |
+| Safety | **Data bindings:** new lookup records go in a **new** binding, never an edit of an existing one (updates install only new bindings). Columns that must overwrite need `ForceUpdate`; install type `Install` | An edited binding never reaches a stand that already has it |
+| Safety | **C# goes into a package as source only**, never a compiled DLL | A DLL built for another platform version installs fine, then fails at the first call |
+| Safety | **Freedom UI handlers:** always `return this.next?.handle(request)` unless stopping the chain on purpose, and always set `scopes: ['<PageSchema>']`. Nothing slow in init or attribute-change handlers | Without scopes it runs on every page; without `next` save and other platform handlers silently stop |
+| Safety | **Bulk process runs** go in the background, split into batches (10 run at once by default), never during a demo or rehearsal | Foreground runs one by one in the user session and loads the stand |
+| Safety | **AI Studio integrations:** demo agents use delegated (user) credentials, not shared integration credentials | APD-8145 (internal, Aug 2026): any user can attach a shared-credential integration. Internal only, never to customers |
+| Efficiency | **"Works at runtime, missing in the Designer"** = a missing package dependency, not a bug. Add the dependency to the highest common package, or edit from runtime | Saves a debugging loop |
+| Efficiency | **One business rule per field.** Several rules on one field with different conditions don't add up; only one fires. Combine the conditions | Support checklist |
+| Efficiency | **"Refused to connect" in the console** = CSP. Check `CSPMode` and the trusted-sources lookup; add the source through a data binding | Support checklist |
+| Efficiency | **Generated processes (clio):** prompt as trigger → records → steps in order → who's responsible → exact values and timings → package and version. No branching, record sets or sub-processes yet: plan those as manual steps or separate processes | R&D toolkit page (Sep 2026) |
+| Quality | **Data model:** extend the standard object before creating a new one; lookups, not text, for statuses and types; a detail for repeating items; no stored derived values; an external-Id column for anything integrated | R&D data-model best practice (Apr 2026) |
+| Quality | **Processes:** one job each, fits on one screen; Read Data reads only the columns needed, sorting off; always a failure path | R&D and NCD process standards |
+| Quality | **Page bodies:** don't write properties that keep their default value (`color: default`, `disabled: false`, `iconPosition`) | Less metadata, fewer upgrade problems (R&D, 2022) |
+| Quality | **Naming (NCD):** object codes singular PascalCase, `ContactInAccount` for relations; pages `<Entity>_FormPage` / `_ListPage` / `_MiniPage`; components `AddButton`, not `Button_Add`; lookup column codes without `Id`; business rules "Action: target"; dashboards `<Title>Widget`; agents `<Domain>Agent`, never "AI" in the name; titles in sentence case | Demos that read like the product hand over cleanly to delivery |
+| Quality | **Custom components with an agent:** one prompt for the component (behaviour, config panel, data binding, validation, accessibility), a separate one for Designer registration; tell it to "Read AI_GUIDES from @creatio libraries" | How R&D builds components with agents (Jul 2026) |
+
 ## Changes
 
 | Version | Date | Change |
 |---|---|---|
+| v0.7 | 19 Nov 2026 | §6 configuration quality from Creatio Confluence: shared-stand change discipline, data bindings, source-only C#, handler `next` + `scopes`, bulk processes, AI Studio credentials, Designer dependency gap, business rules, CSP, process prompts, data model, metadata, NCD naming, component prompts; load R&D's instructions MCP when on VPN (Renzo) |
 | v0.6 (addition) | 19 Nov 2026 | §5: duplicates in a demo need the `EnableDeduplicationFreedomUI` feature registered (Renzo, after the bpd-bali-map dedup test) |
 | v0.6 | 18 Nov 2026 | §5: custom components start on the UI kit (vendored kit-data / kit-write / tokens); the deal folder holds source, README, page bodies, seed scripts and a handover note by build end (report checks); headless checks when the pane is signed out; clio traps; web map = custom component (Renzo, after the BPD Bali map build) |
 | v0.5 | 16 Nov 2026 | Building on top of a master stand (demo bar §6c): library modules named in the pack's `extends` are in scope and go into the restore point; a master that another deal holds (`in_use_by`) is a hard stop (Renzo) |

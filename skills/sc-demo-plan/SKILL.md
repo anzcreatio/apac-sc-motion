@@ -128,7 +128,7 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
     plan" below), give it to the SC (a private artifact link if this session can publish, else the file), and stop.
     Nothing is built and no stand is touched until the SC approves it in chat; record the approval in the demo plan.
     A change after approval is shown and approved again.
-    **With the build plan, ask for the approval pack** (`../../standards/BUILD-RULES-v0.6.md` section 4) in the same
+    **With the build plan, ask for the approval pack** (`../../standards/BUILD-RULES-v0.7.md` section 4) in the same
     message, as one list the SC confirms in one reply: scope = this plan; the stand and whether it's ours alone;
     compiles for the listed schema/code items; restarts (our own clean stand only, max 3); custom components and code
     (rollback plan first); auto-rollback; demo data and reset; small decisions logged with the default taken. Write
@@ -139,7 +139,7 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
     BUILD-RULES section 4 (pre-flight with the SC, restore point, `log` each step, `check` between items, `report` at the end).
 12. **Hand-off** (only after 12a is approved). Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
-    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.6.md`**: read `build/approval-pack.json` first and build
+    candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.7.md`**: read `build/approval-pack.json` first and build
     non-stop within it (hard stops only); refresh before any compile or restart, ask the SC before one the pack doesn't cover, check the OData token first when calls suddenly fail, and **write a
     rollback plan before any custom component or code** (backup, how to undo, how to check, the demo's plan B). The
     plan lists the rollback for every element marked custom.

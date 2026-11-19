@@ -4,6 +4,18 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.35.0 (19 Nov 2026): build rules v0.7, configuration quality from Creatio Confluence
+
+- **Build rules v0.7 §6 (new):** rules from Creatio's internal Confluence (NCD no-code standards, R&D guides, support
+  checklists) that the demo toolkit doesn't have yet: on a shared stand, a test case and no improvised steps; new
+  lookup data in a new data binding; C# as source only; Freedom UI handlers pass to `next` and set `scopes`; bulk
+  processes in the background; demo AI agents on delegated credentials; "missing in the Designer" means a package
+  dependency; one business rule per field; CSP for blocked calls; how to prompt for a generated process; data model,
+  metadata and NCD naming rules; two prompts for a custom component. Rule 9 in the toolkit notes block.
+- **Each SC: on Creatio VPN, add R&D's instruction server once:** `claude mcp add --scope user --transport http
+  creatio-instructions-mcp https://ai-instructions-rnd.creatio.com/api/v1/mcp`. Builds load it when it's connected;
+  off VPN it just fails to connect.
+
 ## 0.33.1 (19 Nov 2026): duplicates in a demo need one feature switched on
 
 - **Build rules v0.6 §5, new row:** the Freedom UI "Potential duplicates found" pop-up on save (Contacts: Edit record,
