@@ -4,6 +4,8 @@
   installed one -> one line with the update command and the titles of what they're missing.
 - Chat standards: standards/CHAT-FORMAT-*, CHAT-TRACKING-* and TOOL-ROUTING-* (newest) go into every session's context, also
   after compaction, so plain chats follow them too (18 Nov 2026).
+- Release owner: with `plugin_repo` in the config, one line on how many changes wait under "## Unreleased" and how
+  many requests are in RELEASE-QUEUE.md (19 Nov 2026).
 - What's new: the installed version is newer than `seen_version` in ~/.apac-sc-motion.json -> the changelog entries
   since then, shown once; then `seen_version` is saved.
 
@@ -78,6 +80,38 @@ def standards(root):
             "plugin dir: " + os.path.abspath(root) + "):\n\n" + "\n\n---\n\n".join(parts))
 
 
+def pending(repo):
+    """Release owner only (`plugin_repo` in ~/.apac-sc-motion.json): changes waiting under '## Unreleased' and
+    requests in RELEASE-QUEUE.md, as one line. Empty string when nothing waits or the repo isn't on this computer."""
+    if not repo or not os.path.isdir(repo):
+        return ""
+    changes = queued = 0
+    try:
+        with open(os.path.join(repo, "CHANGELOG.md"), encoding="utf-8-sig") as f:
+            inside = False
+            for line in f.read().splitlines():
+                if line.startswith("## "):
+                    inside = line.strip() == "## Unreleased"
+                elif inside and re.match(r"^\s*- ", line):
+                    changes += 1
+    except OSError:
+        pass
+    try:
+        with open(os.path.join(repo, "RELEASE-QUEUE.md"), encoding="utf-8-sig") as f:
+            rows = [l for l in f.read().splitlines() if l.startswith("| ") and not l.startswith("| Date")]
+            queued = len(rows)
+    except OSError:
+        pass
+    if not changes and not queued:
+        return ""
+    parts = []
+    if changes:
+        parts.append(f"{changes} unreleased change{'s' if changes != 1 else ''} (say 'publish the plugin' to release)")
+    if queued:
+        parts.append(f"{queued} queued request{'s' if queued != 1 else ''} in RELEASE-QUEUE.md")
+    return "apac-sc-motion plugin repo: " + "; ".join(parts) + "."
+
+
 def main(argv):
     args = dict(zip(argv[::2], argv[1::2])) if len(argv) % 2 == 0 else {}
     dry = "--dry-run" in sys.argv
@@ -134,6 +168,11 @@ def main(argv):
                 cfg["seen_version"] = installed
                 with open(cfg_path, "w", encoding="utf-8") as f:
                     json.dump(cfg, f, indent=2)
+
+    waiting = pending(cfg.get("plugin_repo"))
+    if waiting:
+        user.append(waiting)
+        context.append(waiting + " If the SC asks to publish, run publish.ps1 in the plugin repo (it picks the version).")
 
     rules = standards(root)
     if rules:

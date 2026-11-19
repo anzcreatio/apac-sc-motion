@@ -1,8 +1,16 @@
 # Changelog
 
-Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what changed for SCs, and any one-off action
-as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
-`sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
+**Chats never edit the version.** Any chat that changes the plugin commits the change and adds a bullet under
+`## Unreleased` below: what changed for SCs, and any one-off action as "**Each SC: …**". Only `publish.ps1` picks the
+version: it turns Unreleased into `## <version> (<d Mon yyyy>): <title>`, bumps `plugin.json`, commits, publishes and
+tags `v<version>` (and refuses if `plugin.json` was changed by hand). The Monday task `sc-release-message` (Renzo's PC)
+turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
+
+## Unreleased
+
+- **Versions are picked only at publish time.** Chats add changes under "Unreleased" in the changelog; `publish.ps1`
+  assigns the next version, so two chats can no longer release the same number. Session start tells Renzo how many
+  changes are waiting. Nothing changes for SCs.
 
 ## 0.36.1 (19 Nov 2026): which tool for which Creatio job, in every chat
 
