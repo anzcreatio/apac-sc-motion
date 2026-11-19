@@ -1,4 +1,4 @@
-# UI kit standard v0.6: reusable, no-code, upgrade-safe custom components and the pages around them
+# UI kit standard v0.7: reusable, no-code, upgrade-safe custom components and the pages around them
 
 > Applies to every component in `labUiKit`, the team's shared package of custom Freedom UI components. First written
 > for East West Bank (12 Nov 2026), updated after the Navalo build (13 Nov 2026), where three components were built,
@@ -28,7 +28,8 @@
 | Who's working (`usr.SessionIdentity`) | Name and role once per visit; stamps them on save and on a contribution log | Stamp columns, log object, prompt text | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
 | Help panel (`usr.HelpPanel`) | A slim "how this works" line that opens the page's guidance, with a User guide link (`guideUrl`, site paths or https only) | Text, guide link and label | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
 | Card tiles (`usr.CardTiles`) | One tile per card or request with its status; counts a sent card, splits own cards from other units' | Records object, date and owner columns, statuses | **Live** on EWB (11014930, Creatio 10.1), kit 0.6.1 (`ewb-components`; native tokens, pickers, row cap) |
-| Map (`usr.GeoMap`) | Records with latitude/longitude on an OpenStreetMap map (web only). Area map: up to 3 layers, heat, area borders, filters, outside-the-area rings, bars, owner comparison. Near a point: radius list from a click, GPS or named points. Record check on a record page: duplicates nearby and at the same point, value benchmark, GPS, address search, pin to address, optional stored result | Layers (object, latitude/longitude, name, colour-by with colours, owner, date, area, filters, pop-up, photo, shape); areas (object, GeoJSON border, centre); periods, bars, share, reached condition; radii and named points; record check (layer, radius, same point, value/date columns, tolerance, rules object, address search, up to 5 store columns); page fields | **Built** on branch `geomap` (kit 0.7.0, not merged or published). Tested on clean82 (11014982, 18 Nov 2026): BPD Bali Peta Cabang and the collateral check reproduced from settings only, numbers identical to `usr.BpdMap`. Set-up guide: kit `GEO-MAP-README.md` |
+| Map (`usr.GeoMap`) | Records with latitude/longitude on an OpenStreetMap map (web only). Area map: up to 3 layers, heat, area borders, filters, outside-the-area rings, bars, owner comparison. Near a point: radius list from a click, GPS or named points. Record check on a record page: duplicates nearby and at the same point, value benchmark, GPS, address search, pin to address, optional stored result | Layers (object, latitude/longitude, name, colour-by with colours, owner, date, area, filters, pop-up, photo, shape); areas (object, GeoJSON border, centre); periods, bars, share, reached condition; radii and named points; record check (layer, radius, same point, value/date columns, tolerance, rules object, address search, up to 5 store columns); page fields | **Published** in `main` (kit 0.7.0 to 0.8.3, 19 Nov 2026). Tested on clean82 (11014982, 18 Nov 2026): BPD Bali Peta Cabang and the collateral check reproduced from settings only, numbers identical to `usr.BpdMap`. 19 Nov: Leaflet loads only on a page with a map (own 148 KB chunk); address search off unless set (it sends addresses outside Creatio); colours hex or palette names only; open-record link fixed (0.8.1). Set-up guide: kit `GEO-MAP-README.md` |
+| Record inbox (`usr.RecordInbox`) | The records waiting for the signed-in user (or a shared queue) on any object: count, oldest, age against a target with text, up to three actions per row that each run a named business process; comment box in the row, optional native confirmation, "already handled" re-check, focus to the next row, Show more | Object; queue condition rows (sent to the server); assigned-to column + who (contact, user, company, nobody); optional link to the open record; title and up to 4 detail columns; waiting-since date + target hours; sort; page size; per action: button, process, record parameter, comment parameter + label + needed, confirm, style, done text; reload-on field | **Published** (kit 0.8.3, 19 Nov 2026, `Library/ui-kit/packages/labUiKit-0.8.3-2026-11-19.zip`). Live on clean82 gallery (`UsrUiKitGallery`: home page on Activity and Case, portal desktop for external users): every action, the guards, keyboard-only pass, portal user, request budget (2f, 2g). Writes data through processes, which must check rights themselves (2g) |
 | Trace map (`usr.TraceMap`) | A chain of linked records left to right; highlight what a change affects | Objects, link, label and status columns | Idea (Phase 2) |
 
 **No code for the next customer:** drag the component from **Custom components** in the Freedom UI Designer palette,
@@ -174,7 +175,7 @@ Creatio 10.2 has zoneless as a beta (`EnableZoneless` additional feature); **10.
 | Our route: `Model.create(...)` + `load({ attributes, parameters, options })` inside the component. Academy's other route: a page data source + an `isCollection` attribute bound with `bindToAttribute` (follows the page's filters and the data-source designer). Use that route when a list must follow page filters | Model route ✅ |
 | Select only the columns you need; **cap the rows** (paging `rowCount`) on anything that loads a whole object; sort in the query, not in code | ✅ row cap on whole-object loads (0.6.1); Stage funnel counts on the server (0.6.2) |
 | Independent loads in parallel (`Promise.all`); share one in-flight promise for the same query; a timeout on slow calls | Rule (`refreshOn` sequence guard stays) |
-| Before a write, `canSave` / `canDelete`: disable the action and say why instead of failing | ✅ in the shared writer before every write; a "no" stops it with Creatio's reason (kit 0.6.2) |
+| Before a write, `canSave` / `canDelete`: disable the action and say why instead of failing | **Corrected 0.8.3:** `canSave` on a `Model.create` model only answers "may create", so it is used before inserts only; updates rely on the server's record rights ("not saved" when nothing changed, 0.6.4) and deletes on `canDelete` with the record Id (2g) |
 | `update` / `delete` pick the record by filter: always filter on the primary key only | ✅ (`byId`) |
 | What a refused write returns is not documented: check the result **and** catch a rejected promise (our `ensureOk`, go-live test E5) | EWB branch ✅; `main` gets it when EWB merges back |
 | Calculated attributes (`from`, `converter`, `filter`, `triggers`, `triggersOptions.debounce`) for page-side derived values instead of handler code; read-only, lazy; `crt.Input` can't bind to them | Use on pages around components |
@@ -238,6 +239,32 @@ older answers say custom components "can't have a settings panel": outdated sinc
 | Zoneless timeline (Creatio staff, 17 Nov 2026): 10.2 Dec 2026–Jan 2027 (zoneless optional), **10.2.1 about Feb 2027 (default)**. It also covers page handlers and client modules around our components: await everything there too. Open question (unanswered on the forum): updates after the first `await` in a handler; until answered, `await Promise.all(...)` first, then set state once | §6 |
 | Marketplace patterns worth copying: a colour per value and theme/size in the setup panel; search and copy; column layout saved per user; row click opens the record; README tells the customer to add `labUiKit` as a dependency of the page's package | Ideas |
 
+## 2f. Efficiency budget (v0.7, measured on Record inbox, 19 Nov 2026)
+
+| Rule | How it is checked | Record inbox on clean82 |
+|---|---|---|
+| One page load + one server count per refresh; page size + 1 rows to know there is more; selected columns only | Count the component's SelectQuery calls on a fresh open | ✅ 2 per inbox (rows=6 for page size 5, and the count) |
+| No polling and no timers. Reload on `refreshOn`, after an action, and when the tab becomes visible again at most every 30 s; the listener is removed on destroy | Unit test + review | ✅ |
+| Lookup values, captions and the current user cached per object for the page's life | Second open makes no lookup reads | ✅ |
+| `OnPush` + signals; no function calls in templates (computed signals instead) | Review | ✅ |
+| Nothing left behind: no kit elements in the DOM after leaving the page; heap growth no worse than native pages over 10 open/close cycles (no forced GC, so compare with a native control) | `performance.memory` loop vs a native list-to-list loop | ✅ 0 elements left; +4.7 MB per cycle vs +9.1 MB native control |
+| Heavy libraries load only where used (dynamic `import()`, own chunk) | Build output: the chunk is reached only through `.e(<chunk>)` | ✅ Leaflet (Map) 148 KB own chunk |
+| Bundle growth per new component: **+15 KB gzipped runtime** at most; report raw and gzipped | `ng build` before and after | Record inbox +9.8 KB gzipped (+41 KB raw: devkit code is bundled because the remote shares nothing) |
+
+## 2g. Security (v0.7)
+
+| Rule | Why |
+|---|---|
+| A component that runs processes runs only the process names in its settings, checked against `^[A-Za-z][A-Za-z0-9_]*$`, and passes only the record Id and a trimmed, length-capped comment; an unsafe setting is refused and shown, never run | A page user cannot make it run anything else |
+| Before a process: re-read that the record still meets the queue condition ("already handled"); lock the buttons while it runs | No double actions, no acting on stale data |
+| **A process an action runs must itself only act on records the running user may change.** Pattern (gallery): a shared sub-process `UsrRecord_CheckCanChangeSubProcess` (object name + record Id) runs `UserConnection.DBSecurityEngine.GetEntitySchemaRecordRightLevel` and throws unless `CanEdit`; every action process calls it first. One compile for all; they stay no-code | Tested 19 Nov on clean82: a portal user can run processes through `ProcessEngineService.svc/RunProcess`, also without the component. After hardening, his direct call on a Supervisor task was refused (`success: false`, record unchanged); his own case and the employee's records still worked |
+| **`Model.canSave` on a model from `Model.create` answers "may this user CREATE records of the object"** (Creatio picks the check by the model's mode; no request is sent), not "may they edit this record" | It let a read-only portal user through and could block someone who may edit but not create. Kit 0.8.3 uses it before inserts only; the devkit has no public record-level check (its `RightsService` covers system operations only) |
+| A refusal reads in plain words in the row; the platform's raw text goes to the console (0.8.2) | "An error has occurred during the process execution" tells a user nothing |
+| Opening a record: `crt.UpdateRecordRequest` with `entityName` + `recordId` and **no `$context`** | Creatio's handler reads `$context._subscriptions`; an empty `{}` throws on home pages and nothing opens (fixed 0.8.1 in Record inbox, Group overlap, Map) |
+| Record data only through Angular interpolation: no `innerHTML`, no `bypassSecurityTrust*` for text, no URLs from data. A setting that ends up in HTML (a Map marker colour) is validated | No XSS through data or settings |
+| A component that sends data outside Creatio (address search, tiles) is off unless set, and its panel says what leaves | Customer data stays in Creatio by default |
+| Portal users get **desktops**, not workplace home pages: test a component for external users on a desktop (`CentralAreaDesktopTemplate`) with read on its `Desktop` record for All external users | A home page or a page URL redirects a portal user to the portal desktop |
+
 ## 2b. The pages around the components (look)
 
 A polished component on a cheap-looking page still looks cheap. These rules apply to every page we build for a demo:
@@ -272,6 +299,7 @@ therefore shows the grey like background looks cheap").
 
 | Step | Command or rule |
 |---|---|
+| Build check (v0.7) | Before every install: `ng build` exit code 0 **and** `remoteModuleEntry.js` in the output folder. A failed build leaves the folder empty, and `push-workspace` then installs a package with no JS, which breaks every kit component on the stand (happened 19 Nov on clean82 for 2 minutes: a worktree whose `node_modules` predated a new dependency). Run `npm ci` after pulling a change to `package.json` |
 | Test | `npx ng test` (the project's Jest builder). Plain `npx jest` fails most suites: wrong runner, not a fault |
 | Build | `npx ng build` → `packages/labUiKit/Files/src/js/ui_kit` |
 | Install | Renzo's yes per stand. `push-workspace` (application installer): package locked, about a second, no compile, no restart. An early "500" poll in the log is harmless |
@@ -280,7 +308,7 @@ therefore shows the grey like background looks cheap").
 
 **One package, one version line.** Every branch ships the same package UId (`bd7e46b4-…`), so installing one branch
 replaces the other on a stand. Merge before installing on a stand that has another branch's components. Today (18 Nov
-2026, updated 19 Nov): **`main` = 0.6.4 since 18 Nov evening** (fast-forwarded to `ewb-components` `2b2721c`: 0.6.3 stage re-check before unit writes, 0.6.4 "not saved" when a write changes no rows; 121 tests; package `Library/ui-kit/packages/labUiKit-0.6.4-2026-11-18.zip`). Before that, **`main` = 0.6.2** (`ewb-components` 0.6.1 fast-forwarded in 19 Nov, then the §2d/§2e to-dos, `c92cebc`; installed on clean82 only):
+2026, updated 19 Nov): **`main` = 0.8.3 since 19 Nov** (Map 0.7.0, Record inbox 0.8.0, open-record fix 0.8.1, readable process refusal 0.8.2, no misleading `canSave` 0.8.3; `a1fccc2`, 152 tests; published `Library/ui-kit/packages/labUiKit-0.8.3-2026-11-19.zip`). Before that, **`main` = 0.6.4 since 18 Nov evening** (fast-forwarded to `ewb-components` `2b2721c`: 0.6.3 stage re-check before unit writes, 0.6.4 "not saved" when a write changes no rows; 121 tests; package `Library/ui-kit/packages/labUiKit-0.6.4-2026-11-18.zip`). Before that, **`main` = 0.6.2** (`ewb-components` 0.6.1 fast-forwarded in 19 Nov, then the §2d/§2e to-dos, `c92cebc`; installed on clean82 only):
 the Navalo components plus the 7 EWB components, all on `_kit-tokens`, all on pickers, with shape skeletons and a row
 cap. Build OK, 19 suites / 116 tests pass. New work goes on `main`; installs need a yes per stand (EWB stand only after
 a clean-stand test, with the EWB chat told first).
@@ -301,7 +329,7 @@ a clean-stand test, with the EWB chat told first).
 |---|---|---|
 | 10.0 | 11014108-demo (Navalo) | Group holdings, Decision checks and Flow timeline installed, placed, used live; full rehearsal of straight-through, approval and lodgement (13 and 14 Nov 2026). 0.5.0 installed 15 Nov: all eight components on pages; pickers built and unit-tested, not yet opened in the live designer |
 | 10.1 | 11014930-demo (EWB) | `ewb-components` 0.6.1 live 19 Nov 2026 (main merged in, EWB components aligned to v0.6) |
-| 10.x clean | 11014982-demo (`clean82`) | 0.6.2 rehearsed 19 Nov (Stage funnel server counts match 104 records). 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
+| 10.x clean (10.1.796) | 11014982-demo (`clean82`) | **0.8.3 19 Nov**: gallery package `UsrUiKitGallery` (home page, portal desktop, five processes incl. the rights check, `gallery/seed.py` data), CrtProcessBuilder installed for clio process builds; keyboard-only and portal-user tests passed. 0.6.2 rehearsed 19 Nov (Stage funnel server counts match 104 records). 0.5.5 first install on a stand that never had `labUiKit` (no compile, no restart); Stage funnel rehearsed on live data, look and focus match native (18 Nov 2026) |
 | 10.2.1 | none yet | ⚠️ Zoneless on by default (about Feb 2027; 10.2 with it optional Dec 2026–Jan 2027): run the §2d zoneless test before any customer stand moves to 10.2.1 |
 | Below 8.3.3 | – | Not offered: no setup areas (our pickers) |
 
@@ -324,6 +352,7 @@ Pinned versions (kit `main`, 19 Nov 2026): Angular 22.0.8, `@creatio-devkit/comm
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| v0.7 | 19 Nov 2026 | Record inbox (§1); §2f efficiency budget and §2g security, measured on clean82 (process-side rights check, `canSave` only means "may create", no `$context` when opening records, portal desktops); build check before every install (§4); Map: lazy Leaflet, address search off by default, colour validation. File name kept as v0.6 so links still work | Record inbox build, gallery rehearsal, keyboard and portal tests on clean82; kit `main` `a1fccc2` |
 | v0.6 | 19 Nov 2026 | New §2d: the rules from all 37 Freedom UI pages of Academy › Front-end development (build route, zoneless for 10.2.1, settings panels, data, strings, icons, handlers), each checked against kit 0.5.5; new §2e: field lessons from 40 Community forum threads (inputs after init, re-open test, counts by aggregation, portal-user test, common build errors, mobile not supported, version floors); §4 zoneless check; §6 versions pinned, the 10.2.1 date and the 8.3.3 floor; §8 mobile | Academy version-10 guides and community.creatio.com threads read 19 Nov 2026; kit `main` source |
 | v0.5 | 18 Nov 2026 | §2c native patterns (tokens, component looks, schema conventions); tokens rule corrected; rehearsal on clean82 | Clean stand 11014982, kit 0.5.5 |
 | v0.4 | 15 Nov 2026 | Section 2b page look rules (no text on the grey page background, one header card, metrics first, lists with row numbers and add-column, one accent colour, palette chart colours by meaning, slots fit their cards); every setting picked not typed (0.5.0 pickers); person-level exclusion; five more components in section 1; versions 0.5.0 | Navalo 14-15 Nov: plan 15 build (labUiKit 0.5.0) and Renzo's "looks cheap" feedback on the lending overview (`Lessons/feedback/2026-11-15-renzo-huruiti-home-pages-look-cheap.md`) |
