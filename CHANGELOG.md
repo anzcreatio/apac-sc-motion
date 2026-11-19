@@ -8,6 +8,9 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+## 0.36.2 (19 Nov 2026): Release flow: versions picked only at publish
+
+
 - **Versions are picked only at publish time.** Chats add changes under "Unreleased" in the changelog; `publish.ps1`
   assigns the next version, so two chats can no longer release the same number. Session start tells Renzo how many
   changes are waiting. Nothing changes for SCs.
