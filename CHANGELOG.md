@@ -8,6 +8,9 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+## 0.36.3 (19 Nov 2026): Install safety, UI kit 0.8.4, channels-showcase
+
+
 - **Installs and other heavy jobs: one at a time per stand (build rules §1b, in every build session).** Before a package install, push, compile or restart, the stand must answer `/0/ping` with 200 and nothing else heavy may run on it; afterwards wait until it has settled (about 2 minutes) before the next one; never retry a failed install straight away. Back-to-back installs and a retry once took a sandbox down with a 502.
 - **UI kit 0.8.4: releases and installs in one place.** Versions are picked only by the kit's `release.ps1`; installs only through `install.ps1` (stand list, deal OK, no downgrade, stand safety, install log). Every kit component shows its build as `data-kit-version`. Package: `Library/ui-kit/packages/labUiKit-0.8.4-2026-11-19.zip`.
 - **Demo library: `channels-showcase` (L2, install-tested 19 Nov).** Social comments to cases with triage rules and a stage bar, "Check in core system" integration with an integration log (live relay `channels-relay.apac-sc-demos.workers.dev`), Contact "Conversations" tab, Channels and integrations Overview home, Kestrel Bank demo data, Telegram channel with AI answers from the knowledge base and handoff. Packages and install guide: SharePoint `Library/channels-showcase/`.
