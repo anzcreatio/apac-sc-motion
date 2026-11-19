@@ -42,4 +42,8 @@
    what the app shows before publishing (it replaces it). No custom components on mobile: native fields instead.
    Offline: test every business rule with the network off. Live lists: `cacheConfig.readMode: 2`. Mobile workplace
    with every demo login; `Mobile.UseSysWorkplaceForModuleRegistration` on existing stands.
+11. **Installs and other heavy jobs (BUILD-RULES §1b): one at a time per stand.** Before a package install, `push-workspace`,
+   compile or restart: `<stand>/0/ping` answers 200 within 10 s and nothing else heavy runs on that stand. Afterwards wait
+   until `/0/ping` is steadily 200 (about 2 minutes) before the next one. Never retry a failed install straight away:
+   check the stand, tell the SC, wait for a yes. A long install while the stand answers 200 is working: never start a second copy.
 <!-- end apac-sc-motion build rules -->

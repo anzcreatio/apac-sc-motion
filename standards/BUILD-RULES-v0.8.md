@@ -20,6 +20,22 @@ A compile or restart takes the stand down for minutes and can break other sessio
 down and for roughly how long, and whether anyone else is on the stand. Wait for a yes. Never compile or restart "to be
 safe", and never restart a shared stand without the SC's OK.
 
+### 1b. Package installs and other heavy jobs: one at a time, healthy before, settled after
+
+An install uploads the package, backs up, installs and restarts the stand's app; on a cloud stand `push-pkg` can take
+15 minutes or more. Starting a second package straight after the first, then retrying when it failed, once took a
+sandbox down with a 502 until Creatio support restarted it. For every package install, `push-workspace`, compile or restart:
+
+| Rule | How |
+|---|---|
+| 1. Healthy stand first | `<stand url>/0/ping` answers 200 within 10 s. Slow (that stand was timing out at 40 s before it went down) or failing: don't start; tell the SC |
+| 2. One heavy job per stand | Never start one while another runs on the same stand, from any chat or person. Check the running `clio` jobs for that stand first |
+| 3. Wait until it has settled | Afterwards, `/0/ping` answers 200 steadily for about 2 minutes before the next job, a version check or a demo |
+| 4. Never retry straight away | A failed job: check `/0/ping`, tell the SC what failed and whether the stand answers, wait for a yes before trying again |
+| 5. Slow is not stuck | A long install while the stand still answers 200 is working: wait. Never start a second copy |
+
+`labUiKit` installs go through the kit's `scripts/install.ps1`, which enforces rules 1–4 (UI kit standard §4).
+
 ## 2. When calls suddenly fail, check the token first
 
 Rarely, the OData session or token expires mid-build. Signs: `401` or `403`, "unauthorised" or "authentication
@@ -167,6 +183,7 @@ From Creatio's Confluence (mobile team and Academy drafts, read 19 Nov 2026; sou
 
 | Version | Date | Change |
 |---|---|---|
+| v0.8 (addition) | 19 Nov 2026 | §1b: package installs and other heavy jobs one at a time per stand, healthy stand first, wait until settled, never retried straight away (Renzo, after a sandbox went down with a 502 from back-to-back installs and a retry) |
 | v0.8 | 19 Nov 2026 | §7 mobile pages from Creatio Confluence: web and mobile pages separate, R&D conversion skill plan first, check before publishing, related form pages, no custom components on mobile, offline business rules, fresh lists, mobile workplace (Renzo) |
 | v0.7 | 19 Nov 2026 | §6 configuration quality from Creatio Confluence: shared-stand change discipline, data bindings, source-only C#, handler `next` + `scopes`, bulk processes, AI Studio credentials, Designer dependency gap, business rules, CSP, process prompts, data model, metadata, NCD naming, component prompts; load R&D's instructions MCP when on VPN (Renzo) |
 | v0.6 (addition) | 19 Nov 2026 | §5: duplicates in a demo need the `EnableDeduplicationFreedomUI` feature registered (Renzo, after the bpd-bali-map dedup test) |
