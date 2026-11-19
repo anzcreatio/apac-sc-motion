@@ -9,6 +9,8 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
 - `sc-bank-ai-log` now drafts the lines, then asks you before writing anything: one sentence on what the log is for
   (your bank's requirements, our proposed configuration and fit, gaps first, for Creatio's Bank.AI team; no prices,
   competitors or names) and how many lines and gaps it will add. Say yes and it writes them.
+- Also ships the UI kit standard update from another chat (commit `ca7bf11`, 19 Nov): Record inbox, efficiency (2f),
+  security (2g) and a build check in `standards/UI-KIT-STANDARD-v0.6.md`.
 
 ## 0.35.0 (19 Nov 2026): build rules v0.7, configuration quality from Creatio Confluence
 
