@@ -49,7 +49,11 @@ team lead) may look across SCs, and he sets who owns a deal (`owner`). Deal fold
    actions table, the 📋 open work table (mode G), today's meetings with prep gaps, the follow-up drafts, the open
    commitments. Keep the SC's words.
    **Sidebar** (if the session has the sidebar tools): put the brief's chat in a section named **Desk** (create it
-   once, pin it if the app allows), title `Desk · <Ddd DD Mon>`. A fresh brief chat each day: there is no master chat.
+   once, pin it if the app allows), title `Desk · <Ddd DD Mon>` with no status mark (CHAT-TRACKING §2 rule 7). A
+   fresh brief chat each day: there is no master chat.
+3c. **Still open?** (CHAT-TRACKING §4): `list_sessions`; chats whose title starts with 🟢 🟡 🔵 and whose
+   `lastActivityAt` is more than 3 days ago → a short table (title · mark · last touched), any chat, not only customer
+   chats. Ask end / park / keep for each and act on the answer (§2 steps 4-5). Skip the section when there are none.
 4. **Follow-up drafts:** the script writes a starting draft per stalled deal (at most 3, addressed to the AE so they
    can forward or adapt it). Rework each in plain words (`../../standards/WRITING-STYLE-v0.1.md`): short, one ask,
    their names, what we owe and what they owe. No "SC check" warning line. **Never send mail, never save a draft into Outlook, never book a meeting.** The SC or the AE sends it.
@@ -134,7 +138,7 @@ the deal folders.
 
 ## G. Open work (chat registry)
 
-Rules: `../../standards/CHAT-TRACKING-v0.1.md` (loaded into every chat by the plugin hook). Agreed with Renzo 18 Nov
+Rules: `../../standards/CHAT-TRACKING-v0.2.md` (loaded into every chat by the plugin hook). Agreed with Renzo 18 Nov
 2026: **track deals, not chats.** Each customer chat is one row in `<deal>/00-chats.md` (No · Date · Machine · Stage ·
 Topic · Status · Next · Due · Updated · Outcome); the desk shows the open ones. No master chat.
 
@@ -143,6 +147,7 @@ Topic · Status · Next · Due · Updated · Outcome); the desk shows the open o
 | A customer chat starts | `desk.py chat-open --deal <deal> --stage <Stage> --topic "<2-4 words>"` (first chat on a deal: add `--short <name> --section "<sidebar section>"`). Use the printed title |
 | Wrap-up, or the status changes | `desk.py chat-set --deal <deal> --no NN --status <...> --next "..." [--due yyyy-mm-dd] [--outcome "..."]` |
 | "what's running?" | `desk.py work` → show the table as printed, then the "Do first" line |
+| SC says "end chat" / "park this" | CHAT-TRACKING §2 steps 4-5: remove the title mark, `chat-set --status done` (or `parked`), `mark_completed` on done |
 | Older rows with no status | Ask the SC once which are done; `chat-set --status done` each |
 
 Status: 🟢 `active` · 🟡 `waiting-sc` (the SC must act) · 🔵 `waiting-customer` (customer or AE owes it) · ✅ `done`

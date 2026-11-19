@@ -23,7 +23,7 @@ Put `---` between blocks 1, 2 and 3.
 | ❓ | Needs the SC's answer | Questions heading |
 | ⚠️ | Risk, blocker, overdue, stale | Watch-out heading, flagged table cells |
 | ✅ | Done | Done heading, finished rows |
-| 🟢 🟡 🔵 ⏸ | Active · Waiting on SC · Waiting on customer · Parked | Work-status cells |
+| 🟢 🟡 🔵 ⏸ | Active · Waiting on SC · Waiting on customer · Parked | Work-status cells; 🟢 🟡 🔵 also lead an open chat's title (`CHAT-TRACKING` §2) |
 | 📋 | Desk view | Desk brief / open-work heading |
 | 📄 | Files produced | Files heading |
 | 💡 | Learn: a rule worth keeping, with its evidence and the habit (max 2 per output, picked by impact) | Learning-loop steps only (`LEARNING-LOOP-v0.1.md` §2; v0.2, 18 Nov 2026) |

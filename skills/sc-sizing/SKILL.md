@@ -55,7 +55,7 @@ first-meeting pack is needed.
    a close match (ask the SC, then pass that folder to `new` or rerun with `--confirm-new`), otherwise creates
    `Deals/<kebab-account>-<sc>/`. It writes `00-deal-start.md` (entry: sizing only, partner, who asked) and
    `sizing.json` with `entry.type = "sizing-only"`. It prints `DEAL=<folder>`.
-2. **Chat.** Number and title the chat as usual (`../../standards/CHAT-TRACKING-v0.1.md`) with stage **`Sizing`**:
+2. **Chat.** Number and title the chat as usual (`../../standards/CHAT-TRACKING-v0.2.md`) with stage **`Sizing`**:
    `python ../sc-desk/scripts/desk.py chat-open --deal "<folder>" --stage Sizing --topic "<2-4 words>" --short <SHORT>`.
 3. **Dates.** Record only what's known (`../sc-guide/scripts/deal_dates.py set … --field sc_notified`). No first-call
    date is fine on a partner deal; don't ask for it.

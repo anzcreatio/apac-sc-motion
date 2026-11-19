@@ -27,7 +27,7 @@ PRIVATE PER SC (FEEDBACK-LOOP v0.2 section 5): every command works only on the S
   python desk.py load     [--sc rh] [--week 2026-W47] [--calendar events.json]
   python desk.py chat-open --deal <deal> --stage Build --topic "perf page" [--short BAF --section "Bussan Auto Finance (BAF)"]
   python desk.py chat-set  --deal <deal> --no 04 [--status active|waiting-sc|waiting-customer|done|parked] [--next "..."] [--due 2026-11-20|unknown] [--outcome "..."]
-  python desk.py work      [--sc rh] [--deal <deal>]          open work across my deals (00-chats.md, CHAT-TRACKING-v0.1)
+  python desk.py work      [--sc rh] [--deal <deal>]          open work across my deals (00-chats.md, CHAT-TRACKING-v0.2)
 
 --calendar: a JSON list Claude saves from the Microsoft 365 connector (read-only), each
   {"subject": "...", "start": "2026-11-16T08:30:00+11:00", "end": "...", "attendees": ["..."], "location": "..."}.
@@ -787,7 +787,7 @@ def c_scan(a):
 
 
 # ---------- chat registry (00-chats.md) and open work ----------
-# CHAT-TRACKING-v0.1: one row per chat in <deal>/00-chats.md; `work` shows what's open. Columns are found by header
+# CHAT-TRACKING-v0.2: one row per chat in <deal>/00-chats.md; `work` shows what's open. Columns are found by header
 # name, so older files (No · Date · Machine · Stage · Topic · Outcome) are upgraded in place on the next write.
 
 CHATS = "00-chats.md"
@@ -890,14 +890,14 @@ def c_chat_open(a):
         head = ["# Chats: %s" % a.short, "",
                 "- Customer short name (used in every chat title): **%s**" % a.short,
                 "- Sidebar section: **%s**" % (a.section or a.short),
-                "- Title: `<Customer> NN · <Stage> · <topic>`. Next number = last row + 1. Rules: plugin standards/CHAT-TRACKING-v0.1.md.", ""]
+                "- Title: `🟢 <Customer> NN · <Stage> · <topic>` (mark changes with the status; none once ended). Next number = last row + 1. Rules: plugin standards/CHAT-TRACKING-v0.2.md.", ""]
     nums = [int(r["No"]) for r in rows if (r.get("No") or "").strip().isdigit()]
     no = "%02d" % (max(nums or [0]) + 1)
     rows.append({"No": no, "Date": fmt_day(TODAY), "Machine": a.machine or machine(), "Stage": a.stage, "Topic": a.topic,
                  "Status": STATUS["active"], "Next": "", "Due": "", "Updated": fmt_day(TODAY), "Outcome": ""})
     write_chats(deal, head, rows, tail)
     name = short_name(deal, head) or os.path.basename(deal)
-    print("%s %s · %s · %s" % (name, no, a.stage, a.topic))
+    print("🟢 %s %s · %s · %s" % (name, no, a.stage, a.topic))
 
 
 def c_chat_set(a):

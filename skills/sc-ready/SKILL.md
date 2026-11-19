@@ -15,7 +15,7 @@ crib sheet instead (step 5 only). On → the steps below.
 
 ## Chat
 
-Number and title it as a deal chat (`../../standards/CHAT-TRACKING-v0.1.md`), stage **`Ready`**, topic e.g.
+Number and title it as a deal chat (`../../standards/CHAT-TRACKING-v0.2.md`), stage **`Ready`**, topic e.g.
 "demo tomorrow". Wrap-up: status done, outcome = the verdict.
 
 ## Read the deal (silently, before the first question)

@@ -4,6 +4,18 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.33.0 (19 Nov 2026): open chats carry a status mark; say "end chat" to close one
+
+- **Chat tracking v0.2** (`standards/CHAT-TRACKING-v0.2.md` §2, replaces v0.1): every new chat's title starts with
+  🟢. The mark changes as the work moves: 🟡 means it's your move (Claude asked you something), 🔵 means the customer
+  or AE owes the next step. A closed chat has no mark, so the sidebar shows what's open at a glance.
+- **Close chats on purpose:** say **"end chat"** (or press the End chat button Claude offers when the work looks
+  finished). Claude removes the mark and, in a customer chat, marks the row done in `00-chats.md`. "Park this"
+  removes the mark but keeps the chat on the desk.
+- **Daily brief:** a new "Still open?" list shows marked chats nobody has touched for 3 days, so you can end, park or
+  keep each one.
+- **Each SC:** nothing to install. Your older chats have no mark; that's fine: start using "end chat" from today.
+
 ## 0.32.6 (18 Nov 2026): build rules v0.6, lessons from the BPD Bali map build
 
 - **Build rules v0.6** (`standards/BUILD-RULES-v0.6.md` §5, and rules 5–8 in the block your demo toolkit reads):
