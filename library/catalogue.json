@@ -1,229 +1,298 @@
 {
-  "updated": "2026-11-11",
-  "note": "Demo library. Every demo built through this process is harvested to at least L1 within 2 working days (sc-harvest). sc-first-meeting and sc-demo-plan check here first. Packages and READMEs live in SharePoint Library/<id>/.",
-  "modules": [
+ "updated": "2026-11-19",
+ "note": "Demo library. Every demo built through this process is harvested to at least L1 within 2 working days (sc-harvest). sc-first-meeting and sc-demo-plan check here first. Packages and READMEs live in SharePoint Library/<id>/.",
+ "modules": [
+  {
+   "id": "site-selling",
+   "name": "Sell more of every project, stage by stage",
+   "level": "L1",
+   "what": "Site/project record linked to the builder; build-type template fills a stage-by-stage wish list; custom Build board (whole job, won/to win/lost, next to chase); custom Template builder; custom Sales overview home with 'identified in time'; stage bar; site diary.",
+   "pains": [
+    "manage by project, not by account",
+    "missed sales at each stage",
+    "coaching reps who take orders instead of hunting"
+   ],
+   "patterns": [
+    "P01",
+    "P02",
+    "P03",
+    "P10",
+    "P13"
+   ],
+   "source_deal": "hardware-and-general",
+   "built": "2026-11-06 to 2026-11-10",
+   "stand": "11011710-demo",
+   "packages": [
     {
-      "id": "site-selling",
-      "name": "Sell more of every project, stage by stage",
-      "level": "L1",
-      "what": "Site/project record linked to the builder; build-type template fills a stage-by-stage wish list; custom Build board (whole job, won/to win/lost, next to chase); custom Template builder; custom Sales overview home with 'identified in time'; stage bar; site diary.",
-      "pains": [
-        "manage by project, not by account",
-        "missed sales at each stage",
-        "coaching reps who take orders instead of hunting"
-      ],
-      "patterns": [
-        "P01",
-        "P02",
-        "P03",
-        "P10",
-        "P13"
-      ],
-      "source_deal": "hardware-and-general",
-      "built": "2026-11-06 to 2026-11-10",
-      "stand": "11011710-demo",
-      "packages": [
-        {
-          "name": "UsrHgSite",
-          "file": "packages/UsrHgSite-2026-11-11.zip",
-          "layer": "module+customer"
-        },
-        {
-          "name": "UsrHgDcm",
-          "file": "packages/UsrHgDcm-2026-11-11.zip",
-          "layer": "module"
-        },
-        {
-          "name": "UsrHgBuildBoard",
-          "file": "packages/UsrHgBuildBoard-2026-11-11.zip",
-          "layer": "module"
-        },
-        {
-          "name": "UsrHgTemplateBuilder",
-          "file": "packages/UsrHgTemplateBuilder-2026-11-11.zip",
-          "layer": "module"
-        },
-        {
-          "name": "UsrHgSalesOverview",
-          "file": "packages/UsrHgSalesOverview-2026-11-11.zip",
-          "layer": "module"
-        }
-      ],
-      "manual_steps": [
-        "SysDcmSettings row for the stage bar",
-        "site page binding (add-on + SysModule.CardSchemaUId)",
-        "home page set on the workplace",
-        "seed sites, wish items, Feed notes, accounts and reps (not in the package)"
-      ],
-      "customer_specific": [
-        "UsrHg schema prefix",
-        "captions: H&G, Site Sales, Frameworks",
-        "build types, stages, product groups, AUD values",
-        "sites, builders, reps",
-        "logo, workplace name"
-      ],
-      "rule_breaks": [
-        "module and customer layers mixed",
-        "customer-named schemas",
-        "site data not in the package"
-      ],
-      "reuse_estimate_h": 8,
-      "sharepoint": "Library/site-selling/",
-      "harvested": "2026-11-11",
-      "owner": "Renzo",
-      "notes": "Built before the build-for-reuse rules; promote to L2 on first reuse (split layers, seed script, remap prefix).",
-      "ai": []
+     "name": "UsrHgSite",
+     "file": "packages/UsrHgSite-2026-11-11.zip",
+     "layer": "module+customer"
     },
     {
-      "id": "field-sales-visit",
-      "name": "The rep knows what to raise before every visit",
-      "level": "L1",
-      "what": "Field Sales home (my day), Outlet 360 custom page, visit briefing agent (AI Studio) ranked by a business-owned priorities table with confirm-then-save and a log, read aloud, licensed vs non-licensed visit steps on mobile, direct and partner orders, live priority change.",
-      "pains": [
-        "reps go into visits unprepared",
-        "information spread across SAP, data lake, image recognition",
-        "channels work differently"
-      ],
-      "patterns": [
-        "P04",
-        "P05",
-        "P06",
-        "P07",
-        "P08",
-        "P09"
-      ],
-      "source_deal": "suntory-oceania",
-      "built": "2026-11-09 to 2026-11-10",
-      "stand": "11013904-demo (shared with Ord Minnett)",
-      "packages": [
-        {
-          "name": "RswSuntoryDemo",
-          "file": "packages/RswSuntoryDemo-2026-11-11.zip",
-          "layer": "module+customer"
-        },
-        {
-          "name": "RswSuntoryOutlet360",
-          "file": "packages/RswSuntoryOutlet360-2026-11-11.zip",
-          "layer": "module"
-        },
-        {
-          "name": "RswCrtFieldForceApp_cp1rmhz",
-          "file": "packages/RswCrtFieldForceApp_cp1rmhz-2026-11-11.zip",
-          "layer": "module"
-        },
-        {
-          "name": "RswlabWealthMgmt_a4djyji",
-          "file": "packages/RswlabWealthMgmt_a4djyji-2026-11-11.zip",
-          "layer": "stand-specific (depends on labWealthMgmt)"
-        },
-        {
-          "name": "labCrtOrderContractMgmtApp_ejhcmpi",
-          "file": "packages/labCrtOrderContractMgmtApp_ejhcmpi-2026-11-11.zip",
-          "layer": "module"
-        }
-      ],
-      "manual_steps": [
-        "AI Studio agent: rebuild from ai/agent-visit-briefing.md; deploy to the stand's Studio environment",
-        "C# tools compile + restart",
-        "workplace SQL + cache reset; home page set live",
-        "reset function + snapshot",
-        "seed data by scripts"
-      ],
-      "customer_specific": [
-        "Rsw prefix and 'Suntory Field Demo' captions",
-        "outlets, territory, reps, products, channels, A$",
-        "priority rows and ranking rules",
-        "logo settings"
-      ],
-      "rule_breaks": [
-        "design packages chosen by the platform",
-        "module and customer mixed",
-        "seed by scripts not bindings",
-        "agent prompt not saved as a file",
-        "account tab depends on the Ord Minnett package"
-      ],
-      "reuse_estimate_h": 20,
-      "sharepoint": "Library/field-sales-visit/",
-      "harvested": "2026-11-11",
-      "owner": "Renzo",
-      "notes": "Built on a shared stand before the build-for-reuse rules. Best candidate for L2/L3 once a second field-sales deal appears (FMCG journey is also missing from the packs).",
-      "ai": [
-        {
-          "type": "agent",
-          "name": "Suntory Visit Briefing (AI Studio)",
-          "file": "ai/agent-visit-briefing.md",
-          "complete": true
-        },
-        {
-          "type": "mcp_tool",
-          "name": "suntory_get_visit_briefing",
-          "file": "ai/mcp-tools.json",
-          "complete": true
-        },
-        {
-          "type": "mcp_tool",
-          "name": "suntory_save_visit_briefing",
-          "file": "ai/mcp-tools.json",
-          "complete": true
-        }
-      ]
+     "name": "UsrHgDcm",
+     "file": "packages/UsrHgDcm-2026-11-11.zip",
+     "layer": "module"
     },
     {
-      "id": "enquiry-recruitment",
-      "name": "Every enquiry gets an owner in a minute",
-      "level": "L1",
-      "what": "Student Recruitment app on Lead: quick-add form, business-owned assignment rule table (course to advisor) read by an assignment process that creates the first task, stages and lost reasons, overview home page.",
-      "pains": [
-        "enquiries sit unanswered",
-        "no owner for a new enquiry",
-        "no pipeline view by course and intake"
-      ],
-      "patterns": [
-        "P04",
-        "P11",
-        "P13"
-      ],
-      "source_deal": "southern-academy-of-higher-education",
-      "built": "2026-11-05",
-      "stand": "11013018-demo",
-      "packages": [
-        {
-          "name": "UsrStudentRecruitment",
-          "file": "packages/UsrStudentRecruitment-2026-11-11.zip",
-          "layer": "module"
-        },
-        {
-          "name": "UsrCrtLeadOppMgmtApp_qfbpxjg",
-          "file": "packages/UsrCrtLeadOppMgmtApp_qfbpxjg-2026-11-11.zip",
-          "layer": "module (design package)"
-        },
-        {
-          "name": "UsrCrtOrderContractMgmtApp_oyzxij2",
-          "file": "packages/UsrCrtOrderContractMgmtApp_oyzxij2-2026-11-11.zip",
-          "layer": "module (design package)"
-        }
-      ],
-      "manual_steps": [
-        "switch off standard B2B lead rules",
-        "disable standard Lead processing (SysProcessDisabled + restart)",
-        "seed students and advisors"
-      ],
-      "customer_specific": [
-        "student wording and captions",
-        "courses, intakes, lead sources, advisors, students"
-      ],
-      "rule_breaks": [
-        "quick-add and form in platform design packages",
-        "one layer",
-        "people data not in the package"
-      ],
-      "reuse_estimate_h": 4,
-      "sharepoint": "Library/enquiry-recruitment/",
-      "harvested": "2026-11-11",
-      "owner": "Renzo",
-      "notes": "Neutral names already; easiest to promote to a generic 'enquiry to owner' L2/L3 module.",
-      "ai": []
+     "name": "UsrHgBuildBoard",
+     "file": "packages/UsrHgBuildBoard-2026-11-11.zip",
+     "layer": "module"
+    },
+    {
+     "name": "UsrHgTemplateBuilder",
+     "file": "packages/UsrHgTemplateBuilder-2026-11-11.zip",
+     "layer": "module"
+    },
+    {
+     "name": "UsrHgSalesOverview",
+     "file": "packages/UsrHgSalesOverview-2026-11-11.zip",
+     "layer": "module"
     }
-  ],
-  "candidates": []
+   ],
+   "manual_steps": [
+    "SysDcmSettings row for the stage bar",
+    "site page binding (add-on + SysModule.CardSchemaUId)",
+    "home page set on the workplace",
+    "seed sites, wish items, Feed notes, accounts and reps (not in the package)"
+   ],
+   "customer_specific": [
+    "UsrHg schema prefix",
+    "captions: H&G, Site Sales, Frameworks",
+    "build types, stages, product groups, AUD values",
+    "sites, builders, reps",
+    "logo, workplace name"
+   ],
+   "rule_breaks": [
+    "module and customer layers mixed",
+    "customer-named schemas",
+    "site data not in the package"
+   ],
+   "reuse_estimate_h": 8,
+   "sharepoint": "Library/site-selling/",
+   "harvested": "2026-11-11",
+   "owner": "Renzo",
+   "notes": "Built before the build-for-reuse rules; promote to L2 on first reuse (split layers, seed script, remap prefix).",
+   "ai": []
+  },
+  {
+   "id": "field-sales-visit",
+   "name": "The rep knows what to raise before every visit",
+   "level": "L1",
+   "what": "Field Sales home (my day), Outlet 360 custom page, visit briefing agent (AI Studio) ranked by a business-owned priorities table with confirm-then-save and a log, read aloud, licensed vs non-licensed visit steps on mobile, direct and partner orders, live priority change.",
+   "pains": [
+    "reps go into visits unprepared",
+    "information spread across SAP, data lake, image recognition",
+    "channels work differently"
+   ],
+   "patterns": [
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09"
+   ],
+   "source_deal": "suntory-oceania",
+   "built": "2026-11-09 to 2026-11-10",
+   "stand": "11013904-demo (shared with Ord Minnett)",
+   "packages": [
+    {
+     "name": "RswSuntoryDemo",
+     "file": "packages/RswSuntoryDemo-2026-11-11.zip",
+     "layer": "module+customer"
+    },
+    {
+     "name": "RswSuntoryOutlet360",
+     "file": "packages/RswSuntoryOutlet360-2026-11-11.zip",
+     "layer": "module"
+    },
+    {
+     "name": "RswCrtFieldForceApp_cp1rmhz",
+     "file": "packages/RswCrtFieldForceApp_cp1rmhz-2026-11-11.zip",
+     "layer": "module"
+    },
+    {
+     "name": "RswlabWealthMgmt_a4djyji",
+     "file": "packages/RswlabWealthMgmt_a4djyji-2026-11-11.zip",
+     "layer": "stand-specific (depends on labWealthMgmt)"
+    },
+    {
+     "name": "labCrtOrderContractMgmtApp_ejhcmpi",
+     "file": "packages/labCrtOrderContractMgmtApp_ejhcmpi-2026-11-11.zip",
+     "layer": "module"
+    }
+   ],
+   "manual_steps": [
+    "AI Studio agent: rebuild from ai/agent-visit-briefing.md; deploy to the stand's Studio environment",
+    "C# tools compile + restart",
+    "workplace SQL + cache reset; home page set live",
+    "reset function + snapshot",
+    "seed data by scripts"
+   ],
+   "customer_specific": [
+    "Rsw prefix and 'Suntory Field Demo' captions",
+    "outlets, territory, reps, products, channels, A$",
+    "priority rows and ranking rules",
+    "logo settings"
+   ],
+   "rule_breaks": [
+    "design packages chosen by the platform",
+    "module and customer mixed",
+    "seed by scripts not bindings",
+    "agent prompt not saved as a file",
+    "account tab depends on the Ord Minnett package"
+   ],
+   "reuse_estimate_h": 20,
+   "sharepoint": "Library/field-sales-visit/",
+   "harvested": "2026-11-11",
+   "owner": "Renzo",
+   "notes": "Built on a shared stand before the build-for-reuse rules. Best candidate for L2/L3 once a second field-sales deal appears (FMCG journey is also missing from the packs).",
+   "ai": [
+    {
+     "type": "agent",
+     "name": "Suntory Visit Briefing (AI Studio)",
+     "file": "ai/agent-visit-briefing.md",
+     "complete": true
+    },
+    {
+     "type": "mcp_tool",
+     "name": "suntory_get_visit_briefing",
+     "file": "ai/mcp-tools.json",
+     "complete": true
+    },
+    {
+     "type": "mcp_tool",
+     "name": "suntory_save_visit_briefing",
+     "file": "ai/mcp-tools.json",
+     "complete": true
+    }
+   ]
+  },
+  {
+   "id": "enquiry-recruitment",
+   "name": "Every enquiry gets an owner in a minute",
+   "level": "L1",
+   "what": "Student Recruitment app on Lead: quick-add form, business-owned assignment rule table (course to advisor) read by an assignment process that creates the first task, stages and lost reasons, overview home page.",
+   "pains": [
+    "enquiries sit unanswered",
+    "no owner for a new enquiry",
+    "no pipeline view by course and intake"
+   ],
+   "patterns": [
+    "P04",
+    "P11",
+    "P13"
+   ],
+   "source_deal": "southern-academy-of-higher-education",
+   "built": "2026-11-05",
+   "stand": "11013018-demo",
+   "packages": [
+    {
+     "name": "UsrStudentRecruitment",
+     "file": "packages/UsrStudentRecruitment-2026-11-11.zip",
+     "layer": "module"
+    },
+    {
+     "name": "UsrCrtLeadOppMgmtApp_qfbpxjg",
+     "file": "packages/UsrCrtLeadOppMgmtApp_qfbpxjg-2026-11-11.zip",
+     "layer": "module (design package)"
+    },
+    {
+     "name": "UsrCrtOrderContractMgmtApp_oyzxij2",
+     "file": "packages/UsrCrtOrderContractMgmtApp_oyzxij2-2026-11-11.zip",
+     "layer": "module (design package)"
+    }
+   ],
+   "manual_steps": [
+    "switch off standard B2B lead rules",
+    "disable standard Lead processing (SysProcessDisabled + restart)",
+    "seed students and advisors"
+   ],
+   "customer_specific": [
+    "student wording and captions",
+    "courses, intakes, lead sources, advisors, students"
+   ],
+   "rule_breaks": [
+    "quick-add and form in platform design packages",
+    "one layer",
+    "people data not in the package"
+   ],
+   "reuse_estimate_h": 4,
+   "sharepoint": "Library/enquiry-recruitment/",
+   "harvested": "2026-11-11",
+   "owner": "Renzo",
+   "notes": "Neutral names already; easiest to promote to a generic 'enquiry to owner' L2/L3 module.",
+   "ai": []
+  },
+  {
+   "id": "channels-showcase",
+   "name": "Channels and integrations showcase",
+   "level": "L2",
+   "what": "Social comments (Facebook/Instagram/Google review) become Social interactions with AI-style triage, triage rules the business edits (live change), DCM stage bar, case link; outbound 'Check in core system' process (web service, integration log, handled-failure task to case owner); Integration log and Triage rules sections; Contact 'Conversations' tab (comments + chats); Channels and integrations Overview home (6 KPIs, 3 charts, urgent list). Meta relay (Cloudflare Worker: verify, signature, mapping, de-dup) + mock core API + simulator in the build repo.",
+   "pains": [
+    "can't show integrations working",
+    "public complaints on social reach nobody",
+    "no single view of a customer across channels",
+    "who watches integrations when they fail"
+   ],
+   "patterns": [],
+   "source_deal": null,
+   "built": "2026-11-18 to 2026-11-19",
+   "stand": "11014983-demo",
+   "install_tested_on": "11014993-demo (clean, 2026-11-19, passed)",
+   "creatio_version": "10.1",
+   "packages": [
+    {
+     "name": "labChannelsCore",
+     "file": "packages/labChannelsCore-2026-11-19.zip",
+     "layer": "module"
+    },
+    {
+     "name": "labIntegrationShowcase",
+     "file": "packages/labIntegrationShowcase-2026-11-19.zip",
+     "layer": "module"
+    },
+    {
+     "name": "labChannelsHub",
+     "file": "packages/labChannelsHub-2026-11-19.zip",
+     "layer": "module"
+    },
+    {
+     "name": "labChannelsDemoData",
+     "file": "packages/labChannelsDemoData-2026-11-19.zip",
+     "layer": "demo data (Kestrel Bank, fictional)"
+    }
+   ],
+   "manual_steps": [
+    "install in order Core > IntegrationShowcase > Hub > DemoData (needs C360, Case Mgmt, Omnichannel, CCH apps, CrtLeadOppMgmtInC360)",
+    "post-install.md: setBaseUri on labCoreSystem to the relay or customer API",
+    "chat channels per stand (CONFIGURE-CHANNELS.md)",
+    "webhook URL per stand + relay secrets (RELAY.md)",
+    "log in again to see the workplace",
+    "rerun data generator before a demo to refresh dates"
+   ],
+   "customer_specific": [
+    "Kestrel Bank demo data package (swap or remove)"
+   ],
+   "rule_breaks": [],
+   "not_yet": [
+    "live webhook on cloud stand (support ticket)",
+    "relay deployed",
+    "AI triage sub-agent (prompt drafted)",
+    "live WhatsApp/SMS/Telegram",
+    "phase 2 campaign WhatsApp",
+    "phase 3 custom campaign element"
+   ],
+   "reuse_estimate_h": 1,
+   "sharepoint": "Library/channels-showcase/",
+   "source_repo": "C:\\Projects\builds\\channels-showcase (git)",
+   "harvested": "2026-11-19",
+   "owner": "Renzo",
+   "notes": "Built to the reuse rules from day 1 (lab prefix, module/demo-data split, bindings verified, clean-install test). Promote to L3 when live channels + AI triage are done.",
+   "ai": [
+    "Social triage sub-agent (draft prompt ai/social-triage-skill.md, not yet built)"
+   ]
+  }
+ ],
+ "candidates": []
 }
