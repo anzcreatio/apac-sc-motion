@@ -1,37 +1,73 @@
 {
-  "updated": "2026-11-16",
-  "note": "Stand register (demo bar §6c). Master stands grow deal by deal: each new complementary journey is built on top as its own lab<Module> package, the deal's customer layer comes off after the demo, and the entry is updated by sc-harvest. sc-demo-plan step 0 and step 4 read this file. status: ready (neutral, free to build on) · in_use (a deal's customer layer is on it; see in_use_by) · neutralise_first (holds a customer layer that must come off before another customer sees it) · off_limits (never build on it). Never put credentials here.",
-  "masters": [
+ "updated": "2026-11-19",
+ "note": "Stand register (demo bar §6c). Master stands grow deal by deal: each new complementary journey is built on top as its own lab<Module> package, the deal's customer layer comes off after the demo, and the entry is updated by sc-harvest. sc-demo-plan step 0 and step 4 read this file. status: ready (neutral, free to build on) · in_use (a deal's customer layer is on it; see in_use_by) · neutralise_first (holds a customer layer that must come off before another customer sees it) · off_limits (never build on it). Never put credentials here.",
+ "masters": [
+  {
+   "env": "11011710-demo",
+   "url": "https://11011710-demo.creatio.com",
+   "industry": "cross-industry",
+   "role": "First master stand and library master (Renzo, 16 Nov 2026)",
+   "status": "neutralise_first",
+   "in_use_by": null,
+   "core_objects": [
+    "Account",
+    "Contact",
+    "UsrSite (Site / project)"
+   ],
+   "journeys": [
     {
-      "env": "11011710-demo",
-      "url": "https://11011710-demo.creatio.com",
-      "industry": "cross-industry",
-      "role": "First master stand and library master (Renzo, 16 Nov 2026)",
-      "status": "neutralise_first",
-      "in_use_by": null,
-      "core_objects": ["Account", "Contact", "UsrSite (Site / project)"],
-      "journeys": [
-        {"journey": "Sell more of every project, stage by stage", "module": "site-selling", "packages": ["UsrHgSite", "UsrHgDcm", "UsrHgBuildBoard", "UsrHgTemplateBuilder", "UsrHgSalesOverview"], "from_deal": "hardware-and-general", "added": "2026-11-10", "layer": "module+customer mixed"}
-      ],
-      "personas": ["H&G reps and site sales (customer layer)"],
-      "home_page": "H&G Sales overview (customer layer)",
-      "data_set": "H&G sites, builders, reps, AUD values (customer layer)",
-      "neutralise_first": [
-        "H&G captions, logo and workplace name (Site Sales, Frameworks)",
-        "H&G seed data: sites, builders, reps, accounts",
-        "UsrHg schema prefix stays (can't rename safely); new modules use lab<Module> and neutral names",
-        "split the customer layer out of UsrHgSite (sc-harvest L2 promotion)"
-      ],
-      "restore_points": [],
-      "owner": "Renzo"
+     "journey": "Sell more of every project, stage by stage",
+     "module": "site-selling",
+     "packages": [
+      "UsrHgSite",
+      "UsrHgDcm",
+      "UsrHgBuildBoard",
+      "UsrHgTemplateBuilder",
+      "UsrHgSalesOverview"
+     ],
+     "from_deal": "hardware-and-general",
+     "added": "2026-11-10",
+     "layer": "module+customer mixed"
     }
-  ],
-  "candidates": [],
-  "off_limits": [
-    {"env": "11013904-demo", "why": "Shared with Ord Minnett; holds Suntory and Ord Minnett demos (Renzo, 16 Nov 2026)"}
-  ],
-  "deal_stands": [
-    {"env": "11013018-demo", "deal": "southern-academy-of-higher-education", "note": "Deal stand; not a master unless Renzo promotes it"}
-  ],
-  "format": "masters[]: {env, url, industry, role, status, in_use_by, core_objects, journeys: [{journey, module, packages, from_deal, added, layer}], personas, home_page, data_set, neutralise_first, restore_points: [{date, deal, path}], owner}"
+   ],
+   "personas": [
+    "H&G reps and site sales (customer layer)"
+   ],
+   "home_page": "H&G Sales overview (customer layer)",
+   "data_set": "H&G sites, builders, reps, AUD values (customer layer)",
+   "neutralise_first": [
+    "H&G captions, logo and workplace name (Site Sales, Frameworks)",
+    "H&G seed data: sites, builders, reps, accounts",
+    "UsrHg schema prefix stays (can't rename safely); new modules use lab<Module> and neutral names",
+    "split the customer layer out of UsrHgSite (sc-harvest L2 promotion)"
+   ],
+   "restore_points": [],
+   "owner": "Renzo"
+  }
+ ],
+ "candidates": [
+  {
+   "env": "11014983-demo",
+   "clio": "channels-build",
+   "role": "Channels showcase build stand (library module channels-showcase); clean, no customer layer",
+   "status": "ready",
+   "owner": "Renzo",
+   "added": "2026-11-19",
+   "note": "11014993-demo (clio channels-test) holds a clean install of the same module"
+  }
+ ],
+ "off_limits": [
+  {
+   "env": "11013904-demo",
+   "why": "Shared with Ord Minnett; holds Suntory and Ord Minnett demos (Renzo, 16 Nov 2026)"
+  }
+ ],
+ "deal_stands": [
+  {
+   "env": "11013018-demo",
+   "deal": "southern-academy-of-higher-education",
+   "note": "Deal stand; not a master unless Renzo promotes it"
+  }
+ ],
+ "format": "masters[]: {env, url, industry, role, status, in_use_by, core_objects, journeys: [{journey, module, packages, from_deal, added, layer}], personas, home_page, data_set, neutralise_first, restore_points: [{date, deal, path}], owner}"
 }
