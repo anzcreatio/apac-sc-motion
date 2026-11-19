@@ -12,6 +12,28 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   on → Save changes → reload the page; no compile. It's on for the signed-in user only, so add every demo login.
   Found on bpd-bali-map, 19 Nov 2026.
 
+## 0.34.0 (19 Nov 2026): RFP clarification questions, two sheets from one list
+
+- **`sc-rfp` step 8b, clarification questions:** right after the fit-gap, Claude goes through a checklist
+  (`skills/sc-rfp/CLARIFICATIONS.md`: weights and gates, which parts apply, Day 1 scope and volumes, systems of record
+  and middleware, **which system owns cases** when CRM and workflow are both in scope, channels, third-party services,
+  documents, regulation, residency, contract, references, demo) and keeps only what changes the answer, sizing, price
+  or demo.
+- **Two sheets from one list** (`scripts/clarify.py`): a working sheet for you (topic, what we need, why we ask,
+  status, dropped questions with the reason) and a 4-column customer sheet (#, criterion IDs, question, their answer).
+  Numbering is redone on every build, so cutting or adding a question never leaves gaps. Edited the customer sheet by
+  hand? `clarify.py read` brings your changes back.
+- **New standard `standards/CUSTOMER-QUESTIONS-v0.1.md`** for any question list a customer answers: one question per
+  row, the reason inside the question only where it helps, state our assumption, cut what we can assume or what shows
+  our hand, offer to answer optional parts (and ask how that's scored), no references to earlier calls, promise the
+  outcome rather than a walkthrough of the internals. The cover email is drafted in your voice from your own sent emails.
+- **RFP reading traps** (map step): a "Service Management" category is the vendor's own operations (bid team); a
+  multi-platform overlay is n/a when we propose one platform. Deadlines are worked out from the issue date, and asks
+  that are only in the cover email are flagged.
+- `rfp.py` accepts verdicts as a list or as a dict keyed by requirement ID.
+- Built from Renzo's edits on the Navalo RFP (19 Nov 2026).
+- **Each SC:** nothing to install.
+
 ## 0.33.0 (19 Nov 2026): open chats carry a status mark; say "end chat" to close one
 
 - **Chat tracking v0.2** (`standards/CHAT-TRACKING-v0.2.md` §2, replaces v0.1): every new chat's title starts with

@@ -175,7 +175,8 @@ def register(a):
 
 def load(a):
     reg = json.load(open(a.register, encoding="utf-8"))
-    ver = {v["rid"]: v for v in json.load(open(a.verdicts, encoding="utf-8"))}
+    raw = json.load(open(a.verdicts, encoding="utf-8"))
+    ver = {k: dict(v, rid=k) for k, v in raw.items()} if isinstance(raw, dict) else {v["rid"]: v for v in raw}
     return reg, ver
 
 

@@ -1,6 +1,6 @@
 ---
 name: sc-rfp
-description: Fit-gap an RFP, TOR or requirements list for a Creatio APAC deal - read the customer's spreadsheet or PDF in whatever layout it comes, build one requirements register (their IDs and words, Bahasa kept), split our scope from the bid team's, rate every requirement honestly (standard, configure, AI, Marketplace, integration, custom, partner, roadmap, no) with confidence, evidence, POC tier and effort, recommend bid / bid with conditions / no-bid from the fit % and the big gaps, and check the bid team's compliance answers against the fit-gap. Use when an SC gets an RFP, TOR, tender, requirements matrix or compliance sheet, asks for a fit-gap or a bid/no-bid view, or wants to check a filled compliance sheet before it's submitted.
+description: Fit-gap an RFP, TOR or requirements list for a Creatio APAC deal - read the customer's spreadsheet or PDF in whatever layout it comes, build one requirements register (their IDs and words, Bahasa kept), split our scope from the bid team's, rate every requirement honestly (standard, configure, AI, Marketplace, integration, custom, partner, roadmap, no) with confidence, evidence, POC tier and effort, recommend bid / bid with conditions / no-bid from the fit % and the big gaps, and check the bid team's compliance answers against the fit-gap. Also drafts the clarification questions (a working sheet for the SC and a short customer sheet) and the cover email in the SC's voice. Use when an SC gets an RFP, TOR, tender, requirements matrix or compliance sheet, asks for a fit-gap or a bid/no-bid view, or wants to check a filled compliance sheet before it's submitted.
 ---
 
 # sc-rfp
@@ -32,12 +32,16 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
    --item "<id>: <what we did>"`.
 1. **Ask first (at the top):** the three pre-build questions (competition, anything else from the customer, anything
    else to know), the submission deadline, and what the customer's own compliance codes mean if the sheet uses codes
-   (e.g. `FS/MM/LM/NV/NS`). Don't guess a code's meaning.
+   (e.g. `FS/MM/LM/NV/NS`). Don't guess a code's meaning. Ask the **issue date** too and work out every deadline in
+   business days (participation, clarifications, response, demo); asks can sit in the cover email rather than the RFP
+   files (`CLARIFICATIONS.md` §1).
 2. **Scan:** `python scripts/rfp.py scan rfp/00-<file>.xlsx --out rfp/scan.json`. For a PDF or Word file, extract the
    requirement table into a spreadsheet first (keep their numbering) and scan that.
 3. **Map:** write `rfp/map.json` from the scan: per sheet the header row, ID, text, mandatory and answer columns, how
    sections are shown, and **scope** (`ours` = functional, technical, security, architecture; `bid` = commercial,
-   legal, licensing, project, people, SLA, support terms). Show the SC the map as a short table (sheet · rows · scope)
+   legal, licensing, project, people, SLA, support terms). A "Service Management" category (incident, problem,
+   change) is the vendor's own operations: `bid`. A multi-platform overlay is rated `n/a` when we propose one
+   platform (`CLARIFICATIONS.md` §3). Show the SC the map as a short table (sheet · rows · scope)
    and wait for an OK. Map format:
 
    ```json
@@ -50,7 +54,8 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
    ```
 4. **Register:** `python scripts/rfp.py register rfp/00-<file>.xlsx --map rfp/map.json --out rfp/register.json`.
    Check the counts against the sheet (spot-check the first and last requirement of each sheet).
-5. **Rate** every `ours` requirement with `FIT-RUBRIC.md` → `rfp/verdicts.json`. Over ~60 requirements, split into
+5. **Rate** every `ours` requirement with `FIT-RUBRIC.md` → `rfp/verdicts.json` (a JSON list, one object per
+   requirement with its `rid`; a dict keyed by `rid` is also accepted). Over ~60 requirements, split into
    batches of about 50 and rate them in parallel (one subagent each, given the rubric, the differentiator catalogue,
    the governance pack and the library catalogue). Translate Bahasa into `english`. Rate blind: don't read any answers
    already in the sheet while rating.
@@ -70,7 +75,19 @@ Paths are relative to this skill's folder; plugin root = `../..`. Script: `scrip
    differentiators). Then `python scripts/rfp.py poc --register rfp/register.json --verdicts rfp/verdicts.json --out rfp/05-poc-brief.md --deal "<Customer>"`
    (Build lines grouped with draft tests, must-have gaps to handle, Show evidence, questions, low-confidence lines) and
    hand it to `sc-demo-plan` in proof mode. `rfp.py coverage` later checks every Build ref made it into the plan and
-   the click path.
+   the click path. When the customer weights "configuration over customisation", the proof demo uses no custom
+   components (or labels them custom in the configuration inventory).
+8b. **Clarification questions** (when the RFP allows them; usually due within days, so do this right after the
+   fit-gap). Go through `CLARIFICATIONS.md` §2 (including **where cases live** when CRM and workflow are both in
+   scope) and keep only what changes our answer, sizing, price or demo. Write them by
+   `../../standards/CUSTOMER-QUESTIONS-v0.1.md`: one question per row, the reason inline only where it helps, state our
+   assumption, cut what we can assume or what shows our hand, offer to answer optional parts and ask how that's
+   scored, no references to past calls. Put them in `rfp/clarifications.json` and build both sheets:
+   `python scripts/clarify.py build --questions rfp/clarifications.json --working rfp/08b-questions-working-<date>.xlsx --customer rfp/08-<Vendor>-clarification-questions-<Customer>-<date>.xlsx`.
+   The SC edits the working sheet (it has topic, what we need, why, status); numbering is redone on every build. If
+   the SC edits the customer sheet directly, `clarify.py read` it, learn from the changes (feedback file), carry them
+   into the JSON and rebuild. Draft the cover email in the SC's own voice (read their sent emails in `Deals/` first),
+   with a short body when the sheet is attached.
 9. **Consistency check** (when the bid team shares their filled sheet): copy it in as `rfp/03-bid-team-answers-<date>.xlsx`,
    map its answer columns into a register, then
    `python scripts/rfp.py check --register <that register> --verdicts rfp/verdicts.json --out rfp/04-consistency-<date>.md --xlsx rfp/04-consistency-<date>.xlsx`.
