@@ -10,6 +10,8 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   right guidance in ad-hoc chats too: custom component → UI kit standard + R&D's instruction server; handlers, page
   bodies, C# → R&D's instruction server; mobile page → R&D's mobile conversion skill + build rules §7; pages,
   processes, data and AI through clio → demo toolkit; naming → R&D's schema naming skill.
+- **Version clean-up:** the UI kit standard's file is now named `UI-KIT-STANDARD-v0.7.md` to match its content (it
+  was v0.7 inside a v0.6 file name). Links in the plugin are updated.
 - Nothing to do: it loads on your next session after updating.
 
 ## 0.36.0 (19 Nov 2026): build rules v0.8, mobile pages
