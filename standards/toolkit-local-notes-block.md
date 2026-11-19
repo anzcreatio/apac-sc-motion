@@ -32,7 +32,7 @@
    `add-package-dependency` first; `rows-file` must sit in the OS temp folder or the workspace; a component package:
    `create-package` first, then `push-workspace` with the server package's UId in the descriptor. A web map is a custom
    component (no native one): Leaflet + OpenStreetMap passes the default CSP.
-9. **Configuration quality (BUILD-RULES §6).** On VPN, load `creatio-instructions-mcp` for the area first. Handlers:
+9. **Configuration quality (BUILD-RULES §6).** Before page-body, handler, custom-component or C# work, on VPN, load R&D's `creatio-instructions-mcp` (ships with the plugin; not for processes or data) and follow its "Traps verified on a stand". Handlers:
    `return this.next?.handle(request)` and `scopes`; new lookup data = a new data binding; C# as source, never a DLL;
    bulk processes in the background; one business rule per field; "missing in the Designer" = add the package
    dependency; extend standard objects, lookups not text; Read Data columns only; no default-valued properties in page

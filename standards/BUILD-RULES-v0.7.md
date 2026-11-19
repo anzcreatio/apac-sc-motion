@@ -120,9 +120,13 @@ From Creatio's internal Confluence (NCD no-code standards, R&D, support checklis
 `research/CONFLUENCE-BEST-PRACTICE-2026-11-19.md` in the motion folder). The demo toolkit already covers idempotent
 processes, recursion guards, no hard-coded values and gateways; these are the rules it doesn't.
 
-**Before building:** when the `creatio-instructions-mcp` server is connected (Creatio VPN), load R&D's instructions for
-the area you're about to touch (pages, processes, components) and follow them where they're stricter than the toolkit.
-Off VPN it fails to connect; carry on with the toolkit.
+**Before pro-code work:** when the `creatio-instructions-mcp` server is connected (it ships with the plugin; Creatio
+VPN only), call `resolve_creatio_instructions` once, then `get_instructions_batch` for what you're about to touch:
+**page bodies** (`viewConfigDiff`, `modelConfigDiff`, view model), **handlers, converters, validators**, **custom
+components** (Angular, TypeScript, SCSS) and **C#** (composable-app guide: data bindings, rights, services). Read the
+"Traps verified on a stand" and "Guardrails for LLM" sections and follow them where they're stricter than the toolkit.
+It doesn't cover processes, dashboards, data model, demo data or AI Studio: the toolkit stays the guide there. Our
+demo prefix counts as the package naming convention. Off VPN it fails to connect; carry on with the toolkit.
 
 | Area | Rule | Why |
 |---|---|---|

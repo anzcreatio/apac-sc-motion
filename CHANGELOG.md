@@ -12,9 +12,13 @@ as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the com
   processes in the background; demo AI agents on delegated credentials; "missing in the Designer" means a package
   dependency; one business rule per field; CSP for blocked calls; how to prompt for a generated process; data model,
   metadata and NCD naming rules; two prompts for a custom component. Rule 9 in the toolkit notes block.
-- **Each SC: on Creatio VPN, add R&D's instruction server once:** `claude mcp add --scope user --transport http
-  creatio-instructions-mcp https://ai-instructions-rnd.creatio.com/api/v1/mcp`. Builds load it when it's connected;
-  off VPN it just fails to connect.
+- **R&D's instruction server ships with the plugin** (`.mcp.json`: `creatio-instructions-mcp`). It's 41 documents R&D
+  writes for AI agents: Freedom UI page metadata, handlers, components, C#, composable apps, each with "traps verified
+  on a stand" (e.g. a `merge` on a list's columns replaces the whole array; a reload can still run the old client
+  code). Claude loads it before page-body, handler, component or C# work. Not for processes, dashboards or data.
+  Creatio VPN only: off VPN it shows "failed to connect", which is harmless.
+- **Each SC:** nothing to install. If you added `creatio-instructions-mcp` by hand, remove that copy:
+  `claude mcp remove --scope user creatio-instructions-mcp`. Re-run `sc-setup` once to pick up rule 9 in the toolkit notes.
 
 ## 0.33.1 (19 Nov 2026): duplicates in a demo need one feature switched on
 

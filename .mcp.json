@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "creatio-instructions-mcp": {
+      "type": "http",
+      "url": "https://ai-instructions-rnd.creatio.com/api/v1/mcp"
+    }
+  }
+}
