@@ -2,7 +2,7 @@
 
 - Update available: the published version (synced SharePoint folder, `Plugin/apac-sc-motion`) is newer than the
   installed one -> one line with the update command and the titles of what they're missing.
-- Chat standards: standards/CHAT-FORMAT-* and CHAT-TRACKING-* (newest) go into every session's context, also
+- Chat standards: standards/CHAT-FORMAT-*, CHAT-TRACKING-* and TOOL-ROUTING-* (newest) go into every session's context, also
   after compaction, so plain chats follow them too (18 Nov 2026).
 - What's new: the installed version is newer than `seen_version` in ~/.apac-sc-motion.json -> the changelog entries
   since then, shown once; then `seen_version` is saved.
@@ -56,7 +56,7 @@ def between(entries, low, high):
     return out
 
 
-STANDARDS = ("CHAT-FORMAT", "CHAT-TRACKING")  # loaded into every chat (newest version of each in standards/)
+STANDARDS = ("CHAT-FORMAT", "CHAT-TRACKING", "TOOL-ROUTING")  # loaded into every chat (newest version of each in standards/)
 
 
 def standards(root):

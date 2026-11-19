@@ -4,6 +4,14 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.36.1 (19 Nov 2026): which tool for which Creatio job, in every chat
+
+- **New `standards/TOOL-ROUTING-v0.1.md`, loaded into every session** (like the chat standards), so Claude picks the
+  right guidance in ad-hoc chats too: custom component → UI kit standard + R&D's instruction server; handlers, page
+  bodies, C# → R&D's instruction server; mobile page → R&D's mobile conversion skill + build rules §7; pages,
+  processes, data and AI through clio → demo toolkit; naming → R&D's schema naming skill.
+- Nothing to do: it loads on your next session after updating.
+
 ## 0.36.0 (19 Nov 2026): build rules v0.8, mobile pages
 
 - **Build rules v0.8 §7 (new), mobile pages**, from Creatio's mobile team pages in Confluence: web and mobile pages
