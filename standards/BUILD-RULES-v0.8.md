@@ -1,4 +1,4 @@
-# Build rules v0.7: while configuring a demo stand
+# Build rules v0.8: while configuring a demo stand
 
 **What it is:** how every demo build runs, whichever tool does it, whichever tool runs it (the demo toolkit, clio, or Claude by hand).
 **Agreed:** Renzo, 13 Nov 2026. `sc-setup` copies the short version into the demo toolkit's local notes for
@@ -146,10 +146,28 @@ demo prefix counts as the package naming convention. Off VPN it fails to connect
 | Quality | **Naming (NCD):** object codes singular PascalCase, `ContactInAccount` for relations; pages `<Entity>_FormPage` / `_ListPage` / `_MiniPage`; components `AddButton`, not `Button_Add`; lookup column codes without `Id`; business rules "Action: target"; dashboards `<Title>Widget`; agents `<Domain>Agent`, never "AI" in the name; titles in sentence case | Demos that read like the product hand over cleanly to delivery |
 | Quality | **Custom components with an agent:** one prompt for the component (behaviour, config panel, data binding, validation, accessibility), a separate one for Designer registration; tell it to "Read AI_GUIDES from @creatio libraries" | How R&D builds components with agents (Jul 2026) |
 
+## 7. Mobile pages (v0.8)
+
+From Creatio's Confluence (mobile team and Academy drafts, read 19 Nov 2026; sources in
+`research/CONFLUENCE-BEST-PRACTICE-2026-11-19.md` §6). Layout, crashers and refresh rules stay in the toolkit's
+`mobile-golden-standard.md`.
+
+| Rule | Why |
+|---|---|
+| **Web and mobile pages are separate.** Plan a mobile page for every screen the demo shows on a phone; a web change after conversion must be copied to the mobile page by hand | A web page never appears in the app by itself |
+| **Build mobile pages with R&D's `creatio-mobile-page-conversion` skill**, plan first: the SC approves the plan before anything is built, and approves publishing separately. Phone layout only (no tablet); Freedom UI web pages only | The skill reads the web page, says what can't move, and recreates page business rules |
+| **Before publishing, check what the app shows today.** Registering a section or default mobile edit page replaces the current one. To rebuild, say "update the existing mobile page" (otherwise a duplicate); a rebuild wipes Mobile Designer edits | On a shared stand this changes other people's demos |
+| **Convert the related object's form page too** when a button opens it (e.g. New on Products) | Otherwise the button opens nothing on mobile |
+| **No custom components on mobile.** A UI kit or other `usr.*` component shows a placeholder; put native fields or widgets in the mobile page and say so in the build plan. Mobile pages are JSON only; logic goes in handlers through `@creatio/mobile-common` | The app is compiled Flutter; R&D's mobile custom-component design is still a draft (16 Nov 2026) |
+| **Offline demo: test every business rule with the network off.** Only model-level rules run on the device; page rules and rules needing server code or unsynchronised data don't | They silently don't fire offline |
+| **Live demo lists: always fresh.** Set the list attribute's `cacheConfig.readMode` to `2` (forceRemote) | Otherwise the app can show cached data from before the presenter's change |
+| **Mobile workplace:** Workplace setup → Usage type Mobile → sections → user groups (every demo login). On an existing stand switch on `Mobile.UseSysWorkplaceForModuleRegistration`; a user on a legacy workplace switches to "Main workplace" in the app's Settings. Sync the app after | The section is missing from the app otherwise (8.3.2+) |
+
 ## Changes
 
 | Version | Date | Change |
 |---|---|---|
+| v0.8 | 19 Nov 2026 | §7 mobile pages from Creatio Confluence: web and mobile pages separate, R&D conversion skill plan first, check before publishing, related form pages, no custom components on mobile, offline business rules, fresh lists, mobile workplace (Renzo) |
 | v0.7 | 19 Nov 2026 | §6 configuration quality from Creatio Confluence: shared-stand change discipline, data bindings, source-only C#, handler `next` + `scopes`, bulk processes, AI Studio credentials, Designer dependency gap, business rules, CSP, process prompts, data model, metadata, NCD naming, component prompts; load R&D's instructions MCP when on VPN (Renzo) |
 | v0.6 (addition) | 19 Nov 2026 | §5: duplicates in a demo need the `EnableDeduplicationFreedomUI` feature registered (Renzo, after the bpd-bali-map dedup test) |
 | v0.6 | 18 Nov 2026 | §5: custom components start on the UI kit (vendored kit-data / kit-write / tokens); the deal folder holds source, README, page bodies, seed scripts and a handover note by build end (report checks); headless checks when the pane is signed out; clio traps; web map = custom component (Renzo, after the BPD Bali map build) |

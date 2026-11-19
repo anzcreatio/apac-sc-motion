@@ -1,4 +1,4 @@
-<!-- apac-sc-motion build rules v0.7 (19 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.7.md -->
+<!-- apac-sc-motion build rules v0.8 (19 Nov 2026). Added by sc-setup; full text: apac-sc-motion standards/BUILD-RULES-v0.8.md -->
 ## APAC SC team build rules (apac-sc-motion)
 
 1. **Compile and restart only when really needed, and only with the SC's OK (or the approval pack's).** Pages, captions, layouts, business
@@ -37,4 +37,9 @@
    bulk processes in the background; one business rule per field; "missing in the Designer" = add the package
    dependency; extend standard objects, lookups not text; Read Data columns only; no default-valued properties in page
    bodies; NCD naming (`Contact_FormPage`, `AddButton`, `<Domain>Agent`); demo agents use delegated credentials.
+10. **Mobile pages (BUILD-RULES §7).** Web and mobile pages are separate. Build mobile pages with R&D's
+   `creatio-mobile-page-conversion` skill (plan approved first, publishing approved separately; phone only). Check
+   what the app shows before publishing (it replaces it). No custom components on mobile: native fields instead.
+   Offline: test every business rule with the network off. Live lists: `cacheConfig.readMode: 2`. Mobile workplace
+   with every demo login; `Mobile.UseSysWorkplaceForModuleRegistration` on existing stands.
 <!-- end apac-sc-motion build rules -->

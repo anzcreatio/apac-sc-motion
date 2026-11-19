@@ -4,6 +4,16 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.36.0 (19 Nov 2026): build rules v0.8, mobile pages
+
+- **Build rules v0.8 §7 (new), mobile pages**, from Creatio's mobile team pages in Confluence: web and mobile pages
+  are separate (a web change doesn't reach the app); build mobile pages with R&D's `creatio-mobile-page-conversion`
+  skill, plan first, phone only; check what the app shows before publishing, because publishing replaces it; convert
+  related form pages that buttons open; no custom components on mobile (they show a placeholder), so plan native
+  fields; offline demos: test every business rule with the network off; live lists set to always fetch fresh data;
+  mobile workplace with every demo login. Rule 10 in the toolkit notes block.
+- **Each SC:** re-run `sc-setup` once to pick up rule 10 in the demo toolkit's notes.
+
 ## 0.35.1 (19 Nov 2026): Bank.AI log asks first, with a one-sentence reminder
 
 - `sc-bank-ai-log` now drafts the lines, then asks you before writing anything: one sentence on what the log is for

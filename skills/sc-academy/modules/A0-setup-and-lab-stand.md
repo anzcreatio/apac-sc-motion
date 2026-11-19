@@ -22,7 +22,7 @@ the wrong settings file, a plugin blocking clio, a token that expired. Fix them 
 5. **Prove clio reaches it:** ask Claude to run `list-packages` on the stand (read-only). Note the stand's Creatio
    version in the About dialog (10.x or 8.x changes some commands later).
 6. **Find the toolkit notes:** ask Claude where `sc-setup` wrote the build rules into your toolkit notes, and open
-   `standards/BUILD-RULES-v0.7.md` §1 (compile and restart only with your OK). Read it, two minutes.
+   `standards/BUILD-RULES-v0.8.md` §1 (compile and restart only with your OK). Read it, two minutes.
 
 ## Check (pass criteria)
 
