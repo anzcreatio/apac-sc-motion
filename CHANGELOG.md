@@ -8,6 +8,8 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+- **Demo library: `channels-showcase` (L2, install-tested 19 Nov).** Social comments to cases with triage rules and a stage bar, "Check in core system" integration with an integration log (live relay `channels-relay.apac-sc-demos.workers.dev`), Contact "Conversations" tab, Channels and integrations Overview home, Kestrel Bank demo data, Telegram channel with AI answers from the knowledge base and handoff. Packages and install guide: SharePoint `Library/channels-showcase/`.
+
 ## 0.36.2 (19 Nov 2026): Release flow: versions picked only at publish
 
 
