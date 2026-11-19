@@ -36,6 +36,15 @@ pawn, securities or insurance company. Then, after each of these:
 | `sc-demo-plan` | Add or update `proposed_configuration` and `fit` on the lines the plan covers (same `id`, via `add`) |
 | Any of the above | `python scripts/bankai.py index` |
 
+**Ask the SC before writing** (Renzo, 19 Nov 2026). Draft the lines, then put this at the top of your message, with the
+count filled in, and wait for a yes (also as the app's question buttons where the session has them):
+
+> **Bank.AI log:** it records this bank's requirements (their words, our proposed configuration and the fit, gaps first)
+> in the shared Bank-AI-Requirements folder, so Creatio's Bank.AI team sees what APAC banks need and where the product
+> falls short. No prices, competitors or people's names go in. Write **N lines (G gaps)** now?
+
+Then run `add` and `index`. SCs who don't know the log approve what they can't see; the sentence lets them decide.
+
 First time on a deal, write `<deal>/bank-ai.json`:
 
 ```json

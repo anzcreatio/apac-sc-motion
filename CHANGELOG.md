@@ -4,6 +4,12 @@ Every release needs an entry here: `## <version> (<d Mon yyyy>): <title>`, what 
 as "**Each SC: …**". `publish.ps1` refuses to publish without it, tags the commit `v<version>`, and the Monday task
 `sc-release-message` (Renzo's PC) turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
+## 0.35.1 (19 Nov 2026): Bank.AI log asks first, with a one-sentence reminder
+
+- `sc-bank-ai-log` now drafts the lines, then asks you before writing anything: one sentence on what the log is for
+  (your bank's requirements, our proposed configuration and fit, gaps first, for Creatio's Bank.AI team; no prices,
+  competitors or names) and how many lines and gaps it will add. Say yes and it writes them.
+
 ## 0.35.0 (19 Nov 2026): build rules v0.7, configuration quality from Creatio Confluence
 
 - **Build rules v0.7 §6 (new):** rules from Creatio's internal Confluence (NCD no-code standards, R&D guides, support
