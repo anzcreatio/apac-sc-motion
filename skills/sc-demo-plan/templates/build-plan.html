@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <title>Build Plan</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=Montserrat:wght@400;500;600&display=swap">
 <style>
 /* Layout: one reading column; storyboard cards = wireframe left, notes right; stacks on phones */
 :root{
@@ -79,6 +79,33 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .ba-label{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .change{border-left:3px solid var(--accent);padding:4px 10px;background:var(--accent-soft);border-radius:0 6px 6px 0}
 .caption{font-size:12px;color:var(--muted)}
+/* Freedom UI skin for wireframes (standards/mockup-kit v0.1, UI-KIT-STANDARD v0.7 §2c): screens read as Creatio.
+   Light in both themes like a screenshot; blue = product action colour; orange stays for our annotations (.hl, .change). */
+.wf:not(.custom){--fx-text:#181818;--fx-head:#0d2e4e;--fx-muted:#606060;--fx-link:#004fd6;--fx-blue:#004fd6;--fx-blue-soft:#e3ebfa;
+  --fx-border:#dfdfdf;--fx-border-m:#ededed;--fx-card:rgba(0,0,0,.1);--fx-page:#f4f6f9;
+  background:var(--fx-page);color:var(--fx-text);border:1px solid var(--fx-card);border-radius:8px;
+  font-family:"Montserrat","Segoe UI",system-ui,sans-serif;color-scheme:light}
+.wf:not(.custom) .wf-bar{background:#fff;border-bottom:1px solid var(--fx-border-m);min-height:44px}
+.wf:not(.custom) .wf-title{color:var(--fx-head);font-size:15px;font-weight:600}
+.wf:not(.custom) .btn{border:0;border-radius:4px;height:28px;display:inline-flex;align-items:center;padding:0 12px;background:transparent;color:var(--fx-head);font-weight:500}
+.wf:not(.custom) .btn.primary{background:var(--fx-blue);color:#fff}
+.wf:not(.custom) .stage{background:#fff;border-color:var(--fx-border);color:var(--fx-muted)}
+.wf:not(.custom) .stage.done{background:var(--fx-blue-soft);color:var(--fx-head)}
+.wf:not(.custom) .stage.on{background:var(--fx-blue);border-color:var(--fx-blue);color:#fff}
+.wf:not(.custom) .field{grid-template-columns:1fr;gap:1px;border-bottom:0;padding:2px 0}
+.wf:not(.custom) .field span:first-child{color:var(--fx-muted);font-size:11.5px;font-weight:500}
+.wf:not(.custom) .field span:last-child{font-weight:500}
+.wf:not(.custom) .tabs{border-bottom:1px solid var(--fx-border-m)}
+.wf:not(.custom) .tabs span{color:var(--fx-link);text-transform:uppercase;font-size:11.5px;font-weight:500;padding:6px 0}
+.wf:not(.custom) .tabs .on{color:var(--fx-head);border-bottom:2px solid var(--fx-head);font-weight:500}
+.wf:not(.custom) .panel,.wf:not(.custom) .kpi{background:#fff;border:1px solid var(--fx-card);border-radius:8px}
+.wf:not(.custom) .panel b{color:var(--fx-head);font-weight:500;font-size:12.5px}
+.wf:not(.custom) .kpi b{font-family:inherit;color:var(--fx-head)}
+.wf:not(.custom) .kpi span{color:var(--fx-muted)}
+.wf:not(.custom) table th{background:#fff;color:var(--fx-muted);font-weight:400;border-bottom:1px solid var(--fx-border)}
+.wf:not(.custom) table td{border-bottom:1px solid var(--fx-border-m);color:var(--fx-text)}
+.wf:not(.custom) .bar i{background:var(--fx-blue)}
+.wf:not(.custom) .muted,.wf:not(.custom) .caption{color:var(--fx-muted)}
 /* sections */
 section{display:grid;gap:10px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}

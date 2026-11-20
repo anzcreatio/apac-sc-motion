@@ -191,6 +191,10 @@ deal's words. In this order:
 
 Wireframes are boxes and real labels, not screenshots and not invented Creatio chrome: they show **what** is on the
 screen and in which order, so the SC can say "move that, drop this" before it's built. Example data only, captioned.
+The template skins them with Freedom UI's measured values (blue actions, Montserrat, native cards, tabs and fields),
+so they read as Creatio. **Mock-ups for a partner or customer** (a storyboard or concept page they'll see) use the
+mock-up kit in full: `../../standards/mockup-kit/` (README rules + `freedom-ui-mock.css`). Never style Creatio screens
+with our own colours (Renzo, 20 Nov 2026, Yokogawa).
 
 **How to make it (cheap per deal):** write `build-plan.json` in the deal folder, then
 `python scripts/build_build_plan.py <deal>/build-plan.json --out <deal>/NN-build-plan.html`. Never hand-write the HTML.

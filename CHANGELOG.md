@@ -8,6 +8,8 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+- **Mock-ups now look like Creatio.** New `standards/mockup-kit/` (rules + `freedom-ui-mock.css`, Freedom UI values measured on a clean Creatio 10 stand): blue actions, Montserrat, native cards, chips, tabs, fields and lists, AI panels in violet. Use it for any storyboard or concept page a partner or customer sees. The build plan's wireframes get the same skin, so they read as Creatio too (`sc-demo-plan` template). Worked example: the Yokogawa storyboard (Renzo, 20 Nov 2026).
+
 ## 0.36.4 (20 Nov 2026): Install counts as a compile; new build rules reach the toolkit by themselves
 
 
