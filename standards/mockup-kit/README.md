@@ -20,6 +20,7 @@ the measured Freedom UI values, it reads as Creatio. Lesson: `Lessons/feedback/2
 | 7 | Every record page gets the header (title, status chip, Close / Save) and a tab row: it's what makes a mock-up read as Freedom UI |
 | 8 | Example data only, fictional names and companies, and a caption saying so. No customer data |
 | 9 | Don't show another vendor's screens or compare with them on the page |
+| 10 | **The page is for the reader, not about them.** Question boxes are labelled "Question", never "Ask <name>" or "Ask the partner"; no coaching notes on a page the partner or customer sees (Renzo, 20 Nov 2026). A partner-ready storyboard (mock-up + caption + one question per screen) is worth making whenever a partner must picture the demo before the build |
 
 **What the kit can't do:** it's ~80% of the real look. Real screenshots from the stand replace the mock-ups once the
 demo is built (deck `screen` slides). Internal build plans keep their wireframes (`sc-demo-plan`), skinned with the

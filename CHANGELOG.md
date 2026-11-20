@@ -7,6 +7,7 @@ tags `v<version>` (and refuses if `plugin.json` was changed by hand). The Monday
 turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
 ## Unreleased
+- Mock-up kit rule 10: question boxes on partner/customer pages say "Question", never "Ask <name>" (Renzo, Yokogawa, 20 Nov 2026).
 
 - **Build chats open from one folder, and the pre-flight checks it (build rules §4 step 2, `sc-setup`).** The build permissions only load in a chat opened from the folder `sc-setup` put them in. A chat opened from a deal folder has none, so every browser click and clio call asks first. `sc-setup` now defaults to your local builds folder (never the synced Deals folder) and tells you to open every build chat from it. The pre-flight now reads that folder's settings and stops if `mcp__Claude_Browser` or our auto-mode rules are missing. **Each SC:** re-run the permissions step of `sc-setup` if you've never done it, then open build chats from the folder it names.
 
