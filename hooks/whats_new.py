@@ -6,6 +6,8 @@
   after compaction, so plain chats follow them too (18 Nov 2026).
 - Release owner: with `plugin_repo` in the config, one line on how many changes wait under "## Unreleased" and how
   many requests are in RELEASE-QUEUE.md (19 Nov 2026).
+- Toolkit notes: after an update, our build-rules block in the demo toolkit's notes is refreshed (only an existing
+  block, only between our markers, backup + atomic swap; 19 Nov 2026).
 - What's new: the installed version is newer than `seen_version` in ~/.apac-sc-motion.json -> the changelog entries
   since then, shown once; then `seen_version` is saved.
 
@@ -112,6 +114,67 @@ def pending(repo):
     return "apac-sc-motion plugin repo: " + "; ".join(parts) + "."
 
 
+BLOCK = re.compile(r"<!-- apac-sc-motion build rules.*?<!-- end apac-sc-motion build rules -->\n?", re.S)
+START, END = "<!-- apac-sc-motion build rules", "<!-- end apac-sc-motion build rules -->"
+
+
+def toolkit_notes_path():
+    """The demo toolkit's own notes file for creatio-demo-build, asked from the toolkit's helper (never guessed)."""
+    cache = os.path.join(os.path.expanduser("~"), ".claude", "plugins", "cache")
+    roots = []
+    for market in (os.listdir(cache) if os.path.isdir(cache) else []):
+        base = os.path.join(cache, market, "creatio-demo-toolkit")
+        if os.path.isdir(base):
+            roots += [os.path.join(base, v) for v in os.listdir(base) if re.match(r"^\d+(\.\d+)+$", v)]
+    if not roots:
+        return None  # toolkit not installed: nothing to refresh
+    newest = max(roots, key=lambda p: vkey(os.path.basename(p)))
+    helper = os.path.join(newest, "scripts", "helpers", "local_notes.py")
+    import subprocess
+    out = subprocess.run([sys.executable, "-I", helper, "path", "creatio-demo-build"],
+                         capture_output=True, text=True, timeout=8)
+    path = out.stdout.strip().splitlines()[-1].strip() if out.returncode == 0 and out.stdout.strip() else ""
+    if not path:
+        raise RuntimeError("the demo toolkit didn't say where its notes are")
+    return path
+
+
+def refresh_notes(root, override=None, dry=False):
+    """After a plugin update, bring our build-rules block in the demo toolkit's notes up to date (19 Nov 2026).
+    Only refreshes a block the SC already added through sc-setup; touches nothing outside our two markers; backs the
+    file up and swaps it in atomically; only writes when the block changed. Returns one line for the SC, or ""."""
+    try:
+        with open(os.path.join(root, "standards", "toolkit-local-notes-block.md"), encoding="utf-8-sig") as f:
+            new = f.read().strip() + "\n"
+        path = override or toolkit_notes_path()
+        if not path or not os.path.exists(path):
+            return ""
+        with open(path, encoding="utf-8-sig", newline="") as f:
+            text = f.read()  # newline="": keep the file's own line endings
+        starts, ends = text.count(START), text.count(END)
+        if starts == 0 and ends == 0:
+            return ""  # the SC never added our block: sc-setup asks first, so leave it alone
+        if starts != 1 or ends != 1 or text.index(START) > text.index(END):
+            return ("apac-sc-motion: couldn't refresh the build rules in your demo toolkit notes (the block markers "
+                    "were changed). Ask Claude to run `sc-setup` to fix them.")
+        updated = BLOCK.sub(lambda m: new, text, count=1)
+        if updated == text:
+            return ""
+        version = re.search(r"build rules (v[\d.]+)", new)
+        if not dry:
+            with open(path + ".bak", "w", encoding="utf-8", newline="") as f:
+                f.write(text)
+            tmp = path + ".tmp"
+            with open(tmp, "w", encoding="utf-8", newline="") as f:
+                f.write(updated)
+            os.replace(tmp, path)
+        return ("apac-sc-motion: build rules in your demo toolkit notes refreshed"
+                + (f" to {version.group(1)}" if version else "") + " (backup next to the file).")
+    except Exception:
+        return ("apac-sc-motion: couldn't refresh the build rules in your demo toolkit notes. "
+                "Ask Claude to run `sc-setup` to refresh them.")
+
+
 def main(argv):
     args = dict(zip(argv[::2], argv[1::2])) if len(argv) % 2 == 0 else {}
     dry = "--dry-run" in sys.argv
@@ -164,6 +227,9 @@ def main(argv):
                                "\n\nAt the top of your first reply, tell the SC in 2-4 plain bullets what changed "
                                "for them, and list any 'Each SC:' action as a numbered question asking if they want "
                                "to do it now. Do this once; don't repeat it later in the session.")
+            note = refresh_notes(root, args.get("--notes"), dry)
+            if note:
+                user.append(note)
             if not dry:
                 cfg["seen_version"] = installed
                 with open(cfg_path, "w", encoding="utf-8") as f:

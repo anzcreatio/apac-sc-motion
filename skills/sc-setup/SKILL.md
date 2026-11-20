@@ -105,8 +105,9 @@ Renzo and will be added here later.)
 | Deck builder | `python <plugin root>/skills/sc-deck/scripts/build_deck.py <plugin root>/tests/deck/sample-fictional/deck.json --out <system temp>/sample.pptx --render` (full paths: the session usually isn't in the plugin folder) | the same with `python3`; the first render asks the SC to let Claude control PowerPoint and may ask PowerPoint for file access: they click **OK** / **Grant Access** | Read the error. On a Mac, if the render can't run (exit 2), the deck is still built: open the .pptx for the SC and mark rendering "look by eye" |
 | Demo toolkit (for configuration) | the `creatio-demo-toolkit` skills are listed in this session | same | Install the plugin (Renzo has the instructions) |
 | clio (for configuration) | the clio MCP tools are available | same | Install clio; the SC registers environments themselves |
+| R&D's AI app development toolkit (for configuration) | the `creatio-ai-app-development-toolkit` skills are listed (e.g. `creatio-mobile-page-conversion`, `creatio-schema-naming`) | same | Ask first, then run `claude plugin marketplace add Creatio-Platform/creatio-ai-app-development-toolkit` and `claude plugin install creatio-ai-app-development-toolkit@creatio`; the SC starts a new session. Needed for mobile pages (BUILD-RULES §7) and schema naming (TOOL-ROUTING) |
 
-The toolkit and clio are only needed to **configure** demos. An SC can prepare first meetings, decks, RFP fit-gaps
+The toolkits and clio are only needed to **configure** demos. An SC can prepare first meetings, decks, RFP fit-gaps
 and workshops without them: mark them "later", not "failed".
 
 **Build rules into the toolkit (once the toolkit is installed).** The toolkit reads a local notes file for each skill
@@ -116,6 +117,8 @@ that survives its updates. Ask the SC, then add our build rules to the one for `
 2. If the file doesn't already contain `apac-sc-motion build rules`, append `../../standards/toolkit-local-notes-block.md`
    to it (create the file if it's missing). If an older version of the block is there, replace just that block.
    Never change anything else in the file.
+   After that, the plugin's session-start hook refreshes this block by itself after every plugin update (only
+   this block, with a backup), so the SC doesn't need to re-run `sc-setup` for new build rules.
 
 **Permission allowlist for unattended builds (ask first).** So a demo build can run without the SC approving
 every command, offer to merge `../../standards/build-permissions.json` into `.claude/settings.local.json` of the

@@ -8,6 +8,12 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+- **New build rules reach your demo toolkit by themselves.** After each plugin update, session start refreshes our
+  build-rules block in the demo toolkit's notes (only that block, with a backup next to the file). You no longer need
+  to re-run `sc-setup` for new rules. If the block was edited by hand, it says so and leaves it alone.
+- **`sc-setup` checks for R&D's AI app development toolkit**, needed for mobile pages (build rules §7) and schema naming.
+- **Each SC:** if `sc-setup` says the AI app development toolkit is missing, install it (it gives the two commands).
+
 ## 0.36.3 (19 Nov 2026): Install safety, UI kit 0.8.4, channels-showcase
 
 
