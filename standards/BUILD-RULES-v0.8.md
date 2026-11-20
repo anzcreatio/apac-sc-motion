@@ -80,7 +80,9 @@ only, max 3), custom components and code once each rollback is written, auto-rol
 and reset, reversible decisions on defaults. It stores the plan's fingerprint and a time budget (plan hours × 1.5).
 
 **2. Pre-flight, with the SC still there (about 5 minutes).** Stand reachable and signed in; OData token fresh;
-`UserSessionTimeout` long enough for the build; clio sees the stand; the browser pane is signed in; no other session
+`UserSessionTimeout` long enough for the build; clio sees the stand; the browser pane is signed in; the stand's URL
+is in the desktop app's **Settings → Allowed sites** (otherwise a stand on a private network, e.g. through the VPN,
+asks before every click and script, which stops an unattended build; only the SC can add it); no other session
 or SC holds the stand (toolkit lock); the permission setup is loaded (a **new** session in auto mode). Then
 `log --kind preflight-ok` and tell the SC "safe to leave". A sign-in found later is a hard stop, so find it now.
 
