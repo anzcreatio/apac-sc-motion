@@ -122,11 +122,16 @@ that survives its updates. Ask the SC, then add our build rules to the one for `
 
 **Permission allowlist for unattended builds (ask first).** So a demo build can run without the SC approving
 every command, offer to merge `../../standards/build-permissions.json` into `.claude/settings.local.json` of the
-folder the SC starts build sessions in (ask which; default the folder they use for deals work). Replace `<DEALS>`
+folder the SC starts build sessions in (ask which; default their **builds folder**: it's local, so the file never
+syncs to other SCs. Never the synced `Deals` folder or a deal folder). Replace `<DEALS>`
 with their `Deals` path and `<BUILDS>` with their builds folder (Windows `C:/Projects/builds`, Mac
 `~/Projects/builds` written out in full), forward slashes. Read the file first and merge, never overwrite; leave
-out the `_what` line. Tell them it loads in the next session. Never touch the user-level settings or the permission
-mode.
+out the `_what` line. Never touch the user-level settings or the permission mode.
+Then tell the SC, in these words, with the real path: "**Open every build chat from `<that folder>`, in auto mode.**
+A chat opened from a deal folder or anywhere else doesn't load these permissions, so the built-in browser and clio
+will ask you before each step. It loads in the next session." Also tell them to add each stand they build on to the
+desktop app's **Settings → Allowed sites**, and to register each stand in clio themselves in the terminal (never by
+giving Claude the password).
 
 ## 2b. Daily brief at 8 am (offer it, don't force it)
 

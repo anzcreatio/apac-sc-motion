@@ -83,7 +83,10 @@ and reset, reversible decisions on defaults. It stores the plan's fingerprint an
 `UserSessionTimeout` long enough for the build; clio sees the stand; the browser pane is signed in; the stand's URL
 is in the desktop app's **Settings → Allowed sites** (otherwise a stand on a private network, e.g. through the VPN,
 asks before every click and script, which stops an unattended build; only the SC can add it); no other session
-or SC holds the stand (toolkit lock); the permission setup is loaded (a **new** session in auto mode). Then
+or SC holds the stand (toolkit lock); the permission setup is loaded: the session is in auto mode **and** its
+working folder's `.claude/settings.local.json` allows `mcp__Claude_Browser` and has our `autoMode` rules (read the
+file; if it's missing or lacks them, stop: the SC opens a new chat from the folder `sc-setup` set up, or re-runs that
+step of `sc-setup`). Then
 `log --kind preflight-ok` and tell the SC "safe to leave". A sign-in found later is a hard stop, so find it now.
 
 **3. Restore point before the first change.** Export every package of the deal (on a master stand, also every
