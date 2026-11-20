@@ -7,6 +7,9 @@ tags `v<version>` (and refuses if `plugin.json` was changed by hand). The Monday
 turns last week's entries into a Teams message in SharePoint `Plugin/release-messages/`.
 
 ## Unreleased
+
+## 0.36.5 (20 Nov 2026): Allowance tracker, stand lock, mock-up kit
+
 - **UI kit 0.10.3: new Allowance tracker** (`usr.AllowanceTracker`): how much of an allowance (prepaid pack, retainer, contract value, budget, credit line, cap) is used over its period, with the pace, a usage line, one sentence of advice and an optional top-up action. Set-up guide: `Library/ui-kit/ALLOWANCE-TRACKER-README.md`. Also in 0.9.0: the whole kit on R&D's coding rules (no behaviour change).
 - Mock-up kit rule 10: question boxes on partner/customer pages say "Question", never "Ask <name>" (Renzo, Yokogawa, 20 Nov 2026).
 
