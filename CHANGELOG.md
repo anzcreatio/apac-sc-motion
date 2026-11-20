@@ -8,6 +8,7 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+- **A package install counts as a compile (build rules §1b rule 6, in every build session).** Ask before each install unless the approval pack lists it, and report after each one before the next. A build once installed its package 4 times, about 10 minutes of compiling, without asking.
 - **New build rules reach your demo toolkit by themselves.** After each plugin update, session start refreshes our
   build-rules block in the demo toolkit's notes (only that block, with a backup next to the file). You no longer need
   to re-run `sc-setup` for new rules. If the block was edited by hand, it says so and leaves it alone.

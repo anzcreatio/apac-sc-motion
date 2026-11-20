@@ -46,4 +46,6 @@
    compile or restart: `<stand>/0/ping` answers 200 within 10 s and nothing else heavy runs on that stand. Afterwards wait
    until `/0/ping` is steadily 200 (about 2 minutes) before the next one. Never retry a failed install straight away:
    check the stand, tell the SC, wait for a yes. A long install while the stand answers 200 is working: never start a second copy.
+   **A package install counts as a compile:** ask the SC before each one (unless the approval pack lists it) and report
+   after each (what, how long, whether it compiled) before the next.
 <!-- end apac-sc-motion build rules -->

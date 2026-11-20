@@ -33,6 +33,7 @@ sandbox down with a 502 until Creatio support restarted it. For every package in
 | 3. Wait until it has settled | Afterwards, `/0/ping` answers 200 steadily for about 2 minutes before the next job, a version check or a demo |
 | 4. Never retry straight away | A failed job: check `/0/ping`, tell the SC what failed and whether the stand answers, wait for a yes before trying again |
 | 5. Slow is not stuck | A long install while the stand still answers 200 is working: wait. Never start a second copy |
+| 6. A package install counts as a compile | Ask the SC before **each** install (unless the approval pack lists it), and report after each one before the next: what was installed, how long it took, whether the stand compiled. An install can compile the stand for minutes (one build installed 4 times, about 10 minutes of compiling, without asking: a stand without the cliogate package needs an install for things like AI skills) |
 
 `labUiKit` installs go through the kit's `scripts/install.ps1`, which enforces rules 1–4 (UI kit standard §4).
 
@@ -183,6 +184,7 @@ From Creatio's Confluence (mobile team and Academy drafts, read 19 Nov 2026; sou
 
 | Version | Date | Change |
 |---|---|---|
+| v0.8 (addition 2) | 20 Nov 2026 | §1b rule 6: a package install counts as a compile: ask before each one, report after each (Renzo, after a build installed its package 4 times without stopping to ask) |
 | v0.8 (addition) | 19 Nov 2026 | §1b: package installs and other heavy jobs one at a time per stand, healthy stand first, wait until settled, never retried straight away (Renzo, after a sandbox went down with a 502 from back-to-back installs and a retry) |
 | v0.8 | 19 Nov 2026 | §7 mobile pages from Creatio Confluence: web and mobile pages separate, R&D conversion skill plan first, check before publishing, related form pages, no custom components on mobile, offline business rules, fresh lists, mobile workplace (Renzo) |
 | v0.7 | 19 Nov 2026 | §6 configuration quality from Creatio Confluence: shared-stand change discipline, data bindings, source-only C#, handler `next` + `scopes`, bulk processes, AI Studio credentials, Designer dependency gap, business rules, CSP, process prompts, data model, metadata, NCD naming, component prompts; load R&D's instructions MCP when on VPN (Renzo) |
