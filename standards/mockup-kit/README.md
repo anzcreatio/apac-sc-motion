@@ -47,7 +47,7 @@ same values.
 
 Also in the kit: `.t` list table (`td.edit` + `.was` for a live change), `.ba` before/after, `.audit` change log,
 `.toast`, `.bars` chart, `.kpi`, `.phone` frame (`.ph-top`, `.ph-body`), `.steps`/`.canvas`/`.fld`/`.palette` for the
-app designer, `.mail` for an incoming email. Worked example: `Deals/yokogawa-electric-rh/07-demo-storyboard-2026-11-20.html`.
+app designer, `.mail` for an incoming email, `.par` for parallel consultation (Japanese ringi 合議), `.stamp` for a seal image, `.notice` for a blocking rule message, `.jp` for Japanese text. Tabs need `[hidden]{display:none!important}` in the page if you test it outside the Artifact viewer. Worked example: `Deals/yokogawa-electric-rh/07-demo-storyboard-2026-11-20.html`.
 
 ## Changes
 

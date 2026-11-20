@@ -119,3 +119,11 @@ table.t{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;mi
 .mail b{color:var(--ui-heading)}
 .mail .from{color:var(--ui-muted)}
 
+/* v0.1 additions (Yokogawa, 20 Nov 2026): parallel consultation (ringi 合議), seal image, inline notice, Japanese text */
+.par{border:1px dashed var(--ui-primary);border-radius:8px;padding:6px;display:grid;gap:6px;background:#f7f9fe}
+.par .pl{font-size:11px;font-weight:600;color:var(--ui-primary)}
+.par .row{display:flex;flex-wrap:wrap;gap:6px}
+.stamp{width:34px;height:34px;border-radius:50%;border:2px solid #c8102e;color:#c8102e;display:grid;place-items:center;font-size:11px;font-weight:700;line-height:1;transform:rotate(-8deg);font-family:"Hiragino Mincho ProN","Yu Mincho",serif}
+.notice{border-radius:8px;padding:10px 12px;font-size:12px;display:grid;gap:2px;background:var(--ui-error-soft);color:var(--ui-error)}
+.notice b{font-weight:600}
+.jp{font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",var(--ui-font-b)}
