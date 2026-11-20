@@ -137,6 +137,8 @@ differently and the lesson id or deal it came from). Then log it: `learn_from_de
     must be in place, and the build runs in a **new** session so it loads. Use `python scripts/approval_pack.py new --deal <deal>
     --plan <deal>/build-plan.json --approved-by "<SC>"` to write the pack and print the checklist; the build then follows
     BUILD-RULES section 4 (pre-flight with the SC, restore point, `log` each step, `check` between items, `report` at the end).
+    At the start of the build, hold the stand for the time budget: `python <plugin>/hooks/stand_lock.py hold --stand <env>
+    --hours <budget> --why "<deal> build"` (refused if another chat holds it: a hard stop); `release` after the report.
 12. **Hand-off** (only after 12a is approved). Write the demo script the toolkit builds from (`creatio-demo-runbook` → `creatio-demo-build`): the
     scenes in order with persona, clicks in their words, the data each needs, and the live change. Note harvest
     candidates for the demo library. **Building follows `../../standards/BUILD-RULES-v0.8.md`**: read `build/approval-pack.json` first and build

@@ -43,7 +43,9 @@
    Offline: test every business rule with the network off. Live lists: `cacheConfig.readMode: 2`. Mobile workplace
    with every demo login; `Mobile.UseSysWorkplaceForModuleRegistration` on existing stands.
 11. **Installs and other heavy jobs (BUILD-RULES §1b): one at a time per stand.** Before a package install, `push-workspace`,
-   compile or restart: `<stand>/0/ping` answers 200 within 10 s and nothing else heavy runs on that stand. Afterwards wait
+   compile or restart: `<stand>/0/ping` answers 200 within 10 s and nothing else heavy runs on that stand. **Stand lock:**
+   the plugin's hook leases the stand on every clio write; if it says another chat holds the stand, stop and tell the SC.
+   A long build first runs `python <plugin>/hooks/stand_lock.py hold --stand <env> --hours <n> --why "<build>"`, `release` at the end. Afterwards wait
    until `/0/ping` is steadily 200 (about 2 minutes) before the next one. Never retry a failed install straight away:
    check the stand, tell the SC, wait for a yes. A long install while the stand answers 200 is working: never start a second copy.
    **A package install counts as a compile:** ask the SC before each one (unless the approval pack lists it) and report

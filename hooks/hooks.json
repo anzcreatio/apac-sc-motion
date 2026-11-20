@@ -11,6 +11,41 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*clio.*|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/stand_lock.py\" --hook pre 2>/dev/null || python \"${CLAUDE_PLUGIN_ROOT}/hooks/stand_lock.py\" --hook pre 2>/dev/null || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__.*clio.*|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/stand_lock.py\" --hook post 2>/dev/null || python \"${CLAUDE_PLUGIN_ROOT}/hooks/stand_lock.py\" --hook post 2>/dev/null || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/stand_lock.py\" --hook end 2>/dev/null || python \"${CLAUDE_PLUGIN_ROOT}/hooks/stand_lock.py\" --hook end 2>/dev/null || true",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

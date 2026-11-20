@@ -997,7 +997,32 @@ def c_work(a):
     sc = my_sc(a.sc)
     deals = [guard_deal(resolve_deal(root, a.deal))] if a.deal else my_deals(root, sc)
     items, unset = open_work(deals)
-    print("\n".join(work_md(items, unset, TEAM.get(sc, sc))))
+    print("\n".join(work_md(items, unset, TEAM.get(sc, sc)) + stands_md()))
+
+
+def stands_md():
+    """Stands in use right now (stand lock, build rules §1b rule 2); empty when none."""
+    try:
+        import importlib.util
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(here, "..", "..", "..", "hooks", "stand_lock.py")
+        spec = importlib.util.spec_from_file_location("stand_lock", path)
+        sl = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(sl)
+        d = sl.lock_dir()
+        rows = [sl.read_lock(d, f[:-5]) for f in sorted(os.listdir(d)) if f.endswith(".json")] if d else []
+        rows = [r for r in rows if r and sl.live(r)]
+    except Exception:
+        return []
+    if not rows:
+        return []
+    L = ["", "**Stands in use**", "", "| Stand | Held by | Why / last action | Free at |", "|---|---|---|---|"]
+    for r in rows:
+        h = r.get("holder", {})
+        L.append("| %s (%s) | SC %s on %s | %s | %s |" % (
+            r["stand"], ", ".join(r.get("envs", [])), h.get("sc", "?"), h.get("machine", "?"),
+            r.get("why") or r.get("last_action", ""), sl.parse(r["expires"]).astimezone().strftime("%d %b %H:%M")))
+    return L
 
 
 # ---------- daily brief ----------

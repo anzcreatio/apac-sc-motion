@@ -29,7 +29,7 @@ sandbox down with a 502 until Creatio support restarted it. For every package in
 | Rule | How |
 |---|---|
 | 1. Healthy stand first | `<stand url>/0/ping` answers 200 within 10 s. Slow (that stand was timing out at 40 s before it went down) or failing: don't start; tell the SC |
-| 2. One heavy job per stand | Never start one while another runs on the same stand, from any chat or person. Check the running `clio` jobs for that stand first |
+| 2. One chat per stand (stand lock) | Never start one while another runs on the same stand, from any chat or person. The plugin enforces it: every clio write to a stand (MCP, `clio ... -e`, the kit's `install.ps1`) takes a 30-minute lease on that stand in SharePoint `Stands/locks/`; a write while another chat holds it asks the SC ("in use by ... go ahead anyway?"), or in an unattended run is refused (a hard stop). A long build holds the stand on purpose: `python <plugin>/hooks/stand_lock.py hold --stand <env> --hours 8 --why "<build>"`, `release` at the end (session end frees it too). `stand_lock.py status` or `desk.py work` shows which stands are in use |
 | 3. Wait until it has settled | Afterwards, `/0/ping` answers 200 steadily for about 2 minutes before the next job, a version check or a demo |
 | 4. Never retry straight away | A failed job: check `/0/ping`, tell the SC what failed and whether the stand answers, wait for a yes before trying again |
 | 5. Slow is not stuck | A long install while the stand still answers 200 is working: wait. Never start a second copy |
@@ -184,6 +184,7 @@ From Creatio's Confluence (mobile team and Academy drafts, read 19 Nov 2026; sou
 
 | Version | Date | Change |
 |---|---|---|
+| v0.8 (addition 3) | 20 Nov 2026 | §1b rule 2: stand lock, enforced by the plugin's hook (leases on every clio write, hold for a long build, ask or refuse when another chat holds the stand) (Renzo, after one chat silently overwrote another chat's kit install on clean82 11 minutes after it) |
 | v0.8 (addition 2) | 20 Nov 2026 | §1b rule 6: a package install counts as a compile: ask before each one, report after each (Renzo, after a build installed its package 4 times without stopping to ask) |
 | v0.8 (addition) | 19 Nov 2026 | §1b: package installs and other heavy jobs one at a time per stand, healthy stand first, wait until settled, never retried straight away (Renzo, after a sandbox went down with a 502 from back-to-back installs and a retry) |
 | v0.8 | 19 Nov 2026 | §7 mobile pages from Creatio Confluence: web and mobile pages separate, R&D conversion skill plan first, check before publishing, related form pages, no custom components on mobile, offline business rules, fresh lists, mobile workplace (Renzo) |

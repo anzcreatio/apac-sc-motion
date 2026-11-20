@@ -8,6 +8,8 @@ turns last week's entries into a Teams message in SharePoint `Plugin/release-mes
 
 ## Unreleased
 
+- **Stand lock: one chat at a time on a stand (build rules §1b rule 2).** Every clio write to a stand (MCP tools, `clio ... -e <stand>`, the kit's `install.ps1`) now takes a 30-minute lease on that stand, kept in SharePoint `Stands/locks/` so your Mac and other SCs see it. If another chat holds the stand, Claude Code asks you before writing ("clean82 is in use by ... go ahead anyway?"); an unattended build is refused instead. Reads are never checked. A long build holds the stand: `python <plugin>/hooks/stand_lock.py hold --stand <env> --hours 8 --why "..."`; `release` frees it and so does closing the chat. `stand_lock.py status` and `desk.py work` show which stands are in use. Why: on 20 Nov one chat reinstalled the UI kit on clean82 eleven minutes after another chat's install and silently overwrote it.
+
 - **Mock-ups now look like Creatio.** New `standards/mockup-kit/` (rules + `freedom-ui-mock.css`, Freedom UI values measured on a clean Creatio 10 stand): blue actions, Montserrat, native cards, chips, tabs, fields and lists, AI panels in violet. Use it for any storyboard or concept page a partner or customer sees. The build plan's wireframes get the same skin, so they read as Creatio too (`sc-demo-plan` template). Worked example: the Yokogawa storyboard (Renzo, 20 Nov 2026).
 
 ## 0.36.4 (20 Nov 2026): Install counts as a compile; new build rules reach the toolkit by themselves
